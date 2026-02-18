@@ -8,6 +8,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Initialize Firebase
+  // Note: Firebase API keys are safe to expose in client-side code when protected by 
+  // Firestore security rules. Security is enforced through Firebase Authentication
+  // and Firestore rules that restrict access to pwavwef@gmail.com only.
+  // For production apps with sensitive configuration, consider using --dart-define
+  // or environment-specific configuration files.
   await Firebase.initializeApp(
     options: const FirebaseOptions(
       apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
@@ -497,7 +502,14 @@ class _AIAssistantPageState extends State<AIAssistantPage> {
     _inputController.clear();
   }
 
+  /// Generates AI responses based on the selected category
+  /// Currently uses predefined responses as a placeholder.
+  /// TODO: Integrate with actual AI API (e.g., OpenAI, Google Gemini) to provide
+  /// personalized responses based on the user's message content.
+  /// The 'message' parameter is reserved for future AI API integration.
   String _getAIResponse(String message, String category) {
+    // Note: This is a placeholder implementation with predefined responses
+    // In production, this should call an AI API with the user's message
     switch (category) {
       case 'Finance':
         return "Based on your Blaze plan features, I can help you track your finances. "

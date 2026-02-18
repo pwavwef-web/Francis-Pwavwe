@@ -110,7 +110,13 @@ contactForm.addEventListener('submit', async (e) => {
 
     try {
         // Save to Firestore if available
-        if (window.firebaseDb && window.firebaseCollection && window.firebaseAddDoc) {
+        // Check if Firebase is properly initialized by verifying all required functions exist
+        const isFirebaseReady = window.firebaseDb && 
+                                 window.firebaseCollection && 
+                                 window.firebaseAddDoc && 
+                                 window.firebaseServerTimestamp;
+        
+        if (isFirebaseReady) {
             const messagesRef = window.firebaseCollection(window.firebaseDb, 'messages');
             await window.firebaseAddDoc(messagesRef, {
                 ...formData,
