@@ -572,13 +572,13 @@ function renderBlogs() {
         
         // Extract text preview (first 5 lines approximately)
         const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = blog.content || '';
+        tempDiv.innerHTML = sanitizeHtmlContent(blog.content || '');
         const textContent = tempDiv.textContent || tempDiv.innerText || '';
         const preview = textContent.substring(0, 300) + (textContent.length > 300 ? '...' : '');
         
-        // Extract first image from content
+        // Extract first image from content and sanitize
         const imgMatch = blog.content?.match(/<img[^>]+src="([^">]+)"/);
-        const imageUrl = imgMatch ? imgMatch[1] : null;
+        const imageUrl = imgMatch ? sanitizeImageUrl(imgMatch[1]) : null;
         
         // Get interaction data
         const interactions = userInteractions[blog.id] || { liked: false, comments: [] };
@@ -634,19 +634,28 @@ window.toggleLike = async function(blogId) {
     const interactions = userInteractions[blogId] || { liked: false, comments: [] };
     const newLikedState = !interactions.liked;
     
-    try {
-        const blogRef = doc(db, 'blogs', blogId);
-        await updateDoc(blogRef, {
-            likes: increment(newLikedState ? 1 : -1)
-        });
-        
-        // Update local storage
-        userInteractions[blogId] = { ...interactions, liked: newLikedState };
-        localStorage.setItem('blogInteractions', JSON.stringify(userInteractions));
-        
-    } catch (error) {
-        console.error('Error updating like:', error);
-        showNotification('Unable to update like. Please try again.');
+    // Update local storage first
+    userInteractions[blogId] = { ...interactions, liked: newLikedState };
+    localStorage.setItem('blogInteractions', JSON.stringify(userInteractions));
+    
+    // Only update Firebase if db is available and it's not a demo blog
+    if (typeof db !== 'undefined' && !blogId.startsWith('demo')) {
+        try {
+            const blogRef = doc(db, 'blogs', blogId);
+            await updateDoc(blogRef, {
+                likes: increment(newLikedState ? 1 : -1)
+            });
+        } catch (error) {
+            console.error('Error updating like:', error);
+            showNotification('Unable to sync like. It has been saved locally.');
+        }
+    }
+    
+    // Update the local count display immediately
+    const blog = blogsData.find(b => b.id === blogId);
+    if (blog) {
+        blog.likes = (blog.likes || 0) + (newLikedState ? 1 : -1);
+        renderBlogs();
     }
 };
 
@@ -695,32 +704,41 @@ window.addComment = async function(event, blogId) {
     
     if (!commentText) return;
     
-    try {
-        const blogRef = doc(db, 'blogs', blogId);
-        await updateDoc(blogRef, {
-            comments: increment(1)
-        });
-        
-        // Save comment locally
-        const interactions = userInteractions[blogId] || { liked: false, comments: [] };
-        interactions.comments.push({
-            author: 'Anonymous',
-            text: commentText,
-            timestamp: new Date().toISOString()
-        });
-        
-        userInteractions[blogId] = interactions;
-        localStorage.setItem('blogInteractions', JSON.stringify(userInteractions));
-        
-        // Clear input and reload comments
-        input.value = '';
-        loadComments(blogId);
-        
-        showNotification('Comment added successfully!');
-    } catch (error) {
-        console.error('Error adding comment:', error);
-        showNotification('Unable to add comment. Please try again.');
+    // Save comment locally
+    const interactions = userInteractions[blogId] || { liked: false, comments: [] };
+    interactions.comments.push({
+        author: 'Anonymous',
+        text: commentText,
+        timestamp: new Date().toISOString()
+    });
+    
+    userInteractions[blogId] = interactions;
+    localStorage.setItem('blogInteractions', JSON.stringify(userInteractions));
+    
+    // Only update Firebase if db is available and it's not a demo blog
+    if (typeof db !== 'undefined' && !blogId.startsWith('demo')) {
+        try {
+            const blogRef = doc(db, 'blogs', blogId);
+            await updateDoc(blogRef, {
+                comments: increment(1)
+            });
+        } catch (error) {
+            console.error('Error syncing comment count:', error);
+        }
     }
+    
+    // Update the local count display immediately
+    const blog = blogsData.find(b => b.id === blogId);
+    if (blog) {
+        blog.comments = (blog.comments || 0) + 1;
+        renderBlogs();
+    }
+    
+    // Clear input and reload comments
+    input.value = '';
+    loadComments(blogId);
+    
+    showNotification('Comment added successfully!');
 };
 
 // Share blog
@@ -740,11 +758,24 @@ window.shareBlog = async function(blogId, title) {
             showNotification('Link copied to clipboard!');
         }
         
-        // Increment share count
-        const blogRef = doc(db, 'blogs', blogId);
-        await updateDoc(blogRef, {
-            shares: increment(1)
-        });
+        // Only update Firebase if db is available and it's not a demo blog
+        if (typeof db !== 'undefined' && !blogId.startsWith('demo')) {
+            try {
+                const blogRef = doc(db, 'blogs', blogId);
+                await updateDoc(blogRef, {
+                    shares: increment(1)
+                });
+            } catch (error) {
+                console.error('Error syncing share count:', error);
+            }
+        }
+        
+        // Update the local count display immediately
+        const blog = blogsData.find(b => b.id === blogId);
+        if (blog) {
+            blog.shares = (blog.shares || 0) + 1;
+            renderBlogs();
+        }
     } catch (error) {
         console.error('Error sharing:', error);
         showNotification('Unable to share. Please copy the URL manually.');
@@ -763,9 +794,12 @@ window.openBlogModal = function(blogId) {
         day: 'numeric'
     }).format(date) : 'No date';
     
-    // Extract first image from content
+    // Extract first image from content and sanitize
     const imgMatch = blog.content?.match(/<img[^>]+src="([^">]+)"/);
-    const imageUrl = imgMatch ? imgMatch[1] : null;
+    const imageUrl = imgMatch ? sanitizeImageUrl(imgMatch[1]) : null;
+    
+    // Sanitize the blog content
+    const sanitizedContent = sanitizeHtmlContent(blog.content || '');
     
     // Create modal
     const modal = document.createElement('div');
@@ -777,7 +811,7 @@ window.openBlogModal = function(blogId) {
             <div class="blog-modal-body">
                 <h2 class="blog-modal-title">${escapeHtml(blog.title || 'Untitled')}</h2>
                 <div class="blog-modal-date">${formattedDate}</div>
-                <div class="blog-modal-content-text">${blog.content || ''}</div>
+                <div class="blog-modal-content-text">${sanitizedContent}</div>
             </div>
         </div>
     `;
@@ -826,6 +860,71 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// Validate and sanitize image URL
+function sanitizeImageUrl(url) {
+    if (!url) return null;
+    try {
+        const parsed = new URL(url, window.location.href);
+        // Only allow http and https protocols
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+            return url;
+        }
+    } catch (e) {
+        console.warn('Invalid image URL:', url);
+    }
+    return null;
+}
+
+// Sanitize HTML content to remove dangerous scripts
+function sanitizeHtmlContent(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // Remove all script tags
+    const scripts = tempDiv.querySelectorAll('script');
+    scripts.forEach(script => script.remove());
+    
+    // Remove all event handlers
+    const allElements = tempDiv.querySelectorAll('*');
+    allElements.forEach(el => {
+        // Remove event handler attributes
+        Array.from(el.attributes).forEach(attr => {
+            if (attr.name.startsWith('on')) {
+                el.removeAttribute(attr.name);
+            }
+        });
+        
+        // Sanitize href attributes to prevent javascript: urls
+        if (el.hasAttribute('href')) {
+            const href = el.getAttribute('href');
+            try {
+                const url = new URL(href, window.location.href);
+                if (url.protocol !== 'http:' && url.protocol !== 'https:' && url.protocol !== 'mailto:') {
+                    el.removeAttribute('href');
+                }
+            } catch (e) {
+                // If it's a fragment link (e.g., #section), keep it
+                if (!href.startsWith('#')) {
+                    el.removeAttribute('href');
+                }
+            }
+        }
+        
+        // Sanitize src attributes for images
+        if (el.tagName === 'IMG' && el.hasAttribute('src')) {
+            const src = el.getAttribute('src');
+            const sanitized = sanitizeImageUrl(src);
+            if (sanitized) {
+                el.setAttribute('src', sanitized);
+            } else {
+                el.removeAttribute('src');
+            }
+        }
+    });
+    
+    return tempDiv.innerHTML;
 }
 
 // Initialize blogs when page loads
