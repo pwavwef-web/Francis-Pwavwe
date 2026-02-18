@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Francis Admin Panel</title>
+    <title>Francis Personal Portal</title>
     <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -17,36 +18,38 @@
             background: #f5f5f5;
         }
 
-        /* Login Screen Styles */
+        /* Login Screen */
         .login-container {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
         .login-card {
             background: white;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             max-width: 400px;
             width: 90%;
         }
 
         .login-icon {
             text-align: center;
-            color: #1e3a8a;
-            font-size: 80px;
+            font-size: 60px;
             margin-bottom: 20px;
         }
 
         .login-title {
             text-align: center;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 700;
             margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .login-subtitle {
@@ -62,149 +65,163 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
+            margin-bottom: 8px;
+            font-weight: 600;
             color: #333;
         }
 
         .form-input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 14px;
+            transition: all 0.3s;
         }
 
         .form-input:focus {
             outline: none;
-            border-color: #1e3a8a;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .error-message {
             color: #dc2626;
             text-align: center;
-            margin: 20px 0;
+            margin: 15px 0;
             font-size: 14px;
         }
 
-        .btn-primary {
-            width: 100%;
-            padding: 15px;
-            background: #1e3a8a;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn-primary:hover {
-            background: #1e40af;
-        }
-
-        .btn-primary:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ffffff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Dashboard Styles */
+        /* Dashboard */
         .dashboard {
             display: none;
+            min-height: 100vh;
+            background: #f5f7fa;
         }
 
         .dashboard.active {
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
         }
 
-        .app-bar {
-            background: #1e3a8a;
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px 20px;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .app-title {
-            font-size: 20px;
-            font-weight: 600;
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
         }
 
         .logout-btn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
+            padding: 8px 20px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
+            font-weight: 500;
+            transition: all 0.3s;
         }
 
         .logout-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
 
-        .dashboard-content {
+        /* Main Content */
+        .main-content {
             display: flex;
             flex: 1;
         }
 
-        .nav-rail {
-            width: 120px;
-            background: #f5f5f5;
-            border-right: 1px solid #e0e0e0;
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
             padding: 20px 0;
         }
 
         .nav-item {
-            padding: 20px;
-            text-align: center;
+            padding: 15px 25px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #555;
+            font-weight: 500;
         }
 
         .nav-item:hover {
-            background: #e0e0e0;
+            background: #f5f7fa;
+            color: #667eea;
         }
 
         .nav-item.active {
-            background: #e8eaf6;
-            color: #1e3a8a;
-            font-weight: bold;
+            background: linear-gradient(90deg, #667eea15 0%, transparent 100%);
+            border-right: 3px solid #667eea;
+            color: #667eea;
+            font-weight: 600;
         }
 
         .nav-icon {
-            font-size: 28px;
-            margin-bottom: 5px;
+            font-size: 22px;
+            width: 30px;
+            text-align: center;
         }
 
-        .nav-label {
-            font-size: 12px;
-        }
-
-        .screen-container {
+        /* Content Area */
+        .content-area {
             flex: 1;
-            padding: 20px;
+            padding: 30px;
             overflow-y: auto;
         }
 
@@ -216,132 +233,342 @@
             display: block;
         }
 
-        /* Messages Screen */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
+        .page-header {
+            margin-bottom: 30px;
         }
 
-        .empty-icon {
-            font-size: 80px;
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: #718096;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             margin-bottom: 20px;
         }
 
-        .message-card {
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a202c;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
             background: white;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid;
         }
 
-        .message-header {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
+        .stat-card.income {
+            border-left-color: #10b981;
+        }
+
+        .stat-card.expenses {
+            border-left-color: #ef4444;
+        }
+
+        .stat-card.budget {
+            border-left-color: #3b82f6;
+        }
+
+        .stat-card.savings {
+            border-left-color: #8b5cf6;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .stat-change {
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .stat-change.positive {
+            color: #10b981;
+        }
+
+        .stat-change.negative {
+            color: #ef4444;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
-            transition: background 0.3s;
+            font-weight: 500;
+            transition: all 0.3s;
         }
 
-        .message-header:hover {
-            background: #f9fafb;
-        }
-
-        .message-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #1e3a8a;
+        .btn-success {
+            background: #10b981;
             color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
         }
 
-        .message-info {
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-info {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Forms */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        /* Transaction List */
+        .transaction-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-info {
             flex: 1;
         }
 
-        .message-name {
-            font-weight: bold;
-            margin-bottom: 3px;
+        .transaction-description {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 4px;
         }
 
-        .message-email {
+        .transaction-meta {
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .transaction-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .transaction-amount.expense {
+            color: #ef4444;
+        }
+
+        .transaction-amount.income {
+            color: #10b981;
+        }
+
+        /* Blog Editor */
+        .editor-toolbar {
+            display: flex;
+            gap: 5px;
+            padding: 10px;
+            background: #f5f7fa;
+            border-radius: 8px 8px 0 0;
+            border: 2px solid #e0e0e0;
+            border-bottom: none;
+            flex-wrap: wrap;
+        }
+
+        .editor-btn {
+            padding: 8px 12px;
+            border: none;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
             font-size: 14px;
-            color: #666;
+            transition: all 0.2s;
         }
 
-        .message-time {
-            font-size: 12px;
-            color: #999;
+        .editor-btn:hover {
+            background: #e0e0e0;
         }
 
-        .message-expand-icon {
-            font-size: 20px;
-            color: #666;
-            transition: transform 0.3s;
+        .editor-content {
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 0 0 8px 8px;
+            background: white;
+            outline: none;
         }
 
-        .message-card.expanded .message-expand-icon {
-            transform: rotate(180deg);
+        .blog-post {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .message-body {
-            display: none;
-            padding: 0 20px 20px;
-            border-top: 1px solid #e0e0e0;
+        .blog-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1a202c;
         }
 
-        .message-card.expanded .message-body {
-            display: block;
-        }
-
-        .message-subject {
-            font-weight: bold;
-            margin: 15px 0 10px;
-        }
-
-        .message-text {
-            color: #333;
-            line-height: 1.6;
+        .blog-meta {
+            font-size: 14px;
+            color: #718096;
             margin-bottom: 15px;
         }
 
-        .message-actions {
-            display: flex;
-            justify-content: flex-end;
+        .blog-content {
+            line-height: 1.8;
+            color: #4a5568;
         }
 
-        .btn-delete {
-            background: transparent;
-            border: 1px solid #dc2626;
-            color: #dc2626;
-            padding: 8px 15px;
-            border-radius: 5px;
+        .blog-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .btn-delete:hover {
-            background: #dc2626;
-            color: white;
+        .file-upload-area:hover {
+            border-color: #667eea;
+            background: #f7fafc;
         }
 
-        /* AI Assistant Screen */
-        .ai-container {
+        .file-upload-area.dragover {
+            border-color: #667eea;
+            background: #eef2ff;
+        }
+
+        .file-list {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            font-size: 32px;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 4px;
+        }
+
+        .file-size {
+            font-size: 13px;
+            color: #718096;
+        }
+
+        /* Chat Interface */
+        .chat-container {
             display: flex;
             flex-direction: column;
-            height: 100%;
+            height: calc(100vh - 300px);
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-            background: white;
         }
 
         .chat-bubble {
@@ -354,79 +581,48 @@
         }
 
         .chat-avatar {
-            width: 35px;
-            height: 35px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            font-size: 18px;
         }
 
         .chat-avatar.ai {
-            background: #1e3a8a;
+            background: #667eea;
             color: white;
-            margin-right: 10px;
+            margin-right: 12px;
         }
 
         .chat-avatar.user {
-            background: #d4af37;
+            background: #10b981;
             color: white;
-            margin-left: 10px;
+            margin-left: 12px;
         }
 
         .chat-content {
             max-width: 70%;
-            padding: 15px;
-            border-radius: 15px;
+            padding: 12px 16px;
+            border-radius: 12px;
         }
 
         .chat-bubble.ai .chat-content {
-            background: #f5f5f5;
-            color: #333;
+            background: #f7fafc;
+            color: #1a202c;
         }
 
         .chat-bubble.user .chat-content {
-            background: #1e3a8a;
+            background: #667eea;
             color: white;
-        }
-
-        .chat-text {
-            margin-bottom: 5px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-        }
-
-        .chat-time {
-            font-size: 10px;
-            opacity: 0.7;
-        }
-
-        .ai-loading {
-            padding: 10px 20px;
-            display: none;
-            align-items: center;
-        }
-
-        .ai-loading.active {
-            display: flex;
-        }
-
-        .ai-loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #1e3a8a;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
-            margin-right: 10px;
         }
 
         .chat-input-container {
             padding: 20px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
-            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
+            background: #f7fafc;
+            border-top: 1px solid #e2e8f0;
         }
 
         .chat-input-row {
@@ -436,63 +632,120 @@
 
         .chat-input {
             flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 14px;
             resize: none;
         }
 
         .chat-input:focus {
             outline: none;
-            border-color: #1e3a8a;
+            border-color: #667eea;
         }
 
         .btn-send {
-            background: #1e3a8a;
+            padding: 12px 24px;
+            background: #667eea;
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 20px;
-            transition: background 0.3s;
+            font-weight: 600;
         }
 
         .btn-send:hover {
-            background: #1e40af;
+            background: #5568d3;
         }
 
-        .btn-send:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-        }
-
-        /* Loading indicator */
-        .loading-container {
+        /* Task List */
+        .task-item {
             display: flex;
-            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background: #f5f5f5;
+            gap: 15px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
-        .loading-container.hidden {
-            display: none;
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
         }
 
+        .task-text {
+            flex: 1;
+            font-size: 15px;
+        }
+
+        .task-text.completed {
+            text-decoration: line-through;
+            color: #718096;
+        }
+
+        .task-priority {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .task-priority.high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .task-priority.medium {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .task-priority.low {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        /* Utilities */
         .hidden {
             display: none !important;
         }
 
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-rail {
+            .sidebar {
                 width: 80px;
             }
-            
+
             .nav-label {
-                font-size: 10px;
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-area {
+                padding: 15px;
             }
 
             .chat-content {
@@ -504,15 +757,15 @@
 <body>
     <!-- Loading Screen -->
     <div id="loadingScreen" class="loading-container">
-        <div class="loading-spinner"></div>
+        <div class="loading">Loading...</div>
     </div>
 
     <!-- Login Screen -->
     <div id="loginScreen" class="login-container hidden">
         <div class="login-card">
-            <div class="login-icon">🔒</div>
-            <div class="login-title">Francis Admin Panel</div>
-            <div class="login-subtitle">Restricted Access</div>
+            <div class="login-icon">🔐</div>
+            <div class="login-title">Francis Portal</div>
+            <div class="login-subtitle">Your Personal Command Center</div>
             
             <form id="loginForm">
                 <div class="form-group">
@@ -527,23 +780,44 @@
                 
                 <div id="errorMessage" class="error-message hidden"></div>
                 
-                <button type="submit" id="loginBtn" class="btn-primary">
-                    Sign In
-                </button>
+                <button type="submit" id="loginBtn" class="btn-primary">Sign In</button>
             </form>
         </div>
     </div>
 
     <!-- Dashboard -->
     <div id="dashboard" class="dashboard">
-        <div class="app-bar">
-            <div class="app-title">Francis Admin Panel</div>
-            <button id="logoutBtn" class="logout-btn">Sign Out</button>
+        <div class="header">
+            <div class="header-title">Francis Portal</div>
+            <div class="header-user">
+                <div class="user-avatar">👤</div>
+                <button id="logoutBtn" class="logout-btn">Sign Out</button>
+            </div>
         </div>
         
-        <div class="dashboard-content">
-            <div class="nav-rail">
-                <div class="nav-item active" data-screen="messages">
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="nav-item active" data-screen="dashboard">
+                    <div class="nav-icon">📊</div>
+                    <div class="nav-label">Dashboard</div>
+                </div>
+                <div class="nav-item" data-screen="finances">
+                    <div class="nav-icon">💰</div>
+                    <div class="nav-label">Finances</div>
+                </div>
+                <div class="nav-item" data-screen="planning">
+                    <div class="nav-icon">📝</div>
+                    <div class="nav-label">Planning</div>
+                </div>
+                <div class="nav-item" data-screen="blogs">
+                    <div class="nav-icon">✍️</div>
+                    <div class="nav-label">Blogs</div>
+                </div>
+                <div class="nav-item" data-screen="projects">
+                    <div class="nav-icon">📁</div>
+                    <div class="nav-label">Projects</div>
+                </div>
+                <div class="nav-item" data-screen="messages">
                     <div class="nav-icon">📧</div>
                     <div class="nav-label">Messages</div>
                 </div>
@@ -553,31 +827,277 @@
                 </div>
             </div>
             
-            <div class="screen-container">
+            <div class="content-area">
+                <!-- Dashboard Screen -->
+                <div id="dashboardScreen" class="screen active">
+                    <div class="page-header">
+                        <h1 class="page-title">Dashboard</h1>
+                        <p class="page-subtitle">Overview of your portal</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card expenses">
+                            <div class="stat-label">Total Expenses</div>
+                            <div class="stat-value" id="dashTotalExpenses">GH₵ 0</div>
+                            <div class="stat-change">This month</div>
+                        </div>
+                        <div class="stat-card budget">
+                            <div class="stat-label">Monthly Budget</div>
+                            <div class="stat-value" id="dashMonthlyBudget">GH₵ 0</div>
+                            <div class="stat-change">Remaining</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Active Tasks</div>
+                            <div class="stat-value" id="dashActiveTasks">0</div>
+                            <div class="stat-change">In planning</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Blog Posts</div>
+                            <div class="stat-value" id="dashBlogCount">0</div>
+                            <div class="stat-change">Published</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Quick Actions</h3>
+                        </div>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-success" onclick="switchScreen('finances')">Add Expense</button>
+                            <button class="btn btn-info" onclick="switchScreen('planning')">Add Task</button>
+                            <button class="btn btn-success" onclick="switchScreen('blogs')">Write Blog</button>
+                            <button class="btn btn-info" onclick="switchScreen('projects')">Upload File</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finances Screen -->
+                <div id="financesScreen" class="screen">
+                    <div class="page-header">
+                        <h1 class="page-title">💰 Finances</h1>
+                        <p class="page-subtitle">Track your spending, manage your budget</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card income">
+                            <div class="stat-label">Total Income</div>
+                            <div class="stat-value" id="totalIncome">GH₵ 0</div>
+                        </div>
+                        <div class="stat-card expenses">
+                            <div class="stat-label">Total Expenses</div>
+                            <div class="stat-value" id="totalExpenses">GH₵ 0</div>
+                        </div>
+                        <div class="stat-card budget">
+                            <div class="stat-label">Budget Remaining</div>
+                            <div class="stat-value" id="budgetRemaining">GH₵ 0</div>
+                        </div>
+                        <div class="stat-card savings">
+                            <div class="stat-label">Net Balance</div>
+                            <div class="stat-value" id="netBalance">GH₵ 0</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Add Transaction</h3>
+                            </div>
+                            <form id="transactionForm">
+                                <div class="form-group">
+                                    <label>Type</label>
+                                    <select id="txType" class="form-control" required>
+                                        <option value="expense">Expense</option>
+                                        <option value="income">Income</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select id="txCategory" class="form-control" required>
+                                        <option value="Food">Food</option>
+                                        <option value="Airtime">Airtime</option>
+                                        <option value="Transport">Transport</option>
+                                        <option value="Education">Education</option>
+                                        <option value="Entertainment">Entertainment</option>
+                                        <option value="Health">Health</option>
+                                        <option value="Utilities">Utilities</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Amount (GH₵)</label>
+                                    <input type="number" id="txAmount" class="form-control" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" id="txDescription" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="date" id="txDate" class="form-control" required>
+                                </div>
+                                <button type="submit" class="btn btn-success" style="width: 100%;">Add Transaction</button>
+                            </form>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Spending by Category</h3>
+                            </div>
+                            <canvas id="spendingChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Recent Transactions</h3>
+                        </div>
+                        <div id="transactionList" class="transaction-list"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">💡 AI Financial Advice</h3>
+                            <button class="btn btn-info" onclick="getFinancialAdvice()">Get Advice</button>
+                        </div>
+                        <div id="financialAdvice" style="line-height: 1.8; color: #4a5568;"></div>
+                    </div>
+                </div>
+
+                <!-- Planning Screen -->
+                <div id="planningScreen" class="screen">
+                    <div class="page-header">
+                        <h1 class="page-title">📝 Planning</h1>
+                        <p class="page-subtitle">Organize your tasks and goals</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Add New Task</h3>
+                        </div>
+                        <form id="taskForm">
+                            <div class="form-row">
+                                <input type="text" id="taskTitle" class="form-control" placeholder="Task title" required>
+                                <select id="taskPriority" class="form-control">
+                                    <option value="low">Low Priority</option>
+                                    <option value="medium">Medium Priority</option>
+                                    <option value="high">High Priority</option>
+                                </select>
+                                <input type="date" id="taskDueDate" class="form-control" required>
+                                <button type="submit" class="btn btn-success">Add Task</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Tasks</h3>
+                        </div>
+                        <div id="taskList"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">🤖 AI Planning Advice</h3>
+                            <button class="btn btn-info" onclick="getPlanningAdvice()">Get Advice</button>
+                        </div>
+                        <div id="planningAdvice" style="line-height: 1.8; color: #4a5568;"></div>
+                    </div>
+                </div>
+
+                <!-- Blogs Screen -->
+                <div id="blogsScreen" class="screen">
+                    <div class="page-header">
+                        <h1 class="page-title">✍️ Blogs</h1>
+                        <p class="page-subtitle">Share your thoughts and ideas</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Write New Blog Post</h3>
+                        </div>
+                        <form id="blogForm">
+                            <div class="form-group">
+                                <input type="text" id="blogTitle" class="form-control" placeholder="Blog Title" required>
+                            </div>
+                            <div class="editor-toolbar">
+                                <button type="button" class="editor-btn" onclick="formatText('bold')"><b>B</b></button>
+                                <button type="button" class="editor-btn" onclick="formatText('italic')"><i>I</i></button>
+                                <button type="button" class="editor-btn" onclick="formatText('underline')"><u>U</u></button>
+                                <button type="button" class="editor-btn" onclick="formatText('insertOrderedList')">1. List</button>
+                                <button type="button" class="editor-btn" onclick="formatText('insertUnorderedList')">• List</button>
+                                <button type="button" class="editor-btn" onclick="insertLink()">🔗 Link</button>
+                                <button type="button" class="editor-btn" onclick="insertImage()">🖼️ Image</button>
+                                <select class="editor-btn" onchange="formatHeading(this.value)">
+                                    <option value="">Heading</option>
+                                    <option value="h1">Heading 1</option>
+                                    <option value="h2">Heading 2</option>
+                                    <option value="h3">Heading 3</option>
+                                </select>
+                            </div>
+                            <div id="blogEditor" class="editor-content" contenteditable="true"></div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <button type="submit" class="btn btn-success">Publish Blog Post</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Published Blogs</h3>
+                        </div>
+                        <div id="blogList"></div>
+                    </div>
+                </div>
+
+                <!-- Projects Screen -->
+                <div id="projectsScreen" class="screen">
+                    <div class="page-header">
+                        <h1 class="page-title">📁 Projects</h1>
+                        <p class="page-subtitle">Upload and manage your project files</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Upload Files</h3>
+                        </div>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <div style="font-size: 48px; margin-bottom: 15px;">📤</div>
+                            <div style="font-size: 18px; font-weight: 600; margin-bottom: 8px;">Drop files here or click to upload</div>
+                            <div style="font-size: 14px; color: #718096;">Supported files: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, ZIP, Images</div>
+                            <input type="file" id="fileInput" multiple style="display: none;">
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">My Files</h3>
+                        </div>
+                        <div id="fileList" class="file-list"></div>
+                    </div>
+                </div>
+
                 <!-- Messages Screen -->
-                <div id="messagesScreen" class="screen active">
+                <div id="messagesScreen" class="screen">
+                    <div class="page-header">
+                        <h1 class="page-title">📧 Messages</h1>
+                        <p class="page-subtitle">Messages from your website contact form</p>
+                    </div>
                     <div id="messagesContent"></div>
                 </div>
-                
+
                 <!-- AI Assistant Screen -->
                 <div id="aiScreen" class="screen">
-                    <div class="ai-container">
+                    <div class="page-header">
+                        <h1 class="page-title">🤖 AI Assistant</h1>
+                        <p class="page-subtitle">Your personal AI advisor</p>
+                    </div>
+
+                    <div class="chat-container">
                         <div id="chatMessages" class="chat-messages"></div>
-                        
-                        <div id="aiLoading" class="ai-loading">
-                            <div class="ai-loading-spinner"></div>
-                            <span>AI is thinking...</span>
-                        </div>
-                        
                         <div class="chat-input-container">
                             <div class="chat-input-row">
-                                <textarea 
-                                    id="chatInput" 
-                                    class="chat-input" 
-                                    placeholder="Ask about finances, budgeting, diet, planning..."
-                                    rows="1"
-                                ></textarea>
-                                <button id="sendBtn" class="btn-send">➤</button>
+                                <textarea id="chatInput" class="chat-input" placeholder="Ask anything..." rows="1"></textarea>
+                                <button id="sendBtn" class="btn-send">Send</button>
                             </div>
                         </div>
                     </div>
@@ -590,7 +1110,8 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { getFirestore, collection, query, orderBy, onSnapshot, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, serverTimestamp, where, getDocs, updateDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject, listAll } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -606,9 +1127,17 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // Gemini API Key
         const GEMINI_API_KEY = 'AIzaSyDcEcBXUuzBas3qAaSQ-zw1a7Tj20guvwk';
+
+        // Global state
+        let currentUser = null;
+        let transactions = [];
+        let tasks = [];
+        let blogs = [];
+        let spendingChart = null;
 
         // DOM elements
         const loadingScreen = document.getElementById('loadingScreen');
@@ -616,20 +1145,17 @@
         const dashboard = document.getElementById('dashboard');
         const loginForm = document.getElementById('loginForm');
         const errorMessage = document.getElementById('errorMessage');
-        const loginBtn = document.getElementById('loginBtn');
         const logoutBtn = document.getElementById('logoutBtn');
-        const navItems = document.querySelectorAll('.nav-item');
-        const screens = document.querySelectorAll('.screen');
 
         // Auth state observer
         onAuthStateChanged(auth, (user) => {
             loadingScreen.classList.add('hidden');
             
             if (user && user.email === 'pwavwef@gmail.com') {
+                currentUser = user;
                 loginScreen.classList.add('hidden');
                 dashboard.classList.add('active');
-                initializeMessagesListener();
-                initializeAIAssistant();
+                initializeApp();
             } else {
                 if (user) {
                     signOut(auth);
@@ -647,19 +1173,14 @@
             const password = document.getElementById('password').value;
             
             if (email !== 'pwavwef@gmail.com') {
-                showError('Access denied. This panel is restricted to Francis Pwavwe only.');
+                showError('Access denied. This portal is for Francis only.');
                 return;
             }
-            
-            setLoading(true);
-            errorMessage.classList.add('hidden');
             
             try {
                 await signInWithEmailAndPassword(auth, email, password);
             } catch (error) {
                 showError(error.message || 'Authentication failed');
-            } finally {
-                setLoading(false);
             }
         });
 
@@ -668,45 +1189,573 @@
             await signOut(auth);
         });
 
-        // Navigation handler
-        navItems.forEach(item => {
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 const screenId = item.dataset.screen;
-                
-                navItems.forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
-                
-                screens.forEach(screen => screen.classList.remove('active'));
-                document.getElementById(`${screenId}Screen`).classList.add('active');
+                switchScreen(screenId);
             });
         });
 
-        // Helper functions
-        function setLoading(loading) {
-            loginBtn.disabled = loading;
-            loginBtn.innerHTML = loading 
-                ? '<div class="loading-spinner"></div>' 
-                : 'Sign In';
-        }
+        window.switchScreen = function(screenId) {
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelector(`[data-screen="${screenId}"]`).classList.add('active');
+            
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById(`${screenId}Screen`).classList.add('active');
+        };
 
         function showError(message) {
             errorMessage.textContent = message;
             errorMessage.classList.remove('hidden');
         }
 
-        // Messages listener
-        function initializeMessagesListener() {
-            const messagesContent = document.getElementById('messagesContent');
+        // Initialize app
+        function initializeApp() {
+            initializeFinances();
+            initializePlanning();
+            initializeBlogs();
+            initializeProjects();
+            initializeMessages();
+            initializeAI();
+            updateDashboard();
+        }
+
+        // ===== FINANCES =====
+        function initializeFinances() {
+            // Set today's date as default
+            document.getElementById('txDate').valueAsDate = new Date();
+
+            // Transaction form
+            document.getElementById('transactionForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const type = document.getElementById('txType').value;
+                const category = document.getElementById('txCategory').value;
+                const amount = parseFloat(document.getElementById('txAmount').value);
+                const description = document.getElementById('txDescription').value;
+                const date = document.getElementById('txDate').value;
+
+                try {
+                    await addDoc(collection(db, 'transactions'), {
+                        type,
+                        category,
+                        amount,
+                        description,
+                        date,
+                        timestamp: serverTimestamp(),
+                        userId: currentUser.uid
+                    });
+
+                    e.target.reset();
+                    document.getElementById('txDate').valueAsDate = new Date();
+                    alert('Transaction added successfully!');
+                } catch (error) {
+                    alert('Error adding transaction: ' + error.message);
+                }
+            });
+
+            // Listen for transactions
+            const q = query(
+                collection(db, 'transactions'),
+                where('userId', '==', currentUser.uid),
+                orderBy('timestamp', 'desc')
+            );
+
+            onSnapshot(q, (snapshot) => {
+                transactions = [];
+                snapshot.forEach((doc) => {
+                    transactions.push({ id: doc.id, ...doc.data() });
+                });
+                updateFinances();
+            });
+        }
+
+        function updateFinances() {
+            // Calculate totals
+            let totalIncome = 0;
+            let totalExpenses = 0;
+            const categoryExpenses = {};
+
+            transactions.forEach(tx => {
+                if (tx.type === 'income') {
+                    totalIncome += tx.amount;
+                } else {
+                    totalExpenses += tx.amount;
+                    categoryExpenses[tx.category] = (categoryExpenses[tx.category] || 0) + tx.amount;
+                }
+            });
+
+            const netBalance = totalIncome - totalExpenses;
+            const monthlyBudget = 1000; // You can make this configurable
+            const budgetRemaining = monthlyBudget - totalExpenses;
+
+            // Update stats
+            document.getElementById('totalIncome').textContent = `GH₵ ${totalIncome.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `GH₵ ${totalExpenses.toFixed(2)}`;
+            document.getElementById('budgetRemaining').textContent = `GH₵ ${budgetRemaining.toFixed(2)}`;
+            document.getElementById('netBalance').textContent = `GH₵ ${netBalance.toFixed(2)}`;
+
+            // Update transaction list
+            const txList = document.getElementById('transactionList');
+            if (transactions.length === 0) {
+                txList.innerHTML = '<div class="empty-state"><div class="empty-icon">💸</div><div>No transactions yet</div></div>';
+            } else {
+                txList.innerHTML = transactions.slice(0, 10).map(tx => `
+                    <div class="transaction-item">
+                        <div class="transaction-info">
+                            <div class="transaction-description">${escapeHtml(tx.description)}</div>
+                            <div class="transaction-meta">${escapeHtml(tx.category)} • ${escapeHtml(tx.date)}</div>
+                        </div>
+                        <div class="transaction-amount ${tx.type}">
+                            ${tx.type === 'income' ? '+' : '-'} GH₵ ${tx.amount.toFixed(2)}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Update chart
+            updateSpendingChart(categoryExpenses);
+        }
+
+        function updateSpendingChart(categoryExpenses) {
+            const canvas = document.getElementById('spendingChart');
+            const ctx = canvas.getContext('2d');
+
+            if (spendingChart) {
+                spendingChart.destroy();
+            }
+
+            const categories = Object.keys(categoryExpenses);
+            const amounts = Object.values(categoryExpenses);
+
+            if (categories.length === 0) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.font = '14px sans-serif';
+                ctx.fillStyle = '#718096';
+                ctx.textAlign = 'center';
+                ctx.fillText('No spending data yet', canvas.width / 2, canvas.height / 2);
+                return;
+            }
+
+            spendingChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        data: amounts,
+                        backgroundColor: [
+                            '#ef4444', '#f59e0b', '#10b981', '#3b82f6',
+                            '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': GH₵ ' + context.parsed.toFixed(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.getFinancialAdvice = async function() {
+            const adviceDiv = document.getElementById('financialAdvice');
+            adviceDiv.innerHTML = '<div class="loading">Getting AI advice...</div>';
+
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            
+            const categoryBreakdown = {};
+            transactions.filter(t => t.type === 'expense').forEach(t => {
+                categoryBreakdown[t.category] = (categoryBreakdown[t.category] || 0) + t.amount;
+            });
+
+            const prompt = `As a financial advisor, analyze this spending data and provide personalized advice:
+- Total Income: GH₵ ${totalIncome}
+- Total Expenses: GH₵ ${totalExpenses}
+- Spending by category: ${JSON.stringify(categoryBreakdown)}
+
+Provide specific advice on:
+1. Budget optimization
+2. Spending patterns
+3. Savings recommendations
+4. Areas to reduce spending`;
+
+            try {
+                const response = await callGeminiAPI(prompt);
+                adviceDiv.innerHTML = response.replace(/\n/g, '<br>');
+            } catch (error) {
+                adviceDiv.innerHTML = `<div style="color: #ef4444;">Error getting advice: ${error.message}</div>`;
+            }
+        };
+
+        // ===== PLANNING =====
+        function initializePlanning() {
+            // Task form
+            document.getElementById('taskForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const title = document.getElementById('taskTitle').value;
+                const priority = document.getElementById('taskPriority').value;
+                const dueDate = document.getElementById('taskDueDate').value;
+
+                try {
+                    await addDoc(collection(db, 'tasks'), {
+                        title,
+                        priority,
+                        dueDate,
+                        completed: false,
+                        timestamp: serverTimestamp(),
+                        userId: currentUser.uid
+                    });
+
+                    e.target.reset();
+                    alert('Task added successfully!');
+                } catch (error) {
+                    alert('Error adding task: ' + error.message);
+                }
+            });
+
+            // Listen for tasks
+            const q = query(
+                collection(db, 'tasks'),
+                where('userId', '==', currentUser.uid),
+                orderBy('timestamp', 'desc')
+            );
+
+            onSnapshot(q, (snapshot) => {
+                tasks = [];
+                snapshot.forEach((doc) => {
+                    tasks.push({ id: doc.id, ...doc.data() });
+                });
+                updateTasks();
+            });
+        }
+
+        function updateTasks() {
+            const taskList = document.getElementById('taskList');
+            
+            if (tasks.length === 0) {
+                taskList.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><div>No tasks yet</div></div>';
+                return;
+            }
+
+            taskList.innerHTML = tasks.map(task => `
+                <div class="task-item">
+                    <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} 
+                           onchange="toggleTask('${task.id}', this.checked)">
+                    <div class="task-text ${task.completed ? 'completed' : ''}">${escapeHtml(task.title)}</div>
+                    <div class="task-priority ${task.priority}">${task.priority}</div>
+                    <div style="font-size: 13px; color: #718096;">${task.dueDate}</div>
+                    <button class="btn btn-danger" onclick="deleteTask('${task.id}')" style="padding: 6px 12px;">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        window.toggleTask = async function(taskId, completed) {
+            try {
+                await updateDoc(doc(db, 'tasks', taskId), { completed });
+            } catch (error) {
+                alert('Error updating task: ' + error.message);
+            }
+        };
+
+        window.deleteTask = async function(taskId) {
+            if (confirm('Delete this task?')) {
+                try {
+                    await deleteDoc(doc(db, 'tasks', taskId));
+                } catch (error) {
+                    alert('Error deleting task: ' + error.message);
+                }
+            }
+        };
+
+        window.getPlanningAdvice = async function() {
+            const adviceDiv = document.getElementById('planningAdvice');
+            adviceDiv.innerHTML = '<div class="loading">Getting AI advice...</div>';
+
+            const activeTasks = tasks.filter(t => !t.completed);
+            const tasksByPriority = {
+                high: activeTasks.filter(t => t.priority === 'high').length,
+                medium: activeTasks.filter(t => t.priority === 'medium').length,
+                low: activeTasks.filter(t => t.priority === 'low').length
+            };
+
+            const prompt = `As a productivity advisor, analyze this task data and provide advice:
+- Active tasks: ${activeTasks.length}
+- High priority: ${tasksByPriority.high}
+- Medium priority: ${tasksByPriority.medium}
+- Low priority: ${tasksByPriority.low}
+- Top tasks: ${activeTasks.slice(0, 5).map(t => t.title).join(', ')}
+
+Provide specific advice on:
+1. Task prioritization
+2. Time management
+3. Productivity tips
+4. How to tackle tasks efficiently`;
+
+            try {
+                const response = await callGeminiAPI(prompt);
+                adviceDiv.innerHTML = response.replace(/\n/g, '<br>');
+            } catch (error) {
+                adviceDiv.innerHTML = `<div style="color: #ef4444;">Error getting advice: ${error.message}</div>`;
+            }
+        };
+
+        // ===== BLOGS =====
+        function initializeBlogs() {
+            // Blog form
+            document.getElementById('blogForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const title = document.getElementById('blogTitle').value;
+                const content = document.getElementById('blogEditor').innerHTML;
+
+                if (!content.trim()) {
+                    alert('Please write some content');
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, 'blogs'), {
+                        title,
+                        content,
+                        timestamp: serverTimestamp(),
+                        userId: currentUser.uid
+                    });
+
+                    document.getElementById('blogTitle').value = '';
+                    document.getElementById('blogEditor').innerHTML = '';
+                    alert('Blog published successfully!');
+                } catch (error) {
+                    alert('Error publishing blog: ' + error.message);
+                }
+            });
+
+            // Listen for blogs
+            const q = query(
+                collection(db, 'blogs'),
+                where('userId', '==', currentUser.uid),
+                orderBy('timestamp', 'desc')
+            );
+
+            onSnapshot(q, (snapshot) => {
+                blogs = [];
+                snapshot.forEach((doc) => {
+                    blogs.push({ id: doc.id, ...doc.data() });
+                });
+                updateBlogs();
+            });
+        }
+
+        function updateBlogs() {
+            const blogList = document.getElementById('blogList');
+            
+            if (blogs.length === 0) {
+                blogList.innerHTML = '<div class="empty-state"><div class="empty-icon">✍️</div><div>No blog posts yet</div></div>';
+                return;
+            }
+
+            blogList.innerHTML = blogs.map(blog => {
+                const date = blog.timestamp?.toDate();
+                const formattedDate = date ? new Intl.DateTimeFormat('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }).format(date) : 'No date';
+
+                return `
+                    <div class="blog-post">
+                        <h3 class="blog-title">${escapeHtml(blog.title)}</h3>
+                        <div class="blog-meta">Published on ${formattedDate}</div>
+                        <div class="blog-content">${blog.content}</div>
+                        <div class="blog-actions">
+                            <button class="btn btn-danger" onclick="deleteBlog('${blog.id}')">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.deleteBlog = async function(blogId) {
+            if (confirm('Delete this blog post?')) {
+                try {
+                    await deleteDoc(doc(db, 'blogs', blogId));
+                } catch (error) {
+                    alert('Error deleting blog: ' + error.message);
+                }
+            }
+        };
+
+        // Blog editor functions
+        window.formatText = function(command) {
+            document.execCommand(command, false, null);
+        };
+
+        window.formatHeading = function(heading) {
+            if (heading) {
+                document.execCommand('formatBlock', false, heading);
+            }
+        };
+
+        window.insertLink = function() {
+            const url = prompt('Enter the URL:');
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
+        };
+
+        window.insertImage = function() {
+            const url = prompt('Enter the image URL:');
+            if (url) {
+                document.execCommand('insertImage', false, url);
+            }
+        };
+
+        // ===== PROJECTS =====
+        function initializeProjects() {
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const fileInput = document.getElementById('fileInput');
+
+            fileUploadArea.addEventListener('click', () => fileInput.click());
+
+            fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.add('dragover');
+            });
+
+            fileUploadArea.addEventListener('dragleave', () => {
+                fileUploadArea.classList.remove('dragover');
+            });
+
+            fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUploadArea.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+
+            loadFiles();
+        }
+
+        async function handleFiles(files) {
+            if (files.length === 0) return;
+
+            for (let file of files) {
+                try {
+                    const storageRef = ref(storage, `projects/${currentUser.uid}/${file.name}`);
+                    await uploadBytes(storageRef, file);
+                    
+                    const downloadURL = await getDownloadURL(storageRef);
+                    
+                    await addDoc(collection(db, 'projectFiles'), {
+                        name: file.name,
+                        size: file.size,
+                        type: file.type,
+                        url: downloadURL,
+                        path: storageRef.fullPath,
+                        timestamp: serverTimestamp(),
+                        userId: currentUser.uid
+                    });
+                } catch (error) {
+                    alert('Error uploading ' + file.name + ': ' + error.message);
+                }
+            }
+
+            fileInput.value = '';
+            alert('Files uploaded successfully!');
+        }
+
+        async function loadFiles() {
+            const q = query(
+                collection(db, 'projectFiles'),
+                where('userId', '==', currentUser.uid),
+                orderBy('timestamp', 'desc')
+            );
+
+            onSnapshot(q, (snapshot) => {
+                const files = [];
+                snapshot.forEach((doc) => {
+                    files.push({ id: doc.id, ...doc.data() });
+                });
+                displayFiles(files);
+            });
+        }
+
+        function displayFiles(files) {
+            const fileList = document.getElementById('fileList');
+            
+            if (files.length === 0) {
+                fileList.innerHTML = '<div class="empty-state"><div class="empty-icon">📁</div><div>No files uploaded yet</div></div>';
+                return;
+            }
+
+            fileList.innerHTML = files.map(file => {
+                const sizeKB = (file.size / 1024).toFixed(2);
+                const icon = getFileIcon(file.type);
+
+                return `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-icon">${icon}</div>
+                            <div class="file-details">
+                                <div class="file-name">${escapeHtml(file.name)}</div>
+                                <div class="file-size">${sizeKB} KB</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            <a href="${file.url}" target="_blank" class="btn btn-info">Download</a>
+                            <button class="btn btn-danger" onclick="deleteFile('${file.id}', '${file.path}')">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getFileIcon(type) {
+            if (type.startsWith('image/')) return '🖼️';
+            if (type.includes('pdf')) return '📄';
+            if (type.includes('word') || type.includes('document')) return '📝';
+            if (type.includes('sheet') || type.includes('excel')) return '📊';
+            if (type.includes('presentation') || type.includes('powerpoint')) return '📽️';
+            if (type.includes('zip') || type.includes('compressed')) return '🗜️';
+            return '📎';
+        }
+
+        window.deleteFile = async function(fileId, filePath) {
+            if (confirm('Delete this file?')) {
+                try {
+                    await deleteDoc(doc(db, 'projectFiles', fileId));
+                    const storageRef = ref(storage, filePath);
+                    await deleteObject(storageRef);
+                } catch (error) {
+                    alert('Error deleting file: ' + error.message);
+                }
+            }
+        };
+
+        // ===== MESSAGES =====
+        function initializeMessages() {
             const q = query(collection(db, 'messages'), orderBy('timestamp', 'desc'));
             
             onSnapshot(q, (snapshot) => {
+                const messagesContent = document.getElementById('messagesContent');
+                
                 if (snapshot.empty) {
-                    messagesContent.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">📭</div>
-                            <div style="font-size: 18px;">No messages yet</div>
-                        </div>
-                    `;
+                    messagesContent.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div>No messages yet</div></div>';
                     return;
                 }
                 
@@ -716,18 +1765,12 @@
                     const messageCard = createMessageCard(docSnap.id, data);
                     messagesContent.appendChild(messageCard);
                 });
-            }, (error) => {
-                messagesContent.innerHTML = `
-                    <div class="empty-state">
-                        <div style="color: #dc2626;">Error loading messages: ${error.message}</div>
-                    </div>
-                `;
             });
         }
 
         function createMessageCard(id, data) {
             const card = document.createElement('div');
-            card.className = 'message-card';
+            card.className = 'card';
             
             const timestamp = data.timestamp?.toDate();
             const formattedTime = timestamp 
@@ -740,130 +1783,89 @@
                 }).format(timestamp)
                 : 'No date';
             
-            const initial = (data.name || 'U')[0].toUpperCase();
-            
-            // Escape HTML to prevent XSS
-            const escapeHtml = (text) => {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            };
-            
             card.innerHTML = `
-                <div class="message-header">
-                    <div class="message-avatar">${escapeHtml(initial)}</div>
-                    <div class="message-info">
-                        <div class="message-name">${escapeHtml(data.name || 'Unknown')}</div>
-                        <div class="message-email">${escapeHtml(data.email || 'No email')}</div>
-                        <div class="message-time">${escapeHtml(formattedTime)}</div>
+                <div class="card-header">
+                    <div>
+                        <div style="font-weight: 600; font-size: 18px; margin-bottom: 5px;">${escapeHtml(data.name || 'Unknown')}</div>
+                        <div style="color: #718096; font-size: 14px;">${escapeHtml(data.email || 'No email')}</div>
                     </div>
-                    <div class="message-expand-icon">▼</div>
+                    <div style="color: #718096; font-size: 13px;">${formattedTime}</div>
                 </div>
-                <div class="message-body">
-                    <div class="message-subject">Subject: ${escapeHtml(data.subject || 'No subject')}</div>
-                    <div class="message-text">${escapeHtml(data.message || 'No message')}</div>
-                    <div class="message-actions">
-                        <button class="btn-delete" data-id="${escapeHtml(id)}">Delete</button>
-                    </div>
+                <div style="margin-bottom: 15px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">Subject: ${escapeHtml(data.subject || 'No subject')}</div>
+                    <div style="line-height: 1.6;">${escapeHtml(data.message || 'No message')}</div>
                 </div>
+                <button class="btn btn-danger" onclick="deleteMessage('${id}')">Delete</button>
             `;
-            
-            // Toggle expand on header click
-            const header = card.querySelector('.message-header');
-            header.addEventListener('click', () => {
-                card.classList.toggle('expanded');
-            });
-            
-            // Delete handler
-            const deleteBtn = card.querySelector('.btn-delete');
-            deleteBtn.addEventListener('click', async () => {
-                if (confirm('Delete this message?')) {
-                    await deleteDoc(doc(db, 'messages', id));
-                }
-            });
             
             return card;
         }
 
-        // AI Assistant
+        window.deleteMessage = async function(messageId) {
+            if (confirm('Delete this message?')) {
+                try {
+                    await deleteDoc(doc(db, 'messages', messageId));
+                } catch (error) {
+                    alert('Error deleting message: ' + error.message);
+                }
+            }
+        };
+
+        // ===== AI ASSISTANT =====
         let chatMessages = [];
 
-        function initializeAIAssistant() {
-            const chatMessagesDiv = document.getElementById('chatMessages');
+        function initializeAI() {
             const chatInput = document.getElementById('chatInput');
             const sendBtn = document.getElementById('sendBtn');
-            const aiLoading = document.getElementById('aiLoading');
-            
+
             // Add welcome message
             if (chatMessages.length === 0) {
-                addMessage({
-                    text: `Hello Francis! I'm your AI assistant. I can help you with:
-
-💰 Financial planning and budgeting
-💳 Expense tracking and spending analysis
-📊 Budget optimization
-📅 Financial goal planning
-🥗 Dietary advice and meal planning
-🎯 Personal productivity tips
-
-How can I assist you today?`,
+                addChatMessage({
+                    text: `Hello Francis! 👋 I'm your AI assistant. I can help you with finances, planning, productivity, and more. What can I do for you today?`,
                     isUser: false,
                     timestamp: new Date()
                 });
             }
-            
-            // Send message handler
-            async function sendMessage() {
-                const text = chatInput.value.trim();
-                if (!text) return;
-                
-                chatInput.value = '';
-                chatInput.style.height = 'auto';
-                
-                addMessage({
-                    text: text,
-                    isUser: true,
-                    timestamp: new Date()
-                });
-                
-                sendBtn.disabled = true;
-                aiLoading.classList.add('active');
-                
-                try {
-                    const response = await callGeminiAPI(text);
-                    addMessage({
-                        text: response,
-                        isUser: false,
-                        timestamp: new Date()
-                    });
-                } catch (error) {
-                    addMessage({
-                        text: `Sorry, I encountered an error: ${error.message}`,
-                        isUser: false,
-                        timestamp: new Date()
-                    });
-                } finally {
-                    sendBtn.disabled = false;
-                    aiLoading.classList.remove('active');
-                }
-            }
-            
-            sendBtn.addEventListener('click', sendMessage);
+
+            sendBtn.addEventListener('click', sendChatMessage);
             chatInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
-                    sendMessage();
+                    sendChatMessage();
                 }
-            });
-            
-            // Auto-resize textarea
-            chatInput.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
             });
         }
 
-        function addMessage(message) {
+        async function sendChatMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            chatInput.value = '';
+
+            addChatMessage({
+                text: text,
+                isUser: true,
+                timestamp: new Date()
+            });
+
+            try {
+                const response = await callGeminiAPI(text);
+                addChatMessage({
+                    text: response,
+                    isUser: false,
+                    timestamp: new Date()
+                });
+            } catch (error) {
+                addChatMessage({
+                    text: `Sorry, I encountered an error: ${error.message}`,
+                    isUser: false,
+                    timestamp: new Date()
+                });
+            }
+        }
+
+        function addChatMessage(message) {
             chatMessages.push(message);
             
             const chatMessagesDiv = document.getElementById('chatMessages');
@@ -875,20 +1877,13 @@ How can I assist you today?`,
                 minute: '2-digit'
             }).format(message.timestamp);
             
-            // Escape HTML to prevent XSS
-            const escapeHtml = (text) => {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            };
-            
             bubble.innerHTML = `
                 <div class="chat-avatar ${message.isUser ? 'user' : 'ai'}">
                     ${message.isUser ? '👤' : '🤖'}
                 </div>
                 <div class="chat-content">
-                    <div class="chat-text">${escapeHtml(message.text)}</div>
-                    <div class="chat-time">${escapeHtml(time)}</div>
+                    <div>${escapeHtml(message.text)}</div>
+                    <div style="font-size: 11px; opacity: 0.7; margin-top: 5px;">${time}</div>
                 </div>
             `;
             
@@ -897,16 +1892,6 @@ How can I assist you today?`,
         }
 
         async function callGeminiAPI(userMessage) {
-            const prompt = `You are a personal AI assistant for Francis Pwavwe. You specialize in:
-1. Financial planning, budgeting, and spending management
-2. Personal finance advice tailored to a student/young professional
-3. Dietary and nutrition advice
-4. Personal productivity and planning
-
-User's question: ${userMessage}
-
-Provide helpful, practical, and personalized advice. Be concise but thorough.`;
-
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
                 method: 'POST',
                 headers: {
@@ -915,7 +1900,7 @@ Provide helpful, practical, and personalized advice. Be concise but thorough.`;
                 body: JSON.stringify({
                     contents: [{
                         parts: [{
-                            text: prompt
+                            text: userMessage
                         }]
                     }]
                 })
@@ -929,7 +1914,29 @@ Provide helpful, practical, and personalized advice. Be concise but thorough.`;
             return data.candidates[0].content.parts[0].text;
         }
 
-        // Make functions available globally for debugging if needed
+        // ===== DASHBOARD =====
+        function updateDashboard() {
+            // Update dashboard stats periodically
+            setInterval(() => {
+                const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+                const monthlyBudget = 1000;
+                const activeTasks = tasks.filter(t => !t.completed).length;
+                
+                document.getElementById('dashTotalExpenses').textContent = `GH₵ ${totalExpenses.toFixed(2)}`;
+                document.getElementById('dashMonthlyBudget').textContent = `GH₵ ${(monthlyBudget - totalExpenses).toFixed(2)}`;
+                document.getElementById('dashActiveTasks').textContent = activeTasks;
+                document.getElementById('dashBlogCount').textContent = blogs.length;
+            }, 1000);
+        }
+
+        // Utility function
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Make available globally for debugging
         window.firebaseApp = app;
     </script>
 </body>

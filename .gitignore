@@ -18,3 +18,7 @@ build/
 # Misc
 .DS_Store
 pubspec.lock
+
+# Backup files
+francis_old.html
+francis.html.backup
