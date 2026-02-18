@@ -1,0 +1,11 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Project files - only pwavwef@gmail.com can upload/download/delete
+    match /projects/{userId}/{allPaths=**} {
+      allow read, write, delete: if request.auth != null 
+                                 && request.auth.token.email == 'pwavwef@gmail.com'
+                                 && request.auth.uid == userId;
+    }
+  }
+}

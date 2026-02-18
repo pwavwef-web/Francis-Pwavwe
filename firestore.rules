@@ -14,5 +14,53 @@ service cloud.firestore {
                     && request.resource.data.subject is string
                     && request.resource.data.message is string;
     }
+
+    // Transactions collection (for finances)
+    match /transactions/{transactionId} {
+      allow read: if request.auth != null 
+                  && request.auth.token.email == 'pwavwef@gmail.com';
+      allow create: if request.auth != null 
+                    && request.auth.token.email == 'pwavwef@gmail.com'
+                    && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null 
+                            && request.auth.token.email == 'pwavwef@gmail.com'
+                            && resource.data.userId == request.auth.uid;
+    }
+
+    // Tasks collection (for planning)
+    match /tasks/{taskId} {
+      allow read: if request.auth != null 
+                  && request.auth.token.email == 'pwavwef@gmail.com';
+      allow create: if request.auth != null 
+                    && request.auth.token.email == 'pwavwef@gmail.com'
+                    && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null 
+                            && request.auth.token.email == 'pwavwef@gmail.com'
+                            && resource.data.userId == request.auth.uid;
+    }
+
+    // Blogs collection
+    match /blogs/{blogId} {
+      allow read: if request.auth != null 
+                  && request.auth.token.email == 'pwavwef@gmail.com';
+      allow create: if request.auth != null 
+                    && request.auth.token.email == 'pwavwef@gmail.com'
+                    && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null 
+                            && request.auth.token.email == 'pwavwef@gmail.com'
+                            && resource.data.userId == request.auth.uid;
+    }
+
+    // Project files collection
+    match /projectFiles/{fileId} {
+      allow read: if request.auth != null 
+                  && request.auth.token.email == 'pwavwef@gmail.com';
+      allow create: if request.auth != null 
+                    && request.auth.token.email == 'pwavwef@gmail.com'
+                    && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null 
+                            && request.auth.token.email == 'pwavwef@gmail.com'
+                            && resource.data.userId == request.auth.uid;
+    }
   }
 }

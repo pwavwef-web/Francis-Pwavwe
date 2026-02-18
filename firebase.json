@@ -6,7 +6,9 @@
       "**/.*",
       "**/node_modules/**",
       "**/*.dart",
-      "pubspec.yaml"
+      "pubspec.yaml",
+      "francis_old.html",
+      "francis.html.backup"
     ],
     "rewrites": [
       {
@@ -17,5 +19,8 @@
   },
   "firestore": {
     "rules": "firestore.rules"
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }
