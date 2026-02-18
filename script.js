@@ -593,12 +593,23 @@ window.openBlogModal = function(blogId) {
 // Toggle like in modal
 window.toggleLikeModal = function(blogId) {
     toggleLike(blogId);
+    
+    // Update the like count in the modal without re-rendering
     const likeCountEl = document.getElementById(`modal-like-count-${blogId}`);
     if (likeCountEl) {
         likeCountEl.textContent = blogLikes[blogId] || 0;
     }
-    // Update the like button appearance
-    openBlogModal(blogId);
+    
+    // Update the like button appearance in the modal
+    const modalLikeBtn = document.getElementById('blogModalBody').querySelector(`button[onclick="toggleLikeModal('${blogId}')"]`);
+    if (modalLikeBtn) {
+        const isLiked = localStorage.getItem(`blog_liked_${blogId}`) === 'true';
+        const iconSpan = modalLikeBtn.querySelector('.action-icon');
+        if (iconSpan) {
+            iconSpan.textContent = isLiked ? '❤️' : '🤍';
+        }
+        modalLikeBtn.classList.toggle('liked', isLiked);
+    }
 };
 
 // Add comment
