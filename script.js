@@ -107,7 +107,7 @@ contactForm.addEventListener('submit', (e) => {
     };
 
     // Create mailto link (since we don't have a backend)
-    const mailtoLink = `mailto:francispwavwe@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
+    const mailtoLink = `mailto:pwavwef@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
     
     // Open email client
     window.location.href = mailtoLink;
@@ -310,5 +310,125 @@ formInputs.forEach(input => {
 // ===== CONSOLE EASTER EGG =====
 console.log('%c👋 Hello, Fellow Developer!', 'font-size: 20px; font-weight: bold; color: #1E3A8A;');
 console.log('%cThis website was built with precision and passion.', 'font-size: 14px; color: #64748B;');
-console.log('%cInterested in collaborating? Reach out: francispwavwe@gmail.com', 'font-size: 14px; color: #3B82F6;');
+console.log('%cInterested in collaborating? Reach out: pwavwef@gmail.com', 'font-size: 14px; color: #3B82F6;');
 console.log('%c- Francis Pwavwe', 'font-size: 12px; font-style: italic; color: #D4AF37;');
+
+// ===== CV DOWNLOAD FUNCTIONALITY =====
+document.addEventListener('DOMContentLoaded', () => {
+    const downloadCVButton = document.getElementById('downloadCV');
+    
+    if (downloadCVButton) {
+        downloadCVButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            generateAndDownloadCV();
+        });
+    }
+});
+
+function generateAndDownloadCV() {
+    // Create CV content
+    const cvContent = `
+FRANCIS PWAVWE
+Strategic Thinker. Tourism Professional. Digital Innovator.
+
+CONTACT INFORMATION
+Email: pwavwef@gmail.com
+Location: Cape Coast, Ghana
+LinkedIn: https://linkedin.com/in/francis-pwavwe
+
+PROFILE
+I'm Francis Pwavwe, a Tourism Management student at the University of Cape Coast and the Founder of AZ Learner – an academic support platform designed to improve student retention and performance through innovative digital solutions.
+
+As a member of both the Oguaa Hall Army Cadet Corps and the UCC Armed Forces Cadet Corps, I bring military precision to my strategic thinking while maintaining a creative and innovative approach to problem-solving.
+
+My passion lies at the intersection of leadership, digital systems, and innovation. I'm driven by the challenge of creating impactful solutions in tourism planning, travel operations, and strategic management – with a focus on building systems that transform experiences and drive sustainable growth.
+
+I'm committed to pursuing an international career in tourism strategy, leveraging technology and strategic thinking to create meaningful change in the African educational and tourism landscape.
+
+EDUCATION & PROGRAMS
+Harvard Aspire Leaders Program, Cohort 5
+2025
+
+Tourism Management Student
+University of Cape Coast
+2021 - Present
+Pursuing comprehensive education in tourism management, strategic planning, and hospitality operations. Conducting research on sustainable tourism development and digital transformation in the industry.
+
+EXPERIENCE
+Intern - Housekeeping & Food and Beverage
+Kempinski Hotel Gold Coast City
+August - October 2025
+Gained hands-on experience in luxury hospitality operations, working across Housekeeping and Food and Beverage departments. Developed practical skills in guest service excellence, operational efficiency, and maintaining high-quality standards in a five-star hotel environment.
+
+Founder & CEO
+AZ Learner
+2023 - Present
+Founded and leading an education-tech platform focused on improving student retention and academic performance through innovative digital solutions and personalized learning experiences.
+
+Head of Security & Transport Committee
+Journey to the East Event
+2024
+Led security and transportation operations for a major regional event, managing logistics, coordinating teams, and ensuring seamless execution of all safety and transport protocols.
+
+Digital Strategy Consultant
+Torchlight Tours
+2023 - 2024
+Developed and implemented social media strategy to enhance brand visibility, audience engagement, and conversion rates for a tourism company operating in competitive markets.
+
+Cadet Member
+Oguaa Hall Army Cadet Corps & UCC Armed Forces Cadet Corps
+2022 - Present
+Active member developing leadership skills, discipline, and strategic thinking through military training and cadet corps activities. Contributing to campus security initiatives and leadership development programs.
+
+CORE COMPETENCIES
+• Tourism Planning - Strategic development and management of tourism experiences
+• Research & Data Analysis - Evidence-based decision making and insights generation
+• Travel & Tour Operations - End-to-end management of travel services and experiences
+• Event Coordination - Seamless planning and execution of complex events
+• Leadership & Team Management - Building and guiding high-performing teams
+• Digital Strategy - Leveraging technology for competitive advantage
+• Systems Thinking - Holistic approach to complex problem-solving
+• Public Speaking - Clear and compelling communication to diverse audiences
+
+FEATURED PROJECTS
+AZ Learner
+An innovative academic support platform designed to improve student retention and performance through personalized learning paths, analytics-driven insights, and collaborative study tools. Currently supporting students across multiple disciplines at the University of Cape Coast.
+
+Torchlight Tours Social Media Strategy
+Developed and implemented a comprehensive social media strategy for Torchlight Tours, focusing on audience engagement, brand positioning, and conversion optimization in the competitive tourism market.
+
+Journey to the East
+Served as Head of Security and Transport Committee for this major event, coordinating logistics, ensuring participant safety, and managing a team responsible for seamless transportation and security operations.
+
+Tourism Research & Analysis
+Conducting research on sustainable tourism development, visitor experience optimization, and the impact of digital transformation on tourism operations in West Africa.
+
+VISION
+To become a leading international tourism strategist, pioneering innovative systems that transform the African tourism landscape while revolutionizing student experiences across the continent.
+
+I envision a future where strategic thinking meets digital innovation – where African students have access to world-class educational support systems, and where tourism operations leverage technology to create sustainable, impactful experiences.
+
+---
+© 2026 Francis Pwavwe. Building the future, one strategic decision at a time.
+    `.trim();
+
+    // Create a Blob from the text content
+    const blob = new Blob([cvContent], { type: 'text/plain;charset=utf-8' });
+    
+    // Create a download link
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'Francis_Pwavwe_CV.txt';
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the URL
+    URL.revokeObjectURL(link.href);
+    
+    // Show notification
+    showNotification('CV downloaded successfully!');
+}
+
