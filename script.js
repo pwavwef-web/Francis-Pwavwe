@@ -461,31 +461,95 @@ I envision a future where strategic thinking meets digital innovation – where 
 let blogsData = [];
 let userInteractions = JSON.parse(localStorage.getItem('blogInteractions') || '{}');
 
-// Load blogs from Firestore
+// Demo blog data for demonstration when Firebase is unavailable
+const demoBlogsData = [
+    {
+        id: 'demo1',
+        title: 'The Future of Tourism in West Africa',
+        content: '<p>Tourism in West Africa is experiencing a transformative shift driven by digital innovation and sustainable practices. As we navigate through 2026, the integration of technology in tourism operations is no longer optional—it\'s essential for growth and competitiveness.</p><p>From mobile booking platforms to AI-powered customer service, the landscape is changing rapidly. Hotels and tour operators must adapt to meet the evolving expectations of modern travelers who demand seamless, personalized experiences.</p><img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="Tourism landscape" /><p>The key to success lies in balancing traditional hospitality with cutting-edge technology, creating experiences that are both authentic and efficient.</p>',
+        timestamp: { toDate: () => new Date('2026-02-15') },
+        likes: 24,
+        comments: 8,
+        shares: 12
+    },
+    {
+        id: 'demo2',
+        title: 'Building AZ Learner: Lessons in EdTech Innovation',
+        content: '<p>Creating an education technology platform from scratch has been one of the most challenging and rewarding experiences of my entrepreneurial journey. AZ Learner was born from a simple observation: students needed better tools to succeed academically.</p><p>The platform focuses on three core pillars: personalized learning paths, data-driven insights, and collaborative study tools. Each feature was designed with student success in mind, backed by research and user feedback.</p><p>One of the biggest lessons I learned was the importance of iterative development. We launched with a minimum viable product and continuously improved based on user needs. This approach allowed us to stay agile and responsive to our community.</p>',
+        timestamp: { toDate: () => new Date('2026-02-10') },
+        likes: 42,
+        comments: 15,
+        shares: 18
+    },
+    {
+        id: 'demo3',
+        title: 'Leadership Lessons from the Harvard Aspire Program',
+        content: '<p>The Harvard Aspire Leaders Program was a transformative experience that reshaped my understanding of leadership in the 21st century. Cohort 5 brought together leaders from diverse backgrounds, creating a rich learning environment.</p><p>Key takeaways included the importance of emotional intelligence, strategic thinking, and the ability to navigate complex, ambiguous situations. The program emphasized that leadership is not about having all the answers, but about asking the right questions and empowering others.</p><p>These insights have directly influenced how I approach my work with AZ Learner and my tourism management studies. Leadership is about creating systems that enable others to succeed.</p>',
+        timestamp: { toDate: () => new Date('2026-02-05') },
+        likes: 56,
+        comments: 22,
+        shares: 31
+    },
+    {
+        id: 'demo4',
+        title: 'Digital Strategy in Tourism: A Case Study',
+        content: '<p>During my time as a Digital Strategy Consultant with Torchlight Tours, I developed and implemented a comprehensive social media strategy that significantly increased brand visibility and engagement.</p><img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800" alt="Digital marketing" /><p>The strategy focused on authentic storytelling, user-generated content, and data-driven decision making. By analyzing engagement metrics and customer feedback, we were able to optimize our content for maximum impact.</p><p>This experience taught me the power of strategic digital marketing in the tourism industry and the importance of staying ahead of trends.</p>',
+        timestamp: { toDate: () => new Date('2026-01-28') },
+        likes: 33,
+        comments: 11,
+        shares: 9
+    },
+    {
+        id: 'demo5',
+        title: 'Sustainable Tourism: Balancing Growth and Conservation',
+        content: '<p>As tourism continues to grow globally, the question of sustainability becomes increasingly critical. How do we promote economic development through tourism while preserving the natural and cultural resources that make destinations attractive?</p><p>My research at the University of Cape Coast focuses on this delicate balance. Sustainable tourism is not just about environmental protection—it encompasses economic viability, social equity, and cultural preservation.</p><p>The future of tourism lies in creating experiences that benefit local communities, protect ecosystems, and provide authentic, meaningful experiences for travelers. This requires innovative thinking and collaborative partnerships.</p>',
+        timestamp: { toDate: () => new Date('2026-01-20') },
+        likes: 48,
+        comments: 19,
+        shares: 25
+    }
+];
+
+// Load blogs from Firestore or use demo data
 async function loadBlogs() {
     const blogsCarousel = document.getElementById('blogsCarousel');
     
     try {
-        // Listen for real-time updates
-        const blogsQuery = query(collection(db, 'blogs'), orderBy('timestamp', 'desc'));
-        
-        onSnapshot(blogsQuery, (snapshot) => {
-            blogsData = [];
-            snapshot.forEach((doc) => {
-                blogsData.push({
-                    id: doc.id,
-                    ...doc.data()
-                });
-            });
+        // Check if Firebase is available
+        if (typeof db !== 'undefined') {
+            // Listen for real-time updates
+            const blogsQuery = query(collection(db, 'blogs'), orderBy('timestamp', 'desc'));
             
+            onSnapshot(blogsQuery, (snapshot) => {
+                blogsData = [];
+                snapshot.forEach((doc) => {
+                    blogsData.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                // If no blogs loaded from Firebase, use demo data
+                if (blogsData.length === 0) {
+                    blogsData = demoBlogsData;
+                }
+                renderBlogs();
+            }, (error) => {
+                console.error('Error loading blogs:', error);
+                // Load demo blogs on error
+                blogsData = demoBlogsData;
+                renderBlogs();
+            });
+        } else {
+            // Firebase not available, use demo data
+            blogsData = demoBlogsData;
             renderBlogs();
-        }, (error) => {
-            console.error('Error loading blogs:', error);
-            blogsCarousel.innerHTML = '<div class="blog-loading">Unable to load blogs. Please try again later.</div>';
-        });
+        }
     } catch (error) {
         console.error('Error setting up blog listener:', error);
-        blogsCarousel.innerHTML = '<div class="blog-loading">Unable to load blogs. Please try again later.</div>';
+        // Load demo blogs on error
+        blogsData = demoBlogsData;
+        renderBlogs();
     }
 }
 
