@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Francis Admin Panel</title>
+    <title>Francis Personal Portal</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
         * {
@@ -174,6 +174,7 @@
             background: #f5f5f5;
             border-right: 1px solid #e0e0e0;
             padding: 20px 0;
+            overflow-y: auto;
         }
 
         .nav-item {
@@ -206,6 +207,7 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
+            background: #fafafa;
         }
 
         .screen {
@@ -216,256 +218,77 @@
             display: block;
         }
 
-        /* Messages Screen */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #666;
-        }
-
-        .empty-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-        }
-
-        .message-card {
+        /* Common Screen Elements */
+        .screen-header {
             background: white;
+            padding: 20px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .message-header {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: background 0.3s;
+        .screen-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 10px;
         }
 
-        .message-header:hover {
-            background: #f9fafb;
-        }
-
-        .message-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #1e3a8a;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-
-        .message-info {
-            flex: 1;
-        }
-
-        .message-name {
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-
-        .message-email {
+        .screen-subtitle {
+            color: #666;
             font-size: 14px;
-            color: #666;
         }
 
-        .message-time {
-            font-size: 12px;
-            color: #999;
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .message-expand-icon {
-            font-size: 20px;
-            color: #666;
-            transition: transform 0.3s;
-        }
-
-        .message-card.expanded .message-expand-icon {
-            transform: rotate(180deg);
-        }
-
-        .message-body {
-            display: none;
-            padding: 0 20px 20px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .message-card.expanded .message-body {
-            display: block;
-        }
-
-        .message-subject {
-            font-weight: bold;
-            margin: 15px 0 10px;
-        }
-
-        .message-text {
-            color: #333;
-            line-height: 1.6;
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
             margin-bottom: 15px;
+            color: #333;
         }
 
-        .message-actions {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .btn-delete {
-            background: transparent;
-            border: 1px solid #dc2626;
-            color: #dc2626;
-            padding: 8px 15px;
+        .btn {
+            padding: 10px 20px;
+            border: none;
             border-radius: 5px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s;
         }
 
-        .btn-delete:hover {
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
             background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
             color: white;
         }
 
-        /* AI Assistant Screen */
-        .ai-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-            background: white;
-        }
-
-        .chat-bubble {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .chat-bubble.user {
-            flex-direction: row-reverse;
-        }
-
-        .chat-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .chat-avatar.ai {
-            background: #1e3a8a;
-            color: white;
-            margin-right: 10px;
-        }
-
-        .chat-avatar.user {
-            background: #d4af37;
-            color: white;
-            margin-left: 10px;
-        }
-
-        .chat-content {
-            max-width: 70%;
-            padding: 15px;
-            border-radius: 15px;
-        }
-
-        .chat-bubble.ai .chat-content {
-            background: #f5f5f5;
-            color: #333;
-        }
-
-        .chat-bubble.user .chat-content {
-            background: #1e3a8a;
-            color: white;
-        }
-
-        .chat-text {
-            margin-bottom: 5px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-        }
-
-        .chat-time {
-            font-size: 10px;
-            opacity: 0.7;
-        }
-
-        .ai-loading {
-            padding: 10px 20px;
-            display: none;
-            align-items: center;
-        }
-
-        .ai-loading.active {
-            display: flex;
-        }
-
-        .ai-loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #1e3a8a;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
-            margin-right: 10px;
-        }
-
-        .chat-input-container {
-            padding: 20px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
-            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .chat-input-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-            resize: none;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: #1e3a8a;
-        }
-
-        .btn-send {
-            background: #1e3a8a;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 20px;
-            transition: background 0.3s;
-        }
-
-        .btn-send:hover {
-            background: #1e40af;
-        }
-
-        .btn-send:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
+        .btn-secondary:hover {
+            background: #4b5563;
         }
 
         /* Loading indicator */
@@ -485,6 +308,19 @@
             display: none !important;
         }
 
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-rail {
@@ -495,9 +331,206 @@
                 font-size: 10px;
             }
 
-            .chat-content {
-                max-width: 85%;
+            .screen-container {
+                padding: 10px;
             }
+        }
+
+        /* Finances specific styles */
+        .stat-card {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #e0e0e0;
+            color: #333;
+            margin-left: 8px;
+        }
+
+        /* Blog specific styles */
+        .blog-post {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+
+        .blog-meta {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .blog-content {
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .blog-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        /* Rich text editor */
+        .editor-toolbar {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .editor-btn {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .editor-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .editor-content {
+            min-height: 300px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 8px 8px;
+            background: white;
+            outline: none;
+        }
+
+        /* File upload */
+        .file-upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-area:hover {
+            border-color: #1e3a8a;
+            background: #f9fafb;
+        }
+
+        .file-list {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        /* Chart container */
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-close:hover {
+            color: #333;
         }
     </style>
 </head>
@@ -511,7 +544,7 @@
     <div id="loginScreen" class="login-container hidden">
         <div class="login-card">
             <div class="login-icon">🔒</div>
-            <div class="login-title">Francis Admin Panel</div>
+            <div class="login-title">Francis Personal Portal</div>
             <div class="login-subtitle">Restricted Access</div>
             
             <form id="loginForm">
@@ -537,13 +570,33 @@
     <!-- Dashboard -->
     <div id="dashboard" class="dashboard">
         <div class="app-bar">
-            <div class="app-title">Francis Admin Panel</div>
+            <div class="app-title">Francis Personal Portal</div>
             <button id="logoutBtn" class="logout-btn">Sign Out</button>
         </div>
         
         <div class="dashboard-content">
             <div class="nav-rail">
-                <div class="nav-item active" data-screen="messages">
+                <div class="nav-item active" data-screen="dashboard">
+                    <div class="nav-icon">📊</div>
+                    <div class="nav-label">Dashboard</div>
+                </div>
+                <div class="nav-item" data-screen="finances">
+                    <div class="nav-icon">💰</div>
+                    <div class="nav-label">Finances</div>
+                </div>
+                <div class="nav-item" data-screen="planning">
+                    <div class="nav-icon">📅</div>
+                    <div class="nav-label">Planning</div>
+                </div>
+                <div class="nav-item" data-screen="blogs">
+                    <div class="nav-icon">✍️</div>
+                    <div class="nav-label">Blogs</div>
+                </div>
+                <div class="nav-item" data-screen="projects">
+                    <div class="nav-icon">📁</div>
+                    <div class="nav-label">Projects</div>
+                </div>
+                <div class="nav-item" data-screen="messages">
                     <div class="nav-icon">📧</div>
                     <div class="nav-label">Messages</div>
                 </div>
@@ -554,31 +607,189 @@
             </div>
             
             <div class="screen-container">
+                <!-- Dashboard Screen -->
+                <div id="dashboardScreen" class="screen active">
+                    <div class="screen-header">
+                        <h1 class="screen-title">Welcome, Francis!</h1>
+                        <p class="screen-subtitle">Your personal command center</p>
+                    </div>
+                    
+                    <div class="grid-3">
+                        <div class="stat-card">
+                            <div class="stat-label">Total Expenses (Month)</div>
+                            <div class="stat-value" id="dashTotalExpenses">GH₵ 0.00</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Active Plans</div>
+                            <div class="stat-value" id="dashActivePlans">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Blog Posts</div>
+                            <div class="stat-value" id="dashBlogPosts">0</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">Quick Actions</h2>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <button class="btn btn-success" onclick="switchScreen('finances')">💰 Add Expense</button>
+                            <button class="btn btn-success" onclick="switchScreen('planning')">📅 Create Plan</button>
+                            <button class="btn btn-success" onclick="switchScreen('blogs')">✍️ Write Blog</button>
+                            <button class="btn btn-success" onclick="switchScreen('projects')">📁 Upload Project</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">Recent Activity</h2>
+                        <div id="recentActivity">
+                            <p style="color: #666;">No recent activity</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Finances Screen -->
+                <div id="financesScreen" class="screen">
+                    <div class="screen-header">
+                        <h1 class="screen-title">💰 Financial Management</h1>
+                        <p class="screen-subtitle">Track your spending, manage budgets, and get AI-powered financial insights</p>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <h2 class="card-title">Wallet Balance</h2>
+                            <div style="font-size: 36px; font-weight: 700; color: #1e3a8a; margin: 20px 0;">
+                                GH₵ <span id="walletBalance">0.00</span>
+                            </div>
+                            <button class="btn btn-success" onclick="updateWallet()">Update Balance</button>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="card-title">Today's Spending</h2>
+                            <div style="font-size: 36px; font-weight: 700; color: #ef4444; margin: 20px 0;">
+                                GH₵ <span id="todaySpending">0.00</span>
+                            </div>
+                            <button class="btn btn-success" onclick="addExpense()">Add Expense</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">Monthly Budget</h2>
+                        <div style="margin-bottom: 15px;">
+                            <label style="display: block; margin-bottom: 5px;">Budget Limit</label>
+                            <input type="number" id="budgetLimit" class="form-input" placeholder="Enter monthly budget" style="width: 300px;">
+                            <button class="btn btn-success" onclick="saveBudget()" style="margin-left: 10px;">Save Budget</button>
+                        </div>
+                        <div id="budgetStatus"></div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <h2 class="card-title">Spending by Category</h2>
+                            <div class="chart-container">
+                                <canvas id="spendingChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h2 class="card-title">Recent Expenses</h2>
+                            <div id="recentExpenses">
+                                <p style="color: #666;">No expenses recorded</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">AI Financial Analysis & Advice</h2>
+                        <button class="btn btn-success" onclick="getFinancialAdvice()">Get AI Advice</button>
+                        <div id="financialAdvice" style="margin-top: 15px; padding: 15px; background: #f9fafb; border-radius: 8px; display: none;">
+                            <div class="loading-spinner" id="adviceLoading" style="margin: 20px auto;"></div>
+                            <div id="adviceContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Planning Screen -->
+                <div id="planningScreen" class="screen">
+                    <div class="screen-header">
+                        <h1 class="screen-title">📅 Planning & Goals</h1>
+                        <p class="screen-subtitle">Organize your tasks, set goals, and get AI-powered planning assistance</p>
+                    </div>
+
+                    <div class="card">
+                        <button class="btn btn-success" onclick="createNewPlan()">+ Create New Plan</button>
+                    </div>
+
+                    <div id="plansList"></div>
+                </div>
+
+                <!-- Blogs Screen -->
+                <div id="blogsScreen" class="screen">
+                    <div class="screen-header">
+                        <h1 class="screen-title">✍️ Blog Management</h1>
+                        <p class="screen-subtitle">Write and publish your thoughts, experiences, and insights</p>
+                    </div>
+
+                    <div class="card">
+                        <button class="btn btn-success" onclick="createNewBlog()">+ Write New Blog Post</button>
+                    </div>
+
+                    <div id="blogsList"></div>
+                </div>
+
+                <!-- Projects Screen -->
+                <div id="projectsScreen" class="screen">
+                    <div class="screen-header">
+                        <h1 class="screen-title">📁 Project Files</h1>
+                        <p class="screen-subtitle">Upload, organize, and retrieve your project documentation</p>
+                    </div>
+
+                    <div class="card">
+                        <h2 class="card-title">Upload New Project</h2>
+                        <div class="form-group">
+                            <label>Project Name</label>
+                            <input type="text" id="projectName" class="form-input" placeholder="Enter project name">
+                        </div>
+                        <div class="form-group">
+                            <label>Project Description</label>
+                            <textarea id="projectDescription" class="form-input" rows="3" placeholder="Describe your project"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload Files</label>
+                            <input type="file" id="projectFiles" multiple class="form-input">
+                        </div>
+                        <button class="btn btn-success" onclick="uploadProject()">Upload Project</button>
+                    </div>
+
+                    <div id="projectsList"></div>
+                </div>
+
                 <!-- Messages Screen -->
-                <div id="messagesScreen" class="screen active">
+                <div id="messagesScreen" class="screen">
+                    <div class="screen-header">
+                        <h1 class="screen-title">📧 Messages</h1>
+                        <p class="screen-subtitle">Contact form submissions from your portfolio</p>
+                    </div>
                     <div id="messagesContent"></div>
                 </div>
                 
                 <!-- AI Assistant Screen -->
                 <div id="aiScreen" class="screen">
-                    <div class="ai-container">
-                        <div id="chatMessages" class="chat-messages"></div>
+                    <div class="screen-header">
+                        <h1 class="screen-title">🤖 AI Assistant</h1>
+                        <p class="screen-subtitle">Get help with finances, planning, and more</p>
+                    </div>
+                    <div class="card" style="height: calc(100vh - 250px); display: flex; flex-direction: column;">
+                        <div id="chatMessages" style="flex: 1; overflow-y: auto; padding: 20px; background: #f9fafb; border-radius: 8px; margin-bottom: 15px;"></div>
                         
-                        <div id="aiLoading" class="ai-loading">
-                            <div class="ai-loading-spinner"></div>
-                            <span>AI is thinking...</span>
-                        </div>
-                        
-                        <div class="chat-input-container">
-                            <div class="chat-input-row">
-                                <textarea 
-                                    id="chatInput" 
-                                    class="chat-input" 
-                                    placeholder="Ask about finances, budgeting, diet, planning..."
-                                    rows="1"
-                                ></textarea>
-                                <button id="sendBtn" class="btn-send">➤</button>
-                            </div>
+                        <div style="display: flex; gap: 10px;">
+                            <textarea 
+                                id="chatInput" 
+                                class="form-input" 
+                                placeholder="Ask me anything..."
+                                rows="2"
+                                style="flex: 1; resize: none;"
+                            ></textarea>
+                            <button id="sendBtn" class="btn btn-success" style="align-self: flex-end;">Send</button>
                         </div>
                     </div>
                 </div>
@@ -586,11 +797,108 @@
         </div>
     </div>
 
+    <!-- Modals -->
+    <div id="expenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add Expense</h2>
+                <button class="modal-close" onclick="closeModal('expenseModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Amount (GH₵)</label>
+                <input type="number" id="expenseAmount" class="form-input" placeholder="0.00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="expenseCategory" class="form-input">
+                    <option value="Food">Food</option>
+                    <option value="Airtime">Airtime</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Education">Education</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Health">Health</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <input type="text" id="expenseDescription" class="form-input" placeholder="What was this for?">
+            </div>
+            <button class="btn btn-success" onclick="saveExpense()">Save Expense</button>
+        </div>
+    </div>
+
+    <div id="planModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Create Plan</h2>
+                <button class="modal-close" onclick="closeModal('planModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Plan Title</label>
+                <input type="text" id="planTitle" class="form-input" placeholder="What do you want to plan?">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="planDescription" class="form-input" rows="4" placeholder="Details about your plan"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Due Date</label>
+                <input type="date" id="planDueDate" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>Priority</label>
+                <select id="planPriority" class="form-input">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
+            <button class="btn btn-success" onclick="savePlan()">Save Plan</button>
+            <button class="btn btn-secondary" onclick="getPlanAdvice()" style="margin-left: 10px;">Get AI Advice</button>
+        </div>
+    </div>
+
+    <div id="blogModal" class="modal">
+        <div class="modal-content" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2 class="modal-title">Write Blog Post</h2>
+                <button class="modal-close" onclick="closeModal('blogModal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <label>Blog Title</label>
+                <input type="text" id="blogTitle" class="form-input" placeholder="Enter blog title">
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <div class="editor-toolbar">
+                    <button class="editor-btn" onclick="formatText('bold')"><b>B</b></button>
+                    <button class="editor-btn" onclick="formatText('italic')"><i>I</i></button>
+                    <button class="editor-btn" onclick="formatText('underline')"><u>U</u></button>
+                    <button class="editor-btn" onclick="formatText('insertUnorderedList')">• List</button>
+                    <button class="editor-btn" onclick="formatText('insertOrderedList')">1. List</button>
+                    <button class="editor-btn" onclick="insertLink()">🔗 Link</button>
+                    <button class="editor-btn" onclick="insertImage()">🖼️ Image</button>
+                    <select class="editor-btn" onchange="formatText('fontSize', this.value); this.selectedIndex=0;">
+                        <option value="" selected disabled>Size</option>
+                        <option value="1">Small</option>
+                        <option value="3">Normal</option>
+                        <option value="5">Large</option>
+                        <option value="7">XLarge</option>
+                    </select>
+                </div>
+                <div id="blogEditor" class="editor-content" contenteditable="true"></div>
+            </div>
+            <button class="btn btn-success" onclick="saveBlog()">Publish Blog</button>
+        </div>
+    </div>
+
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { getFirestore, collection, query, orderBy, onSnapshot, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getFirestore, collection, query, orderBy, onSnapshot, deleteDoc, doc, addDoc, updateDoc, getDocs, serverTimestamp, where, setDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL, listAll } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -606,9 +914,16 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // Gemini API Key
         const GEMINI_API_KEY = 'AIzaSyDcEcBXUuzBas3qAaSQ-zw1a7Tj20guvwk';
+
+        // Make Firebase available globally
+        window.db = db;
+        window.storage = storage;
+        window.auth = auth;
+        window.GEMINI_API_KEY = GEMINI_API_KEY;
 
         // DOM elements
         const loadingScreen = document.getElementById('loadingScreen');
@@ -619,7 +934,6 @@
         const loginBtn = document.getElementById('loginBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const navItems = document.querySelectorAll('.nav-item');
-        const screens = document.querySelectorAll('.screen');
 
         // Auth state observer
         onAuthStateChanged(auth, (user) => {
@@ -628,8 +942,7 @@
             if (user && user.email === 'pwavwef@gmail.com') {
                 loginScreen.classList.add('hidden');
                 dashboard.classList.add('active');
-                initializeMessagesListener();
-                initializeAIAssistant();
+                initializeApp();
             } else {
                 if (user) {
                     signOut(auth);
@@ -671,13 +984,7 @@
         // Navigation handler
         navItems.forEach(item => {
             item.addEventListener('click', () => {
-                const screenId = item.dataset.screen;
-                
-                navItems.forEach(nav => nav.classList.remove('active'));
-                item.classList.add('active');
-                
-                screens.forEach(screen => screen.classList.remove('active'));
-                document.getElementById(`${screenId}Screen`).classList.add('active');
+                window.switchScreen(item.dataset.screen);
             });
         });
 
@@ -694,243 +1001,45 @@
             errorMessage.classList.remove('hidden');
         }
 
-        // Messages listener
-        function initializeMessagesListener() {
-            const messagesContent = document.getElementById('messagesContent');
-            const q = query(collection(db, 'messages'), orderBy('timestamp', 'desc'));
-            
-            onSnapshot(q, (snapshot) => {
-                if (snapshot.empty) {
-                    messagesContent.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">📭</div>
-                            <div style="font-size: 18px;">No messages yet</div>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                messagesContent.innerHTML = '';
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const messageCard = createMessageCard(docSnap.id, data);
-                    messagesContent.appendChild(messageCard);
-                });
-            }, (error) => {
-                messagesContent.innerHTML = `
-                    <div class="empty-state">
-                        <div style="color: #dc2626;">Error loading messages: ${error.message}</div>
-                    </div>
-                `;
-            });
+        // Initialize all modules
+        function initializeApp() {
+            initializeFinances();
+            initializePlanning();
+            initializeBlogs();
+            initializeProjects();
+            initializeMessages();
+            initializeAI();
+            updateDashboard();
         }
 
-        function createMessageCard(id, data) {
-            const card = document.createElement('div');
-            card.className = 'message-card';
-            
-            const timestamp = data.timestamp?.toDate();
-            const formattedTime = timestamp 
-                ? new Intl.DateTimeFormat('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }).format(timestamp)
-                : 'No date';
-            
-            const initial = (data.name || 'U')[0].toUpperCase();
-            
-            // Escape HTML to prevent XSS
-            const escapeHtml = (text) => {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            };
-            
-            card.innerHTML = `
-                <div class="message-header">
-                    <div class="message-avatar">${escapeHtml(initial)}</div>
-                    <div class="message-info">
-                        <div class="message-name">${escapeHtml(data.name || 'Unknown')}</div>
-                        <div class="message-email">${escapeHtml(data.email || 'No email')}</div>
-                        <div class="message-time">${escapeHtml(formattedTime)}</div>
-                    </div>
-                    <div class="message-expand-icon">▼</div>
-                </div>
-                <div class="message-body">
-                    <div class="message-subject">Subject: ${escapeHtml(data.subject || 'No subject')}</div>
-                    <div class="message-text">${escapeHtml(data.message || 'No message')}</div>
-                    <div class="message-actions">
-                        <button class="btn-delete" data-id="${escapeHtml(id)}">Delete</button>
-                    </div>
-                </div>
-            `;
-            
-            // Toggle expand on header click
-            const header = card.querySelector('.message-header');
-            header.addEventListener('click', () => {
-                card.classList.toggle('expanded');
-            });
-            
-            // Delete handler
-            const deleteBtn = card.querySelector('.btn-delete');
-            deleteBtn.addEventListener('click', async () => {
-                if (confirm('Delete this message?')) {
-                    await deleteDoc(doc(db, 'messages', id));
-                }
-            });
-            
-            return card;
-        }
+        // Make functions globally available
+        window.initializeFinances = initializeFinances;
+        window.initializePlanning = initializePlanning;
+        window.initializeBlogs = initializeBlogs;
+        window.initializeProjects = initializeProjects;
+        window.initializeMessages = initializeMessages;
+        window.initializeAI = initializeAI;
+        window.updateDashboard = updateDashboard;
 
-        // AI Assistant
-        let chatMessages = [];
-
-        function initializeAIAssistant() {
-            const chatMessagesDiv = document.getElementById('chatMessages');
-            const chatInput = document.getElementById('chatInput');
-            const sendBtn = document.getElementById('sendBtn');
-            const aiLoading = document.getElementById('aiLoading');
-            
-            // Add welcome message
-            if (chatMessages.length === 0) {
-                addMessage({
-                    text: `Hello Francis! I'm your AI assistant. I can help you with:
-
-💰 Financial planning and budgeting
-💳 Expense tracking and spending analysis
-📊 Budget optimization
-📅 Financial goal planning
-🥗 Dietary advice and meal planning
-🎯 Personal productivity tips
-
-How can I assist you today?`,
-                    isUser: false,
-                    timestamp: new Date()
-                });
-            }
-            
-            // Send message handler
-            async function sendMessage() {
-                const text = chatInput.value.trim();
-                if (!text) return;
-                
-                chatInput.value = '';
-                chatInput.style.height = 'auto';
-                
-                addMessage({
-                    text: text,
-                    isUser: true,
-                    timestamp: new Date()
-                });
-                
-                sendBtn.disabled = true;
-                aiLoading.classList.add('active');
-                
-                try {
-                    const response = await callGeminiAPI(text);
-                    addMessage({
-                        text: response,
-                        isUser: false,
-                        timestamp: new Date()
-                    });
-                } catch (error) {
-                    addMessage({
-                        text: `Sorry, I encountered an error: ${error.message}`,
-                        isUser: false,
-                        timestamp: new Date()
-                    });
-                } finally {
-                    sendBtn.disabled = false;
-                    aiLoading.classList.remove('active');
-                }
-            }
-            
-            sendBtn.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            
-            // Auto-resize textarea
-            chatInput.addEventListener('input', function() {
-                this.style.height = 'auto';
-                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
-            });
-        }
-
-        function addMessage(message) {
-            chatMessages.push(message);
-            
-            const chatMessagesDiv = document.getElementById('chatMessages');
-            const bubble = document.createElement('div');
-            bubble.className = `chat-bubble ${message.isUser ? 'user' : 'ai'}`;
-            
-            const time = new Intl.DateTimeFormat('en-US', {
-                hour: '2-digit',
-                minute: '2-digit'
-            }).format(message.timestamp);
-            
-            // Escape HTML to prevent XSS
-            const escapeHtml = (text) => {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            };
-            
-            bubble.innerHTML = `
-                <div class="chat-avatar ${message.isUser ? 'user' : 'ai'}">
-                    ${message.isUser ? '👤' : '🤖'}
-                </div>
-                <div class="chat-content">
-                    <div class="chat-text">${escapeHtml(message.text)}</div>
-                    <div class="chat-time">${escapeHtml(time)}</div>
-                </div>
-            `;
-            
-            chatMessagesDiv.appendChild(bubble);
-            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-        }
-
-        async function callGeminiAPI(userMessage) {
-            const prompt = `You are a personal AI assistant for Francis Pwavwe. You specialize in:
-1. Financial planning, budgeting, and spending management
-2. Personal finance advice tailored to a student/young professional
-3. Dietary and nutrition advice
-4. Personal productivity and planning
-
-User's question: ${userMessage}
-
-Provide helpful, practical, and personalized advice. Be concise but thorough.`;
-
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: prompt
-                        }]
-                    }]
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to get AI response');
-            }
-
-            const data = await response.json();
-            return data.candidates[0].content.parts[0].text;
-        }
-
-        // Make functions available globally for debugging if needed
-        window.firebaseApp = app;
+        // Export Firebase modules
+        window.addDoc = addDoc;
+        window.collection = collection;
+        window.serverTimestamp = serverTimestamp;
+        window.query = query;
+        window.orderBy = orderBy;
+        window.onSnapshot = onSnapshot;
+        window.deleteDoc = deleteDoc;
+        window.doc = doc;
+        window.updateDoc = updateDoc;
+        window.getDocs = getDocs;
+        window.where = where;
+        window.setDoc = setDoc;
+        window.ref = ref;
+        window.uploadBytes = uploadBytes;
+        window.getDownloadURL = getDownloadURL;
+        window.listAll = listAll;
     </script>
+
+    <script src="francis-portal.js"></script>
 </body>
 </html>
