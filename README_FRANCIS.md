@@ -180,7 +180,18 @@ Francis-Pwavwe/
 1. **Email Restriction**: Hardcoded check ensures only pwavwef@gmail.com can access
 2. **Firebase Authentication**: All operations require authenticated user
 3. **Firestore Rules**: Database rules prevent unauthorized access
-4. **API Key**: Keep your Gemini API key secure (consider using environment variables in production)
+4. **API Keys Security**:
+   - **Firebase API Key**: While included in client code (as designed by Firebase), you should restrict it in Google Cloud Console:
+     - Go to Google Cloud Console → APIs & Services → Credentials
+     - Find your API key and click "Edit"
+     - Under "Application restrictions", select "HTTP referrers"
+     - Add your website domains (e.g., `https://pwavwef-web.github.io/*`)
+     - Under "API restrictions", restrict to only the Firebase APIs you need
+   - **Gemini API Key**: Use environment variables in production:
+     ```bash
+     flutter run --dart-define=GEMINI_API_KEY=your_key_here
+     ```
+     Or use the `flutter_dotenv` package for better secret management
 
 ## Troubleshooting
 

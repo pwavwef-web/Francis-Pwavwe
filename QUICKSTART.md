@@ -41,7 +41,24 @@ This is a private admin panel **exclusively for Francis Pwavwe** to:
    apiKey: 'AIzaSy...your-actual-key...',
    ```
 
-### Step 5: Install Flutter (if not already installed)
+6. **IMPORTANT**: For production use, run with environment variable:
+   ```bash
+   flutter run --dart-define=GEMINI_API_KEY=your_key_here
+   ```
+
+### Step 5: Secure Your Firebase API Key (Recommended)
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Select your project "francis-pwavwe"
+3. Navigate to **APIs & Services** → **Credentials**
+4. Find your API key and click "Edit"
+5. Add restrictions:
+   - **Application restrictions**: HTTP referrers (websites)
+   - Add: `https://pwavwef-web.github.io/*`
+   - **API restrictions**: Restrict to Firebase APIs only
+6. Click "Save"
+
+### Step 6: Install Flutter (if not already installed)
 
 **On macOS:**
 ```bash
@@ -62,7 +79,7 @@ snap install flutter --classic
 flutter doctor
 ```
 
-### Step 6: Run the App
+### Step 7: Run the App
 ```bash
 cd /path/to/Francis-Pwavwe
 flutter pub get

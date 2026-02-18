@@ -389,15 +389,6 @@ class MessagesScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton.icon(
-                              icon: const Icon(Icons.email),
-                              label: const Text('Reply'),
-                              onPressed: () {
-                                // Open email client
-                                // In a real app, you'd use url_launcher package
-                              },
-                            ),
-                            const SizedBox(width: 10),
-                            TextButton.icon(
                               icon: const Icon(Icons.delete),
                               label: const Text('Delete'),
                               style: TextButton.styleFrom(
@@ -441,10 +432,14 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
     super.initState();
     
     // Initialize Gemini AI
-    // Note: In production, the API key should be stored securely
+    // IMPORTANT: Replace 'YOUR_GEMINI_API_KEY_HERE' with your actual Gemini API key
+    // For production, use environment variables or flutter_dotenv package:
+    // apiKey: dotenv.env['GEMINI_API_KEY'] ?? '',
+    const apiKey = String.fromEnvironment('GEMINI_API_KEY', defaultValue: 'YOUR_GEMINI_API_KEY_HERE');
+    
     _model = GenerativeModel(
       model: 'gemini-pro',
-      apiKey: 'YOUR_GEMINI_API_KEY_HERE', // Replace with actual API key
+      apiKey: apiKey,
     );
     
     // Add welcome message
