@@ -94,7 +94,7 @@ animatedElements.forEach(el => {
 
 // ===== FIREBASE CONFIGURATION =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, doc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
@@ -457,3 +457,478 @@ I envision a future where strategic thinking meets digital innovation – where 
     showNotification('CV downloaded successfully!');
 }
 
+// ===== BLOGS SECTION =====
+let blogsData = [];
+let userInteractions = JSON.parse(localStorage.getItem('blogInteractions') || '{}');
+
+// Demo blog data for demonstration when Firebase is unavailable
+const demoBlogsData = [
+    {
+        id: 'demo1',
+        title: 'The Future of Tourism in West Africa',
+        content: '<p>Tourism in West Africa is experiencing a transformative shift driven by digital innovation and sustainable practices. As we navigate through 2026, the integration of technology in tourism operations is no longer optional—it\'s essential for growth and competitiveness.</p><p>From mobile booking platforms to AI-powered customer service, the landscape is changing rapidly. Hotels and tour operators must adapt to meet the evolving expectations of modern travelers who demand seamless, personalized experiences.</p><img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800" alt="Tourism landscape" /><p>The key to success lies in balancing traditional hospitality with cutting-edge technology, creating experiences that are both authentic and efficient.</p>',
+        timestamp: { toDate: () => new Date('2026-02-15') },
+        likes: 24,
+        comments: 8,
+        shares: 12
+    },
+    {
+        id: 'demo2',
+        title: 'Building AZ Learner: Lessons in EdTech Innovation',
+        content: '<p>Creating an education technology platform from scratch has been one of the most challenging and rewarding experiences of my entrepreneurial journey. AZ Learner was born from a simple observation: students needed better tools to succeed academically.</p><p>The platform focuses on three core pillars: personalized learning paths, data-driven insights, and collaborative study tools. Each feature was designed with student success in mind, backed by research and user feedback.</p><p>One of the biggest lessons I learned was the importance of iterative development. We launched with a minimum viable product and continuously improved based on user needs. This approach allowed us to stay agile and responsive to our community.</p>',
+        timestamp: { toDate: () => new Date('2026-02-10') },
+        likes: 42,
+        comments: 15,
+        shares: 18
+    },
+    {
+        id: 'demo3',
+        title: 'Leadership Lessons from the Harvard Aspire Program',
+        content: '<p>The Harvard Aspire Leaders Program was a transformative experience that reshaped my understanding of leadership in the 21st century. Cohort 5 brought together leaders from diverse backgrounds, creating a rich learning environment.</p><p>Key takeaways included the importance of emotional intelligence, strategic thinking, and the ability to navigate complex, ambiguous situations. The program emphasized that leadership is not about having all the answers, but about asking the right questions and empowering others.</p><p>These insights have directly influenced how I approach my work with AZ Learner and my tourism management studies. Leadership is about creating systems that enable others to succeed.</p>',
+        timestamp: { toDate: () => new Date('2026-02-05') },
+        likes: 56,
+        comments: 22,
+        shares: 31
+    },
+    {
+        id: 'demo4',
+        title: 'Digital Strategy in Tourism: A Case Study',
+        content: '<p>During my time as a Digital Strategy Consultant with Torchlight Tours, I developed and implemented a comprehensive social media strategy that significantly increased brand visibility and engagement.</p><img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800" alt="Digital marketing" /><p>The strategy focused on authentic storytelling, user-generated content, and data-driven decision making. By analyzing engagement metrics and customer feedback, we were able to optimize our content for maximum impact.</p><p>This experience taught me the power of strategic digital marketing in the tourism industry and the importance of staying ahead of trends.</p>',
+        timestamp: { toDate: () => new Date('2026-01-28') },
+        likes: 33,
+        comments: 11,
+        shares: 9
+    },
+    {
+        id: 'demo5',
+        title: 'Sustainable Tourism: Balancing Growth and Conservation',
+        content: '<p>As tourism continues to grow globally, the question of sustainability becomes increasingly critical. How do we promote economic development through tourism while preserving the natural and cultural resources that make destinations attractive?</p><p>My research at the University of Cape Coast focuses on this delicate balance. Sustainable tourism is not just about environmental protection—it encompasses economic viability, social equity, and cultural preservation.</p><p>The future of tourism lies in creating experiences that benefit local communities, protect ecosystems, and provide authentic, meaningful experiences for travelers. This requires innovative thinking and collaborative partnerships.</p>',
+        timestamp: { toDate: () => new Date('2026-01-20') },
+        likes: 48,
+        comments: 19,
+        shares: 25
+    }
+];
+
+// Load blogs from Firestore or use demo data
+async function loadBlogs() {
+    const blogsCarousel = document.getElementById('blogsCarousel');
+    
+    try {
+        // Check if Firebase is available
+        if (typeof db !== 'undefined') {
+            // Listen for real-time updates
+            const blogsQuery = query(collection(db, 'blogs'), orderBy('timestamp', 'desc'));
+            
+            onSnapshot(blogsQuery, (snapshot) => {
+                blogsData = [];
+                snapshot.forEach((doc) => {
+                    blogsData.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                // If no blogs loaded from Firebase, use demo data
+                if (blogsData.length === 0) {
+                    blogsData = demoBlogsData;
+                }
+                renderBlogs();
+            }, (error) => {
+                console.error('Error loading blogs:', error);
+                // Load demo blogs on error
+                blogsData = demoBlogsData;
+                renderBlogs();
+            });
+        } else {
+            // Firebase not available, use demo data
+            blogsData = demoBlogsData;
+            renderBlogs();
+        }
+    } catch (error) {
+        console.error('Error setting up blog listener:', error);
+        // Load demo blogs on error
+        blogsData = demoBlogsData;
+        renderBlogs();
+    }
+}
+
+// Render blogs in carousel
+function renderBlogs() {
+    const blogsCarousel = document.getElementById('blogsCarousel');
+    
+    if (blogsData.length === 0) {
+        blogsCarousel.innerHTML = '<div class="blog-loading">No blog posts available yet.</div>';
+        return;
+    }
+    
+    blogsCarousel.innerHTML = blogsData.map(blog => {
+        const date = blog.timestamp?.toDate();
+        const formattedDate = date ? new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }).format(date) : 'No date';
+        
+        // Extract text preview (first 5 lines approximately)
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = sanitizeHtmlContent(blog.content || '');
+        const textContent = tempDiv.textContent || tempDiv.innerText || '';
+        const preview = textContent.substring(0, 300) + (textContent.length > 300 ? '...' : '');
+        
+        // Extract first image from content and sanitize
+        const imgMatch = blog.content?.match(/<img[^>]+src="([^">]+)"/);
+        const imageUrl = imgMatch ? sanitizeImageUrl(imgMatch[1]) : null;
+        
+        // Get interaction data
+        const interactions = userInteractions[blog.id] || { liked: false, comments: [] };
+        const likes = (blog.likes || 0);
+        const comments = (blog.comments || 0);
+        const shares = (blog.shares || 0);
+        
+        return `
+            <div class="blog-card" data-blog-id="${blog.id}">
+                <div class="blog-image">
+                    ${imageUrl ? `<img src="${imageUrl}" alt="${escapeHtml(blog.title || 'Blog image')}" />` : '✍️'}
+                </div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">${escapeHtml(blog.title || 'Untitled')}</h3>
+                    <div class="blog-card-date">${formattedDate}</div>
+                    <div class="blog-card-preview">${escapeHtml(preview)}</div>
+                    <div class="blog-card-actions">
+                        <button class="blog-action-btn ${interactions.liked ? 'active' : ''}" onclick="toggleLike('${blog.id}')" title="Like this post">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <span>${likes}</span>
+                        </button>
+                        <button class="blog-action-btn" onclick="toggleComments('${blog.id}')" title="View comments">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                            </svg>
+                            <span>${comments}</span>
+                        </button>
+                        <button class="blog-action-btn" onclick="shareBlog('${blog.id}', '${escapeHtml(blog.title || 'Blog post')}')" title="Share this post">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                            </svg>
+                            <span>${shares}</span>
+                        </button>
+                    </div>
+                    <a href="#" class="blog-view-more" onclick="openBlogModal('${blog.id}'); return false;">View More →</a>
+                </div>
+                <div class="blog-comment-section" id="comments-${blog.id}" style="display: none;">
+                    <div class="blog-comments" id="comment-list-${blog.id}"></div>
+                    <form class="blog-comment-form" onsubmit="addComment(event, '${blog.id}')">
+                        <input type="text" class="blog-comment-input" placeholder="Add a comment..." required>
+                        <button type="submit" class="blog-comment-submit">Post</button>
+                    </form>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Toggle like
+window.toggleLike = async function(blogId) {
+    const interactions = userInteractions[blogId] || { liked: false, comments: [] };
+    const newLikedState = !interactions.liked;
+    
+    // Update local storage first
+    userInteractions[blogId] = { ...interactions, liked: newLikedState };
+    localStorage.setItem('blogInteractions', JSON.stringify(userInteractions));
+    
+    // Only update Firebase if db is available and it's not a demo blog
+    if (typeof db !== 'undefined' && !blogId.startsWith('demo')) {
+        try {
+            const blogRef = doc(db, 'blogs', blogId);
+            await updateDoc(blogRef, {
+                likes: increment(newLikedState ? 1 : -1)
+            });
+        } catch (error) {
+            console.error('Error updating like:', error);
+            showNotification('Unable to sync like. It has been saved locally.');
+        }
+    }
+    
+    // Update the local count display immediately
+    const blog = blogsData.find(b => b.id === blogId);
+    if (blog) {
+        blog.likes = (blog.likes || 0) + (newLikedState ? 1 : -1);
+        renderBlogs();
+    }
+};
+
+// Toggle comments section
+window.toggleComments = function(blogId) {
+    const commentsSection = document.getElementById(`comments-${blogId}`);
+    const isVisible = commentsSection.style.display !== 'none';
+    
+    // Hide all comment sections
+    document.querySelectorAll('.blog-comment-section').forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    // Toggle current section
+    if (!isVisible) {
+        commentsSection.style.display = 'block';
+        loadComments(blogId);
+    }
+};
+
+// Load comments for a blog
+function loadComments(blogId) {
+    const commentList = document.getElementById(`comment-list-${blogId}`);
+    const interactions = userInteractions[blogId] || { liked: false, comments: [] };
+    
+    if (interactions.comments.length === 0) {
+        commentList.innerHTML = '<div style="text-align: center; color: var(--medium-gray); padding: 1rem;">No comments yet. Be the first to comment!</div>';
+        return;
+    }
+    
+    commentList.innerHTML = interactions.comments.map(comment => `
+        <div class="blog-comment">
+            <div class="blog-comment-author">${escapeHtml(comment.author)}</div>
+            <div class="blog-comment-text">${escapeHtml(comment.text)}</div>
+        </div>
+    `).join('');
+}
+
+// Add comment
+window.addComment = async function(event, blogId) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const input = form.querySelector('.blog-comment-input');
+    const commentText = input.value.trim();
+    
+    if (!commentText) return;
+    
+    // Save comment locally
+    const interactions = userInteractions[blogId] || { liked: false, comments: [] };
+    interactions.comments.push({
+        author: 'Anonymous',
+        text: commentText,
+        timestamp: new Date().toISOString()
+    });
+    
+    userInteractions[blogId] = interactions;
+    localStorage.setItem('blogInteractions', JSON.stringify(userInteractions));
+    
+    // Only update Firebase if db is available and it's not a demo blog
+    if (typeof db !== 'undefined' && !blogId.startsWith('demo')) {
+        try {
+            const blogRef = doc(db, 'blogs', blogId);
+            await updateDoc(blogRef, {
+                comments: increment(1)
+            });
+        } catch (error) {
+            console.error('Error syncing comment count:', error);
+        }
+    }
+    
+    // Update the local count display immediately
+    const blog = blogsData.find(b => b.id === blogId);
+    if (blog) {
+        blog.comments = (blog.comments || 0) + 1;
+        renderBlogs();
+    }
+    
+    // Clear input and reload comments
+    input.value = '';
+    loadComments(blogId);
+    
+    showNotification('Comment added successfully!');
+};
+
+// Share blog
+window.shareBlog = async function(blogId, title) {
+    const url = window.location.href;
+    
+    try {
+        if (navigator.share) {
+            await navigator.share({
+                title: title,
+                text: `Check out this blog post: ${title}`,
+                url: url
+            });
+        } else {
+            // Fallback: copy to clipboard
+            await navigator.clipboard.writeText(url);
+            showNotification('Link copied to clipboard!');
+        }
+        
+        // Only update Firebase if db is available and it's not a demo blog
+        if (typeof db !== 'undefined' && !blogId.startsWith('demo')) {
+            try {
+                const blogRef = doc(db, 'blogs', blogId);
+                await updateDoc(blogRef, {
+                    shares: increment(1)
+                });
+            } catch (error) {
+                console.error('Error syncing share count:', error);
+            }
+        }
+        
+        // Update the local count display immediately
+        const blog = blogsData.find(b => b.id === blogId);
+        if (blog) {
+            blog.shares = (blog.shares || 0) + 1;
+            renderBlogs();
+        }
+    } catch (error) {
+        console.error('Error sharing:', error);
+        showNotification('Unable to share. Please copy the URL manually.');
+    }
+};
+
+// Open blog modal
+window.openBlogModal = function(blogId) {
+    const blog = blogsData.find(b => b.id === blogId);
+    if (!blog) return;
+    
+    const date = blog.timestamp?.toDate();
+    const formattedDate = date ? new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }).format(date) : 'No date';
+    
+    // Extract first image from content and sanitize
+    const imgMatch = blog.content?.match(/<img[^>]+src="([^">]+)"/);
+    const imageUrl = imgMatch ? sanitizeImageUrl(imgMatch[1]) : null;
+    
+    // Sanitize the blog content
+    const sanitizedContent = sanitizeHtmlContent(blog.content || '');
+    
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'blog-modal active';
+    modal.innerHTML = `
+        <div class="blog-modal-content">
+            <button class="blog-modal-close" onclick="closeBlogModal()">×</button>
+            ${imageUrl ? `<img src="${imageUrl}" alt="${escapeHtml(blog.title || 'Blog image')}" class="blog-modal-image" />` : ''}
+            <div class="blog-modal-body">
+                <h2 class="blog-modal-title">${escapeHtml(blog.title || 'Untitled')}</h2>
+                <div class="blog-modal-date">${formattedDate}</div>
+                <div class="blog-modal-content-text">${sanitizedContent}</div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    
+    // Close on background click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeBlogModal();
+        }
+    });
+};
+
+// Close blog modal
+window.closeBlogModal = function() {
+    const modal = document.querySelector('.blog-modal');
+    if (modal) {
+        modal.remove();
+        document.body.style.overflow = '';
+    }
+};
+
+// Carousel navigation
+function setupBlogCarousel() {
+    const carousel = document.getElementById('blogsCarousel');
+    const prevBtn = document.querySelector('.carousel-btn-prev');
+    const nextBtn = document.querySelector('.carousel-btn-next');
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: -370, behavior: 'smooth' });
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: 370, behavior: 'smooth' });
+        });
+    }
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Validate and sanitize image URL
+function sanitizeImageUrl(url) {
+    if (!url) return null;
+    try {
+        const parsed = new URL(url, window.location.href);
+        // Only allow http and https protocols
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+            return url;
+        }
+    } catch (e) {
+        console.warn('Invalid image URL:', url);
+    }
+    return null;
+}
+
+// Sanitize HTML content to remove dangerous scripts
+function sanitizeHtmlContent(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // Remove all script tags
+    const scripts = tempDiv.querySelectorAll('script');
+    scripts.forEach(script => script.remove());
+    
+    // Remove all event handlers
+    const allElements = tempDiv.querySelectorAll('*');
+    allElements.forEach(el => {
+        // Remove event handler attributes
+        Array.from(el.attributes).forEach(attr => {
+            if (attr.name.startsWith('on')) {
+                el.removeAttribute(attr.name);
+            }
+        });
+        
+        // Sanitize href attributes to prevent javascript: urls
+        if (el.hasAttribute('href')) {
+            const href = el.getAttribute('href');
+            try {
+                const url = new URL(href, window.location.href);
+                if (url.protocol !== 'http:' && url.protocol !== 'https:' && url.protocol !== 'mailto:') {
+                    el.removeAttribute('href');
+                }
+            } catch (e) {
+                // If it's a fragment link (e.g., #section), keep it
+                if (!href.startsWith('#')) {
+                    el.removeAttribute('href');
+                }
+            }
+        }
+        
+        // Sanitize src attributes for images
+        if (el.tagName === 'IMG' && el.hasAttribute('src')) {
+            const src = el.getAttribute('src');
+            const sanitized = sanitizeImageUrl(src);
+            if (sanitized) {
+                el.setAttribute('src', sanitized);
+            } else {
+                el.removeAttribute('src');
+            }
+        }
+    });
+    
+    return tempDiv.innerHTML;
+}
+
+// Initialize blogs when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadBlogs();
+    setupBlogCarousel();
+});
