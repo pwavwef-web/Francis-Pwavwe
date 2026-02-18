@@ -95,7 +95,7 @@ animatedElements.forEach(el => {
 // ===== CONTACT FORM HANDLING =====
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', (e) => {
+contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     // Get form data
@@ -103,20 +103,35 @@ contactForm.addEventListener('submit', (e) => {
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,
         subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
+        message: document.getElementById('message').value,
+        timestamp: new Date().toISOString(),
+        read: false
     };
 
-    // Create mailto link (since we don't have a backend)
-    const mailtoLink = `mailto:pwavwef@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
-    
-    // Open email client
-    window.location.href = mailtoLink;
-    
-    // Show success message
-    showNotification('Your message is being prepared in your email client!');
-    
-    // Reset form
-    contactForm.reset();
+    try {
+        // Save to Firestore if available
+        if (window.firebaseDb && window.firebaseCollection && window.firebaseAddDoc) {
+            const messagesRef = window.firebaseCollection(window.firebaseDb, 'messages');
+            await window.firebaseAddDoc(messagesRef, {
+                ...formData,
+                timestamp: window.firebaseServerTimestamp()
+            });
+            
+            // Show success message
+            showNotification('Message sent successfully! Francis will get back to you soon.');
+        } else {
+            // Fallback to mailto if Firebase is not available
+            const mailtoLink = `mailto:pwavwef@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
+            window.location.href = mailtoLink;
+            showNotification('Your message is being prepared in your email client!');
+        }
+        
+        // Reset form
+        contactForm.reset();
+    } catch (error) {
+        console.error('Error sending message:', error);
+        showNotification('There was an error sending your message. Please try again or email directly at pwavwef@gmail.com');
+    }
 });
 
 // ===== NOTIFICATION SYSTEM =====
