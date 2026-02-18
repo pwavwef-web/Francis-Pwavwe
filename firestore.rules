@@ -14,5 +14,29 @@ service cloud.firestore {
                     && request.resource.data.subject is string
                     && request.resource.data.message is string;
     }
+    
+    // Finances collection - Francis only
+    match /finances/{docId} {
+      allow read, write, delete: if request.auth != null 
+                                 && request.auth.token.email == 'pwavwef@gmail.com';
+    }
+    
+    // Plans collection - Francis only
+    match /plans/{planId} {
+      allow read, write, delete: if request.auth != null 
+                                 && request.auth.token.email == 'pwavwef@gmail.com';
+    }
+    
+    // Blogs collection - Francis only
+    match /blogs/{blogId} {
+      allow read, write, delete: if request.auth != null 
+                                 && request.auth.token.email == 'pwavwef@gmail.com';
+    }
+    
+    // Projects collection - Francis only
+    match /projects/{projectId} {
+      allow read, write, delete: if request.auth != null 
+                                 && request.auth.token.email == 'pwavwef@gmail.com';
+    }
   }
 }
