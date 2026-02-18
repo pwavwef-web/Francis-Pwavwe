@@ -1138,6 +1138,9 @@
         let tasks = [];
         let blogs = [];
         let spendingChart = null;
+        
+        // Configurable settings
+        const MONTHLY_BUDGET = 1000; // GH₵ - Change this to set your monthly budget
 
         // DOM elements
         const loadingScreen = document.getElementById('loadingScreen');
@@ -1268,6 +1271,7 @@
                     transactions.push({ id: doc.id, ...doc.data() });
                 });
                 updateFinances();
+                updateDashboard(); // Update dashboard when transactions change
             });
         }
 
@@ -1287,8 +1291,7 @@
             });
 
             const netBalance = totalIncome - totalExpenses;
-            const monthlyBudget = 1000; // You can make this configurable
-            const budgetRemaining = monthlyBudget - totalExpenses;
+            const budgetRemaining = MONTHLY_BUDGET - totalExpenses;
 
             // Update stats
             document.getElementById('totalIncome').textContent = `GH₵ ${totalIncome.toFixed(2)}`;
@@ -1439,6 +1442,7 @@ Provide specific advice on:
                     tasks.push({ id: doc.id, ...doc.data() });
                 });
                 updateTasks();
+                updateDashboard(); // Update dashboard when tasks change
             });
         }
 
@@ -1555,6 +1559,7 @@ Provide specific advice on:
                     blogs.push({ id: doc.id, ...doc.data() });
                 });
                 updateBlogs();
+                updateDashboard(); // Update dashboard when blogs change
             });
         }
 
@@ -1916,17 +1921,15 @@ Provide specific advice on:
 
         // ===== DASHBOARD =====
         function updateDashboard() {
-            // Update dashboard stats periodically
-            setInterval(() => {
-                const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-                const monthlyBudget = 1000;
-                const activeTasks = tasks.filter(t => !t.completed).length;
-                
-                document.getElementById('dashTotalExpenses').textContent = `GH₵ ${totalExpenses.toFixed(2)}`;
-                document.getElementById('dashMonthlyBudget').textContent = `GH₵ ${(monthlyBudget - totalExpenses).toFixed(2)}`;
-                document.getElementById('dashActiveTasks').textContent = activeTasks;
-                document.getElementById('dashBlogCount').textContent = blogs.length;
-            }, 1000);
+            // Calculate stats
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const activeTasks = tasks.filter(t => !t.completed).length;
+            
+            // Update dashboard stats
+            document.getElementById('dashTotalExpenses').textContent = `GH₵ ${totalExpenses.toFixed(2)}`;
+            document.getElementById('dashMonthlyBudget').textContent = `GH₵ ${(MONTHLY_BUDGET - totalExpenses).toFixed(2)}`;
+            document.getElementById('dashActiveTasks').textContent = activeTasks;
+            document.getElementById('dashBlogCount').textContent = blogs.length;
         }
 
         // Utility function
