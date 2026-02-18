@@ -1009,7 +1009,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
-        import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, updateDoc, serverTimestamp, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, deleteDoc, doc, updateDoc, serverTimestamp, where, getDocs, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
         import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
 
         // Firebase configuration
@@ -1130,7 +1130,12 @@
         }
 
         // ===== FINANCES =====
+        let monthlyBudgetAmount = 500; // Default budget
+
         function initializeFinances() {
+            // Load budget setting
+            loadBudgetSetting();
+            
             // Listen to transactions
             const transactionsQuery = query(collection(db, 'transactions'), orderBy('timestamp', 'desc'));
             onSnapshot(transactionsQuery, (snapshot) => {
@@ -1141,6 +1146,28 @@
 
             // Initialize finance chat
             addFinanceMessage('Hello Francis! I can help you with budgeting, expense tracking, and financial planning. What would you like to know?', false);
+        }
+
+        async function loadBudgetSetting() {
+            try {
+                const settingsRef = doc(db, 'settings', 'budget');
+                const settingsSnap = await getDoc(settingsRef);
+                
+                if (settingsSnap.exists()) {
+                    monthlyBudgetAmount = settingsSnap.data().amount || 500;
+                } else {
+                    // Create default budget setting
+                    await updateDoc(settingsRef, { amount: 500 }).catch(() => {
+                        // If update fails (doc doesn't exist), create it
+                        return addDoc(collection(db, 'settings'), { amount: 500 });
+                    });
+                }
+                
+                document.getElementById('monthlyBudget').textContent = `GH₵ ${monthlyBudgetAmount.toFixed(2)}`;
+            } catch (error) {
+                console.error('Error loading budget:', error);
+                monthlyBudgetAmount = 500;
+            }
         }
 
         function displayTransactions(docs) {
@@ -1196,9 +1223,7 @@
 
             document.getElementById('walletBalance').textContent = `GH₵ ${totalBalance.toFixed(2)}`;
             document.getElementById('todaySpending').textContent = `GH₵ ${todayTotal.toFixed(2)}`;
-            
-            // Monthly budget can be set separately or calculated
-            document.getElementById('monthlyBudget').textContent = 'GH₵ 500.00';
+            document.getElementById('monthlyBudget').textContent = `GH₵ ${monthlyBudgetAmount.toFixed(2)}`;
         }
 
         function updateSpendingChart(docs) {
@@ -1559,17 +1584,22 @@
         };
 
         window.editBlog = async function(id) {
-            editingBlogId = id;
-            const docSnap = await getDocs(query(collection(db, 'blogs'), where('__name__', '==', id)));
-            
-            if (!docSnap.empty) {
-                const data = docSnap.docs[0].data();
-                document.getElementById('blogTitle').value = data.title || '';
-                document.getElementById('blogContent').innerHTML = data.content || '';
-                document.getElementById('blogEditor').classList.remove('hidden');
+            try {
+                editingBlogId = id;
+                const docRef = doc(db, 'blogs', id);
+                const docSnap = await getDoc(docRef);
                 
-                // Scroll to editor
-                document.getElementById('blogEditor').scrollIntoView({ behavior: 'smooth' });
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('blogTitle').value = data.title || '';
+                    document.getElementById('blogContent').innerHTML = data.content || '';
+                    document.getElementById('blogEditor').classList.remove('hidden');
+                    
+                    // Scroll to editor
+                    document.getElementById('blogEditor').scrollIntoView({ behavior: 'smooth' });
+                }
+            } catch (error) {
+                alert('Error loading blog: ' + error.message);
             }
         };
 
@@ -1684,10 +1714,11 @@
 
         window.downloadProject = async function(id) {
             try {
-                const docSnap = await getDocs(query(collection(db, 'projects'), where('__name__', '==', id)));
+                const docRef = doc(db, 'projects', id);
+                const docSnap = await getDoc(docRef);
                 
-                if (!docSnap.empty) {
-                    const data = docSnap.docs[0].data();
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
                     const files = data.files || [];
                     const fileNames = data.fileNames || [];
 
@@ -1709,8 +1740,29 @@
         window.deleteProject = async function(id) {
             if (confirm('Delete this project? This will also delete all associated files.')) {
                 try {
-                    // TODO: Also delete files from Storage
-                    await deleteDoc(doc(db, 'projects', id));
+                    // Get project data to find file references
+                    const docRef = doc(db, 'projects', id);
+                    const docSnap = await getDoc(docRef);
+                    
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        const files = data.files || [];
+                        
+                        // Delete files from Storage
+                        for (const fileUrl of files) {
+                            try {
+                                // Extract file path from URL
+                                const fileRef = ref(storage, fileUrl);
+                                await deleteObject(fileRef);
+                            } catch (error) {
+                                console.error('Error deleting file:', error);
+                                // Continue deleting other files even if one fails
+                            }
+                        }
+                    }
+                    
+                    // Delete project document
+                    await deleteDoc(docRef);
                 } catch (error) {
                     alert('Error deleting project: ' + error.message);
                 }
