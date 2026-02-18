@@ -466,7 +466,7 @@ const BLOG_STORAGE_KEY = 'blogInteractions';
 function getSessionId() {
     let sessionId = localStorage.getItem('blogSessionId');
     if (!sessionId) {
-        sessionId = 'anon_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        sessionId = 'anon_' + Date.now() + '_' + Math.random().toString(36).substring(2, 11);
         localStorage.setItem('blogSessionId', sessionId);
     }
     return sessionId;
@@ -537,12 +537,57 @@ function extractText(html) {
     return div.textContent || div.innerText || '';
 }
 
+// Sanitize URL to prevent XSS
+function sanitizeUrl(url) {
+    if (!url) return null;
+    // Only allow http, https, and data URLs
+    const urlPattern = /^(https?:\/\/|data:image\/)/i;
+    return urlPattern.test(url) ? url : null;
+}
+
+// Sanitize HTML content to prevent XSS while preserving basic formatting
+function sanitizeHtml(html) {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    
+    // Remove script tags and event handlers
+    const scripts = div.querySelectorAll('script');
+    scripts.forEach(script => script.remove());
+    
+    // Remove event handler attributes
+    const allElements = div.querySelectorAll('*');
+    allElements.forEach(el => {
+        // Remove all on* event attributes
+        Array.from(el.attributes).forEach(attr => {
+            if (attr.name.startsWith('on')) {
+                el.removeAttribute(attr.name);
+            }
+        });
+        
+        // Sanitize href and src attributes
+        if (el.hasAttribute('href')) {
+            const href = el.getAttribute('href');
+            if (!sanitizeUrl(href) && !href.startsWith('#') && !href.startsWith('mailto:')) {
+                el.removeAttribute('href');
+            }
+        }
+        if (el.hasAttribute('src')) {
+            const src = el.getAttribute('src');
+            if (!sanitizeUrl(src)) {
+                el.removeAttribute('src');
+            }
+        }
+    });
+    
+    return div.innerHTML;
+}
+
 // Get first image from blog content
 function getFirstImage(html) {
     const div = document.createElement('div');
     div.innerHTML = html;
     const img = div.querySelector('img');
-    return img ? img.src : null;
+    return img ? sanitizeUrl(img.src) : null;
 }
 
 // Truncate text to first N lines
@@ -585,7 +630,7 @@ function renderBlogs() {
         return `
             <div class="blog-card" data-blog-id="${blog.id}">
                 <div class="blog-image">
-                    ${imageUrl ? `<img src="${imageUrl}" alt="${blog.title || 'Blog image'}" />` : '📝'}
+                    ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(blog.title || 'Blog image')}" />` : '📝'}
                 </div>
                 <div class="blog-card-content">
                     <h3 class="blog-card-title">${escapeHtml(blog.title || 'Untitled')}</h3>
@@ -693,11 +738,11 @@ window.openBlog = function(blogId) {
     modal.innerHTML = `
         <div class="blog-modal-content">
             <button class="blog-modal-close" onclick="closeBlog()">×</button>
-            ${imageUrl ? `<img src="${imageUrl}" alt="${blog.title || 'Blog image'}" class="blog-modal-image" />` : ''}
+            ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(blog.title || 'Blog image')}" class="blog-modal-image" />` : ''}
             <div class="blog-modal-body">
                 <h2 class="blog-modal-title">${escapeHtml(blog.title || 'Untitled')}</h2>
                 <div class="blog-modal-meta">Published on ${formattedDate}</div>
-                <div class="blog-modal-content-text">${blog.content}</div>
+                <div class="blog-modal-content-text">${sanitizeHtml(blog.content)}</div>
                 <div class="blog-modal-actions">
                     <button class="blog-action-btn ${isLiked ? 'active' : ''}" onclick="handleLike('${blog.id}')">
                         <span class="icon">${isLiked ? '❤️' : '🤍'}</span>
@@ -837,16 +882,19 @@ function setupBlogScroll() {
 
     if (!scrollLeft || !scrollRight || !blogsContainer) return;
 
+    const SCROLL_AMOUNT = 370; // Width of blog card plus gap
+    const SCROLL_THRESHOLD = 5; // Tolerance for scroll position detection
+
     scrollLeft.addEventListener('click', () => {
         blogsContainer.scrollBy({
-            left: -370,
+            left: -SCROLL_AMOUNT,
             behavior: 'smooth'
         });
     });
 
     scrollRight.addEventListener('click', () => {
         blogsContainer.scrollBy({
-            left: 370,
+            left: SCROLL_AMOUNT,
             behavior: 'smooth'
         });
     });
@@ -856,7 +904,7 @@ function setupBlogScroll() {
         const { scrollLeft: left, scrollWidth, clientWidth } = blogsContainer;
         
         scrollLeft.disabled = left <= 0;
-        scrollRight.disabled = left + clientWidth >= scrollWidth - 5;
+        scrollRight.disabled = left + clientWidth >= scrollWidth - SCROLL_THRESHOLD;
     }
 
     blogsContainer.addEventListener('scroll', updateScrollButtons);
