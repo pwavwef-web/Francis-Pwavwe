@@ -1155,7 +1155,7 @@
                 currentUser = user;
                 loginScreen.classList.add('hidden');
                 dashboard.classList.add('active');
-                initializeApp();
+                initializePortal();
             } else {
                 if (user) {
                     signOut(auth);
@@ -1210,8 +1210,8 @@
             errorMessage.classList.remove('hidden');
         }
 
-        // Initialize app
-        function initializeApp() {
+        // Initialize portal modules
+        function initializePortal() {
             initializeFinances();
             initializePlanning();
             initializeBlogs();
