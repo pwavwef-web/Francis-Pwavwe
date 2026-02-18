@@ -6,9 +6,11 @@ A modern, professional personal website showcasing my work as a Tourism Manageme
 
 ## 🌟 Features
 
+### Website Features
 - **Modern Design**: Clean, bold, strategic design with royal blue theme and gold accents
 - **Fully Responsive**: Optimized for mobile, tablet, and desktop devices
 - **Smooth Animations**: Scroll-triggered animations and smooth navigation
+- **Firebase Integration**: Contact form messages saved to Firestore
 - **Professional Sections**:
   - Hero with compelling headline and CTAs
   - About Me highlighting education and achievements
@@ -16,22 +18,53 @@ A modern, professional personal website showcasing my work as a Tourism Manageme
   - Core Competencies showcase
   - Experience & Leadership timeline
   - Vision Statement
-  - Contact form with multiple contact options
+  - Contact form with Firebase backend
+
+### Admin Panel (francis.dart) 🔐
+A secure Flutter application exclusively for Francis Pwavwe to:
+- **View Messages**: Real-time dashboard of all contact form submissions
+- **AI Assistant**: Personal AI powered by Google Gemini for:
+  - 💰 Financial planning and budgeting
+  - 💳 Spending management
+  - 🥗 Dietary advice and meal planning
+  - 📅 Personal planning and productivity tips
+
+**Access**: Restricted to pwavwef@gmail.com only
+
+📚 See [README_FRANCIS.md](README_FRANCIS.md) for admin panel documentation  
+🚀 See [QUICKSTART.md](QUICKSTART.md) for quick setup guide  
+📋 See [IMPLEMENTATION.md](IMPLEMENTATION.md) for complete implementation details
 
 ## 🚀 Technologies Used
 
+### Website
 - **HTML5**: Semantic markup
 - **CSS3**: Modern styling with flexbox, grid, and animations
 - **JavaScript**: Interactive features and smooth scrolling
+- **Firebase**: Firestore for message storage
 - **Google Fonts**: Montserrat and Inter for professional typography
+
+### Admin Panel
+- **Flutter/Dart**: Cross-platform admin application
+- **Firebase Auth**: Secure authentication
+- **Cloud Firestore**: Real-time database
+- **Google Gemini AI**: Personal AI assistant
 
 ## 📂 Structure
 
 ```
-├── index.html    # Main HTML file with all sections
-├── styles.css    # Complete styling and responsive design
-├── script.js     # Interactive features and animations
-└── README.md     # This file
+├── index.html              # Main website
+├── styles.css              # Website styling
+├── script.js               # Website JavaScript + Firebase integration
+├── francis.dart            # Admin panel application
+├── pubspec.yaml            # Flutter dependencies
+├── firebase.json           # Firebase configuration
+├── firestore.rules         # Database security rules
+├── README.md               # This file
+├── README_FRANCIS.md       # Admin panel documentation
+├── QUICKSTART.md           # Quick setup guide
+├── IMPLEMENTATION.md       # Complete implementation guide
+└── DEPLOYMENT.md           # Website deployment guide
 ```
 
 ## 🎨 Color Palette
