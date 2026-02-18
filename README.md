@@ -70,6 +70,16 @@ The website is fully optimized for:
    ```
    Then visit `http://localhost:8000`
 
+## 🌐 Deployment
+
+Want to deploy this website online? Check out the **[DEPLOYMENT.md](DEPLOYMENT.md)** guide for detailed instructions on how to deploy to:
+- GitHub Pages (recommended)
+- Netlify
+- Vercel
+- Cloudflare Pages
+
+All options are **free** and include step-by-step instructions!
+
 ## 📧 Contact
 
 - **Email**: francispwavwe@gmail.com
