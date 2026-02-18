@@ -94,7 +94,7 @@ animatedElements.forEach(el => {
 
 // ===== FIREBASE CONFIGURATION =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, doc, updateDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
@@ -457,3 +457,315 @@ I envision a future where strategic thinking meets digital innovation – where 
     showNotification('CV downloaded successfully!');
 }
 
+// ===== BLOGS SECTION =====
+let blogsData = [];
+let userInteractions = JSON.parse(localStorage.getItem('blogInteractions') || '{}');
+
+// Load blogs from Firestore
+async function loadBlogs() {
+    const blogsCarousel = document.getElementById('blogsCarousel');
+    
+    try {
+        // Listen for real-time updates
+        const blogsQuery = query(collection(db, 'blogs'), orderBy('timestamp', 'desc'));
+        
+        onSnapshot(blogsQuery, (snapshot) => {
+            blogsData = [];
+            snapshot.forEach((doc) => {
+                blogsData.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+            
+            renderBlogs();
+        }, (error) => {
+            console.error('Error loading blogs:', error);
+            blogsCarousel.innerHTML = '<div class="blog-loading">Unable to load blogs. Please try again later.</div>';
+        });
+    } catch (error) {
+        console.error('Error setting up blog listener:', error);
+        blogsCarousel.innerHTML = '<div class="blog-loading">Unable to load blogs. Please try again later.</div>';
+    }
+}
+
+// Render blogs in carousel
+function renderBlogs() {
+    const blogsCarousel = document.getElementById('blogsCarousel');
+    
+    if (blogsData.length === 0) {
+        blogsCarousel.innerHTML = '<div class="blog-loading">No blog posts available yet.</div>';
+        return;
+    }
+    
+    blogsCarousel.innerHTML = blogsData.map(blog => {
+        const date = blog.timestamp?.toDate();
+        const formattedDate = date ? new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }).format(date) : 'No date';
+        
+        // Extract text preview (first 5 lines approximately)
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = blog.content || '';
+        const textContent = tempDiv.textContent || tempDiv.innerText || '';
+        const preview = textContent.substring(0, 300) + (textContent.length > 300 ? '...' : '');
+        
+        // Extract first image from content
+        const imgMatch = blog.content?.match(/<img[^>]+src="([^">]+)"/);
+        const imageUrl = imgMatch ? imgMatch[1] : null;
+        
+        // Get interaction data
+        const interactions = userInteractions[blog.id] || { liked: false, comments: [] };
+        const likes = (blog.likes || 0);
+        const comments = (blog.comments || 0);
+        const shares = (blog.shares || 0);
+        
+        return `
+            <div class="blog-card" data-blog-id="${blog.id}">
+                <div class="blog-image">
+                    ${imageUrl ? `<img src="${imageUrl}" alt="${escapeHtml(blog.title || 'Blog image')}" />` : '✍️'}
+                </div>
+                <div class="blog-card-content">
+                    <h3 class="blog-card-title">${escapeHtml(blog.title || 'Untitled')}</h3>
+                    <div class="blog-card-date">${formattedDate}</div>
+                    <div class="blog-card-preview">${escapeHtml(preview)}</div>
+                    <div class="blog-card-actions">
+                        <button class="blog-action-btn ${interactions.liked ? 'active' : ''}" onclick="toggleLike('${blog.id}')" title="Like this post">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                            <span>${likes}</span>
+                        </button>
+                        <button class="blog-action-btn" onclick="toggleComments('${blog.id}')" title="View comments">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                            </svg>
+                            <span>${comments}</span>
+                        </button>
+                        <button class="blog-action-btn" onclick="shareBlog('${blog.id}', '${escapeHtml(blog.title || 'Blog post')}')" title="Share this post">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                            </svg>
+                            <span>${shares}</span>
+                        </button>
+                    </div>
+                    <a href="#" class="blog-view-more" onclick="openBlogModal('${blog.id}'); return false;">View More →</a>
+                </div>
+                <div class="blog-comment-section" id="comments-${blog.id}" style="display: none;">
+                    <div class="blog-comments" id="comment-list-${blog.id}"></div>
+                    <form class="blog-comment-form" onsubmit="addComment(event, '${blog.id}')">
+                        <input type="text" class="blog-comment-input" placeholder="Add a comment..." required>
+                        <button type="submit" class="blog-comment-submit">Post</button>
+                    </form>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Toggle like
+window.toggleLike = async function(blogId) {
+    const interactions = userInteractions[blogId] || { liked: false, comments: [] };
+    const newLikedState = !interactions.liked;
+    
+    try {
+        const blogRef = doc(db, 'blogs', blogId);
+        await updateDoc(blogRef, {
+            likes: increment(newLikedState ? 1 : -1)
+        });
+        
+        // Update local storage
+        userInteractions[blogId] = { ...interactions, liked: newLikedState };
+        localStorage.setItem('blogInteractions', JSON.stringify(userInteractions));
+        
+    } catch (error) {
+        console.error('Error updating like:', error);
+        showNotification('Unable to update like. Please try again.');
+    }
+};
+
+// Toggle comments section
+window.toggleComments = function(blogId) {
+    const commentsSection = document.getElementById(`comments-${blogId}`);
+    const isVisible = commentsSection.style.display !== 'none';
+    
+    // Hide all comment sections
+    document.querySelectorAll('.blog-comment-section').forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    // Toggle current section
+    if (!isVisible) {
+        commentsSection.style.display = 'block';
+        loadComments(blogId);
+    }
+};
+
+// Load comments for a blog
+function loadComments(blogId) {
+    const commentList = document.getElementById(`comment-list-${blogId}`);
+    const interactions = userInteractions[blogId] || { liked: false, comments: [] };
+    
+    if (interactions.comments.length === 0) {
+        commentList.innerHTML = '<div style="text-align: center; color: var(--medium-gray); padding: 1rem;">No comments yet. Be the first to comment!</div>';
+        return;
+    }
+    
+    commentList.innerHTML = interactions.comments.map(comment => `
+        <div class="blog-comment">
+            <div class="blog-comment-author">${escapeHtml(comment.author)}</div>
+            <div class="blog-comment-text">${escapeHtml(comment.text)}</div>
+        </div>
+    `).join('');
+}
+
+// Add comment
+window.addComment = async function(event, blogId) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const input = form.querySelector('.blog-comment-input');
+    const commentText = input.value.trim();
+    
+    if (!commentText) return;
+    
+    try {
+        const blogRef = doc(db, 'blogs', blogId);
+        await updateDoc(blogRef, {
+            comments: increment(1)
+        });
+        
+        // Save comment locally
+        const interactions = userInteractions[blogId] || { liked: false, comments: [] };
+        interactions.comments.push({
+            author: 'Anonymous',
+            text: commentText,
+            timestamp: new Date().toISOString()
+        });
+        
+        userInteractions[blogId] = interactions;
+        localStorage.setItem('blogInteractions', JSON.stringify(userInteractions));
+        
+        // Clear input and reload comments
+        input.value = '';
+        loadComments(blogId);
+        
+        showNotification('Comment added successfully!');
+    } catch (error) {
+        console.error('Error adding comment:', error);
+        showNotification('Unable to add comment. Please try again.');
+    }
+};
+
+// Share blog
+window.shareBlog = async function(blogId, title) {
+    const url = window.location.href;
+    
+    try {
+        if (navigator.share) {
+            await navigator.share({
+                title: title,
+                text: `Check out this blog post: ${title}`,
+                url: url
+            });
+        } else {
+            // Fallback: copy to clipboard
+            await navigator.clipboard.writeText(url);
+            showNotification('Link copied to clipboard!');
+        }
+        
+        // Increment share count
+        const blogRef = doc(db, 'blogs', blogId);
+        await updateDoc(blogRef, {
+            shares: increment(1)
+        });
+    } catch (error) {
+        console.error('Error sharing:', error);
+        showNotification('Unable to share. Please copy the URL manually.');
+    }
+};
+
+// Open blog modal
+window.openBlogModal = function(blogId) {
+    const blog = blogsData.find(b => b.id === blogId);
+    if (!blog) return;
+    
+    const date = blog.timestamp?.toDate();
+    const formattedDate = date ? new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    }).format(date) : 'No date';
+    
+    // Extract first image from content
+    const imgMatch = blog.content?.match(/<img[^>]+src="([^">]+)"/);
+    const imageUrl = imgMatch ? imgMatch[1] : null;
+    
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'blog-modal active';
+    modal.innerHTML = `
+        <div class="blog-modal-content">
+            <button class="blog-modal-close" onclick="closeBlogModal()">×</button>
+            ${imageUrl ? `<img src="${imageUrl}" alt="${escapeHtml(blog.title || 'Blog image')}" class="blog-modal-image" />` : ''}
+            <div class="blog-modal-body">
+                <h2 class="blog-modal-title">${escapeHtml(blog.title || 'Untitled')}</h2>
+                <div class="blog-modal-date">${formattedDate}</div>
+                <div class="blog-modal-content-text">${blog.content || ''}</div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    
+    // Close on background click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeBlogModal();
+        }
+    });
+};
+
+// Close blog modal
+window.closeBlogModal = function() {
+    const modal = document.querySelector('.blog-modal');
+    if (modal) {
+        modal.remove();
+        document.body.style.overflow = '';
+    }
+};
+
+// Carousel navigation
+function setupBlogCarousel() {
+    const carousel = document.getElementById('blogsCarousel');
+    const prevBtn = document.querySelector('.carousel-btn-prev');
+    const nextBtn = document.querySelector('.carousel-btn-next');
+    
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: -370, behavior: 'smooth' });
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: 370, behavior: 'smooth' });
+        });
+    }
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Initialize blogs when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    loadBlogs();
+    setupBlogCarousel();
+});
