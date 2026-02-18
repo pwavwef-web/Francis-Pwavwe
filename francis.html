@@ -624,13 +624,15 @@
     <!-- Fallback script to show login screen if Firebase fails -->
     <script>
         // Fallback to show login screen if Firebase fails to load or takes too long
+        // Timeout is defined here since it needs to run before the module script
+        const FIREBASE_LOAD_TIMEOUT_MS = 3000;
         setTimeout(() => {
             const loadingOverlay = document.getElementById('loadingOverlay');
             if (loadingOverlay && !loadingOverlay.classList.contains('hidden')) {
                 loadingOverlay.classList.add('hidden');
                 document.getElementById('loginScreen').classList.remove('hidden');
             }
-        }, 3000);
+        }, FIREBASE_LOAD_TIMEOUT_MS);
     </script>
 
     <!-- Firebase SDK -->
@@ -640,6 +642,10 @@
         import { getFirestore, collection, query, orderBy, onSnapshot, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
         // Firebase configuration
+        // SECURITY NOTE: While Firebase API keys are safe to expose in client-side code,
+        // ensure Firestore security rules enforce server-side access control.
+        // The firestore.rules file should restrict 'messages' collection access to
+        // authenticated users with email === 'pwavwef@gmail.com'
         const firebaseConfig = {
             apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
             authDomain: "francis-pwavwe.firebaseapp.com",
@@ -672,12 +678,30 @@
         const sendBtn = document.getElementById('sendBtn');
         const chatLoading = document.getElementById('chatLoading');
 
-        // Gemini API Key (same as in francis.dart)
+        // Configuration constants
+        const FIREBASE_LOAD_TIMEOUT_MS = 3000; // Time to wait for Firebase before showing login
+        
+        // Gemini API Key
+        // SECURITY NOTE: In production, this should be moved to a backend proxy service
+        // to prevent unauthorized API usage. For this admin panel, restricted to a single
+        // authorized user (pwavwef@gmail.com), the risk is limited.
         const GEMINI_API_KEY = 'AIzaSyDcEcBXUuzBas3qAaSQ-zw1a7Tj20guvwk';
         const AUTHORIZED_EMAIL = 'pwavwef@gmail.com';
 
         // Chat history
         let chatHistory = [];
+
+        // Helper function to escape HTML and prevent XSS
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
 
         // Auth state observer
         onAuthStateChanged(auth, (user) => {
@@ -791,20 +815,27 @@
                 minute: '2-digit'
             }) : '';
             
+            // Escape all user input to prevent XSS
+            const safeName = escapeHtml(name);
+            const safeEmail = escapeHtml(email);
+            const safeSubject = escapeHtml(subject);
+            const safeMessage = escapeHtml(message);
+            const safeId = escapeHtml(id);
+            
             card.innerHTML = `
                 <div class="message-header" onclick="toggleMessage(this)">
-                    <div class="message-avatar">${name[0].toUpperCase()}</div>
+                    <div class="message-avatar">${safeName[0].toUpperCase()}</div>
                     <div class="message-info">
-                        <div class="message-name">${name}</div>
-                        <div class="message-email">${email}</div>
-                        ${dateStr ? `<div class="message-date">${dateStr}</div>` : ''}
+                        <div class="message-name">${safeName}</div>
+                        <div class="message-email">${safeEmail}</div>
+                        ${dateStr ? `<div class="message-date">${escapeHtml(dateStr)}</div>` : ''}
                     </div>
                     <div class="message-expand-icon">▼</div>
                 </div>
                 <div class="message-details">
-                    <div class="message-subject">Subject: ${subject}</div>
-                    <div class="message-text">${message}</div>
-                    <button class="delete-btn" onclick="deleteMessage('${id}', event)">Delete</button>
+                    <div class="message-subject">Subject: ${safeSubject}</div>
+                    <div class="message-text">${safeMessage}</div>
+                    <button class="delete-btn" onclick="deleteMessage('${safeId}', event)">Delete</button>
                 </div>
             `;
             
@@ -864,13 +895,16 @@ How can I assist you today?`,
                 minute: '2-digit'
             });
             
+            const safeText = escapeHtml(message.text);
+            const safeTime = escapeHtml(time);
+            
             messageDiv.innerHTML = `
                 <div class="chat-avatar ${message.isUser ? 'user' : 'ai'}">
                     ${message.isUser ? '👤' : '🤖'}
                 </div>
                 <div class="chat-bubble ${message.isUser ? 'user' : 'ai'}">
-                    <div class="chat-text">${message.text}</div>
-                    <div class="chat-time">${time}</div>
+                    <div class="chat-text">${safeText}</div>
+                    <div class="chat-time">${safeTime}</div>
                 </div>
             `;
             
