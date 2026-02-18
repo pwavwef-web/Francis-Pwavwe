@@ -742,21 +742,28 @@
             
             const initial = (data.name || 'U')[0].toUpperCase();
             
+            // Escape HTML to prevent XSS
+            const escapeHtml = (text) => {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            };
+            
             card.innerHTML = `
                 <div class="message-header">
-                    <div class="message-avatar">${initial}</div>
+                    <div class="message-avatar">${escapeHtml(initial)}</div>
                     <div class="message-info">
-                        <div class="message-name">${data.name || 'Unknown'}</div>
-                        <div class="message-email">${data.email || 'No email'}</div>
-                        <div class="message-time">${formattedTime}</div>
+                        <div class="message-name">${escapeHtml(data.name || 'Unknown')}</div>
+                        <div class="message-email">${escapeHtml(data.email || 'No email')}</div>
+                        <div class="message-time">${escapeHtml(formattedTime)}</div>
                     </div>
                     <div class="message-expand-icon">▼</div>
                 </div>
                 <div class="message-body">
-                    <div class="message-subject">Subject: ${data.subject || 'No subject'}</div>
-                    <div class="message-text">${data.message || 'No message'}</div>
+                    <div class="message-subject">Subject: ${escapeHtml(data.subject || 'No subject')}</div>
+                    <div class="message-text">${escapeHtml(data.message || 'No message')}</div>
                     <div class="message-actions">
-                        <button class="btn-delete" data-id="${id}">Delete</button>
+                        <button class="btn-delete" data-id="${escapeHtml(id)}">Delete</button>
                     </div>
                 </div>
             `;
@@ -868,13 +875,20 @@ How can I assist you today?`,
                 minute: '2-digit'
             }).format(message.timestamp);
             
+            // Escape HTML to prevent XSS
+            const escapeHtml = (text) => {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            };
+            
             bubble.innerHTML = `
                 <div class="chat-avatar ${message.isUser ? 'user' : 'ai'}">
                     ${message.isUser ? '👤' : '🤖'}
                 </div>
                 <div class="chat-content">
-                    <div class="chat-text">${message.text}</div>
-                    <div class="chat-time">${time}</div>
+                    <div class="chat-text">${escapeHtml(message.text)}</div>
+                    <div class="chat-time">${escapeHtml(time)}</div>
                 </div>
             `;
             
