@@ -540,12 +540,36 @@ function updateBlogsUI() {
             <div class="blog-meta">
                 Published on ${blog.timestamp?.toDate().toLocaleDateString()} at ${blog.timestamp?.toDate().toLocaleTimeString()}
             </div>
-            <div class="blog-content">${blog.content}</div>
+            <div class="blog-content">${sanitizeHtml(blog.content)}</div>
             <div style="margin-top: 15px;">
                 <button class="btn btn-danger" onclick="deleteBlog('${blog.id}')">Delete</button>
             </div>
         </div>
     `).join('');
+}
+
+// Sanitize HTML to prevent XSS while allowing basic formatting
+function sanitizeHtml(html) {
+    if (!html) return '';
+    
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    // Remove script tags
+    const scripts = tempDiv.querySelectorAll('script');
+    scripts.forEach(script => script.remove());
+    
+    // Remove on* event attributes from all elements
+    const allElements = tempDiv.querySelectorAll('*');
+    allElements.forEach(el => {
+        Array.from(el.attributes).forEach(attr => {
+            if (attr.name.startsWith('on')) {
+                el.removeAttribute(attr.name);
+            }
+        });
+    });
+    
+    return tempDiv.innerHTML;
 }
 
 window.createNewBlog = function() {
