@@ -173,8 +173,12 @@ function showNotification(message) {
     setTimeout(() => {
         notification.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => {
-            document.body.removeChild(notification);
-            document.head.removeChild(style);
+            if (notification.parentNode) {
+                document.body.removeChild(notification);
+            }
+            if (style.parentNode) {
+                document.head.removeChild(style);
+            }
         }, 300);
     }, 4000);
 }
