@@ -64,19 +64,28 @@ python3 -m http.server 8000
 
 ## Security Setup
 
+⚠️ **IMPORTANT**: The API keys are visible in the client-side code. This is normal for web applications, but you MUST configure restrictions:
+
 ### Firebase Configuration
 
-1. **Restrict Firebase API Key**:
+1. **Restrict Firebase API Key** (REQUIRED):
    - Go to [Google Cloud Console](https://console.cloud.google.com/)
    - Navigate to "APIs & Services" → "Credentials"
-   - Find your API key and click "Edit"
+   - Find your API key (starts with `AIzaSyB6lxgjNY...`)
+   - Click "Edit"
    - Under "Application restrictions", select "HTTP referrers"
-   - Add your domains:
+   - Add your authorized domains:
      ```
      https://pwavwef-web.github.io/*
      https://*.netlify.app/*
      https://*.vercel.app/*
+     http://localhost:8000/*    # For local testing
      ```
+   - Under "API restrictions", select "Restrict key"
+   - Enable only:
+     - Firebase Authentication API
+     - Cloud Firestore API
+   - Click "Save"
 
 2. **Firestore Security Rules**:
    Ensure these rules are set in Firebase Console:
@@ -98,10 +107,26 @@ python3 -m http.server 8000
    }
    ```
 
-3. **Gemini API Key**:
-   - Monitor usage at [Google AI Studio](https://makersuite.google.com/)
-   - Set up billing alerts
-   - Consider rate limiting in production
+3. **Gemini API Key** (CRITICAL):
+   ⚠️ **WARNING**: The Gemini API key is exposed in the client code, which means:
+   - Anyone can view the key in browser dev tools
+   - Anyone can use your quota if they copy the key
+   - This is acceptable ONLY for personal use with quota monitoring
+   
+   **Recommended Actions**:
+   - Set up billing alerts in [Google AI Studio](https://makersuite.google.com/)
+   - Monitor API usage regularly
+   - Set spending limits if available
+   - For production, consider:
+     - Moving AI calls to a backend server/Cloud Function
+     - Using Firebase Cloud Functions as a proxy
+     - Implementing rate limiting
+   
+   **Quick Setup**:
+   - Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
+   - View your API key settings
+   - Set up usage alerts
+   - Monitor quota usage
 
 ## Access the Panel
 

@@ -183,20 +183,41 @@ Works on all modern browsers:
 
 ## Security Considerations
 
-1. **API Keys**: The Firebase and Gemini API keys are included in the HTML file (client-side). This is normal for Firebase web apps, but ensure:
-   - Firebase API key is restricted in Google Cloud Console
-   - Firestore security rules are properly configured
-   - Only authorized domains can access the Firebase project
+⚠️ **IMPORTANT SECURITY NOTICE**:
 
-2. **Authentication**: 
+1. **API Keys Exposure**: 
+   - Both Firebase and Gemini API keys are visible in the client-side HTML file
+   - This is **normal for Firebase** web apps but requires proper configuration:
+     - **MUST restrict Firebase API key** in Google Cloud Console to authorized domains
+     - **MUST configure Firestore security rules** to prevent unauthorized access
+     - **MUST monitor Gemini API usage** to prevent quota abuse
+   
+2. **Firebase API Key Protection**:
+   - Go to Google Cloud Console → APIs & Services → Credentials
+   - Edit your Firebase API key
+   - Restrict to HTTP referrers (your GitHub Pages domain)
+   - Restrict to only Firebase APIs (Auth, Firestore)
+   - See `DEPLOYMENT_FRANCIS.md` for detailed steps
+
+3. **Gemini API Key Protection**:
+   - ⚠️ **WARNING**: The key is publicly accessible, allowing anyone to use your quota
+   - This is acceptable for **personal use only** with quota monitoring
+   - Set up billing alerts in Google AI Studio
+   - Monitor usage regularly
+   - For production, implement a backend proxy or Cloud Function
+   - See `DEPLOYMENT_FRANCIS.md` for detailed recommendations
+
+4. **Authentication**: 
    - Only pwavwef@gmail.com can access the panel
    - Firebase handles secure password authentication
    - Sessions expire automatically
+   - Additional email validation in code prevents other users
 
-3. **Data Access**:
+5. **Data Access**:
    - All database operations require authentication
    - Firestore rules prevent unauthorized access
    - Messages can only be viewed/deleted by the authenticated admin
+   - Contact form can create messages (public endpoint)
 
 ## Support
 
