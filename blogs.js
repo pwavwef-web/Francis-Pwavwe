@@ -451,5 +451,13 @@ function showNotification(message) {
 }
 
 // Initialize blogs on page load
-loadBlogInteractions();
-renderBlogs();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        loadBlogInteractions();
+        renderBlogs();
+    });
+} else {
+    // DOM already loaded
+    loadBlogInteractions();
+    renderBlogs();
+}
