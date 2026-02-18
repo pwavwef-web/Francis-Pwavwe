@@ -435,7 +435,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
     // IMPORTANT: Replace 'YOUR_GEMINI_API_KEY_HERE' with your actual Gemini API key
     // For production, use environment variables or flutter_dotenv package:
     // apiKey: dotenv.env['GEMINI_API_KEY'] ?? '',
-    const apiKey = String.fromEnvironment('GEMINI_API_KEY', defaultValue: 'YOUR_GEMINI_API_KEY_HERE');
+    const apiKey = String.fromEnvironment('GEMINI_API_KEY', defaultValue: 'AIzaSyDcEcBXUuzBas3qAaSQ-zw1a7Tj20guvwk');
     
     _model = GenerativeModel(
       model: 'gemini-pro',
