@@ -24,7 +24,6 @@ navLinks.forEach(link => {
 
 // Navbar scroll effect
 const navbar = document.querySelector('.navbar');
-let lastScroll = 0;
 
 window.addEventListener('scroll', () => {
     const currentScroll = window.pageYOffset;
@@ -34,8 +33,6 @@ window.addEventListener('scroll', () => {
     } else {
         navbar.style.boxShadow = 'none';
     }
-    
-    lastScroll = currentScroll;
 });
 
 // ===================================
@@ -78,7 +75,7 @@ const observer = new IntersectionObserver((entries) => {
             if (entry.target.classList.contains('skill-category')) {
                 const skillLevels = entry.target.querySelectorAll('.skill-level');
                 skillLevels.forEach(level => {
-                    const width = level.style.width;
+                    const width = window.getComputedStyle(level).width;
                     level.style.width = '0';
                     setTimeout(() => {
                         level.style.width = width;
@@ -244,6 +241,5 @@ window.addEventListener('scroll', highlightNavigation);
 // ===================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Francis Pwavwe Portfolio - Initialized');
     highlightNavigation();
 });
