@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Messages collection
+    match /messages/{messageId} {
+      // Allow authenticated admin (pwavwef@gmail.com) to read and delete
+      allow read, delete: if request.auth != null 
+                          && request.auth.token.email == 'pwavwef@gmail.com';
+      
+      // Allow anyone to create messages (from website contact form)
+      allow create: if request.resource.data.keys().hasAll(['name', 'email', 'subject', 'message', 'timestamp'])
+                    && request.resource.data.name is string
+                    && request.resource.data.email is string
+                    && request.resource.data.subject is string
+                    && request.resource.data.message is string;
+    }
+  }
+}

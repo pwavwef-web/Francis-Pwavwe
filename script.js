@@ -92,10 +92,26 @@ animatedElements.forEach(el => {
     observer.observe(el);
 });
 
+// ===== FIREBASE CONFIGURATION =====
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
+  authDomain: "francis-pwavwe.firebaseapp.com",
+  projectId: "francis-pwavwe",
+  storageBucket: "francis-pwavwe.firebasestorage.app",
+  messagingSenderId: "658069378543",
+  appId: "1:658069378543:web:87b1dcb0dd27d3255bd21a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
 // ===== CONTACT FORM HANDLING =====
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', (e) => {
+contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     // Get form data
@@ -103,20 +119,29 @@ contactForm.addEventListener('submit', (e) => {
         name: document.getElementById('name').value,
         email: document.getElementById('email').value,
         subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
+        message: document.getElementById('message').value,
+        timestamp: serverTimestamp()
     };
 
-    // Create mailto link (since we don't have a backend)
-    const mailtoLink = `mailto:pwavwef@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
-    
-    // Open email client
-    window.location.href = mailtoLink;
-    
-    // Show success message
-    showNotification('Your message is being prepared in your email client!');
-    
-    // Reset form
-    contactForm.reset();
+    try {
+        // Save to Firestore
+        await addDoc(collection(db, 'messages'), formData);
+        
+        // Show success message
+        showNotification('Message sent successfully! Francis will get back to you soon.');
+        
+        // Reset form
+        contactForm.reset();
+    } catch (error) {
+        console.error('Error sending message:', error);
+        
+        // Fallback to mailto link
+        const mailtoLink = `mailto:pwavwef@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
+        window.location.href = mailtoLink;
+        
+        showNotification('Message is being prepared in your email client!');
+        contactForm.reset();
+    }
 });
 
 // ===== NOTIFICATION SYSTEM =====
