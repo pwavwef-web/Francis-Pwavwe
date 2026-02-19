@@ -460,6 +460,7 @@ I envision a future where strategic thinking meets digital innovation – where 
 // ===== BLOGS FUNCTIONALITY =====
 let blogs = [];
 let currentBlog = null;
+let blogsLoaded = false;
 const BLOG_STORAGE_KEY = 'blogInteractions';
 
 // Get user session ID (for anonymous interactions)
@@ -507,7 +508,11 @@ function loadBlogs() {
                 blogs.push({ id: doc.id, ...doc.data() });
             });
             
+            blogsLoaded = true;
             renderBlogs();
+            
+            // Check if there's a pending blog to open from URL hash
+            checkAndOpenBlogFromHash();
         }, (error) => {
             console.error('Error loading blogs:', error);
             blogsContainer.innerHTML = `
@@ -666,6 +671,15 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// Validate and sanitize blog ID for URL usage
+function sanitizeBlogId(blogId) {
+    // Only allow alphanumeric characters, hyphens, and underscores
+    // This prevents injection of special characters or protocols
+    if (!blogId || typeof blogId !== 'string') return null;
+    const sanitized = blogId.replace(/[^a-zA-Z0-9_-]/g, '');
+    return sanitized.length > 0 ? sanitized : null;
+}
+
 // Handle like action
 window.handleLike = async function(blogId) {
     const sessionId = getSessionId();
@@ -687,7 +701,14 @@ window.shareBlog = function(blogId) {
     const blog = blogs.find(b => b.id === blogId);
     if (!blog) return;
 
-    const url = window.location.href.split('#')[0] + '#blogs';
+    // Sanitize blogId for URL usage
+    const safeBlogId = sanitizeBlogId(blogId);
+    if (!safeBlogId) {
+        console.error('Invalid blog ID');
+        return;
+    }
+
+    const url = window.location.href.split('#')[0] + '#blog-' + safeBlogId;
     const text = `Check out this blog: ${blog.title || 'Untitled'}`;
 
     if (navigator.share) {
@@ -710,6 +731,13 @@ window.shareBlog = function(blogId) {
 window.openBlog = function(blogId) {
     const blog = blogs.find(b => b.id === blogId);
     if (!blog) return;
+
+    // Sanitize blogId for URL usage
+    const safeBlogId = sanitizeBlogId(blogId);
+    if (!safeBlogId) {
+        console.error('Invalid blog ID');
+        return;
+    }
 
     currentBlog = blog;
     const imageUrl = getFirstImage(blog.content);
@@ -738,6 +766,13 @@ window.openBlog = function(blogId) {
     modal.innerHTML = `
         <div class="blog-modal-content">
             <button class="blog-modal-close" onclick="closeBlog()">×</button>
+            <div class="blog-breadcrumbs">
+                <a href="#home">Home</a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="#blogs">Blogs</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current">${escapeHtml(blog.title || 'Untitled')}</span>
+            </div>
             ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(blog.title || 'Blog image')}" class="blog-modal-image" />` : ''}
             <div class="blog-modal-body">
                 <h2 class="blog-modal-title">${escapeHtml(blog.title || 'Untitled')}</h2>
@@ -778,6 +813,10 @@ window.openBlog = function(blogId) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
+    // Update URL hash to the specific blog without triggering page scroll
+    const newUrl = window.location.pathname + window.location.search + '#blog-' + safeBlogId;
+    history.replaceState(null, null, newUrl);
+    
     // Load comments
     loadComments(blogId);
 
@@ -790,12 +829,20 @@ window.openBlog = function(blogId) {
 };
 
 // Close blog modal
-window.closeBlog = function() {
+window.closeBlog = function(skipHashUpdate = false) {
     const modal = document.getElementById('blogModal');
     if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = '';
         currentBlog = null;
+        
+        // Clear the blog-specific hash from URL if present (unless called from hashchange)
+        if (!skipHashUpdate && window.location.hash.startsWith('#blog-')) {
+            // Use replaceState to avoid triggering hashchange event
+            // Navigate back to blogs section
+            const newUrl = window.location.pathname + window.location.search + '#blogs';
+            history.replaceState(null, null, newUrl);
+        }
     }
 };
 
@@ -914,10 +961,40 @@ function setupBlogScroll() {
     setTimeout(updateScrollButtons, 100);
 }
 
+// Check URL hash and open blog if needed
+function checkAndOpenBlogFromHash() {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#blog-')) {
+        const blogId = hash.substring(6); // Remove '#blog-' prefix
+        const safeBlogId = sanitizeBlogId(blogId);
+        if (safeBlogId && blogs.find(b => b.id === safeBlogId)) {
+            openBlog(safeBlogId);
+        }
+    }
+}
+
 // Initialize blogs on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadBlogs();
     setupBlogScroll();
+    // Blog opening from hash is now handled in loadBlogs() callback
+});
+
+// Also handle hash changes (when user navigates using back/forward buttons)
+window.addEventListener('hashchange', () => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#blog-')) {
+        const blogId = hash.substring(6);
+        const safeBlogId = sanitizeBlogId(blogId);
+        if (safeBlogId && blogsLoaded && blogs.find(b => b.id === safeBlogId)) {
+            openBlog(safeBlogId);
+        }
+    } else {
+        // Close blog modal if navigating away from a blog hash
+        if (currentBlog) {
+            closeBlog(true); // Skip hash update since we're responding to hash change
+        }
+    }
 });
 
 // Close modal on Escape key
