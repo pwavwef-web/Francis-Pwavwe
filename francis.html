@@ -2031,7 +2031,7 @@ Provide specific advice on:
 
         // ===== BUDGET CALCULATORS =====
         
-        function calculateSavings() {
+        window.calculateSavings = function() {
             const initial = parseFloat(document.getElementById('savingsInitial').value) || 0;
             const monthly = parseFloat(document.getElementById('savingsMonthly').value) || 0;
             const rate = parseFloat(document.getElementById('savingsRate').value) || 0;
@@ -2064,9 +2064,9 @@ Provide specific advice on:
             `;
             
             resultDiv.style.display = 'block';
-        }
+        };
         
-        function calculateLoan() {
+        window.calculateLoan = function() {
             const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
             const rate = parseFloat(document.getElementById('loanRate').value) || 0;
             const months = parseInt(document.getElementById('loanMonths').value) || 0;
@@ -2095,9 +2095,9 @@ Provide specific advice on:
             `;
             
             resultDiv.style.display = 'block';
-        }
+        };
         
-        function calculateInvestment() {
+        window.calculateInvestment = function() {
             const initial = parseFloat(document.getElementById('investAmount').value) || 0;
             const returnRate = parseFloat(document.getElementById('investReturn').value) || 0;
             const years = parseInt(document.getElementById('investYears').value) || 0;
@@ -2126,9 +2126,9 @@ Provide specific advice on:
             `;
             
             resultDiv.style.display = 'block';
-        }
+        };
         
-        function calculateBudgetRule() {
+        window.calculateBudgetRule = function() {
             const income = parseFloat(document.getElementById('budgetIncome').value) || 0;
             
             const needs = income * 0.50;
@@ -2148,9 +2148,9 @@ Provide specific advice on:
             `;
             
             resultDiv.style.display = 'block';
-        }
+        };
         
-        function calculateEmergencyFund() {
+        window.calculateEmergencyFund = function() {
             const expenses = parseFloat(document.getElementById('emergencyExpenses').value) || 0;
             const months = parseInt(document.getElementById('emergencyMonths').value) || 0;
             const current = parseFloat(document.getElementById('emergencySavings').value) || 0;
@@ -2177,9 +2177,9 @@ Provide specific advice on:
             `;
             
             resultDiv.style.display = 'block';
-        }
+        };
         
-        function calculateTax() {
+        window.calculateTax = function() {
             const income = parseFloat(document.getElementById('taxIncome').value) || 0;
             
             // Ghana tax brackets (simplified - 2024 rates)
@@ -2215,7 +2215,7 @@ Provide specific advice on:
             `;
             
             resultDiv.style.display = 'block';
-        }
+        };
 
         // ===== AI ASSISTANT =====
         let chatMessages = [];
