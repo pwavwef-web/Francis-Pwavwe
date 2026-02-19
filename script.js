@@ -687,7 +687,7 @@ window.shareBlog = function(blogId) {
     const blog = blogs.find(b => b.id === blogId);
     if (!blog) return;
 
-    const url = window.location.href.split('#')[0] + '#blogs';
+    const url = window.location.href.split('#')[0] + '#blog-' + blogId;
     const text = `Check out this blog: ${blog.title || 'Untitled'}`;
 
     if (navigator.share) {
@@ -738,6 +738,13 @@ window.openBlog = function(blogId) {
     modal.innerHTML = `
         <div class="blog-modal-content">
             <button class="blog-modal-close" onclick="closeBlog()">×</button>
+            <div class="blog-breadcrumbs">
+                <a href="#home" onclick="closeBlog()">Home</a>
+                <span class="breadcrumb-separator">›</span>
+                <a href="#blogs" onclick="closeBlog()">Blogs</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-current">${escapeHtml(blog.title || 'Untitled')}</span>
+            </div>
             ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(blog.title || 'Blog image')}" class="blog-modal-image" />` : ''}
             <div class="blog-modal-body">
                 <h2 class="blog-modal-title">${escapeHtml(blog.title || 'Untitled')}</h2>
@@ -778,6 +785,9 @@ window.openBlog = function(blogId) {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     
+    // Update URL hash to the specific blog without triggering page scroll
+    history.replaceState(null, null, '#blog-' + blogId);
+    
     // Load comments
     loadComments(blogId);
 
@@ -796,6 +806,12 @@ window.closeBlog = function() {
         modal.classList.remove('active');
         document.body.style.overflow = '';
         currentBlog = null;
+        
+        // Clear the blog-specific hash from URL if present
+        if (window.location.hash.startsWith('#blog-')) {
+            // Use replaceState to avoid triggering hashchange event
+            history.replaceState(null, null, window.location.pathname + '#blogs');
+        }
     }
 };
 
@@ -918,6 +934,29 @@ function setupBlogScroll() {
 document.addEventListener('DOMContentLoaded', () => {
     loadBlogs();
     setupBlogScroll();
+    
+    // Check if URL has a specific blog hash (e.g., #blog-abc123)
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#blog-')) {
+        const blogId = hash.substring(6); // Remove '#blog-' prefix
+        // Wait a bit for blogs to load, then open the specific blog
+        setTimeout(() => {
+            if (blogs.find(b => b.id === blogId)) {
+                openBlog(blogId);
+            }
+        }, 1000);
+    }
+});
+
+// Also handle hash changes (when user navigates using back/forward buttons)
+window.addEventListener('hashchange', () => {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#blog-')) {
+        const blogId = hash.substring(6);
+        if (blogs.find(b => b.id === blogId)) {
+            openBlog(blogId);
+        }
+    }
 });
 
 // Close modal on Escape key
