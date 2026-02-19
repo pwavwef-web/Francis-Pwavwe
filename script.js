@@ -460,6 +460,7 @@ I envision a future where strategic thinking meets digital innovation – where 
 // ===== BLOGS FUNCTIONALITY =====
 let blogs = [];
 let currentBlog = null;
+let blogsLoaded = false;
 const BLOG_STORAGE_KEY = 'blogInteractions';
 
 // Get user session ID (for anonymous interactions)
@@ -507,7 +508,11 @@ function loadBlogs() {
                 blogs.push({ id: doc.id, ...doc.data() });
             });
             
+            blogsLoaded = true;
             renderBlogs();
+            
+            // Check if there's a pending blog to open from URL hash
+            checkAndOpenBlogFromHash();
         }, (error) => {
             console.error('Error loading blogs:', error);
             blogsContainer.innerHTML = `
@@ -800,15 +805,15 @@ window.openBlog = function(blogId) {
 };
 
 // Close blog modal
-window.closeBlog = function() {
+window.closeBlog = function(skipHashUpdate = false) {
     const modal = document.getElementById('blogModal');
     if (modal) {
         modal.classList.remove('active');
         document.body.style.overflow = '';
         currentBlog = null;
         
-        // Clear the blog-specific hash from URL if present
-        if (window.location.hash.startsWith('#blog-')) {
+        // Clear the blog-specific hash from URL if present (unless called from hashchange)
+        if (!skipHashUpdate && window.location.hash.startsWith('#blog-')) {
             // Use replaceState to avoid triggering hashchange event
             history.replaceState(null, null, window.location.pathname + '#blogs');
         }
@@ -930,22 +935,22 @@ function setupBlogScroll() {
     setTimeout(updateScrollButtons, 100);
 }
 
+// Check URL hash and open blog if needed
+function checkAndOpenBlogFromHash() {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith('#blog-')) {
+        const blogId = hash.substring(6); // Remove '#blog-' prefix
+        if (blogs.find(b => b.id === blogId)) {
+            openBlog(blogId);
+        }
+    }
+}
+
 // Initialize blogs on page load
 document.addEventListener('DOMContentLoaded', () => {
     loadBlogs();
     setupBlogScroll();
-    
-    // Check if URL has a specific blog hash (e.g., #blog-abc123)
-    const hash = window.location.hash;
-    if (hash && hash.startsWith('#blog-')) {
-        const blogId = hash.substring(6); // Remove '#blog-' prefix
-        // Wait a bit for blogs to load, then open the specific blog
-        setTimeout(() => {
-            if (blogs.find(b => b.id === blogId)) {
-                openBlog(blogId);
-            }
-        }, 1000);
-    }
+    // Blog opening from hash is now handled in loadBlogs() callback
 });
 
 // Also handle hash changes (when user navigates using back/forward buttons)
@@ -953,8 +958,13 @@ window.addEventListener('hashchange', () => {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#blog-')) {
         const blogId = hash.substring(6);
-        if (blogs.find(b => b.id === blogId)) {
+        if (blogsLoaded && blogs.find(b => b.id === blogId)) {
             openBlog(blogId);
+        }
+    } else {
+        // Close blog modal if navigating away from a blog hash
+        if (currentBlog) {
+            closeBlog(true); // Skip hash update since we're responding to hash change
         }
     }
 });
