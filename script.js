@@ -744,9 +744,9 @@ window.openBlog = function(blogId) {
         <div class="blog-modal-content">
             <button class="blog-modal-close" onclick="closeBlog()">×</button>
             <div class="blog-breadcrumbs">
-                <a href="#home" onclick="closeBlog()">Home</a>
+                <a href="#home">Home</a>
                 <span class="breadcrumb-separator">›</span>
-                <a href="#blogs" onclick="closeBlog()">Blogs</a>
+                <a href="#blogs">Blogs</a>
                 <span class="breadcrumb-separator">›</span>
                 <span class="breadcrumb-current">${escapeHtml(blog.title || 'Untitled')}</span>
             </div>
