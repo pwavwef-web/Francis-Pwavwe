@@ -671,6 +671,15 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// Validate and sanitize blog ID for URL usage
+function sanitizeBlogId(blogId) {
+    // Only allow alphanumeric characters, hyphens, and underscores
+    // This prevents injection of special characters or protocols
+    if (!blogId || typeof blogId !== 'string') return null;
+    const sanitized = blogId.replace(/[^a-zA-Z0-9_-]/g, '');
+    return sanitized.length > 0 ? sanitized : null;
+}
+
 // Handle like action
 window.handleLike = async function(blogId) {
     const sessionId = getSessionId();
@@ -692,7 +701,14 @@ window.shareBlog = function(blogId) {
     const blog = blogs.find(b => b.id === blogId);
     if (!blog) return;
 
-    const url = window.location.href.split('#')[0] + '#blog-' + blogId;
+    // Sanitize blogId for URL usage
+    const safeBlogId = sanitizeBlogId(blogId);
+    if (!safeBlogId) {
+        console.error('Invalid blog ID');
+        return;
+    }
+
+    const url = window.location.href.split('#')[0] + '#blog-' + safeBlogId;
     const text = `Check out this blog: ${blog.title || 'Untitled'}`;
 
     if (navigator.share) {
@@ -715,6 +731,13 @@ window.shareBlog = function(blogId) {
 window.openBlog = function(blogId) {
     const blog = blogs.find(b => b.id === blogId);
     if (!blog) return;
+
+    // Sanitize blogId for URL usage
+    const safeBlogId = sanitizeBlogId(blogId);
+    if (!safeBlogId) {
+        console.error('Invalid blog ID');
+        return;
+    }
 
     currentBlog = blog;
     const imageUrl = getFirstImage(blog.content);
@@ -791,7 +814,7 @@ window.openBlog = function(blogId) {
     document.body.style.overflow = 'hidden';
     
     // Update URL hash to the specific blog without triggering page scroll
-    const newUrl = window.location.pathname + window.location.search + '#blog-' + blogId;
+    const newUrl = window.location.pathname + window.location.search + '#blog-' + safeBlogId;
     history.replaceState(null, null, newUrl);
     
     // Load comments
@@ -943,8 +966,9 @@ function checkAndOpenBlogFromHash() {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#blog-')) {
         const blogId = hash.substring(6); // Remove '#blog-' prefix
-        if (blogs.find(b => b.id === blogId)) {
-            openBlog(blogId);
+        const safeBlogId = sanitizeBlogId(blogId);
+        if (safeBlogId && blogs.find(b => b.id === safeBlogId)) {
+            openBlog(safeBlogId);
         }
     }
 }
@@ -961,8 +985,9 @@ window.addEventListener('hashchange', () => {
     const hash = window.location.hash;
     if (hash && hash.startsWith('#blog-')) {
         const blogId = hash.substring(6);
-        if (blogsLoaded && blogs.find(b => b.id === blogId)) {
-            openBlog(blogId);
+        const safeBlogId = sanitizeBlogId(blogId);
+        if (safeBlogId && blogsLoaded && blogs.find(b => b.id === safeBlogId)) {
+            openBlog(safeBlogId);
         }
     } else {
         // Close blog modal if navigating away from a blog hash
