@@ -2303,33 +2303,33 @@ Provide specific advice on:
             // Escape HTML first
             let formatted = escapeHtml(text);
             
+            // Convert line breaks to <br> first
+            formatted = formatted.replace(/\n/g, '<br>');
+            
+            // Convert ### and ## Headings to styled headings (before other formatting)
+            formatted = formatted.replace(/###\s+(.+?)(?:<br>|$)/g, '<h3 style="font-size: 18px; font-weight: 700; margin-top: 15px; margin-bottom: 10px; color: #1a202c;">$1</h3>');
+            formatted = formatted.replace(/##\s+(.+?)(?:<br>|$)/g, '<h2 style="font-size: 20px; font-weight: 700; margin-top: 15px; margin-bottom: 10px; color: #1a202c;">$1</h2>');
+            
+            // Convert code blocks `code` (before other inline formatting)
+            formatted = formatted.replace(/`(.+?)`/g, '<code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px;">$1</code>');
+            
+            // Convert numbered lists (1. item) - process before asterisk formatting
+            formatted = formatted.replace(/^(\d+)\.\s+(.+)$/gm, '<div style="margin-left: 20px; margin-bottom: 8px;"><strong>$1.</strong> $2</div>');
+            
+            // Convert bullet points starting with dash (- item)
+            formatted = formatted.replace(/^-\s+(.+)$/gm, '<div style="margin-left: 20px; margin-bottom: 8px;">• $1</div>');
+            
+            // Convert *italic* to <em> (before bold to avoid conflicts)
+            formatted = formatted.replace(/\*([^*]+?)\*/g, '<em>$1</em>');
+            
             // Convert **bold** to <strong>
             formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
             
-            // Convert *italic* to <em>
-            formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>');
-            
-            // Convert URLs to clickable links
+            // Convert URLs to clickable links (excluding trailing punctuation)
             formatted = formatted.replace(
-                /(https?:\/\/[^\s]+)/g, 
-                '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: underline;">$1</a>'
+                /(https?:\/\/[^\s<>"]+?)([.,;!?)\]]*)(?=\s|<|$)/g, 
+                '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: underline;">$1</a>$2'
             );
-            
-            // Convert numbered lists (1. item)
-            formatted = formatted.replace(/^(\d+)\.\s+(.+)$/gm, '<div style="margin-left: 20px; margin-bottom: 8px;"><strong>$1.</strong> $2</div>');
-            
-            // Convert bullet points (- item or * item)
-            formatted = formatted.replace(/^[\-\*]\s+(.+)$/gm, '<div style="margin-left: 20px; margin-bottom: 8px;">• $1</div>');
-            
-            // Convert line breaks to <br>
-            formatted = formatted.replace(/\n/g, '<br>');
-            
-            // Convert ### Headings to styled headings
-            formatted = formatted.replace(/###\s+(.+?)<br>/g, '<h3 style="font-size: 18px; font-weight: 700; margin-top: 15px; margin-bottom: 10px; color: #1a202c;">$1</h3>');
-            formatted = formatted.replace(/##\s+(.+?)<br>/g, '<h2 style="font-size: 20px; font-weight: 700; margin-top: 15px; margin-bottom: 10px; color: #1a202c;">$1</h2>');
-            
-            // Convert code blocks `code`
-            formatted = formatted.replace(/`(.+?)`/g, '<code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px;">$1</code>');
             
             return formatted;
         }
