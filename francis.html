@@ -2319,16 +2319,28 @@ Provide specific advice on:
             // Convert bullet points starting with dash (- item)
             formatted = formatted.replace(/^-\s+(.+)$/gm, '<div style="margin-left: 20px; margin-bottom: 8px;">• $1</div>');
             
-            // Convert *italic* to <em> (before bold to avoid conflicts)
-            formatted = formatted.replace(/\*([^*]+?)\*/g, '<em>$1</em>');
-            
-            // Convert **bold** to <strong>
+            // Convert **bold** to <strong> (before italic to avoid conflicts)
             formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
             
-            // Convert URLs to clickable links (excluding trailing punctuation)
+            // Convert *italic* to <em> (after bold)
+            formatted = formatted.replace(/\*([^*]+?)\*/g, '<em>$1</em>');
+            
+            // Convert URLs to clickable links (handle parentheses in URLs while excluding trailing punctuation)
             formatted = formatted.replace(
-                /(https?:\/\/[^\s<>"]+?)([.,;!?)\]]*)(?=\s|<|$)/g, 
-                '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: underline;">$1</a>$2'
+                /(https?:\/\/[^\s<>"]+?)([.,;!?]*)(?=\s|<|$)/g,
+                function(match, url, trailing) {
+                    // If URL ends with closing paren and trailing has punctuation, check if it's part of URL
+                    if (url.endsWith(')') && trailing) {
+                        // Count parentheses in URL
+                        const openParens = (url.match(/\(/g) || []).length;
+                        const closeParens = (url.match(/\)/g) || []).length;
+                        // If balanced, keep the closing paren
+                        if (openParens === closeParens) {
+                            return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: underline;">${url}</a>${trailing}`;
+                        }
+                    }
+                    return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: underline;">${url}</a>${trailing}`;
+                }
             );
             
             return formatted;
