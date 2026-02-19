@@ -4,9 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Francis Personal Portal - Manage finances, budgets, tasks, and more with AI assistance">
+    <meta name="theme-color" content="#667eea">
     <title>Francis Personal Portal</title>
     <link rel="icon" type="image/png" href="favicon.png">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -659,6 +663,39 @@
             background: #5568d3;
         }
 
+        /* AI Message Formatting */
+        .ai-message-content {
+            line-height: 1.7;
+        }
+        
+        .ai-message-content strong {
+            font-weight: 600;
+            color: #1a202c;
+        }
+        
+        .ai-message-content em {
+            font-style: italic;
+            color: #4a5568;
+        }
+        
+        .ai-message-content a {
+            color: #667eea;
+            text-decoration: underline;
+            word-break: break-all;
+        }
+        
+        .ai-message-content a:hover {
+            color: #5568d3;
+        }
+        
+        .ai-message-content code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
         /* Task List */
         .task-item {
             display: flex;
@@ -806,6 +843,10 @@
                 <div class="nav-item" data-screen="finances">
                     <div class="nav-icon">💰</div>
                     <div class="nav-label">Finances</div>
+                </div>
+                <div class="nav-item" data-screen="budget">
+                    <div class="nav-icon">💵</div>
+                    <div class="nav-label">Budget</div>
                 </div>
                 <div class="nav-item" data-screen="planning">
                     <div class="nav-icon">📝</div>
@@ -963,6 +1004,174 @@
                             <button class="btn btn-info" onclick="getFinancialAdvice()">Get Advice</button>
                         </div>
                         <div id="financialAdvice" style="line-height: 1.8; color: #4a5568;"></div>
+                    </div>
+                </div>
+
+                <!-- Budget Screen -->
+                <div id="budgetScreen" class="screen">
+                    <div class="page-header">
+                        <h1 class="page-title">💵 Budget Tools</h1>
+                        <p class="page-subtitle">Financial calculators and planning tools</p>
+                    </div>
+
+                    <!-- Financial Calculators Grid -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                        
+                        <!-- Savings Calculator -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">💰 Savings Calculator</h3>
+                            </div>
+                            <div class="form-group">
+                                <label>Initial Amount (GH₵)</label>
+                                <input type="number" id="savingsInitial" class="form-control" value="1000" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Contribution (GH₵)</label>
+                                <input type="number" id="savingsMonthly" class="form-control" value="100" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Interest Rate (% per year)</label>
+                                <input type="number" id="savingsRate" class="form-control" value="5" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Years</label>
+                                <input type="number" id="savingsYears" class="form-control" value="5" step="1">
+                            </div>
+                            <button class="btn btn-info" onclick="calculateSavings()" style="width: 100%;">Calculate</button>
+                            <div id="savingsResult" class="result-box" style="margin-top: 15px; padding: 15px; background: #f0f9ff; border-radius: 8px; display: none;">
+                                <h4 style="margin-bottom: 10px; color: #0369a1;">Results:</h4>
+                                <div id="savingsResultText"></div>
+                            </div>
+                        </div>
+
+                        <!-- Loan Calculator -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">🏦 Loan Calculator</h3>
+                            </div>
+                            <div class="form-group">
+                                <label>Loan Amount (GH₵)</label>
+                                <input type="number" id="loanAmount" class="form-control" value="10000" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Interest Rate (% per year)</label>
+                                <input type="number" id="loanRate" class="form-control" value="15" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Loan Term (months)</label>
+                                <input type="number" id="loanMonths" class="form-control" value="12" step="1">
+                            </div>
+                            <button class="btn btn-info" onclick="calculateLoan()" style="width: 100%;">Calculate</button>
+                            <div id="loanResult" class="result-box" style="margin-top: 15px; padding: 15px; background: #fef3c7; border-radius: 8px; display: none;">
+                                <h4 style="margin-bottom: 10px; color: #92400e;">Results:</h4>
+                                <div id="loanResultText"></div>
+                            </div>
+                        </div>
+
+                        <!-- Investment Return Calculator -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">📈 Investment Calculator</h3>
+                            </div>
+                            <div class="form-group">
+                                <label>Initial Investment (GH₵)</label>
+                                <input type="number" id="investAmount" class="form-control" value="5000" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Expected Return (% per year)</label>
+                                <input type="number" id="investReturn" class="form-control" value="12" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Investment Period (years)</label>
+                                <input type="number" id="investYears" class="form-control" value="10" step="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Additional Annual Contribution (GH₵)</label>
+                                <input type="number" id="investAnnual" class="form-control" value="1000" step="0.01">
+                            </div>
+                            <button class="btn btn-info" onclick="calculateInvestment()" style="width: 100%;">Calculate</button>
+                            <div id="investResult" class="result-box" style="margin-top: 15px; padding: 15px; background: #f0fdf4; border-radius: 8px; display: none;">
+                                <h4 style="margin-bottom: 10px; color: #065f46;">Results:</h4>
+                                <div id="investResultText"></div>
+                            </div>
+                        </div>
+
+                        <!-- Budget Breakdown Tool -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">📊 50/30/20 Budget Rule</h3>
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Income (GH₵)</label>
+                                <input type="number" id="budgetIncome" class="form-control" value="3000" step="0.01">
+                            </div>
+                            <button class="btn btn-info" onclick="calculateBudgetRule()" style="width: 100%;">Calculate</button>
+                            <div id="budgetRuleResult" class="result-box" style="margin-top: 15px; padding: 15px; background: #faf5ff; border-radius: 8px; display: none;">
+                                <h4 style="margin-bottom: 10px; color: #6b21a8;">Recommended Budget:</h4>
+                                <div id="budgetRuleText"></div>
+                            </div>
+                        </div>
+
+                        <!-- Emergency Fund Calculator -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">🛡️ Emergency Fund</h3>
+                            </div>
+                            <div class="form-group">
+                                <label>Monthly Expenses (GH₵)</label>
+                                <input type="number" id="emergencyExpenses" class="form-control" value="2000" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Months to Cover</label>
+                                <input type="number" id="emergencyMonths" class="form-control" value="6" step="1">
+                            </div>
+                            <div class="form-group">
+                                <label>Current Savings (GH₵)</label>
+                                <input type="number" id="emergencySavings" class="form-control" value="5000" step="0.01">
+                            </div>
+                            <button class="btn btn-info" onclick="calculateEmergencyFund()" style="width: 100%;">Calculate</button>
+                            <div id="emergencyResult" class="result-box" style="margin-top: 15px; padding: 15px; background: #fef2f2; border-radius: 8px; display: none;">
+                                <h4 style="margin-bottom: 10px; color: #991b1b;">Results:</h4>
+                                <div id="emergencyResultText"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tax Calculator (Ghana) -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">🧾 Income Tax Calculator (Ghana)</h3>
+                            </div>
+                            <div class="form-group">
+                                <label>Annual Income (GH₵)</label>
+                                <input type="number" id="taxIncome" class="form-control" value="50000" step="0.01">
+                            </div>
+                            <button class="btn btn-info" onclick="calculateTax()" style="width: 100%;">Calculate Tax</button>
+                            <div id="taxResult" class="result-box" style="margin-top: 15px; padding: 15px; background: #ecfeff; border-radius: 8px; display: none;">
+                                <h4 style="margin-bottom: 10px; color: #155e75;">Results:</h4>
+                                <div id="taxResultText"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Budget Tips Card -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">💡 Smart Budgeting Tips</h3>
+                        </div>
+                        <div style="line-height: 1.8; color: #4a5568; padding: 10px;">
+                            <ul style="padding-left: 20px;">
+                                <li><strong>Track every expense:</strong> Use the Finances tab to monitor your spending patterns</li>
+                                <li><strong>Follow the 50/30/20 rule:</strong> 50% needs, 30% wants, 20% savings</li>
+                                <li><strong>Build an emergency fund:</strong> Aim for 3-6 months of expenses</li>
+                                <li><strong>Automate savings:</strong> Set up automatic transfers to your savings account</li>
+                                <li><strong>Review monthly:</strong> Check your budget progress regularly and adjust as needed</li>
+                                <li><strong>Avoid impulse purchases:</strong> Wait 24 hours before making non-essential purchases</li>
+                                <li><strong>Use cash envelopes:</strong> Allocate cash for specific spending categories</li>
+                                <li><strong>Plan for irregular expenses:</strong> Set aside money for annual bills and emergencies</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -1820,6 +2029,194 @@ Provide specific advice on:
             }
         };
 
+        // ===== BUDGET CALCULATORS =====
+        
+        function calculateSavings() {
+            const initial = parseFloat(document.getElementById('savingsInitial').value) || 0;
+            const monthly = parseFloat(document.getElementById('savingsMonthly').value) || 0;
+            const rate = parseFloat(document.getElementById('savingsRate').value) || 0;
+            const years = parseInt(document.getElementById('savingsYears').value) || 0;
+            
+            const months = years * 12;
+            const monthlyRate = rate / 100 / 12;
+            
+            // Future value with compound interest
+            let futureValue = initial * Math.pow(1 + monthlyRate, months);
+            
+            // Add monthly contributions
+            if (monthlyRate > 0) {
+                futureValue += monthly * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+            } else {
+                futureValue += monthly * months;
+            }
+            
+            const totalContributions = initial + (monthly * months);
+            const interestEarned = futureValue - totalContributions;
+            
+            const resultDiv = document.getElementById('savingsResult');
+            const resultText = document.getElementById('savingsResultText');
+            
+            resultText.innerHTML = `
+                <div style="margin-bottom: 8px;"><strong>Future Value:</strong> GH₵ ${futureValue.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Total Contributions:</strong> GH₵ ${totalContributions.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Interest Earned:</strong> GH₵ ${interestEarned.toFixed(2)}</div>
+                <div style="color: #059669; font-weight: 600;">Return on Investment: ${((interestEarned / totalContributions) * 100).toFixed(1)}%</div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+        
+        function calculateLoan() {
+            const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+            const rate = parseFloat(document.getElementById('loanRate').value) || 0;
+            const months = parseInt(document.getElementById('loanMonths').value) || 0;
+            
+            const monthlyRate = rate / 100 / 12;
+            
+            // Monthly payment using amortization formula
+            let monthlyPayment = 0;
+            if (monthlyRate > 0) {
+                monthlyPayment = amount * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+            } else {
+                monthlyPayment = amount / months;
+            }
+            
+            const totalPayment = monthlyPayment * months;
+            const totalInterest = totalPayment - amount;
+            
+            const resultDiv = document.getElementById('loanResult');
+            const resultText = document.getElementById('loanResultText');
+            
+            resultText.innerHTML = `
+                <div style="margin-bottom: 8px;"><strong>Monthly Payment:</strong> GH₵ ${monthlyPayment.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Total Payment:</strong> GH₵ ${totalPayment.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Total Interest:</strong> GH₵ ${totalInterest.toFixed(2)}</div>
+                <div style="color: #b45309; font-weight: 600;">Interest as % of Loan: ${((totalInterest / amount) * 100).toFixed(1)}%</div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+        
+        function calculateInvestment() {
+            const initial = parseFloat(document.getElementById('investAmount').value) || 0;
+            const returnRate = parseFloat(document.getElementById('investReturn').value) || 0;
+            const years = parseInt(document.getElementById('investYears').value) || 0;
+            const annual = parseFloat(document.getElementById('investAnnual').value) || 0;
+            
+            const rate = returnRate / 100;
+            
+            let futureValue = initial * Math.pow(1 + rate, years);
+            
+            // Add annual contributions
+            for (let i = 1; i <= years; i++) {
+                futureValue += annual * Math.pow(1 + rate, years - i);
+            }
+            
+            const totalInvested = initial + (annual * years);
+            const totalGains = futureValue - totalInvested;
+            
+            const resultDiv = document.getElementById('investResult');
+            const resultText = document.getElementById('investResultText');
+            
+            resultText.innerHTML = `
+                <div style="margin-bottom: 8px;"><strong>Future Value:</strong> GH₵ ${futureValue.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Total Invested:</strong> GH₵ ${totalInvested.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Investment Gains:</strong> GH₵ ${totalGains.toFixed(2)}</div>
+                <div style="color: #047857; font-weight: 600;">ROI: ${((totalGains / totalInvested) * 100).toFixed(1)}%</div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+        
+        function calculateBudgetRule() {
+            const income = parseFloat(document.getElementById('budgetIncome').value) || 0;
+            
+            const needs = income * 0.50;
+            const wants = income * 0.30;
+            const savings = income * 0.20;
+            
+            const resultDiv = document.getElementById('budgetRuleResult');
+            const resultText = document.getElementById('budgetRuleText');
+            
+            resultText.innerHTML = `
+                <div style="margin-bottom: 8px;"><strong>Needs (50%):</strong> GH₵ ${needs.toFixed(2)}</div>
+                <div style="font-size: 13px; color: #6b7280; margin-bottom: 12px; padding-left: 15px;">Housing, utilities, groceries, transportation, insurance</div>
+                <div style="margin-bottom: 8px;"><strong>Wants (30%):</strong> GH₵ ${wants.toFixed(2)}</div>
+                <div style="font-size: 13px; color: #6b7280; margin-bottom: 12px; padding-left: 15px;">Entertainment, dining out, hobbies, subscriptions</div>
+                <div style="margin-bottom: 8px;"><strong>Savings (20%):</strong> GH₵ ${savings.toFixed(2)}</div>
+                <div style="font-size: 13px; color: #6b7280; padding-left: 15px;">Emergency fund, retirement, investments, debt repayment</div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+        
+        function calculateEmergencyFund() {
+            const expenses = parseFloat(document.getElementById('emergencyExpenses').value) || 0;
+            const months = parseInt(document.getElementById('emergencyMonths').value) || 0;
+            const current = parseFloat(document.getElementById('emergencySavings').value) || 0;
+            
+            const target = expenses * months;
+            const remaining = target - current;
+            const progress = (current / target) * 100;
+            
+            const resultDiv = document.getElementById('emergencyResult');
+            const resultText = document.getElementById('emergencyResultText');
+            
+            let statusMessage = '';
+            if (remaining <= 0) {
+                statusMessage = '<div style="color: #059669; font-weight: 600; margin-top: 10px;">✓ You have met your emergency fund goal!</div>';
+            } else {
+                statusMessage = `<div style="color: #dc2626; font-weight: 600; margin-top: 10px;">You need GH₵ ${remaining.toFixed(2)} more to reach your goal.</div>`;
+            }
+            
+            resultText.innerHTML = `
+                <div style="margin-bottom: 8px;"><strong>Target Emergency Fund:</strong> GH₵ ${target.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Current Savings:</strong> GH₵ ${current.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Progress:</strong> ${progress.toFixed(1)}%</div>
+                ${statusMessage}
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+        
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('taxIncome').value) || 0;
+            
+            // Ghana tax brackets (simplified - 2024 rates)
+            let tax = 0;
+            
+            if (income <= 4380) {
+                tax = 0; // First GH₵ 4,380 is tax-free
+            } else if (income <= 6380) {
+                tax = (income - 4380) * 0.05; // 5% on next GH₵ 2,000
+            } else if (income <= 10380) {
+                tax = 100 + (income - 6380) * 0.10; // 10% on next GH₵ 4,000
+            } else if (income <= 45380) {
+                tax = 500 + (income - 10380) * 0.175; // 17.5% on next GH₵ 35,000
+            } else if (income <= 120380) {
+                tax = 6625 + (income - 45380) * 0.25; // 25% on next GH₵ 75,000
+            } else {
+                tax = 25375 + (income - 120380) * 0.30; // 30% on amount over GH₵ 120,380
+            }
+            
+            const netIncome = income - tax;
+            const effectiveRate = (tax / income) * 100;
+            const monthlyNet = netIncome / 12;
+            
+            const resultDiv = document.getElementById('taxResult');
+            const resultText = document.getElementById('taxResultText');
+            
+            resultText.innerHTML = `
+                <div style="margin-bottom: 8px;"><strong>Annual Income:</strong> GH₵ ${income.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Income Tax:</strong> GH₵ ${tax.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Net Annual Income:</strong> GH₵ ${netIncome.toFixed(2)}</div>
+                <div style="margin-bottom: 8px;"><strong>Monthly Net Income:</strong> GH₵ ${monthlyNet.toFixed(2)}</div>
+                <div style="color: #0e7490; font-weight: 600;">Effective Tax Rate: ${effectiveRate.toFixed(2)}%</div>
+            `;
+            
+            resultDiv.style.display = 'block';
+        }
+
         // ===== AI ASSISTANT =====
         let chatMessages = [];
 
@@ -1885,18 +2282,56 @@ Provide specific advice on:
                 minute: '2-digit'
             }).format(message.timestamp);
             
+            // Format the message text for AI responses
+            const formattedText = message.isUser ? escapeHtml(message.text) : formatAIResponse(message.text);
+            
             bubble.innerHTML = `
                 <div class="chat-avatar ${message.isUser ? 'user' : 'ai'}">
                     ${message.isUser ? '👤' : '🤖'}
                 </div>
                 <div class="chat-content">
-                    <div>${escapeHtml(message.text)}</div>
+                    <div class="ai-message-content">${formattedText}</div>
                     <div style="font-size: 11px; opacity: 0.7; margin-top: 5px;">${time}</div>
                 </div>
             `;
             
             chatMessagesDiv.appendChild(bubble);
             chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+        }
+        
+        function formatAIResponse(text) {
+            // Escape HTML first
+            let formatted = escapeHtml(text);
+            
+            // Convert **bold** to <strong>
+            formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            
+            // Convert *italic* to <em>
+            formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>');
+            
+            // Convert URLs to clickable links
+            formatted = formatted.replace(
+                /(https?:\/\/[^\s]+)/g, 
+                '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #667eea; text-decoration: underline;">$1</a>'
+            );
+            
+            // Convert numbered lists (1. item)
+            formatted = formatted.replace(/^(\d+)\.\s+(.+)$/gm, '<div style="margin-left: 20px; margin-bottom: 8px;"><strong>$1.</strong> $2</div>');
+            
+            // Convert bullet points (- item or * item)
+            formatted = formatted.replace(/^[\-\*]\s+(.+)$/gm, '<div style="margin-left: 20px; margin-bottom: 8px;">• $1</div>');
+            
+            // Convert line breaks to <br>
+            formatted = formatted.replace(/\n/g, '<br>');
+            
+            // Convert ### Headings to styled headings
+            formatted = formatted.replace(/###\s+(.+?)<br>/g, '<h3 style="font-size: 18px; font-weight: 700; margin-top: 15px; margin-bottom: 10px; color: #1a202c;">$1</h3>');
+            formatted = formatted.replace(/##\s+(.+?)<br>/g, '<h2 style="font-size: 20px; font-weight: 700; margin-top: 15px; margin-bottom: 10px; color: #1a202c;">$1</h2>');
+            
+            // Convert code blocks `code`
+            formatted = formatted.replace(/`(.+?)`/g, '<code style="background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px;">$1</code>');
+            
+            return formatted;
         }
 
         async function callGeminiAPI(userMessage) {
