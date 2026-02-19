@@ -791,7 +791,8 @@ window.openBlog = function(blogId) {
     document.body.style.overflow = 'hidden';
     
     // Update URL hash to the specific blog without triggering page scroll
-    history.replaceState(null, null, '#blog-' + blogId);
+    const newUrl = window.location.pathname + window.location.search + '#blog-' + blogId;
+    history.replaceState(null, null, newUrl);
     
     // Load comments
     loadComments(blogId);
@@ -815,7 +816,9 @@ window.closeBlog = function(skipHashUpdate = false) {
         // Clear the blog-specific hash from URL if present (unless called from hashchange)
         if (!skipHashUpdate && window.location.hash.startsWith('#blog-')) {
             // Use replaceState to avoid triggering hashchange event
-            history.replaceState(null, null, window.location.pathname + '#blogs');
+            // Navigate back to blogs section
+            const newUrl = window.location.pathname + window.location.search + '#blogs';
+            history.replaceState(null, null, newUrl);
         }
     }
 };
