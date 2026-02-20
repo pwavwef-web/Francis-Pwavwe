@@ -1570,6 +1570,8 @@
         let expectedExpenses = [];
         let mealPlans = [];
         let autoMealPlanGenerated = false;
+        let mealPlannerInitialized = false;
+        let pendingMealPlanOpen = false;
         
         // Configurable settings
         const MONTHLY_BUDGET = 600; 
@@ -2570,6 +2572,15 @@ Provide specific advice on:
                 snapshot.forEach((docSnap) => {
                     mealPlans.push({ id: docSnap.id, ...docSnap.data() });
                 });
+
+                if (!mealPlannerInitialized) {
+                    mealPlannerInitialized = true;
+                    if (pendingMealPlanOpen) {
+                        pendingMealPlanOpen = false;
+                        doAutoGenerateMealPlan();
+                    }
+                }
+
                 displayMealPlans();
             });
         }
@@ -2577,6 +2588,17 @@ Provide specific advice on:
         async function onMealPlannerOpen() {
             if (autoMealPlanGenerated) return;
             autoMealPlanGenerated = true;
+
+            if (!mealPlannerInitialized) {
+                // Firestore hasn't returned data yet; defer until it does
+                pendingMealPlanOpen = true;
+                return;
+            }
+
+            await doAutoGenerateMealPlan();
+        }
+
+        async function doAutoGenerateMealPlan() {
             const today = new Date().toISOString().split('T')[0];
             const existingPlan = mealPlans.find(p => p.date === today);
             if (existingPlan) {
