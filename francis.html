@@ -868,6 +868,10 @@
                     <div class="nav-icon">🤖</div>
                     <div class="nav-label">AI Assistant</div>
                 </div>
+                <div class="nav-item" data-screen="mealplanner">
+                    <div class="nav-icon">🍽️</div>
+                    <div class="nav-label">Meal Planner</div>
+                </div>
             </div>
 
             <div class="content-area">
@@ -963,6 +967,9 @@
                                         <option value="Entertainment">Entertainment</option>
                                         <option value="Health">Health</option>
                                         <option value="Utilities">Utilities</option>
+                                        <option value="Personal Care">Personal Care</option>
+                                        <option value="Saving">Saving</option>
+                                        <option value="Clothing">Clothing</option>
                                         <option value="Other">Other</option>
                                     </select>
                                 </div>
@@ -996,6 +1003,37 @@
                             <h3 class="card-title">Recent Transactions</h3>
                         </div>
                         <div id="transactionList" class="transaction-list"></div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📋 Expected Expenses</h3>
+                            <button class="btn btn-info" onclick="getExpensesPlanningAdvice()">💡 AI Plan</button>
+                        </div>
+                        <p style="font-size: 14px; color: #718096; margin-bottom: 15px;">Add upcoming expenses you expect to have — the AI will help you plan before you spend.</p>
+                        <form id="expectedExpenseForm">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 10px;">
+                                <select id="expCategory" class="form-control" required>
+                                    <option value="Food">Food</option>
+                                    <option value="Airtime">Airtime</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Education">Education</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Health">Health</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Personal Care">Personal Care</option>
+                                    <option value="Saving">Saving</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <input type="number" id="expAmount" class="form-control" placeholder="Amount (GH₵)" step="0.01" required>
+                                <input type="text" id="expDescription" class="form-control" placeholder="Description" required>
+                                <input type="date" id="expDate" class="form-control" required>
+                                <button type="submit" class="btn btn-success">Add</button>
+                            </div>
+                        </form>
+                        <div id="expectedExpenseList" class="transaction-list" style="max-height: 300px;"></div>
+                        <div id="expensesPlanningAdvice" style="margin-top: 15px; line-height: 1.8; color: #4a5568;"></div>
                     </div>
 
                     <div class="card">
@@ -1323,6 +1361,32 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Meal Planner Screen -->
+                <div id="mealplannerScreen" class="screen">
+                    <div class="page-header">
+                        <h1 class="page-title">🍽️ Meal Planner</h1>
+                        <p class="page-subtitle">AI-powered daily meal planning within your budget</p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Today's Meal Plan</h3>
+                            <button class="btn btn-info" onclick="regenerateTodayMealPlan()">🔄 Regenerate</button>
+                        </div>
+                        <div id="todayMealPlan">
+                            <div class="loading">Opening meal planner…</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📅 Previous Meal Plans</h3>
+                        </div>
+                        <p style="font-size: 14px; color: #718096; margin-bottom: 15px;">Past plans are saved to help the AI provide variety and better nutrition over time.</p>
+                        <div id="mealPlanHistory"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1363,6 +1427,9 @@
         let tasks = [];
         let blogs = [];
         let spendingChart = null;
+        let expectedExpenses = [];
+        let mealPlans = [];
+        let autoMealPlanGenerated = false;
         
         // Configurable settings
         const MONTHLY_BUDGET = 600; 
@@ -1431,6 +1498,10 @@
             
             document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
             document.getElementById(`${screenId}Screen`).classList.add('active');
+
+            if (screenId === 'mealplanner') {
+                onMealPlannerOpen();
+            }
         };
 
         function showError(message) {
@@ -1446,6 +1517,8 @@
             initializeProjects();
             initializeMessages();
             initializeAI();
+            initializeExpectedExpenses();
+            initializeMealPlanner();
             updateDashboard();
         }
 
@@ -1567,7 +1640,8 @@
                         data: amounts,
                         backgroundColor: [
                             '#ef4444', '#f59e0b', '#10b981', '#3b82f6',
-                            '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'
+                            '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16',
+                            '#f97316', '#0ea5e9', '#a78bfa'
                         ]
                     }]
                 },
@@ -1615,6 +1689,109 @@ Provide specific advice on:
             try {
                 const response = await callGeminiAPI(prompt);
                 adviceDiv.innerHTML = response.replace(/\n/g, '<br>');
+            } catch (error) {
+                adviceDiv.innerHTML = `<div style="color: #ef4444;">Error getting advice: ${error.message}</div>`;
+            }
+        };
+
+        // ===== EXPECTED EXPENSES =====
+        function initializeExpectedExpenses() {
+            document.getElementById('expDate').valueAsDate = new Date();
+
+            document.getElementById('expectedExpenseForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const category = document.getElementById('expCategory').value;
+                const amount = parseFloat(document.getElementById('expAmount').value);
+                const description = document.getElementById('expDescription').value;
+                const date = document.getElementById('expDate').value;
+                try {
+                    await addDoc(collection(db, 'expectedExpenses'), {
+                        category, amount, description, date,
+                        timestamp: serverTimestamp(),
+                        userId: currentUser.uid
+                    });
+                    e.target.reset();
+                    document.getElementById('expDate').valueAsDate = new Date();
+                } catch (error) {
+                    alert('Error adding expected expense: ' + error.message);
+                }
+            });
+
+            const q = query(
+                collection(db, 'expectedExpenses'),
+                where('userId', '==', currentUser.uid),
+                orderBy('timestamp', 'desc')
+            );
+
+            onSnapshot(q, (snapshot) => {
+                expectedExpenses = [];
+                snapshot.forEach((docSnap) => {
+                    expectedExpenses.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                updateExpectedExpenseList();
+            });
+        }
+
+        function updateExpectedExpenseList() {
+            const list = document.getElementById('expectedExpenseList');
+            if (expectedExpenses.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div>No expected expenses yet</div></div>';
+                return;
+            }
+            list.innerHTML = expectedExpenses.slice(0, 15).map(exp => `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-description">${escapeHtml(exp.description)}</div>
+                        <div class="transaction-meta">${escapeHtml(exp.category)} • ${escapeHtml(exp.date)}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="transaction-amount expense">GH₵ ${exp.amount.toFixed(2)}</div>
+                        <button class="btn btn-danger" onclick="deleteExpectedExpense('${exp.id}')" style="padding: 6px 12px;">✕</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.deleteExpectedExpense = async function(id) {
+            if (confirm('Remove this expected expense?')) {
+                try {
+                    await deleteDoc(doc(db, 'expectedExpenses', id));
+                } catch (error) {
+                    alert('Error: ' + error.message);
+                }
+            }
+        };
+
+        window.getExpensesPlanningAdvice = async function() {
+            const adviceDiv = document.getElementById('expensesPlanningAdvice');
+            adviceDiv.innerHTML = '<div class="loading">🤖 Getting AI planning advice...</div>';
+
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const budgetRemaining = MONTHLY_BUDGET - totalExpenses;
+            const totalExpected = expectedExpenses.reduce((sum, e) => sum + e.amount, 0);
+
+            const prompt = `As a financial planning advisor for Francis, analyze these planned expenses and provide actionable advice:
+
+Current Financial Status:
+- Total Income: GH₵ ${totalIncome}
+- Total Expenses So Far: GH₵ ${totalExpenses}
+- Monthly Budget: GH₵ ${MONTHLY_BUDGET}
+- Budget Remaining: GH₵ ${budgetRemaining}
+
+Planned/Expected Expenses:
+${expectedExpenses.map(e => `- ${e.description} (${e.category}): GH₵ ${e.amount} on ${e.date}`).join('\n') || '(none added yet)'}
+- Total Expected: GH₵ ${totalExpected}
+
+Please provide:
+1. Whether these planned expenses are financially feasible
+2. Prioritization — which to tackle first and which can wait
+3. Suggestions to cut costs or find alternatives
+4. Impact on budget and savings goals`;
+
+            try {
+                const response = await callGeminiAPI(prompt);
+                adviceDiv.innerHTML = `<div class="ai-message-content">${formatAIResponse(response)}</div>`;
             } catch (error) {
                 adviceDiv.innerHTML = `<div style="color: #ef4444;">Error getting advice: ${error.message}</div>`;
             }
@@ -2216,6 +2393,145 @@ Provide specific advice on:
             
             resultDiv.style.display = 'block';
         };
+
+        // ===== MEAL PLANNER =====
+        function initializeMealPlanner() {
+            const q = query(
+                collection(db, 'mealPlans'),
+                where('userId', '==', currentUser.uid),
+                orderBy('date', 'desc')
+            );
+
+            onSnapshot(q, (snapshot) => {
+                mealPlans = [];
+                snapshot.forEach((docSnap) => {
+                    mealPlans.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                displayMealPlans();
+            });
+        }
+
+        async function onMealPlannerOpen() {
+            if (autoMealPlanGenerated) return;
+            autoMealPlanGenerated = true;
+            const today = new Date().toISOString().split('T')[0];
+            const existingPlan = mealPlans.find(p => p.date === today);
+            if (existingPlan) {
+                const todayDiv = document.getElementById('todayMealPlan');
+                todayDiv.innerHTML = `<div class="ai-message-content" style="line-height: 1.9;">${formatAIResponse(existingPlan.plan)}</div>`;
+                displayMealPlans();
+            } else {
+                await generateMealPlan(today, false);
+            }
+        }
+
+        window.regenerateTodayMealPlan = async function() {
+            const today = new Date().toISOString().split('T')[0];
+            await generateMealPlan(today, true);
+        };
+
+        async function generateMealPlan(date, isRegenerate) {
+            const todayDiv = document.getElementById('todayMealPlan');
+            todayDiv.innerHTML = '<div class="loading">🤖 AI is planning your meals for the day…</div>';
+
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const budgetRemaining = MONTHLY_BUDGET - totalExpenses;
+
+            const foodExpenses = transactions.filter(t => t.type === 'expense' && t.category === 'Food');
+            const now = new Date();
+            const daysElapsed = Math.max(1, now.getDate());
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            const avgDailyFoodBudget = foodExpenses.length > 0
+                ? (foodExpenses.reduce((sum, t) => sum + t.amount, 0) / daysElapsed).toFixed(2)
+                : (budgetRemaining / (daysInMonth - daysElapsed + 1)).toFixed(2);
+
+            const previousMealsSummary = mealPlans
+                .filter(p => p.date !== date)
+                .slice(0, 5)
+                .map(p => `${p.date}: ${p.summary || '(meal plan)'}`)
+                .join('\n');
+
+            const prompt = `As a nutritionist and financial advisor for Francis in Ghana, create a detailed meal plan for ${date}.
+
+Financial Context:
+- Monthly Budget Remaining: GH₵ ${budgetRemaining}
+- Estimated Daily Food Budget: GH₵ ${avgDailyFoodBudget}
+- Monthly Income: GH₵ ${totalIncome}
+${previousMealsSummary ? `\nRecent meal history (for variety):\n${previousMealsSummary}\n` : ''}
+Please create a balanced daily meal plan that:
+1. Stays within the daily food budget
+2. Is nutritionally balanced (carbs, protein, vegetables)
+3. Uses locally available Ghanaian foods/ingredients
+4. Provides variety compared to recent meals
+
+Format your response as:
+**Breakfast**: (meal description) — GH₵ X
+**Lunch**: (meal description) — GH₵ X
+**Dinner**: (meal description) — GH₵ X
+**Snack** (optional): (description) — GH₵ X
+**Total Estimated Cost**: GH₵ X
+**Nutritional Notes**: (brief note on balance)
+
+Keep all costs realistic and affordable for Ghana.`;
+
+            try {
+                const response = await callGeminiAPI(prompt);
+
+                // Build a short summary: prefer a line mentioning Breakfast/Lunch/Dinner, else first non-empty line
+                const lines = response.split('\n').map(l => l.replace(/\*\*/g, '').trim()).filter(l => l.length > 0);
+                const mealLine = lines.find(l => /breakfast|lunch|dinner/i.test(l)) || lines[0] || '';
+                const summary = mealLine.length > 130 ? mealLine.substring(0, 130).replace(/\s+\S*$/, '…') : mealLine;
+
+                const existingPlan = mealPlans.find(p => p.date === date);
+                if (existingPlan && isRegenerate) {
+                    await updateDoc(doc(db, 'mealPlans', existingPlan.id), {
+                        plan: response,
+                        summary,
+                        generatedAt: serverTimestamp()
+                    });
+                } else if (!existingPlan) {
+                    await addDoc(collection(db, 'mealPlans'), {
+                        date,
+                        plan: response,
+                        summary,
+                        timestamp: serverTimestamp(),
+                        generatedAt: serverTimestamp(),
+                        userId: currentUser.uid
+                    });
+                }
+
+                todayDiv.innerHTML = `<div class="ai-message-content" style="line-height: 1.9;">${formatAIResponse(response)}</div>`;
+            } catch (error) {
+                todayDiv.innerHTML = `<div style="color: #ef4444;">Error generating meal plan: ${error.message}</div>`;
+            }
+        }
+
+        function displayMealPlans() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayPlan = mealPlans.find(p => p.date === today);
+            const todayDiv = document.getElementById('todayMealPlan');
+
+            if (todayPlan && todayDiv && !todayDiv.innerHTML.includes('AI is planning')) {
+                todayDiv.innerHTML = `<div class="ai-message-content" style="line-height: 1.9;">${formatAIResponse(todayPlan.plan)}</div>`;
+            }
+
+            const historyDiv = document.getElementById('mealPlanHistory');
+            if (!historyDiv) return;
+
+            const previousPlans = mealPlans.filter(p => p.date !== today);
+            if (previousPlans.length === 0) {
+                historyDiv.innerHTML = '<div class="empty-state"><div class="empty-icon">🍽️</div><div>No previous meal plans yet. Come back tomorrow!</div></div>';
+                return;
+            }
+
+            historyDiv.innerHTML = previousPlans.map(plan => `
+                <div style="padding: 18px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 15px;">
+                    <div style="font-weight: 700; margin-bottom: 12px; color: #4a5568; font-size: 15px;">📅 ${plan.date}</div>
+                    <div class="ai-message-content" style="line-height: 1.9;">${formatAIResponse(plan.plan)}</div>
+                </div>
+            `).join('');
+        }
 
         // ===== AI ASSISTANT =====
         let chatMessages = [];
