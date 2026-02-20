@@ -1570,6 +1570,8 @@
         let expectedExpenses = [];
         let mealPlans = [];
         let autoMealPlanGenerated = false;
+        let mealPlansLoaded = false;
+        let pendingMealPlannerOpen = false;
         
         // Configurable settings
         const MONTHLY_BUDGET = 600; 
@@ -2570,11 +2572,22 @@ Provide specific advice on:
                 snapshot.forEach((docSnap) => {
                     mealPlans.push({ id: docSnap.id, ...docSnap.data() });
                 });
+                if (!mealPlansLoaded) {
+                    mealPlansLoaded = true;
+                    if (pendingMealPlannerOpen) {
+                        pendingMealPlannerOpen = false;
+                        onMealPlannerOpen();
+                    }
+                }
                 displayMealPlans();
             });
         }
 
         async function onMealPlannerOpen() {
+            if (!mealPlansLoaded) {
+                pendingMealPlannerOpen = true;
+                return;
+            }
             if (autoMealPlanGenerated) return;
             autoMealPlanGenerated = true;
             const today = new Date().toISOString().split('T')[0];
