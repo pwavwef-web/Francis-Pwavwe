@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Orders — Admin View</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: #1a0010;
+            color: #fce4ec;
+            min-height: 100vh;
+        }
+
+        /* ── Login screen ── */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .login-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(233,30,99,0.25);
+            border-radius: 16px;
+            padding: 40px 32px;
+            max-width: 380px;
+            width: 100%;
+        }
+        .login-card h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #f48fb1, #e91e63);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        .login-card p { color: #f8bbd0; font-size: 0.9rem; margin-bottom: 28px; line-height: 1.5; }
+        .btn-google {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 13px 20px;
+            background: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #333;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+        }
+        .btn-google:hover { box-shadow: 0 4px 20px rgba(255,255,255,0.15); }
+        .btn-google svg { flex-shrink: 0; }
+        .access-denied {
+            display: none;
+            background: rgba(183,28,28,0.15);
+            border: 1px solid rgba(183,28,28,0.4);
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 16px;
+            color: #ef9a9a;
+            font-size: 0.85rem;
+        }
+
+        /* ── Admin screen ── */
+        .admin-screen { display: none; padding: 0 0 64px; }
+
+        .admin-topbar {
+            background: rgba(26,0,16,0.9);
+            border-bottom: 1px solid rgba(233,30,99,0.2);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(6px);
+        }
+        .admin-topbar h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #f48fb1, #e91e63);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .admin-topbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: #f8bbd0;
+        }
+        .btn-signout {
+            padding: 6px 14px;
+            background: rgba(233,30,99,0.15);
+            border: 1px solid rgba(233,30,99,0.3);
+            border-radius: 6px;
+            color: #f48fb1;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-signout:hover { background: rgba(233,30,99,0.3); }
+
+        .admin-content { max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+
+        /* ── Stats bar ── */
+        .stats-bar {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(233,30,99,0.2);
+            border-radius: 10px;
+            padding: 14px 20px;
+            flex: 1;
+            min-width: 140px;
+        }
+        .stat-box .num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #e91e63;
+        }
+        .stat-box .lbl { font-size: 0.78rem; color: #f8bbd0; margin-top: 2px; }
+
+        /* ── Search & filters ── */
+        .controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .controls input, .controls select {
+            padding: 10px 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(233,30,99,0.3);
+            border-radius: 8px;
+            color: #fce4ec;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.88rem;
+            outline: none;
+        }
+        .controls input { flex: 1; min-width: 180px; }
+        .controls input::placeholder { color: rgba(248,187,208,0.4); }
+        .controls select option { background: #3d0020; }
+
+        /* ── Table ── */
+        .table-wrapper { overflow-x: auto; border-radius: 12px; border: 1px solid rgba(233,30,99,0.2); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        thead th {
+            background: rgba(233,30,99,0.12);
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #f48fb1;
+            white-space: nowrap;
+        }
+        tbody tr { border-top: 1px solid rgba(233,30,99,0.1); transition: background 0.15s; }
+        tbody tr:hover { background: rgba(233,30,99,0.06); }
+        tbody td { padding: 12px 16px; color: #fce4ec; vertical-align: middle; }
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(233,30,99,0.15);
+            border: 1px solid rgba(233,30,99,0.3);
+            color: #f48fb1;
+        }
+        .ref-code {
+            font-family: monospace;
+            font-size: 0.78rem;
+            color: #b0b0b0;
+        }
+
+        /* ── Empty / loading states ── */
+        .state-box {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(248,187,208,0.5);
+        }
+        .state-box .icon { font-size: 3rem; margin-bottom: 12px; }
+        .state-box p { font-size: 0.9rem; }
+
+        /* ── Spinner ── */
+        .spinner {
+            width: 40px; height: 40px;
+            border: 3px solid rgba(233,30,99,0.2);
+            border-top-color: #e91e63;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<!-- ════════════════════════ LOGIN SCREEN ════════════════════════ -->
+<div class="login-screen" id="loginScreen">
+    <div class="login-card">
+        <h1>💌 Admin Access</h1>
+        <p>This page is restricted.<br>Sign in with <strong>pwavwef@gmail.com</strong> to view certificate orders.</p>
+        <button class="btn-google" id="googleSignIn">
+            <!-- Google G logo -->
+            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+                <path d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z" fill="#FBBC05"/>
+                <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z" fill="#EA4335"/>
+            </svg>
+            Sign in with Google
+        </button>
+        <div class="access-denied" id="accessDenied">
+            ⛔ Access denied. Only <strong>pwavwef@gmail.com</strong> can view this page.
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════════════ ADMIN SCREEN ════════════════════════ -->
+<div class="admin-screen" id="adminScreen">
+    <div class="admin-topbar">
+        <h1>💝 Midnight in Love — Certificate Orders</h1>
+        <div class="user-info">
+            <span id="userEmailLabel"></span>
+            <button class="btn-signout" id="signOutBtn">Sign out</button>
+        </div>
+    </div>
+
+    <div class="admin-content">
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-box">
+                <div class="num" id="statTotal">—</div>
+                <div class="lbl">Total orders</div>
+            </div>
+            <div class="stat-box">
+                <div class="num" id="statRevenue">—</div>
+                <div class="lbl">Revenue collected (GHS)</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="🔍 Search by name, committee or email…">
+            <select id="committeeFilter">
+                <option value="">All committees</option>
+                <option>Planning Committee</option>
+                <option>Decoration Committee</option>
+                <option>Entertainment Committee</option>
+                <option>Catering Committee</option>
+                <option>Photography & Media Committee</option>
+                <option>Security Committee</option>
+                <option>Transport & Logistics Committee</option>
+                <option>Finance Committee</option>
+                <option>Publicity Committee</option>
+                <option>Welfare Committee</option>
+                <option>Other</option>
+            </select>
+        </div>
+
+        <!-- Loading state -->
+        <div class="state-box" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading orders…</p>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrapper" id="tableWrapper" style="display:none;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Committee</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Paystack Ref</th>
+                        <th>Submitted</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody"></tbody>
+            </table>
+        </div>
+
+        <!-- Empty state -->
+        <div class="state-box" id="emptyState" style="display:none;">
+            <div class="icon">💔</div>
+            <p>No orders found matching your search.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+    import { initializeApp }     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
+        authDomain: "francis-pwavwe.firebaseapp.com",
+        projectId: "francis-pwavwe",
+        storageBucket: "francis-pwavwe.firebasestorage.app",
+        messagingSenderId: "658069378543",
+        appId: "1:658069378543:web:87b1dcb0dd27d3255bd21a"
+    };
+
+    const app      = initializeApp(firebaseConfig);
+    const auth     = getAuth(app);
+    const db       = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    const ALLOWED_EMAIL = 'pwavwef@gmail.com';
+
+    // ── UI refs ──
+    const loginScreen    = document.getElementById('loginScreen');
+    const adminScreen    = document.getElementById('adminScreen');
+    const accessDenied   = document.getElementById('accessDenied');
+    const googleSignIn   = document.getElementById('googleSignIn');
+    const signOutBtn     = document.getElementById('signOutBtn');
+    const userEmailLabel = document.getElementById('userEmailLabel');
+    const loadingState   = document.getElementById('loadingState');
+    const tableWrapper   = document.getElementById('tableWrapper');
+    const emptyState     = document.getElementById('emptyState');
+    const tbody          = document.getElementById('ordersTableBody');
+    const searchInput    = document.getElementById('searchInput');
+    const committeeFilter= document.getElementById('committeeFilter');
+    const statTotal      = document.getElementById('statTotal');
+    const statRevenue    = document.getElementById('statRevenue');
+
+    let allOrders = [];
+
+    // ── Auth state ──
+    onAuthStateChanged(auth, user => {
+        if (user && user.email === ALLOWED_EMAIL) {
+            loginScreen.style.display = 'none';
+            adminScreen.style.display = 'block';
+            userEmailLabel.textContent = user.email;
+            loadOrders();
+        } else if (user) {
+            // Signed in but wrong account
+            signOut(auth);
+            accessDenied.style.display = 'block';
+        } else {
+            loginScreen.style.display = 'flex';
+            adminScreen.style.display = 'none';
+        }
+    });
+
+    // ── Sign in ──
+    googleSignIn.addEventListener('click', async () => {
+        accessDenied.style.display = 'none';
+        try {
+            await signInWithPopup(auth, provider);
+        } catch (e) {
+            console.error('Sign-in error:', e);
+        }
+    });
+
+    // ── Sign out ──
+    signOutBtn.addEventListener('click', () => signOut(auth));
+
+    // ── Load orders (real-time, sorted by name alphabetically) ──
+    function loadOrders() {
+        const q = query(collection(db, 'certificateOrders'), orderBy('fullName', 'asc'));
+        onSnapshot(q, snapshot => {
+            allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderTable();
+        }, err => {
+            console.error('Firestore error:', err);
+            loadingState.style.display = 'none';
+            emptyState.style.display = 'block';
+        });
+    }
+
+    // ── Render ──
+    function renderTable() {
+        const search    = searchInput.value.toLowerCase();
+        const committee = committeeFilter.value;
+
+        const filtered = allOrders.filter(o => {
+            const matchSearch = !search
+                || (o.fullName  || '').toLowerCase().includes(search)
+                || (o.committee || '').toLowerCase().includes(search)
+                || (o.email     || '').toLowerCase().includes(search);
+            const matchCommittee = !committee || o.committee === committee;
+            return matchSearch && matchCommittee;
+        });
+
+        // Stats (always on full list)
+        statTotal.textContent   = allOrders.length;
+        statRevenue.textContent = (allOrders.length * 6).toFixed(2);
+
+        // Hide loading
+        loadingState.style.display = 'none';
+
+        if (filtered.length === 0) {
+            tableWrapper.style.display = 'none';
+            emptyState.style.display   = 'block';
+            return;
+        }
+
+        emptyState.style.display   = 'none';
+        tableWrapper.style.display = 'block';
+
+        tbody.innerHTML = filtered.map((o, i) => {
+            const ts = o.timestamp?.toDate?.() ?? null;
+            const dateStr = ts
+                ? ts.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                : '—';
+            return `
+            <tr>
+                <td>${i + 1}</td>
+                <td><strong>${escHtml(o.fullName || '—')}</strong></td>
+                <td><span class="badge">${escHtml(o.committee || '—')}</span></td>
+                <td>${escHtml(o.email || '—')}</td>
+                <td>${escHtml(o.phone || '—')}</td>
+                <td><span class="ref-code">${escHtml(o.paystackRef || '—')}</span></td>
+                <td>${dateStr}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    // ── Filter events ──
+    searchInput.addEventListener('input', renderTable);
+    committeeFilter.addEventListener('change', renderTable);
+
+    // ── Escape HTML ──
+    function escHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+</script>
+</body>
+</html>

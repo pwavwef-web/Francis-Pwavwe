@@ -62,5 +62,20 @@ service cloud.firestore {
                             && request.auth.token.email == 'pwavwef@gmail.com'
                             && resource.data.userId == request.auth.uid;
     }
+
+    // Certificate orders collection (Midnight in Love event)
+    match /certificateOrders/{orderId} {
+      // Anyone can submit an order (payment is verified via Paystack on the client)
+      allow create: if request.resource.data.keys().hasAll(['fullName', 'committee', 'email', 'phone', 'paystackRef', 'timestamp'])
+                    && request.resource.data.fullName is string
+                    && request.resource.data.committee is string
+                    && request.resource.data.email is string
+                    && request.resource.data.phone is string
+                    && request.resource.data.paystackRef is string;
+
+      // Only the admin can read or delete orders
+      allow read, delete: if request.auth != null
+                          && request.auth.token.email == 'pwavwef@gmail.com';
+    }
   }
 }
