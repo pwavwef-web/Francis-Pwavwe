@@ -4,6 +4,10 @@ const navToggle = document.querySelector('.nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const navLinks = document.querySelectorAll('.nav-link');
 
+// ===== LOCALE DETECTION =====
+const { language } = navigator ?? {};
+const userLocale = language || 'en-US';
+
 // Smooth scroll for navigation links
 navLinks.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -20,7 +24,9 @@ navLinks.forEach(link => {
         }
 
         // Close mobile menu after clicking
-        navMenu.classList.remove('active');
+        if (navMenu) {
+            navMenu.classList.remove('active');
+        }
         
         // Update active link
         navLinks.forEach(l => l.classList.remove('active'));
@@ -29,13 +35,17 @@ navLinks.forEach(link => {
 });
 
 // Mobile menu toggle
-navToggle.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-});
+if (navToggle) {
+    navToggle.addEventListener('click', () => {
+        if (navMenu) {
+            navMenu.classList.toggle('active');
+        }
+    });
+}
 
 // Close mobile menu when clicking outside
 document.addEventListener('click', (e) => {
-    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+    if (navToggle && navMenu && !navToggle.contains(e.target) && !navMenu.contains(e.target)) {
         navMenu.classList.remove('active');
     }
 });
@@ -286,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===== KEYBOARD NAVIGATION =====
 document.addEventListener('keydown', (e) => {
     // Press 'Escape' to close mobile menu
-    if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+    if (e.key === 'Escape' && navMenu && navMenu.classList.contains('active')) {
         navMenu.classList.remove('active');
     }
     
@@ -619,7 +629,7 @@ function renderBlogs() {
 
     blogsContainer.innerHTML = blogs.map(blog => {
         const date = blog.timestamp?.toDate();
-        const formattedDate = date ? new Intl.DateTimeFormat('en-US', {
+        const formattedDate = date ? new Intl.DateTimeFormat(userLocale, {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
@@ -746,7 +756,7 @@ window.openBlog = function(blogId) {
     const likeCount = blog.likes || 0;
 
     const date = blog.timestamp?.toDate();
-    const formattedDate = date ? new Intl.DateTimeFormat('en-US', {
+    const formattedDate = date ? new Intl.DateTimeFormat(userLocale, {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

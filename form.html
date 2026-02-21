@@ -624,8 +624,20 @@
 
   /* ── DOM helpers ── */
   const $  = id => document.getElementById(id);
-  const show = (el, cls = 'active') => el.classList.add(cls);
-  const hide = (el, cls = 'active') => el.classList.remove(cls);
+  function show(el, cls = 'active') {
+    if (el) {
+      el.classList.add(cls);
+    } else {
+      console.warn('Show function called with a null/undefined element.');
+    }
+  }
+  function hide(el, cls = 'active') {
+    if (el) {
+      el.classList.remove(cls);
+    } else {
+      console.warn('Hide function called with a null/undefined element.');
+    }
+  }
 
   function showAlert(msg, type = 'error') {
     const box = $('alertBox');
