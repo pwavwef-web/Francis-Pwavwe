@@ -63,6 +63,18 @@ service cloud.firestore {
                             && resource.data.userId == request.auth.uid;
     }
 
+    // Meal plans collection (for meal planner)
+    match /mealPlans/{planId} {
+      allow read: if request.auth != null 
+                  && request.auth.token.email == 'pwavwef@gmail.com';
+      allow create: if request.auth != null 
+                    && request.auth.token.email == 'pwavwef@gmail.com'
+                    && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null 
+                            && request.auth.token.email == 'pwavwef@gmail.com'
+                            && resource.data.userId == request.auth.uid;
+    }
+
     // Certificate orders collection (Midnight in Love event)
     match /certificateOrders/{orderId} {
       // Anyone can submit an order (payment is verified client-side via Paystack ref)
