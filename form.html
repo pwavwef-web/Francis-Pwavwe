@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Midnight in Love — Certificate Order Form</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --rose:       #c0392b;
+      --crimson:    #8b0000;
+      --blush:      #fde8ec;
+      --soft-pink:  #f9c4ce;
+      --gold:       #c9973a;
+      --white:      #ffffff;
+      --text-dark:  #2d0b0e;
+      --text-mid:   #6b2737;
+      --text-light: #9c4a59;
+      --card-bg:    rgba(255, 255, 255, 0.92);
+      --shadow:     0 8px 40px rgba(139, 0, 0, 0.18);
+    }
+
+    /* ── Background ── */
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 20% 10%, rgba(192, 57, 43, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 90%, rgba(200, 100, 120, 0.20) 0%, transparent 55%),
+        linear-gradient(160deg, #3b0010 0%, #6b1224 40%, #a0293d 100%);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── Floating hearts decoration ── */
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+    .heart-float {
+      position: absolute;
+      font-size: 1.4rem;
+      opacity: 0.13;
+      animation: floatHeart linear infinite;
+    }
+    @keyframes floatHeart {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 0.13; }
+      90%  { opacity: 0.13; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ── Layout ── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .page-header .event-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--soft-pink);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 0.35rem 1rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.25);
+      margin-bottom: 1rem;
+    }
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 6vw, 3rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+    .page-header h1 span { color: var(--soft-pink); }
+    .page-header .tagline {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.75);
+      font-weight: 300;
+    }
+    .heart-divider { font-size: 1.4rem; margin: 0.75rem 0; letter-spacing: 6px; }
+
+    /* ── Info card ── */
+    .info-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.75rem 2rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow);
+      border-top: 4px solid var(--rose);
+    }
+    .info-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--crimson);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .info-card ol, .info-card ul {
+      padding-left: 1.35rem;
+    }
+    .info-card li {
+      font-size: 0.95rem;
+      color: var(--text-mid);
+      line-height: 1.75;
+      margin-bottom: 0.4rem;
+    }
+    .info-card li strong { color: var(--crimson); }
+
+    /* ── Form card ── */
+    .form-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 2rem 2rem 2.5rem;
+      box-shadow: var(--shadow);
+    }
+    .form-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--crimson);
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    /* ── Steps indicator ── */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-bottom: 2rem;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: calc(50% + 18px);
+      width: calc(100% - 36px);
+      height: 2px;
+      background: var(--soft-pink);
+    }
+    .step.active:not(:last-child)::after,
+    .step.done:not(:last-child)::after {
+      background: var(--rose);
+    }
+    .step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--soft-pink);
+      color: var(--crimson);
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.4rem;
+      transition: 0.3s;
+      border: 2px solid var(--soft-pink);
+      position: relative;
+      z-index: 1;
+    }
+    .step.active .step-num {
+      background: var(--rose);
+      color: var(--white);
+      border-color: var(--rose);
+      box-shadow: 0 0 0 4px rgba(192,57,43,0.18);
+    }
+    .step.done .step-num {
+      background: #27ae60;
+      color: var(--white);
+      border-color: #27ae60;
+    }
+    .step-label {
+      font-size: 0.72rem;
+      color: var(--text-light);
+      text-align: center;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    .step.active .step-label { color: var(--rose); font-weight: 600; }
+
+    /* ── Form sections ── */
+    .form-section { display: none; }
+    .form-section.active { display: block; }
+
+    /* ── Form groups ── */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+    .form-group label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--crimson);
+    }
+    .form-group input,
+    .form-group select {
+      padding: 0.85rem 1rem;
+      border: 2px solid var(--soft-pink);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.97rem;
+      color: var(--text-dark);
+      background: var(--white);
+      transition: 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--rose);
+      box-shadow: 0 0 0 3px rgba(192,57,43,0.12);
+    }
+    .form-group .hint {
+      font-size: 0.78rem;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+    .select-wrap {
+      position: relative;
+    }
+    .select-wrap::after {
+      content: '▾';
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--rose);
+      pointer-events: none;
+      font-size: 1rem;
+    }
+
+    /* ── Payment section ── */
+    .payment-summary {
+      background: var(--blush);
+      border: 2px dashed var(--soft-pink);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .payment-summary h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--crimson);
+      margin-bottom: 0.75rem;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(192,57,43,0.12);
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .value { font-weight: 600; color: var(--text-dark); }
+    .amount-highlight {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--rose);
+      text-align: center;
+      margin: 0.75rem 0 0;
+    }
+
+    .payment-note {
+      font-size: 0.83rem;
+      color: var(--text-light);
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      width: 100%;
+      padding: 0.95rem;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--rose), var(--crimson));
+      color: var(--white);
+      box-shadow: 0 4px 18px rgba(139,0,0,0.3);
+    }
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(139,0,0,0.4);
+    }
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--rose);
+      border: 2px solid var(--soft-pink);
+      margin-top: 0.75rem;
+    }
+    .btn-secondary:hover {
+      border-color: var(--rose);
+      background: var(--blush);
+    }
+
+    /* ── Success screen ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .success-screen.active { display: block; }
+    .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .success-screen h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      color: var(--crimson);
+      margin-bottom: 0.75rem;
+    }
+    .success-screen p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+    .success-ref {
+      display: inline-block;
+      margin-top: 1rem;
+      background: var(--blush);
+      border: 1px solid var(--soft-pink);
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      font-size: 0.83rem;
+      color: var(--crimson);
+      word-break: break-all;
+    }
+
+    /* ── Alert ── */
+    .alert {
+      padding: 0.75rem 1rem;
+      border-radius: 7px;
+      font-size: 0.88rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .alert.error { background: #fde8e8; color: #b71c1c; border-left: 3px solid #b71c1c; }
+    .alert.success { background: #e8f5e9; color: #1b5e20; border-left: 3px solid #27ae60; }
+    .alert.show { display: block; }
+
+    /* ── Payment badge ── */
+    .paid-badge {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      background: #e8f5e9;
+      border: 1.5px solid #27ae60;
+      border-radius: 7px;
+      padding: 0.6rem 1rem;
+      font-size: 0.88rem;
+      color: #1b5e20;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+    }
+    .paid-badge.show { display: flex; }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Footer ── */
+    .page-footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.45);
+    }
+    .page-footer a { color: rgba(255,255,255,0.65); text-decoration: none; }
+    .page-footer a:hover { color: var(--soft-pink); }
+
+    @media (max-width: 480px) {
+      .form-card, .info-card { padding: 1.5rem 1.25rem; }
+      .step-label { font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating hearts background -->
+<div class="hearts-bg" id="heartsContainer"></div>
+
+<div class="page-wrap">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div class="event-tag">💌 Valentine's Day Event</div>
+    <h1>Midnight <span>in Love</span></h1>
+    <div class="heart-divider">♥ ♥ ♥</div>
+    <p class="tagline">Order your personalised event certificate — a keepsake of a night to remember.</p>
+  </header>
+
+  <!-- How it works -->
+  <div class="info-card">
+    <h2>📋 How It Works</h2>
+    <ol>
+      <li><strong>Fill in your details</strong> — your full name and the committee you served on during <em>Midnight in Love</em>.</li>
+      <li><strong>Enter your email &amp; phone</strong> — your email is used to send your receipt, and your phone is used to complete the Mobile Money payment.</li>
+      <li><strong>Pay GHS 6</strong> — a Paystack payment prompt will be sent to your phone. Approve the charge and you're done!</li>
+      <li><strong>Submit your form</strong> — once your payment is confirmed, the submit button unlocks and your details are sent to the designer (Francis).</li>
+      <li><strong>Receive your certificate</strong> — Francis will design and send your personalised certificate.</li>
+    </ol>
+  </div>
+
+  <!-- Form card -->
+  <div class="form-card" id="formCard">
+    <h2>💝 Certificate Order Form</h2>
+
+    <!-- Steps indicator -->
+    <div class="steps">
+      <div class="step active" id="step1-indicator">
+        <div class="step-num">1</div>
+        <div class="step-label">Your Details</div>
+      </div>
+      <div class="step" id="step2-indicator">
+        <div class="step-num">2</div>
+        <div class="step-label">Payment</div>
+      </div>
+      <div class="step" id="step3-indicator">
+        <div class="step-num">3</div>
+        <div class="step-label">Submit</div>
+      </div>
+    </div>
+
+    <div class="alert" id="alertBox"></div>
+
+    <!-- ── Step 1 : Details ── -->
+    <div class="form-section active" id="section1">
+      <div class="form-group">
+        <label for="fullName">Full Name <span style="color:var(--rose)">*</span></label>
+        <input type="text" id="fullName" placeholder="e.g. Abena Mensah" autocomplete="name" required />
+      </div>
+
+      <div class="form-group">
+        <label for="committee">Committee <span style="color:var(--rose)">*</span></label>
+        <div class="select-wrap">
+          <select id="committee" required>
+            <option value="" disabled selected>— Select your committee —</option>
+            <option>Planning Committee</option>
+            <option>Decoration Committee</option>
+            <option>Food &amp; Drinks Committee</option>
+            <option>Entertainment Committee</option>
+            <option>Photography &amp; Media Committee</option>
+            <option>Security Committee</option>
+            <option>Transport Committee</option>
+            <option>Finance Committee</option>
+            <option>PR &amp; Marketing Committee</option>
+            <option>Host / MC Committee</option>
+            <option>General Committee</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address <span style="color:var(--rose)">*</span></label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required />
+        <span class="hint">Used for your Paystack payment receipt — make sure it's correct.</span>
+      </div>
+
+      <button class="btn btn-primary" id="toPaymentBtn" type="button">
+        Continue to Payment &nbsp;→
+      </button>
+    </div>
+
+    <!-- ── Step 2 : Payment ── -->
+    <div class="form-section" id="section2">
+      <div class="payment-summary">
+        <h3>🧾 Order Summary</h3>
+        <div class="summary-row">
+          <span>Name</span>
+          <span class="value" id="summaryName">—</span>
+        </div>
+        <div class="summary-row">
+          <span>Committee</span>
+          <span class="value" id="summaryCommittee">—</span>
+        </div>
+        <div class="summary-row">
+          <span>Email</span>
+          <span class="value" id="summaryEmail">—</span>
+        </div>
+        <div class="amount-highlight">GHS 6.00</div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Mobile Money Number <span style="color:var(--rose)">*</span></label>
+        <input type="tel" id="phone" placeholder="e.g. 0551234567" autocomplete="tel" required />
+        <span class="hint">Enter the MoMo number you'll use to pay. You'll receive a prompt to approve the GHS 6 charge.</span>
+      </div>
+
+      <p class="payment-note">
+        Clicking <strong>Pay GHS 6 via MoMo</strong> will open a secure Paystack window.<br />
+        Confirm the charge on your phone and return here to submit.
+      </p>
+
+      <button class="btn btn-primary" id="payBtn" type="button">
+        💳 &nbsp;Pay GHS 6 via MoMo
+        <div class="spinner" id="paySpinner"></div>
+      </button>
+      <button class="btn btn-secondary" id="backToStep1Btn" type="button">← Back</button>
+    </div>
+
+    <!-- ── Step 3 : Submit ── -->
+    <div class="form-section" id="section3">
+      <div class="paid-badge show" id="paidBadge">
+        ✅ &nbsp;Payment confirmed! You may now submit your form.
+      </div>
+
+      <p style="font-size:0.9rem; color:var(--text-mid); margin-bottom:1.5rem; line-height:1.7;">
+        Your payment of <strong>GHS 6</strong> has been received. Review your details below and click <strong>Submit</strong> to send your certificate order to Francis.
+      </p>
+
+      <div class="payment-summary">
+        <h3>📄 Final Details</h3>
+        <div class="summary-row"><span>Name</span><span class="value" id="finalName">—</span></div>
+        <div class="summary-row"><span>Committee</span><span class="value" id="finalCommittee">—</span></div>
+        <div class="summary-row"><span>Email</span><span class="value" id="finalEmail">—</span></div>
+        <div class="summary-row"><span>Phone</span><span class="value" id="finalPhone">—</span></div>
+        <div class="summary-row"><span>Payment Ref</span><span class="value" id="finalRef" style="font-size:0.8rem;">—</span></div>
+      </div>
+
+      <button class="btn btn-primary" id="submitBtn" type="button">
+        💌 &nbsp;Submit Certificate Order
+        <div class="spinner" id="submitSpinner"></div>
+      </button>
+    </div>
+
+    <!-- ── Success screen ── -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">🌹</div>
+      <h2>Order Received!</h2>
+      <p>
+        Thank you! Your certificate order has been submitted successfully.<br />
+        Francis will design your personalised <em>Midnight in Love</em> certificate and reach out to you soon.
+      </p>
+      <div class="success-ref" id="successRef"></div>
+    </div>
+
+  </div><!-- /form-card -->
+
+  <footer class="page-footer">
+    Designed by <a href="index.html">Francis Pwavwe</a> &nbsp;·&nbsp; Powered by Paystack &amp; Firebase
+  </footer>
+</div><!-- /page-wrap -->
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp }     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp }
+                               from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
+    authDomain:        "francis-pwavwe.firebaseapp.com",
+    projectId:         "francis-pwavwe",
+    storageBucket:     "francis-pwavwe.firebasestorage.app",
+    messagingSenderId: "658069378543",
+    appId:             "1:658069378543:web:87b1dcb0dd27d3255bd21a"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  /* ── Paystack config ── */
+  const PAYSTACK_KEY = 'pk_live_a81acbe138e6a3ce8087f4b36a1dd8e64580ffe2';
+  const AMOUNT_KOBO  = 600; // GHS 6.00 in pesewas
+
+  /* ── State ── */
+  let paymentRef   = null;
+  let paymentDone  = false;
+
+  /* ── DOM helpers ── */
+  const $  = id => document.getElementById(id);
+  const show = (el, cls = 'active') => el.classList.add(cls);
+  const hide = (el, cls = 'active') => el.classList.remove(cls);
+
+  function showAlert(msg, type = 'error') {
+    const box = $('alertBox');
+    box.textContent = msg;
+    box.className = `alert ${type} show`;
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  function clearAlert() {
+    $('alertBox').className = 'alert';
+  }
+
+  function setStep(n) {
+    [1, 2, 3].forEach(i => {
+      const ind = $(`step${i}-indicator`);
+      const sec = $(`section${i}`);
+      ind.classList.remove('active', 'done');
+      if (sec) hide(sec);
+      if (i < n) ind.classList.add('done');
+      if (i === n) { ind.classList.add('active'); if (sec) show(sec); }
+    });
+    clearAlert();
+  }
+
+  /* ── Step 1 → Step 2 ── */
+  $('toPaymentBtn').addEventListener('click', () => {
+    const name      = $('fullName').value.trim();
+    const committee = $('committee').value;
+    const email     = $('email').value.trim();
+
+    if (!name)      { showAlert('Please enter your full name.'); return; }
+    if (!committee) { showAlert('Please select your committee.'); return; }
+    const emailInput = document.getElementById('email');
+    if (!email || !emailInput.checkValidity()) {
+      showAlert('Please enter a valid email address.'); return;
+    }
+
+    $('summaryName').textContent      = name;
+    $('summaryCommittee').textContent = committee;
+    $('summaryEmail').textContent     = email;
+    setStep(2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  /* ── Step 2 → back ── */
+  $('backToStep1Btn').addEventListener('click', () => setStep(1));
+
+  /* ── Pay button ── */
+  $('payBtn').addEventListener('click', () => {
+    const phone = $('phone').value.trim();
+    if (!phone || phone.length < 9) {
+      showAlert('Please enter a valid mobile money number.'); return;
+    }
+
+    const email = $('email').value.trim();
+    const name  = $('fullName').value.trim();
+
+    $('paySpinner').style.display = 'block';
+    $('payBtn').disabled = true;
+
+    const handler = PaystackPop.setup({
+      key:      PAYSTACK_KEY,
+      email:    email,
+      amount:   AMOUNT_KOBO,
+      currency: 'GHS',
+      ref:      'MIL-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8).toUpperCase(),
+      metadata: {
+        custom_fields: [
+          { display_name: 'Name',      variable_name: 'name',      value: name  },
+          { display_name: 'Committee', variable_name: 'committee', value: $('committee').value },
+          { display_name: 'Phone',     variable_name: 'phone',     value: phone }
+        ]
+      },
+      callback: function(response) {
+        paymentRef  = response.reference;
+        paymentDone = true;
+        $('paySpinner').style.display = 'none';
+        $('payBtn').disabled = false;
+
+        // Populate step 3
+        $('finalName').textContent      = name;
+        $('finalCommittee').textContent = $('committee').value;
+        $('finalEmail').textContent     = email;
+        $('finalPhone').textContent     = phone;
+        $('finalRef').textContent       = paymentRef;
+
+        setStep(3);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+      onClose: function() {
+        $('paySpinner').style.display = 'none';
+        $('payBtn').disabled = false;
+        showAlert('Payment was not completed. Please try again to proceed.', 'error');
+      }
+    });
+
+    handler.openIframe();
+  });
+
+  /* ── Submit form ── */
+  $('submitBtn').addEventListener('click', async () => {
+    if (!paymentDone || !paymentRef) {
+      showAlert('Please complete payment before submitting.'); return;
+    }
+
+    $('submitSpinner').style.display = 'block';
+    $('submitBtn').disabled = true;
+
+    const data = {
+      name:       $('fullName').value.trim(),
+      committee:  $('committee').value,
+      email:      $('email').value.trim(),
+      phone:      $('phone').value.trim(),
+      paymentRef: paymentRef,
+      timestamp:  serverTimestamp()
+    };
+
+    try {
+      await addDoc(collection(db, 'certificateOrders'), data);
+
+      // Show success
+      hide($('formCard').querySelector('.form-section.active'));
+      hide($('step3-indicator').closest('.steps').parentElement.querySelector('.form-section.active'));
+      // Hide all sections, show success
+      [1,2,3].forEach(i => { const s = $(`section${i}`); if(s) s.style.display='none'; });
+      $('paidBadge').style.display = 'none';
+      $('successRef').textContent  = 'Reference: ' + paymentRef;
+      show($('successScreen'));
+
+    } catch(err) {
+      console.error('Firestore error:', err);
+      $('submitSpinner').style.display = 'none';
+      $('submitBtn').disabled = false;
+      showAlert('Could not save your order. Please screenshot this page and contact Francis directly at pwavwef@gmail.com. Your payment reference: ' + paymentRef, 'error');
+    }
+  });
+
+  /* ── Floating hearts animation ── */
+  const container = document.getElementById('heartsContainer');
+  const glyphs = ['♥','❤','💕','💖','💗','🌹','✿'];
+  for (let i = 0; i < 22; i++) {
+    const el = document.createElement('span');
+    el.className = 'heart-float';
+    el.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+    const left = Math.random() * 100;
+    const dur  = 12 + Math.random() * 18;
+    const delay = -(Math.random() * dur);
+    const size  = 0.9 + Math.random() * 1.4;
+    el.style.cssText = `left:${left}%;font-size:${size}rem;animation-duration:${dur}s;animation-delay:${delay}s;`;
+    container.appendChild(el);
+  }
+</script>
+</body>
+</html>
