@@ -463,6 +463,25 @@ a {
     font-weight: 500;
 }
 
+.project-link {
+    display: inline-block;
+    margin-top: 1.25rem;
+    color: var(--royal-blue);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transition-medium);
+}
+
+.project-link:hover {
+    color: var(--light-blue);
+    text-decoration: underline;
+}
+
+.project-card.featured-secondary {
+    border-left-color: var(--light-blue);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), var(--white));
+}
+
 /* ===== SKILLS SECTION ===== */
 .skills {
     padding: var(--spacing-xl) 0;
@@ -1225,6 +1244,29 @@ a {
 .form-group textarea {
     resize: vertical;
     min-height: 120px;
+}
+
+/* ===== SUPPORT SECTION ===== */
+.support {
+    padding: var(--spacing-xl) 0;
+    background: var(--off-white);
+}
+
+.support-embed-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background: var(--white);
+    min-height: 600px;
+}
+
+.support-iframe {
+    width: 100%;
+    height: 700px;
+    border: none;
+    display: block;
 }
 
 /* ===== FOOTER ===== */
