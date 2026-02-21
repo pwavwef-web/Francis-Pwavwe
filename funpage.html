@@ -8,10 +8,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <style>
         /* ===== RESET & VARIABLES ===== */
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
             --primary-blue: #0A2463;
             --royal-blue: #1E3A8A;
@@ -31,930 +33,251 @@
             --font-heading: 'Montserrat', sans-serif;
             --font-body: 'Inter', sans-serif;
         }
-
         html { scroll-behavior: smooth; font-size: 16px; }
-
-        body {
-            font-family: var(--font-body);
-            color: var(--text-dark);
-            background: var(--primary-blue);
-            overflow-x: hidden;
-            line-height: 1.7;
-        }
-
-        /* ===== PARTICLE CANVAS ===== */
-        #particle-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ===== GENERAL LAYOUT ===== */
-        .page-wrap {
-            position: relative;
-            z-index: 1;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        section {
-            padding: 5rem 0;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 3.5rem;
-        }
-
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            font-weight: 800;
-            color: var(--white);
-            margin-bottom: 0.75rem;
-        }
-
-        .section-title span {
-            color: var(--accent-gold);
-        }
-
-        .section-line {
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-gold), var(--light-blue));
-            margin: 0 auto 1rem;
-            border-radius: 2px;
-        }
-
-        .section-subtitle {
-            color: var(--light-gray);
-            font-size: 1.05rem;
-            max-width: 600px;
-            margin: 0 auto;
-        }
+        body { font-family: var(--font-body); color: var(--text-dark); background: var(--primary-blue); overflow-x: hidden; line-height: 1.7; }
+        #particle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .page-wrap { position: relative; z-index: 1; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 5rem 0; }
+        .section-header { text-align: center; margin-bottom: 3.5rem; }
+        .section-title { font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 800; color: var(--white); margin-bottom: 0.75rem; }
+        .section-title span { color: var(--accent-gold); }
+        .section-line { width: 80px; height: 4px; background: linear-gradient(90deg, var(--accent-gold), var(--light-blue)); margin: 0 auto 1rem; border-radius: 2px; }
+        .section-subtitle { color: var(--light-gray); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
 
         /* ===== NAV ===== */
-        .fun-nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            padding: 0.9rem 0;
-            background: rgba(10, 36, 99, 0.92);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
-        }
+        .fun-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0.9rem 0; background: rgba(10,36,99,0.92); backdrop-filter: blur(12px); box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+        .fun-nav .container { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .nav-brand { font-family: var(--font-heading); font-weight: 900; font-size: 1.15rem; color: var(--accent-gold); letter-spacing: 1.5px; text-decoration: none; }
+        .nav-links { display: flex; gap: 1rem; list-style: none; flex-wrap: wrap; align-items: center; }
+        .nav-links a { color: var(--white); text-decoration: none; font-size: 0.88rem; font-weight: 500; padding: 0.3rem 0.6rem; border-radius: 4px; transition: background 0.2s, color 0.2s; }
+        .nav-links a:hover { background: rgba(255,255,255,0.1); color: var(--accent-gold); }
+        .back-home { color: var(--accent-gold) !important; border: 1px solid var(--accent-gold) !important; padding: 0.35rem 0.9rem !important; }
+        .back-home:hover { background: var(--accent-gold) !important; color: var(--primary-blue) !important; }
 
-        .fun-nav .container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
+        /* NAV additions */
+        .nav-level-badge { background: rgba(212,175,55,0.2); border: 1px solid var(--accent-gold); color: var(--accent-gold); font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 12px; cursor: default; }
+        .nav-streak-badge { background: rgba(249,115,22,0.2); border: 1px solid var(--fun-orange); color: var(--fun-orange); font-size: 0.78rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 12px; }
+        .nav-signin-btn { background: transparent; border: 1px solid rgba(255,255,255,0.4); color: var(--white); font-size: 0.82rem; font-weight: 600; padding: 0.3rem 0.8rem; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        .nav-signin-btn:hover { background: rgba(255,255,255,0.12); }
+        .nav-user { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; position: relative; }
+        .nav-user-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent-gold); }
+        .nav-user-name { color: var(--white); font-size: 0.82rem; font-weight: 600; max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .nav-user-dropdown { display: none; position: absolute; top: 100%; right: 0; background: rgba(10,36,99,0.97); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 0.5rem; min-width: 120px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .nav-user:hover .nav-user-dropdown, .nav-user:focus-within .nav-user-dropdown { display: block; }
+        .nav-user-dropdown button { width: 100%; background: none; border: none; color: var(--white); font-size: 0.85rem; padding: 0.4rem 0.6rem; border-radius: 4px; cursor: pointer; text-align: left; }
+        .nav-user-dropdown button:hover { background: rgba(255,255,255,0.1); color: var(--accent-gold); }
 
-        .nav-brand {
-            font-family: var(--font-heading);
-            font-weight: 900;
-            font-size: 1.15rem;
-            color: var(--accent-gold);
-            letter-spacing: 1.5px;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.25rem;
-            list-style: none;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            color: var(--white);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 0.3rem 0.6rem;
-            border-radius: 4px;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .nav-links a:hover {
-            background: rgba(255,255,255,0.1);
-            color: var(--accent-gold);
-        }
-
-        .back-home {
-            color: var(--accent-gold) !important;
-            border: 1px solid var(--accent-gold) !important;
-            padding: 0.35rem 0.9rem !important;
-        }
-
-        .back-home:hover {
-            background: var(--accent-gold) !important;
-            color: var(--primary-blue) !important;
-        }
+        /* XP Toast */
+        .xp-toast { position: fixed; font-family: var(--font-heading); font-weight: 900; font-size: 1.1rem; color: var(--accent-gold); text-shadow: 0 2px 8px rgba(0,0,0,0.5); pointer-events: none; z-index: 99999; animation: xp-float 1.5s ease-out forwards; }
+        @keyframes xp-float { 0% { opacity:1; transform: translateY(0) scale(1); } 100% { opacity:0; transform: translateY(-80px) scale(1.3); } }
 
         /* ===== HERO ===== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding-top: 80px;
-            position: relative;
-        }
-
-        .hero-inner {
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-badge {
-            display: inline-block;
-            background: rgba(212, 175, 55, 0.15);
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            padding: 0.4rem 1.2rem;
-            border-radius: 20px;
-            margin-bottom: 1.5rem;
-            animation: pulse-badge 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse-badge {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(212,175,55,0); }
-        }
-
-        .hero-title {
-            font-family: var(--font-heading);
-            font-size: clamp(2.8rem, 7vw, 5.5rem);
-            font-weight: 900;
-            color: var(--white);
-            line-height: 1.05;
-            margin-bottom: 1.5rem;
-        }
-
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 80px; position: relative; }
+        .hero-inner { position: relative; z-index: 2; }
+        .hero-badge { display: inline-block; background: rgba(212,175,55,0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold); font-size: 0.85rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 0.4rem 1.2rem; border-radius: 20px; margin-bottom: 1.5rem; animation: pulse-badge 2s ease-in-out infinite; }
+        @keyframes pulse-badge { 0%,100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); } 50% { box-shadow: 0 0 0 10px rgba(212,175,55,0); } }
+        .hero-title { font-family: var(--font-heading); font-size: clamp(2.8rem,7vw,5.5rem); font-weight: 900; color: var(--white); line-height: 1.05; margin-bottom: 1.5rem; }
         .hero-title .gold { color: var(--accent-gold); }
-
-        .typewriter-wrap {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            color: var(--light-gray);
-            margin-bottom: 2.5rem;
-            min-height: 2.2em;
-        }
-
-        .typewriter {
-            border-right: 3px solid var(--accent-gold);
-            white-space: nowrap;
-            overflow: hidden;
-            display: inline-block;
-            animation: blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: var(--accent-gold); }
-        }
-
-        .hero-emoji-row {
-            font-size: 2.5rem;
-            margin-bottom: 2.5rem;
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .hero-emoji-row span {
-            animation: bounce-emoji 1.4s ease-in-out infinite;
-            display: inline-block;
-        }
-        .hero-emoji-row span:nth-child(1) { animation-delay: 0s; }
-        .hero-emoji-row span:nth-child(2) { animation-delay: 0.15s; }
-        .hero-emoji-row span:nth-child(3) { animation-delay: 0.30s; }
-        .hero-emoji-row span:nth-child(4) { animation-delay: 0.45s; }
-        .hero-emoji-row span:nth-child(5) { animation-delay: 0.60s; }
-        .hero-emoji-row span:nth-child(6) { animation-delay: 0.75s; }
-
-        @keyframes bounce-emoji {
-            0%, 100% { transform: translateY(0) scale(1); }
-            40% { transform: translateY(-14px) scale(1.1); }
-            60% { transform: translateY(-6px) scale(1.05); }
-        }
-
-        .hero-cta-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.9rem 2.2rem;
-            border-radius: 6px;
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-            text-decoration: none;
-        }
-
+        .typewriter-wrap { font-size: clamp(1.1rem,2.5vw,1.5rem); color: var(--light-gray); margin-bottom: 2.5rem; min-height: 2.2em; }
+        .typewriter { border-right: 3px solid var(--accent-gold); white-space: nowrap; overflow: hidden; display: inline-block; animation: blink-caret 0.75s step-end infinite; }
+        @keyframes blink-caret { from,to { border-color:transparent; } 50% { border-color:var(--accent-gold); } }
+        .hero-emoji-row { font-size: 2.5rem; margin-bottom: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .hero-emoji-row span { animation: bounce-emoji 1.4s ease-in-out infinite; display: inline-block; }
+        .hero-emoji-row span:nth-child(1) { animation-delay:0s; }
+        .hero-emoji-row span:nth-child(2) { animation-delay:0.15s; }
+        .hero-emoji-row span:nth-child(3) { animation-delay:0.30s; }
+        .hero-emoji-row span:nth-child(4) { animation-delay:0.45s; }
+        .hero-emoji-row span:nth-child(5) { animation-delay:0.60s; }
+        .hero-emoji-row span:nth-child(6) { animation-delay:0.75s; }
+        @keyframes bounce-emoji { 0%,100% { transform:translateY(0) scale(1); } 40% { transform:translateY(-14px) scale(1.1); } 60% { transform:translateY(-6px) scale(1.05); } }
+        .hero-cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn { display: inline-block; padding: 0.9rem 2.2rem; border-radius: 6px; font-family: var(--font-heading); font-weight: 700; font-size: 1rem; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; text-decoration: none; }
         .btn:hover { transform: translateY(-3px); }
-
-        .btn-gold {
-            background: var(--accent-gold);
-            color: var(--primary-blue);
-        }
+        .btn-gold { background: var(--accent-gold); color: var(--primary-blue); }
         .btn-gold:hover { box-shadow: 0 10px 25px rgba(212,175,55,0.4); }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--white);
-            border-color: var(--white);
-        }
-        .btn-outline:hover {
-            background: var(--white);
-            color: var(--primary-blue);
-            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
-        }
-
-        .btn-blue {
-            background: var(--light-blue);
-            color: var(--white);
-        }
+        .btn-outline { background: transparent; color: var(--white); border-color: var(--white); }
+        .btn-outline:hover { background: var(--white); color: var(--primary-blue); box-shadow: 0 10px 25px rgba(255,255,255,0.2); }
+        .btn-blue { background: var(--light-blue); color: var(--white); }
         .btn-blue:hover { box-shadow: 0 10px 25px rgba(59,130,246,0.4); }
+        .btn-sm { padding: 0.55rem 1.2rem; font-size: 0.88rem; }
+        .btn-purple { background: var(--fun-purple); color: var(--white); }
+        .btn-purple:hover { box-shadow: 0 10px 25px rgba(124,58,237,0.4); }
 
         /* ===== STATS BAR ===== */
-        .stats-bar {
-            background: rgba(255,255,255,0.06);
-            backdrop-filter: blur(8px);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 2rem 0;
-        }
+        .stats-bar { background: rgba(255,255,255,0.06); backdrop-filter: blur(8px); border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 2rem 0; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 2rem; text-align: center; }
+        .stat-number { font-family: var(--font-heading); font-size: clamp(2rem,4vw,3rem); font-weight: 900; color: var(--accent-gold); line-height: 1; margin-bottom: 0.35rem; }
+        .stat-label { color: var(--light-gray); font-size: 0.88rem; font-weight: 500; }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 2rem;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-family: var(--font-heading);
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 900;
-            color: var(--accent-gold);
-            line-height: 1;
-            margin-bottom: 0.35rem;
-        }
-
-        .stat-label {
-            color: var(--light-gray);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        /* ===== TRIVIA SECTION ===== */
-        .trivia-section {
-            background: rgba(255,255,255,0.04);
-        }
-
-        .quiz-card {
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.12);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 2.5rem;
-            max-width: 750px;
-            margin: 0 auto;
-        }
-
-        .quiz-progress-bar {
-            height: 6px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 3px;
-            margin-bottom: 1.75rem;
-            overflow: hidden;
-        }
-
-        .quiz-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--light-blue), var(--accent-gold));
-            border-radius: 3px;
-            transition: width 0.5s ease;
-        }
-
-        .quiz-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .quiz-counter {
-            color: var(--light-gray);
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .quiz-score-display {
-            background: rgba(212,175,55,0.15);
-            border: 1px solid rgba(212,175,55,0.4);
-            color: var(--accent-gold);
-            font-weight: 700;
-            font-size: 0.9rem;
-            padding: 0.3rem 0.9rem;
-            border-radius: 20px;
-        }
-
-        .quiz-question {
-            font-family: var(--font-heading);
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 2rem;
-            line-height: 1.4;
-        }
-
-        .quiz-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        @media (max-width: 550px) {
-            .quiz-options { grid-template-columns: 1fr; }
-        }
-
-        .quiz-option {
-            background: rgba(255,255,255,0.08);
-            border: 2px solid rgba(255,255,255,0.15);
-            color: var(--white);
-            padding: 1rem 1.25rem;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-align: left;
-            transition: background 0.2s, border-color 0.2s, transform 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .quiz-option .opt-letter {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.12);
-            font-weight: 700;
-            font-size: 0.85rem;
-            flex-shrink: 0;
-        }
-
-        .quiz-option:hover:not(:disabled) {
-            background: rgba(59,130,246,0.2);
-            border-color: var(--light-blue);
-            transform: translateY(-2px);
-        }
-
-        .quiz-option.correct {
-            background: rgba(16,185,129,0.25);
-            border-color: var(--fun-green);
-            animation: pulse-correct 0.4s ease;
-        }
-
-        .quiz-option.correct .opt-letter {
-            background: var(--fun-green);
-        }
-
-        .quiz-option.wrong {
-            background: rgba(239,68,68,0.2);
-            border-color: #EF4444;
-        }
-
-        @keyframes pulse-correct {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.04); }
-            100% { transform: scale(1); }
-        }
-
+        /* ===== TRIVIA ===== */
+        .trivia-section { background: rgba(255,255,255,0.04); }
+        .quiz-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(10px); border-radius: 16px; padding: 2.5rem; max-width: 750px; margin: 0 auto; }
+        .quiz-progress-bar { height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; margin-bottom: 1.75rem; overflow: hidden; }
+        .quiz-progress-fill { height: 100%; background: linear-gradient(90deg,var(--light-blue),var(--accent-gold)); border-radius: 3px; transition: width 0.5s ease; }
+        .quiz-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.5rem; }
+        .quiz-counter { color: var(--light-gray); font-size: 0.9rem; font-weight: 600; }
+        .quiz-score-display { background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4); color: var(--accent-gold); font-weight: 700; font-size: 0.9rem; padding: 0.3rem 0.9rem; border-radius: 20px; }
+        .quiz-question { font-family: var(--font-heading); font-size: clamp(1.1rem,2.5vw,1.4rem); font-weight: 700; color: var(--white); margin-bottom: 2rem; line-height: 1.4; }
+        .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+        @media(max-width:550px){ .quiz-options { grid-template-columns: 1fr; } }
+        .quiz-option { background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.15); color: var(--white); padding: 1rem 1.25rem; border-radius: 10px; cursor: pointer; font-size: 0.95rem; font-weight: 500; text-align: left; transition: background 0.2s, border-color 0.2s, transform 0.15s; display: flex; align-items: center; gap: 0.75rem; }
+        .quiz-option .opt-letter { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.12); font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+        .quiz-option:hover:not(:disabled) { background: rgba(59,130,246,0.2); border-color: var(--light-blue); transform: translateY(-2px); }
+        .quiz-option.correct { background: rgba(16,185,129,0.25); border-color: var(--fun-green); animation: pulse-correct 0.4s ease; }
+        .quiz-option.correct .opt-letter { background: var(--fun-green); }
+        .quiz-option.wrong { background: rgba(239,68,68,0.2); border-color: #EF4444; }
+        @keyframes pulse-correct { 0% { transform:scale(1); } 50% { transform:scale(1.04); } 100% { transform:scale(1); } }
         .quiz-option:disabled { cursor: not-allowed; }
-
-        .quiz-feedback {
-            min-height: 2.5rem;
-            color: var(--light-gray);
-            font-size: 0.95rem;
-            text-align: center;
-            margin-bottom: 1rem;
-            font-style: italic;
-        }
-
+        .quiz-feedback { min-height: 2.5rem; color: var(--light-gray); font-size: 0.95rem; text-align: center; margin-bottom: 1rem; font-style: italic; }
         .quiz-feedback.good { color: var(--fun-green); }
         .quiz-feedback.bad { color: #EF4444; }
+        .quiz-next-btn { display: block; width: 100%; padding: 1rem; background: linear-gradient(135deg,var(--royal-blue),var(--light-blue)); color: var(--white); border: none; border-radius: 10px; font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+        .quiz-next-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(59,130,246,0.35); }
+        .quiz-result { text-align: center; display: none; }
+        .result-emoji { font-size: 5rem; margin-bottom: 1rem; animation: result-pop 0.6s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
+        @keyframes result-pop { 0% { transform:scale(0); opacity:0; } 80% { transform:scale(1.1); opacity:1; } 100% { transform:scale(1); opacity:1; } }
+        .result-title { font-family: var(--font-heading); font-size: clamp(1.5rem,3.5vw,2.2rem); font-weight: 900; color: var(--white); margin-bottom: 0.75rem; }
+        .result-score { font-size: 3.5rem; font-weight: 900; color: var(--accent-gold); margin-bottom: 0.5rem; font-family: var(--font-heading); }
+        .result-msg { color: var(--light-gray); margin-bottom: 2rem; font-size: 1.05rem; }
+        .result-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
-        .quiz-next-btn {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--royal-blue), var(--light-blue));
-            color: var(--white);
-            border: none;
-            border-radius: 10px;
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1.05rem;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+        /* Difficulty badge */
+        .difficulty-badge { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.82rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .difficulty-badge.easy { background: rgba(16,185,129,0.15); border: 1px solid var(--fun-green); color: var(--fun-green); }
+        .difficulty-badge.medium { background: rgba(212,175,55,0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold); }
+        .difficulty-badge.hard { background: rgba(239,68,68,0.15); border: 1px solid #EF4444; color: #EF4444; }
 
-        .quiz-next-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(59,130,246,0.35);
-        }
-
-        /* Quiz Result */
-        .quiz-result {
-            text-align: center;
-            display: none;
-        }
-
-        .result-emoji {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            animation: result-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes result-pop {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .result-title {
-            font-family: var(--font-heading);
-            font-size: clamp(1.5rem, 3.5vw, 2.2rem);
-            font-weight: 900;
-            color: var(--white);
-            margin-bottom: 0.75rem;
-        }
-
-        .result-score {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--accent-gold);
-            margin-bottom: 0.5rem;
-            font-family: var(--font-heading);
-        }
-
-        .result-msg {
-            color: var(--light-gray);
-            margin-bottom: 2rem;
-            font-size: 1.05rem;
-        }
-
-        .result-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+        /* AI mode panel */
+        .ai-mode-panel { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.3); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
+        .ai-mode-toggle { display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 0.75rem; }
+        .ai-mode-label { color: var(--white); font-weight: 600; font-size: 0.95rem; }
+        .ai-mode-label span { color: var(--fun-purple); }
+        .ai-toggle-switch { width: 42px; height: 22px; background: rgba(255,255,255,0.15); border-radius: 11px; position: relative; transition: background 0.2s; flex-shrink: 0; }
+        .ai-toggle-switch.on { background: var(--fun-purple); }
+        .ai-toggle-switch::after { content:''; position:absolute; top:3px; left:3px; width:16px; height:16px; border-radius:50%; background:white; transition:transform 0.2s; }
+        .ai-toggle-switch.on::after { transform: translateX(20px); }
+        .ai-key-input-row { margin-top: 1rem; display: none; gap: 0.5rem; flex-wrap: wrap; }
+        .ai-key-input-row.visible { display: flex; }
+        .ai-key-input { flex:1; min-width:200px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:6px; color:var(--white); padding:0.5rem 0.75rem; font-size:0.9rem; }
+        .ai-key-input::placeholder { color:rgba(255,255,255,0.4); }
+        .ai-key-save-btn { background:var(--fun-purple); color:white; border:none; border-radius:6px; padding:0.5rem 1rem; font-weight:700; cursor:pointer; }
+        .ai-status-text { color:rgba(255,255,255,0.55); font-size:0.82rem; margin-top:0.5rem; }
+        .ai-status-text a { color:var(--fun-purple); }
 
         /* ===== MEMORY GAME ===== */
-        .memory-section {
-            background: rgba(0,0,0,0.15);
-        }
-
-        .memory-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 2.5rem;
-        }
-
-        .memory-stat {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: var(--white);
-            padding: 0.5rem 1.2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .memory-stat span {
-            color: var(--accent-gold);
-        }
-
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-
-        @media (max-width: 550px) {
-            .memory-grid { grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
-        }
-
-        .mem-card {
-            aspect-ratio: 1;
-            cursor: pointer;
-            perspective: 600px;
-            border-radius: 10px;
-        }
-
-        .mem-card-inner {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 10px;
-        }
-
-        .mem-card.flipped .mem-card-inner,
-        .mem-card.matched .mem-card-inner {
-            transform: rotateY(180deg);
-        }
-
-        .mem-card-face {
-            position: absolute;
-            inset: 0;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
-        }
-
-        .mem-back {
-            background: linear-gradient(135deg, var(--royal-blue), #1a3f7a);
-            border: 2px solid rgba(255,255,255,0.15);
-        }
-
-        .mem-back::after {
-            content: '?';
-            font-family: var(--font-heading);
-            font-size: clamp(1.4rem, 4vw, 2.2rem);
-            font-weight: 900;
-            color: rgba(255,255,255,0.35);
-        }
-
-        .mem-front {
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.2);
-            transform: rotateY(180deg);
-        }
-
-        .mem-card.matched .mem-front {
-            background: rgba(16,185,129,0.25);
-            border-color: var(--fun-green);
-            box-shadow: 0 0 18px rgba(16,185,129,0.4);
-        }
+        .memory-section { background: rgba(0,0,0,0.15); }
+        .memory-controls { display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+        .memory-stat { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--white); padding: 0.5rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; }
+        .memory-stat span { color: var(--accent-gold); }
+        .memory-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; max-width: 700px; margin: 0 auto 2rem; }
+        .memory-grid-20 { grid-template-columns: repeat(5,1fr) !important; max-width: 820px !important; }
+        .memory-grid-24 { grid-template-columns: repeat(6,1fr) !important; max-width: 900px !important; }
+        @media(max-width:550px){ .memory-grid { grid-template-columns: repeat(4,1fr); gap:0.6rem; } }
+        .mem-card { aspect-ratio:1; cursor:pointer; perspective:600px; border-radius:10px; }
+        .mem-card-inner { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform 0.45s cubic-bezier(0.4,0,0.2,1); border-radius:10px; }
+        .mem-card.flipped .mem-card-inner, .mem-card.matched .mem-card-inner { transform:rotateY(180deg); }
+        .mem-card-face { position:absolute; inset:0; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:clamp(1.5rem,5vw,2.5rem); backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+        .mem-back { background:linear-gradient(135deg,var(--royal-blue),#1a3f7a); border:2px solid rgba(255,255,255,0.15); }
+        .mem-back::after { content:'?'; font-family:var(--font-heading); font-size:clamp(1.4rem,4vw,2.2rem); font-weight:900; color:rgba(255,255,255,0.35); }
+        .mem-front { background:rgba(255,255,255,0.1); border:2px solid rgba(255,255,255,0.2); transform:rotateY(180deg); }
+        .mem-card.matched .mem-front { background:rgba(16,185,129,0.25); border-color:var(--fun-green); box-shadow:0 0 18px rgba(16,185,129,0.4); }
 
         /* ===== SPIN THE GLOBE ===== */
-        .spin-section {
-            background: rgba(255,255,255,0.04);
-        }
-
-        .globe-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2.5rem;
-        }
-
-        .wheel-container {
-            position: relative;
-            width: min(380px, 90vw);
-            height: min(380px, 90vw);
-        }
-
-        #globe-wheel {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 0 30px rgba(59,130,246,0.4));
-        }
-
-        .wheel-pointer {
-            position: absolute;
-            top: 50%;
-            right: -14px;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-top: 18px solid transparent;
-            border-bottom: 18px solid transparent;
-            border-right: 30px solid var(--accent-gold);
-            filter: drop-shadow(0 0 6px rgba(212,175,55,0.6));
-        }
-
-        .spin-result-card {
-            background: rgba(255,255,255,0.08);
-            border: 2px solid var(--accent-gold);
-            border-radius: 16px;
-            padding: 2rem 2.5rem;
-            text-align: center;
-            max-width: 450px;
-            width: 100%;
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            transition: all 0.4s ease;
-        }
-
-        .spin-result-emoji {
-            font-size: 3.5rem;
-            line-height: 1;
-        }
-
-        .spin-result-name {
-            font-family: var(--font-heading);
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: var(--accent-gold);
-        }
-
-        .spin-result-desc {
-            color: var(--light-gray);
-            font-size: 0.95rem;
-        }
-
-        .spin-result-fact {
-            background: rgba(255,255,255,0.06);
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            color: var(--light-gray);
-            font-size: 0.9rem;
-            font-style: italic;
-            margin-top: 0.5rem;
-        }
+        .spin-section { background: rgba(255,255,255,0.04); }
+        .globe-wrapper { display:flex; flex-direction:column; align-items:center; gap:2.5rem; }
+        .wheel-container { position:relative; width:min(380px,90vw); height:min(380px,90vw); }
+        #globe-wheel { width:100%; height:100%; filter:drop-shadow(0 0 30px rgba(59,130,246,0.4)); }
+        .wheel-pointer { position:absolute; top:50%; right:-14px; transform:translateY(-50%); width:0; height:0; border-top:18px solid transparent; border-bottom:18px solid transparent; border-right:30px solid var(--accent-gold); filter:drop-shadow(0 0 6px rgba(212,175,55,0.6)); }
+        .spin-result-card { background:rgba(255,255,255,0.08); border:2px solid var(--accent-gold); border-radius:16px; padding:2rem 2.5rem; text-align:center; max-width:450px; width:100%; min-height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.5rem; transition:all 0.4s ease; }
+        .spin-result-emoji { font-size:3.5rem; line-height:1; }
+        .spin-result-name { font-family:var(--font-heading); font-size:1.6rem; font-weight:900; color:var(--accent-gold); }
+        .spin-result-desc { color:var(--light-gray); font-size:0.95rem; }
+        .spin-result-fact { background:rgba(255,255,255,0.06); border-radius:8px; padding:0.75rem 1rem; color:var(--light-gray); font-size:0.9rem; font-style:italic; margin-top:0.5rem; }
 
         /* ===== ACHIEVEMENTS ===== */
-        .achievements-section {
-            background: rgba(0,0,0,0.15);
-        }
+        .achievements-section { background: rgba(0,0,0,0.15); }
+        .badges-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1.5rem; max-width:1000px; margin:0 auto; }
+        .badge-card { background:rgba(255,255,255,0.06); border:2px solid rgba(255,255,255,0.1); border-radius:14px; padding:1.75rem 1.25rem; text-align:center; transition:transform 0.3s, box-shadow 0.3s, border-color 0.3s; position:relative; overflow:hidden; }
+        .badge-card.locked { opacity:0.45; filter:grayscale(0.8); }
+        .badge-card.unlocked { border-color:var(--accent-gold); animation:badge-unlock 0.6s cubic-bezier(0.175,0.885,0.32,1.275) forwards; }
+        @keyframes badge-unlock { 0% { transform:scale(0.8); opacity:0; } 60% { transform:scale(1.08); } 100% { transform:scale(1); opacity:1; } }
+        .badge-card.unlocked:hover { transform:translateY(-6px) scale(1.03); box-shadow:0 15px 30px rgba(212,175,55,0.25); }
+        .badge-icon { font-size:3rem; margin-bottom:0.75rem; display:block; }
+        .badge-name { font-family:var(--font-heading); font-weight:700; font-size:0.95rem; color:var(--white); margin-bottom:0.4rem; }
+        .badge-desc { color:var(--medium-gray); font-size:0.8rem; }
+        .badge-unlocked-label { position:absolute; top:0.6rem; right:0.6rem; background:var(--accent-gold); color:var(--primary-blue); font-size:0.7rem; font-weight:700; padding:0.2rem 0.5rem; border-radius:10px; }
 
-        .badges-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-            max-width: 900px;
-            margin: 0 auto;
-        }
+        /* ===== QUOTES ===== */
+        .quotes-section { background: linear-gradient(135deg,var(--primary-blue),#122d72); }
+        .quote-carousel { max-width:750px; margin:0 auto; text-align:center; position:relative; min-height:220px; display:flex; align-items:center; justify-content:center; }
+        .quote-slide { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; transition:opacity 0.6s ease, transform 0.6s ease; transform:translateX(60px); }
+        .quote-slide.active { opacity:1; transform:translateX(0); position:relative; }
+        .quote-text { font-family:var(--font-heading); font-size:clamp(1.1rem,2.5vw,1.45rem); font-weight:600; color:var(--white); line-height:1.55; margin-bottom:1.25rem; }
+        .quote-text::before { content:'C'; color:var(--accent-gold); font-size:2em; line-height:0.3; vertical-align:-0.5em; margin-right:0.1em; }
+        .quote-text::after { content:'D'; color:var(--accent-gold); font-size:2em; line-height:0.3; vertical-align:-0.5em; margin-left:0.1em; }
+        .quote-author { color:var(--accent-gold); font-weight:700; font-size:0.95rem; }
+        .quote-dots { display:flex; gap:0.6rem; justify-content:center; margin-top:2rem; }
+        .quote-dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.3); border:none; cursor:pointer; transition:background 0.3s, transform 0.3s; }
+        .quote-dot.active { background:var(--accent-gold); transform:scale(1.3); }
+        .quote-live-badge { display:inline-block; background:rgba(16,185,129,0.15); border:1px solid var(--fun-green); color:var(--fun-green); font-size:0.75rem; font-weight:700; padding:0.15rem 0.6rem; border-radius:10px; margin-left:0.5rem; vertical-align:middle; }
 
-        .badge-card {
-            background: rgba(255,255,255,0.06);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 14px;
-            padding: 1.75rem 1.25rem;
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
+        /* ===== WORD SCRAMBLE ===== */
+        .wordscramble-section { background: rgba(255,255,255,0.04); }
+        .scramble-card { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(10px); border-radius:16px; padding:2.5rem; max-width:650px; margin:0 auto; text-align:center; }
+        .scramble-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; flex-wrap:wrap; gap:0.5rem; }
+        .scramble-timer-bar { height:6px; background:rgba(255,255,255,0.15); border-radius:3px; margin-bottom:1.5rem; overflow:hidden; }
+        .scramble-timer-fill { height:100%; background:linear-gradient(90deg,var(--fun-green),var(--accent-gold)); border-radius:3px; transition:width 0.5s linear, background 0.5s; }
+        .scramble-timer-fill.danger { background:linear-gradient(90deg,#EF4444,#ff6b6b); }
+        .scramble-letters { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-bottom:1.75rem; }
+        .scramble-tile { display:inline-flex; align-items:center; justify-content:center; width:48px; height:52px; background:var(--accent-gold); color:var(--primary-blue); font-family:var(--font-heading); font-weight:900; font-size:1.5rem; border-radius:8px; box-shadow:0 3px 8px rgba(0,0,0,0.25); text-transform:uppercase; }
+        .scramble-input { width:100%; background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.2); border-radius:10px; color:var(--white); padding:0.9rem 1.25rem; font-size:1.1rem; font-family:var(--font-heading); font-weight:700; text-align:center; text-transform:uppercase; letter-spacing:3px; margin-bottom:1.25rem; transition:border-color 0.2s; }
+        .scramble-input:focus { outline:none; border-color:var(--accent-gold); }
+        .scramble-input.correct { border-color:var(--fun-green); background:rgba(16,185,129,0.15); }
+        .scramble-input.wrong { border-color:#EF4444; background:rgba(239,68,68,0.12); }
+        .scramble-actions { display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap; margin-bottom:1rem; }
+        .scramble-hint-text { color:rgba(255,255,255,0.55); font-style:italic; font-size:0.9rem; min-height:1.4em; margin-bottom:0.5rem; }
 
-        .badge-card.locked {
-            opacity: 0.45;
-            filter: grayscale(0.8);
-        }
-
-        .badge-card.unlocked {
-            border-color: var(--accent-gold);
-            animation: badge-unlock 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        @keyframes badge-unlock {
-            0% { transform: scale(0.8); opacity: 0; }
-            60% { transform: scale(1.08); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .badge-card.unlocked:hover {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 15px 30px rgba(212,175,55,0.25);
-        }
-
-        .badge-icon {
-            font-size: 3rem;
-            margin-bottom: 0.75rem;
-            display: block;
-        }
-
-        .badge-name {
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1rem;
-            color: var(--white);
-            margin-bottom: 0.4rem;
-        }
-
-        .badge-desc {
-            color: var(--medium-gray);
-            font-size: 0.82rem;
-        }
-
-        .badge-unlocked-label {
-            position: absolute;
-            top: 0.6rem;
-            right: 0.6rem;
-            background: var(--accent-gold);
-            color: var(--primary-blue);
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 0.2rem 0.5rem;
-            border-radius: 10px;
-        }
-
-        /* ===== QUOTE CAROUSEL ===== */
-        .quotes-section {
-            background: linear-gradient(135deg, var(--primary-blue), #122d72);
-        }
-
-        .quote-carousel {
-            max-width: 750px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            min-height: 220px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quote-slide {
-            position: absolute;
-            inset: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            transform: translateX(60px);
-        }
-
-        .quote-slide.active {
-            opacity: 1;
-            transform: translateX(0);
-            position: relative;
-        }
-
-        .quote-text {
-            font-family: var(--font-heading);
-            font-size: clamp(1.1rem, 2.5vw, 1.45rem);
-            font-weight: 600;
-            color: var(--white);
-            line-height: 1.55;
-            margin-bottom: 1.25rem;
-        }
-
-        .quote-text::before { content: '\201C'; color: var(--accent-gold); font-size: 2em; line-height: 0.3; vertical-align: -0.5em; margin-right: 0.1em; }
-        .quote-text::after { content: '\201D'; color: var(--accent-gold); font-size: 2em; line-height: 0.3; vertical-align: -0.5em; margin-left: 0.1em; }
-
-        .quote-author {
-            color: var(--accent-gold);
-            font-weight: 700;
-            font-size: 0.95rem;
-        }
-
-        .quote-dots {
-            display: flex;
-            gap: 0.6rem;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-
-        .quote-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.3s;
-        }
-
-        .quote-dot.active {
-            background: var(--accent-gold);
-            transform: scale(1.3);
-        }
+        /* ===== FLAG GUESSER ===== */
+        .flag-section { background: rgba(0,0,0,0.15); }
+        .flag-card { background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(10px); border-radius:16px; padding:2.5rem; max-width:600px; margin:0 auto; text-align:center; }
+        .flag-display { font-size:6rem; line-height:1; margin-bottom:1rem; filter:drop-shadow(0 4px 12px rgba(0,0,0,0.3)); animation:flag-pulse 2s ease-in-out infinite; }
+        @keyframes flag-pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.05); } }
+        .flag-options { display:grid; grid-template-columns:1fr 1fr; gap:0.9rem; margin:1.5rem 0; }
+        .flag-option { background:rgba(255,255,255,0.08); border:2px solid rgba(255,255,255,0.15); color:var(--white); padding:0.9rem 1rem; border-radius:10px; cursor:pointer; font-size:0.95rem; font-weight:600; transition:background 0.2s, border-color 0.15s, transform 0.15s; }
+        .flag-option:hover:not(:disabled) { background:rgba(59,130,246,0.2); border-color:var(--light-blue); transform:translateY(-2px); }
+        .flag-option.correct { background:rgba(16,185,129,0.25); border-color:var(--fun-green); }
+        .flag-option.wrong { background:rgba(239,68,68,0.2); border-color:#EF4444; }
+        .flag-option:disabled { cursor:not-allowed; }
+        .flag-timer-bar { height:4px; background:rgba(255,255,255,0.12); border-radius:2px; margin-bottom:1.25rem; overflow:hidden; }
+        .flag-timer-fill { height:100%; background:var(--light-blue); border-radius:2px; transition:width 0.1s linear; }
+        .flag-hint-text { color:rgba(255,255,255,0.5); font-style:italic; font-size:0.88rem; margin-bottom:0.75rem; min-height:1.3em; }
+        .flag-meta { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem; }
 
         /* ===== FOOTER ===== */
-        .fun-footer {
-            background: rgba(0,0,0,0.3);
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding: 2rem 0;
-            text-align: center;
-        }
-
-        .fun-footer p {
-            color: var(--medium-gray);
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .fun-footer a {
-            color: var(--accent-gold);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .fun-footer a:hover { text-decoration: underline; }
+        .fun-footer { background:rgba(0,0,0,0.3); border-top:1px solid rgba(255,255,255,0.1); padding:2rem 0; text-align:center; }
+        .fun-footer p { color:var(--medium-gray); font-size:0.9rem; margin-bottom:0.5rem; }
+        .fun-footer a { color:var(--accent-gold); text-decoration:none; font-weight:600; }
+        .fun-footer a:hover { text-decoration:underline; }
 
         /* ===== CONFETTI CANVAS ===== */
-        #confetti-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-        }
+        #confetti-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
 
         /* ===== TOAST ===== */
-        .toast-container {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            align-items: flex-end;
-        }
-
-        .toast {
-            background: rgba(10, 36, 99, 0.95);
-            border: 1px solid var(--accent-gold);
-            color: var(--white);
-            padding: 0.9rem 1.4rem;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            max-width: 300px;
-            animation: toast-in 0.4s ease forwards;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        @keyframes toast-in {
-            from { opacity: 0; transform: translateX(50px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes toast-out {
-            from { opacity: 1; transform: translateX(0); }
-            to { opacity: 0; transform: translateX(50px); }
-        }
-
-        .toast .toast-icon { margin-right: 0.4rem; }
+        .toast-container { position:fixed; bottom:2rem; right:2rem; z-index:10000; display:flex; flex-direction:column; gap:0.75rem; align-items:flex-end; }
+        .toast { background:rgba(10,36,99,0.95); border:1px solid var(--accent-gold); color:var(--white); padding:0.9rem 1.4rem; border-radius:10px; font-size:0.95rem; font-weight:500; max-width:300px; animation:toast-in 0.4s ease forwards; backdrop-filter:blur(10px); box-shadow:0 8px 25px rgba(0,0,0,0.3); }
+        @keyframes toast-in { from { opacity:0; transform:translateX(50px); } to { opacity:1; transform:translateX(0); } }
+        @keyframes toast-out { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(50px); } }
+        .toast .toast-icon { margin-right:0.4rem; }
 
         /* ===== SCROLL FADE ===== */
-        .reveal {
-            opacity: 0;
-            transform: translateY(35px);
-            transition: opacity 0.65s ease, transform 0.65s ease;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal { opacity:0; transform:translateY(35px); transition:opacity 0.65s ease, transform 0.65s ease; }
+        .reveal.visible { opacity:1; transform:translateY(0); }
     </style>
 </head>
 <body>
     <canvas id="particle-canvas"></canvas>
     <canvas id="confetti-canvas"></canvas>
-
     <div class="toast-container" id="toastContainer"></div>
 
     <div class="page-wrap">
@@ -962,13 +285,26 @@
         <!-- NAV -->
         <nav class="fun-nav">
             <div class="container">
-                <a href="index.html" class="nav-brand">🌍 FRANCIS PWAVWE</a>
+                <a href="index.html" class="nav-brand">&#127757; FRANCIS PWAVWE</a>
                 <ul class="nav-links">
                     <li><a href="#trivia">Trivia</a></li>
                     <li><a href="#memory">Memory</a></li>
                     <li><a href="#spin">Globe Spin</a></li>
+                    <li><a href="#wordscramble">Scramble</a></li>
+                    <li><a href="#flagguesser">Flags</a></li>
                     <li><a href="#achievements">Badges</a></li>
-                    <li><a href="index.html" class="back-home">← Portfolio</a></li>
+                    <li><span class="nav-level-badge" id="navLevelBadge">Lv.1 | 0 XP</span></li>
+                    <li><span class="nav-streak-badge" id="navStreakBadge" style="display:none">&#128293; 1</span></li>
+                    <li><button class="nav-signin-btn" id="signInBtn">&#128273; Sign In</button>
+                        <div class="nav-user" id="navUser" style="display:none">
+                            <img class="nav-user-avatar" id="navAvatar" src="" alt="avatar">
+                            <span class="nav-user-name" id="navUserName">Player</span>
+                            <div class="nav-user-dropdown">
+                                <button id="signOutBtn">Sign Out</button>
+                            </div>
+                        </div>
+                    </li>
+                    <li><a href="index.html" class="back-home">&#8592; Portfolio</a></li>
                 </ul>
             </div>
         </nav>
@@ -976,26 +312,16 @@
         <!-- HERO -->
         <section class="hero">
             <div class="hero-inner container">
-                <div class="hero-badge">🎉 Welcome to Francis's Fun Zone</div>
-                <h1 class="hero-title">
-                    Play. Learn.<br>
-                    <span class="gold">Explore.</span>
-                </h1>
-                <div class="typewriter-wrap">
-                    <span class="typewriter" id="typewriterEl"></span>
-                </div>
+                <div class="hero-badge">&#127881; Welcome to Francis's Fun Zone</div>
+                <h1 class="hero-title">Play. Learn.<br><span class="gold">Explore.</span></h1>
+                <div class="typewriter-wrap"><span class="typewriter" id="typewriterEl"></span></div>
                 <div class="hero-emoji-row">
-                    <span>✈️</span>
-                    <span>🌍</span>
-                    <span>🏆</span>
-                    <span>🎓</span>
-                    <span>🏨</span>
-                    <span>🌴</span>
+                    <span>&#9992;&#65039;</span><span>&#127757;</span><span>&#127942;</span><span>&#127891;</span><span>&#127976;</span><span>&#127796;</span>
                 </div>
                 <div class="hero-cta-group">
-                    <a href="#trivia" class="btn btn-gold">🧠 Take the Quiz</a>
-                    <a href="#memory" class="btn btn-outline">🃏 Memory Game</a>
-                    <a href="#spin" class="btn btn-blue">🌐 Spin the Globe</a>
+                    <a href="#trivia" class="btn btn-gold">&#129504; Take the Quiz</a>
+                    <a href="#memory" class="btn btn-outline">&#127183; Memory Game</a>
+                    <a href="#spin" class="btn btn-blue">&#127760; Spin the Globe</a>
                 </div>
             </div>
         </section>
@@ -1004,107 +330,97 @@
         <div class="stats-bar reveal">
             <div class="container">
                 <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-number" data-target="10">0</div>
-                        <div class="stat-label">Trivia Questions</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-target="16">0</div>
-                        <div class="stat-label">Memory Cards</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-target="12">0</div>
-                        <div class="stat-label">Globe Destinations</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number" data-target="6">0</div>
-                        <div class="stat-label">Badges to Earn</div>
-                    </div>
+                    <div class="stat-item"><div class="stat-number" data-target="30">0</div><div class="stat-label">Trivia Questions</div></div>
+                    <div class="stat-item"><div class="stat-number" data-target="24">0</div><div class="stat-label">Memory Cards</div></div>
+                    <div class="stat-item"><div class="stat-number" data-target="12">0</div><div class="stat-label">Globe Destinations</div></div>
+                    <div class="stat-item"><div class="stat-number" data-target="14">0</div><div class="stat-label">Badges to Earn</div></div>
+                    <div class="stat-item"><div class="stat-number" data-target="30">0</div><div class="stat-label">&#127760; Scramble Words</div></div>
                 </div>
             </div>
         </div>
 
-        <!-- ===== TRIVIA SECTION ===== -->
+        <!-- TRIVIA -->
         <section id="trivia" class="trivia-section">
             <div class="container">
                 <div class="section-header reveal">
-                    <h2 class="section-title">🧠 Tourism <span>Trivia</span> Challenge</h2>
+                    <h2 class="section-title">&#129504; Tourism <span>Trivia</span> Challenge</h2>
                     <div class="section-line"></div>
-                    <p class="section-subtitle">Think you know your way around the world? 10 questions on Ghana, Africa & global tourism.</p>
+                    <p class="section-subtitle">Test your knowledge! Questions adapt to your level.</p>
                 </div>
-
                 <div class="quiz-card reveal" id="quizCard">
-                    <!-- Progress -->
-                    <div class="quiz-progress-bar">
-                        <div class="quiz-progress-fill" id="quizProgress" style="width: 0%"></div>
+                    <div id="diffBadgeWrap"></div>
+                    <div class="ai-mode-panel">
+                        <div class="ai-mode-toggle" id="aiModeToggle">
+                            <div class="ai-mode-label">&#129504; <span>AI Mode</span> &mdash; Generate questions with Gemini</div>
+                            <div class="ai-toggle-switch" id="aiToggleSwitch"></div>
+                        </div>
+                        <div class="ai-key-input-row" id="aiKeyRow">
+                            <input class="ai-key-input" id="aiKeyInput" type="password" placeholder="Paste your Gemini API key here...">
+                            <button class="ai-key-save-btn" id="aiKeySaveBtn">Save</button>
+                        </div>
+                        <div class="ai-status-text" id="aiStatusText">
+                            AI Mode is OFF. <a href="https://aistudio.google.com" target="_blank" rel="noopener">Get a free key at aistudio.google.com</a>
+                        </div>
                     </div>
-
-                    <!-- Meta -->
+                    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgress" style="width:0%"></div></div>
                     <div class="quiz-meta">
                         <span class="quiz-counter" id="quizCounter">Question 1 of 10</span>
                         <span class="quiz-score-display" id="quizScoreDisplay">Score: 0</span>
                     </div>
-
-                    <!-- Question body -->
                     <div id="quizBody">
                         <p class="quiz-question" id="quizQuestion"></p>
                         <div class="quiz-options" id="quizOptions"></div>
                         <p class="quiz-feedback" id="quizFeedback"></p>
-                        <button class="quiz-next-btn" id="quizNextBtn" style="display:none">Next Question →</button>
+                        <button class="quiz-next-btn" id="quizNextBtn" style="display:none">Next Question &#8594;</button>
                     </div>
-
-                    <!-- Result -->
                     <div class="quiz-result" id="quizResult">
                         <div class="result-emoji" id="resultEmoji"></div>
                         <div class="result-title" id="resultTitle"></div>
                         <div class="result-score" id="resultScore"></div>
                         <p class="result-msg" id="resultMsg"></p>
                         <div class="result-actions">
-                            <button class="btn btn-gold" id="retryQuizBtn">🔄 Try Again</button>
-                            <a href="#memory" class="btn btn-outline">🃏 Play Memory Game</a>
+                            <button class="btn btn-gold" id="retryQuizBtn">&#128260; Try Again</button>
+                            <a href="#memory" class="btn btn-outline">&#127183; Play Memory Game</a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== MEMORY GAME ===== -->
+        <!-- MEMORY GAME -->
         <section id="memory" class="memory-section">
             <div class="container">
                 <div class="section-header reveal">
-                    <h2 class="section-title">🃏 Travel <span>Memory</span> Game</h2>
+                    <h2 class="section-title">&#127183; Travel <span>Memory</span> Game</h2>
                     <div class="section-line"></div>
-                    <p class="section-subtitle">Match all 8 travel destination pairs. How fast can you clear the board?</p>
+                    <p class="section-subtitle">Match travel destination pairs. More pairs at higher levels!</p>
                 </div>
-
                 <div class="memory-controls reveal">
                     <div class="memory-stat">Moves: <span id="memMoves">0</span></div>
-                    <div class="memory-stat">Matches: <span id="memMatches">0</span>/8</div>
-                    <div class="memory-stat">⏱️ <span id="memTimer">0s</span></div>
-                    <button class="btn btn-gold" id="memResetBtn">🔄 New Game</button>
+                    <div class="memory-stat">Matches: <span id="memMatches">0</span>/<span id="memTotal">8</span></div>
+                    <div class="memory-stat">&#9201; <span id="memTimer">0s</span></div>
+                    <button class="btn btn-gold" id="memResetBtn">&#128260; New Game</button>
                 </div>
-
                 <div class="memory-grid reveal" id="memoryGrid"></div>
             </div>
         </section>
 
-        <!-- ===== SPIN THE GLOBE ===== -->
+        <!-- SPIN THE GLOBE -->
         <section id="spin" class="spin-section">
             <div class="container">
                 <div class="section-header reveal">
-                    <h2 class="section-title">🌐 Spin the <span>Globe</span></h2>
+                    <h2 class="section-title">&#127760; Spin the <span>Globe</span></h2>
                     <div class="section-line"></div>
-                    <p class="section-subtitle">Where will your next adventure take you? Spin to discover your dream destination!</p>
+                    <p class="section-subtitle">Where will your next adventure take you? Each spin earns 5 XP!</p>
                 </div>
-
                 <div class="globe-wrapper reveal">
                     <div class="wheel-container">
                         <canvas id="globe-wheel" width="380" height="380"></canvas>
                         <div class="wheel-pointer"></div>
                     </div>
-                    <button class="btn btn-gold" id="spinBtn" style="font-size:1.1rem; padding: 1rem 2.5rem;">🌍 Spin the Globe!</button>
+                    <button class="btn btn-gold" id="spinBtn" style="font-size:1.1rem;padding:1rem 2.5rem;">&#127757; Spin the Globe!</button>
                     <div class="spin-result-card" id="spinResult">
-                        <div class="spin-result-emoji" id="spinEmoji">🌐</div>
+                        <div class="spin-result-emoji" id="spinEmoji">&#127760;</div>
                         <div class="spin-result-name" id="spinName">Ready to Spin?</div>
                         <div class="spin-result-desc" id="spinDesc">Hit the button and see where the world takes you!</div>
                         <div class="spin-result-fact" id="spinFact" style="display:none"></div>
@@ -1113,101 +429,288 @@
             </div>
         </section>
 
-        <!-- ===== ACHIEVEMENTS ===== -->
+        <!-- WORD SCRAMBLE -->
+        <section id="wordscramble" class="wordscramble-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">&#128290; Word <span>Scramble</span></h2>
+                    <div class="section-line"></div>
+                    <p class="section-subtitle">Unscramble the travel &amp; tourism word before time runs out!</p>
+                </div>
+                <div class="scramble-card reveal" id="scrambleCard">
+                    <div id="scrambleGameArea">
+                        <div class="scramble-meta">
+                            <span class="quiz-counter" id="scrambleRound">Round 1 of 10</span>
+                            <span class="quiz-score-display" id="scrambleScore">Score: 0</span>
+                            <span class="quiz-score-display" id="scrambleXP">XP: 0</span>
+                        </div>
+                        <div class="scramble-timer-bar"><div class="scramble-timer-fill" id="scrambleTimerFill" style="width:100%"></div></div>
+                        <div style="color:var(--light-gray);font-size:0.9rem;margin-bottom:1rem;" id="scrambleTimerText">30s remaining</div>
+                        <div class="scramble-letters" id="scrambleLetters"></div>
+                        <input class="scramble-input" id="scrambleInput" type="text" placeholder="Type your answer..." autocomplete="off" spellcheck="false">
+                        <div class="scramble-hint-text" id="scrambleHint"></div>
+                        <div class="scramble-actions">
+                            <button class="btn btn-gold btn-sm" id="scrambleSubmit">&#10003; Submit</button>
+                            <button class="btn btn-outline btn-sm" id="scrambleHintBtn">&#128161; Hint (-5 XP)</button>
+                            <button class="btn btn-blue btn-sm" id="scrambleSkip">&#9197; Skip</button>
+                        </div>
+                    </div>
+                    <div id="scrambleResult" style="display:none;text-align:center;">
+                        <div class="result-emoji" id="scrambleResultEmoji">&#127881;</div>
+                        <div class="result-title" id="scrambleResultTitle"></div>
+                        <div class="result-score" id="scrambleResultScore"></div>
+                        <p class="result-msg" id="scrambleResultMsg"></p>
+                        <div class="result-actions" style="justify-content:center;margin-top:1.5rem;">
+                            <button class="btn btn-gold" id="scramblePlayAgain">&#128260; Play Again</button>
+                            <a href="#flagguesser" class="btn btn-outline">&#127988; Flag Guesser</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FLAG GUESSER -->
+        <section id="flagguesser" class="flag-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">&#127988; Flag <span>Guesser</span></h2>
+                    <div class="section-line"></div>
+                    <p class="section-subtitle">Identify the country from its flag emoji! How many do you know?</p>
+                </div>
+                <div class="flag-card reveal" id="flagCard">
+                    <div id="flagGameArea">
+                        <div class="flag-meta">
+                            <span class="quiz-counter" id="flagQuestion">Question 1 of 20</span>
+                            <span class="quiz-score-display" id="flagScore">Score: 0</span>
+                        </div>
+                        <div class="flag-timer-bar"><div class="flag-timer-fill" id="flagTimerFill" style="width:100%"></div></div>
+                        <div class="flag-display" id="flagDisplay">&#127988;</div>
+                        <div class="flag-hint-text" id="flagHintText"></div>
+                        <div class="flag-options" id="flagOptions"></div>
+                        <div style="margin-top:0.75rem;">
+                            <button class="btn btn-outline btn-sm" id="flagHintBtn">&#128161; Hint (-5 XP)</button>
+                        </div>
+                    </div>
+                    <div id="flagResult" style="display:none;text-align:center;">
+                        <div class="result-emoji" id="flagResultEmoji">&#127881;</div>
+                        <div class="result-title" id="flagResultTitle"></div>
+                        <div class="result-score" id="flagResultScore"></div>
+                        <p class="result-msg" id="flagResultMsg"></p>
+                        <div class="result-actions" style="justify-content:center;margin-top:1.5rem;">
+                            <button class="btn btn-gold" id="flagPlayAgain">&#128260; Play Again</button>
+                            <a href="#achievements" class="btn btn-outline">&#127942; View Badges</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACHIEVEMENTS -->
         <section id="achievements" class="achievements-section">
             <div class="container">
                 <div class="section-header reveal">
-                    <h2 class="section-title">🏆 <span>Achievements</span></h2>
+                    <h2 class="section-title">&#127942; <span>Achievements</span></h2>
                     <div class="section-line"></div>
                     <p class="section-subtitle">Earn badges by playing. How many can you unlock?</p>
                 </div>
-
                 <div class="badges-grid reveal" id="badgesGrid"></div>
             </div>
         </section>
 
-        <!-- ===== QUOTES ===== -->
+        <!-- QUOTES -->
         <section id="quotes" class="quotes-section">
             <div class="container">
                 <div class="section-header reveal">
-                    <h2 class="section-title">💡 Words to <span>Live By</span></h2>
+                    <h2 class="section-title">&#128161; Words to <span>Live By</span></h2>
                     <div class="section-line"></div>
                 </div>
-
                 <div class="quote-carousel reveal" id="quoteCarousel"></div>
                 <div class="quote-dots reveal" id="quoteDots"></div>
+                <div style="text-align:center;margin-top:1rem;" id="quoteLiveBadgeWrap"></div>
             </div>
         </section>
 
         <!-- FOOTER -->
         <footer class="fun-footer">
             <div class="container">
-                <p>Made with ❤️ for <strong style="color: var(--accent-gold)">Francis Pwavwe</strong> — Tourism Strategist & Founder of AZ Learner</p>
-                <p><a href="index.html">← Back to Portfolio</a> &nbsp;|&nbsp; <a href="https://azlearner.me" target="_blank" rel="noopener">Visit AZ Learner →</a></p>
+                <p>Made with &#10084;&#65039; for <strong style="color:var(--accent-gold)">Francis Pwavwe</strong> &mdash; Tourism Strategist &amp; Founder of AZ Learner</p>
+                <p><a href="index.html">&#8592; Back to Portfolio</a> &nbsp;|&nbsp; <a href="https://azlearner.me" target="_blank" rel="noopener">Visit AZ Learner &#8594;</a></p>
             </div>
         </footer>
 
     </div><!-- end page-wrap -->
-
     <script>
+    /* ================================================================
+       PROGRESS MANAGER - XP / Level / Streak
+    ================================================================ */
+    const ProgressManager = (() => {
+        const STORAGE_KEY = 'fp_progress';
+        // XP_LEVELS[i] = minimum XP required for level (i+1); e.g. index 0 = Level 1 (0 XP), index 9 = Level 10 (7000 XP)
+        const XP_LEVELS = [0, 100, 250, 500, 900, 1500, 2400, 3600, 5100, 7000];
+
+        let data = { xp: 0, level: 1, badges: [], streak: 1, lastPlay: null, bestMemoryScore: null };
+
+        function load() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) { try { data = { ...data, ...JSON.parse(saved) }; } catch(e) {} }
+            updateStreak();
+            updateNavUI();
+        }
+
+        function save() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            if (window.fbUser && window.fbDb) {
+                window.fbDb.doc('funzone/' + window.fbUser.uid).set(data, { merge: true }).catch(() => {});
+            }
+        }
+
+        function addXP(amount, label) {
+            const prevLevel = data.level;
+            data.xp += amount;
+            for (let i = XP_LEVELS.length - 1; i >= 0; i--) {
+                if (data.xp >= XP_LEVELS[i]) { data.level = i + 1; break; }
+            }
+            if (data.level > 10) data.level = 10;
+            save();
+            showXPFloat('+' + amount + ' XP');
+            if (data.level > prevLevel) {
+                showToast('&#127358; Level Up! You are now <strong>Level ' + data.level + '</strong>!', '&#127358;');
+                launchConfetti(2000);
+                if (data.level >= 5) unlockBadge('level_5');
+                if (data.level >= 10) unlockBadge('level_10');
+            }
+            updateNavUI();
+        }
+
+        function updateStreak() {
+            const today = new Date().toDateString();
+            if (!data.lastPlay) {
+                data.lastPlay = today; data.streak = 1;
+            } else if (data.lastPlay !== today) {
+                const last = new Date(data.lastPlay);
+                const now = new Date(today);
+                const diff = Math.round((now - last) / (1000 * 60 * 60 * 24));
+                if (diff === 1) { data.streak = (data.streak || 0) + 1; }
+                else if (diff > 1) { data.streak = 1; }
+                data.lastPlay = today;
+            }
+            save();
+            if (data.streak >= 3) unlockBadge('streak_3');
+            if (data.streak >= 7) unlockBadge('streak_7');
+        }
+
+        function getDifficulty() {
+            if (data.level <= 2) return 'easy';
+            if (data.level <= 5) return 'medium';
+            return 'hard';
+        }
+
+        function updateNavUI() {
+            const levelEl = document.getElementById('navLevelBadge');
+            if (levelEl) levelEl.textContent = 'Lv.' + data.level + ' | ' + data.xp + ' XP';
+            const streakEl = document.getElementById('navStreakBadge');
+            if (streakEl) {
+                streakEl.textContent = '\u{1F525} ' + data.streak;
+                streakEl.style.display = data.streak >= 2 ? '' : 'none';
+            }
+        }
+
+        function showXPFloat(text) {
+            const el = document.createElement('div');
+            el.className = 'xp-toast';
+            el.textContent = text;
+            el.style.cssText = 'top:' + (Math.random()*30+30) + '%;left:' + (Math.random()*40+30) + '%;';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1600);
+        }
+
+        return { load, save, addXP, getDifficulty, getData: () => data };
+    })();
+
+    // Load progress immediately
+    ProgressManager.load();
+
+    /* ================================================================
+       FIREBASE + GOOGLE AUTH
+    ================================================================ */
+    (function() {
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
+            authDomain: "francis-pwavwe.firebaseapp.com",
+            projectId: "francis-pwavwe",
+            storageBucket: "francis-pwavwe.firebasestorage.app"
+        };
+        try {
+            if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+            window.fbDb = db;
+            const provider = new firebase.auth.GoogleAuthProvider();
+
+            document.getElementById('signInBtn').addEventListener('click', () => {
+                auth.signInWithPopup(provider).catch(err => {
+                    showToast('Sign-in failed: ' + err.message, '&#10060;');
+                });
+            });
+            document.getElementById('signOutBtn').addEventListener('click', () => { auth.signOut(); });
+
+            auth.onAuthStateChanged(user => {
+                window.fbUser = user;
+                const signInBtn = document.getElementById('signInBtn');
+                const navUser = document.getElementById('navUser');
+                if (user) {
+                    if (signInBtn) signInBtn.style.display = 'none';
+                    if (navUser) {
+                        navUser.style.display = 'flex';
+                        const avatar = document.getElementById('navAvatar');
+                        const nameEl = document.getElementById('navUserName');
+                        if (avatar && user.photoURL) avatar.src = user.photoURL;
+                        if (nameEl) nameEl.textContent = (user.displayName || 'Player').split(' ')[0];
+                    }
+                    db.doc('funzone/' + user.uid).get().then(snap => {
+                        if (snap.exists) {
+                            const remoteData = snap.data();
+                            if (!remoteData) return;
+                            const localData = ProgressManager.getData();
+                            if ((remoteData.xp || 0) > localData.xp) {
+                                localStorage.setItem('fp_progress', JSON.stringify(remoteData));
+                                ProgressManager.load();
+                            }
+                        }
+                    }).catch(() => {});
+                } else {
+                    if (signInBtn) signInBtn.style.display = '';
+                    if (navUser) navUser.style.display = 'none';
+                }
+            });
+        } catch(e) { console.warn('Firebase init failed:', e); }
+    })();
+
+
     /* ================================================================
        PARTICLE BACKGROUND
     ================================================================ */
     (function() {
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
-        const emojis = ['✈️','🌍','🏖️','🗺️','🌴','🏔️','🎒','🧭','🏛️','⭐','🌊','🦁','🦅','🌺'];
+        const emojis = ['\u2708\uFE0F','\uD83C\uDF0D','\uD83C\uDFD6\uFE0F','\uD83D\uDDFA\uFE0F','\uD83C\uDF34','\uD83C\uDFD4\uFE0F','\uD83C\uDF92','\uD83E\uDDED','\uD83C\uDFDB\uFE0F','\u2B50','\uD83C\uDF0A','\uD83E\uDD81','\uD83E\uDD85','\uD83C\uDF3A'];
         let W, H, particles = [];
-
-        function resize() {
-            W = canvas.width = window.innerWidth;
-            H = canvas.height = window.innerHeight;
-        }
-
+        function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
         function createParticle() {
-            return {
-                x: Math.random() * W,
-                y: H + 30,
-                emoji: emojis[Math.floor(Math.random() * emojis.length)],
-                size: 16 + Math.random() * 18,
-                speedY: 0.4 + Math.random() * 0.7,
-                speedX: (Math.random() - 0.5) * 0.4,
-                opacity: 0.12 + Math.random() * 0.2,
-                rot: Math.random() * Math.PI * 2,
-                rotSpeed: (Math.random() - 0.5) * 0.015
-            };
+            return { x: Math.random()*W, y: H+30, emoji: emojis[Math.floor(Math.random()*emojis.length)], size: 16+Math.random()*18, speedY: 0.4+Math.random()*0.7, speedX: (Math.random()-0.5)*0.4, opacity: 0.12+Math.random()*0.2, rot: Math.random()*Math.PI*2, rotSpeed: (Math.random()-0.5)*0.015 };
         }
-
-        function init() {
-            resize();
-            for (let i = 0; i < 22; i++) {
-                const p = createParticle();
-                p.y = Math.random() * H;
-                particles.push(p);
-            }
-        }
-
+        function init() { resize(); for(let i=0;i<22;i++){ const p=createParticle(); p.y=Math.random()*H; particles.push(p); } }
         function draw() {
-            ctx.clearRect(0, 0, W, H);
-            particles.forEach((p, i) => {
-                ctx.save();
-                ctx.globalAlpha = p.opacity;
-                ctx.translate(p.x, p.y);
-                ctx.rotate(p.rot);
-                ctx.font = p.size + 'px serif';
-                ctx.fillText(p.emoji, -p.size / 2, p.size / 2);
-                ctx.restore();
-                p.y -= p.speedY;
-                p.x += p.speedX;
-                p.rot += p.rotSpeed;
-                if (p.y < -40) particles[i] = createParticle();
+            ctx.clearRect(0,0,W,H);
+            particles.forEach((p,i) => {
+                ctx.save(); ctx.globalAlpha=p.opacity; ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.font=p.size+'px serif'; ctx.fillText(p.emoji,-p.size/2,p.size/2); ctx.restore();
+                p.y-=p.speedY; p.x+=p.speedX; p.rot+=p.rotSpeed;
+                if(p.y<-40) particles[i]=createParticle();
             });
             requestAnimationFrame(draw);
         }
-
         window.addEventListener('resize', resize);
-        init();
-        draw();
+        init(); draw();
     })();
 
 
@@ -1216,22 +719,15 @@
     ================================================================ */
     (function() {
         const el = document.getElementById('typewriterEl');
-        const lines = [
-            'Future International Tourism Strategist 🌍',
-            'Founder of AZ Learner 🎓',
-            'Harvard Aspire Leaders Cohort 5 🏆',
-            'Kempinski Hospitality Intern 🏨',
-            'Cape Coast, Ghana 🇬🇭',
-            'Strategic Thinker. Digital Innovator. 💡'
-        ];
-        let li = 0, ci = 0, deleting = false;
+        const lines = ['Future International Tourism Strategist \uD83C\uDF0D','Founder of AZ Learner \uD83C\uDF93','Harvard Aspire Leaders Cohort 5 \uD83C\uDFC6','Kempinski Hospitality Intern \uD83C\uDFF8','Cape Coast, Ghana \uD83C\uDDEC\uD83C\uDDED','Strategic Thinker. Digital Innovator. \uD83D\uDCA1'];
+        let li=0, ci=0, deleting=false;
         function tick() {
-            const cur = lines[li];
-            el.textContent = deleting ? cur.slice(0, ci--) : cur.slice(0, ci++);
-            let delay = deleting ? 40 : 70;
-            if (!deleting && ci > cur.length) { delay = 1800; deleting = true; }
-            else if (deleting && ci < 0) { ci = 0; deleting = false; li = (li + 1) % lines.length; delay = 400; }
-            setTimeout(tick, delay);
+            const cur=lines[li];
+            el.textContent=deleting?cur.slice(0,ci--):cur.slice(0,ci++);
+            let delay=deleting?40:70;
+            if(!deleting&&ci>cur.length){delay=1800;deleting=true;}
+            else if(deleting&&ci<0){ci=0;deleting=false;li=(li+1)%lines.length;delay=400;}
+            setTimeout(tick,delay);
         }
         tick();
     })();
@@ -1242,7 +738,7 @@
     ================================================================ */
     (function() {
         const io = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+            entries.forEach(e => { if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);} });
         }, { threshold: 0.12 });
         document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     })();
@@ -1254,16 +750,10 @@
     (function() {
         const io = new IntersectionObserver((entries) => {
             entries.forEach(e => {
-                if (e.isIntersecting) {
-                    const el = e.target;
-                    const target = parseInt(el.dataset.target, 10);
-                    let cur = 0;
-                    const step = Math.ceil(target / 40);
-                    const t = setInterval(() => {
-                        cur = Math.min(cur + step, target);
-                        el.textContent = cur;
-                        if (cur >= target) clearInterval(t);
-                    }, 35);
+                if(e.isIntersecting){
+                    const el=e.target; const target=parseInt(el.dataset.target,10); let cur=0;
+                    const step=Math.ceil(target/40);
+                    const t=setInterval(()=>{ cur=Math.min(cur+step,target); el.textContent=cur; if(cur>=target)clearInterval(t); },35);
                     io.unobserve(el);
                 }
             });
@@ -1275,16 +765,14 @@
     /* ================================================================
        TOAST HELPER
     ================================================================ */
-    function showToast(msg, icon = '🎉') {
+    function showToast(msg, icon) {
+        icon = icon || '\uD83C\uDF89';
         const c = document.getElementById('toastContainer');
         const t = document.createElement('div');
         t.className = 'toast';
-        t.innerHTML = `<span class="toast-icon">${icon}</span>${msg}`;
+        t.innerHTML = '<span class="toast-icon">' + icon + '</span>' + msg;
         c.appendChild(t);
-        setTimeout(() => {
-            t.style.animation = 'toast-out 0.4s ease forwards';
-            setTimeout(() => t.remove(), 400);
-        }, 3500);
+        setTimeout(() => { t.style.animation='toast-out 0.4s ease forwards'; setTimeout(()=>t.remove(),400); }, 3500);
     }
 
 
@@ -1292,29 +780,38 @@
        ACHIEVEMENT SYSTEM
     ================================================================ */
     const BADGE_DEFS = [
-        { id: 'quiz_start',     icon: '🧠', name: 'Knowledge Seeker',  desc: 'Started the trivia quiz',        locked: true },
-        { id: 'quiz_perfect',   icon: '🏅', name: 'Tourism Genius',     desc: 'Got a perfect quiz score!',      locked: true },
-        { id: 'quiz_complete',  icon: '📚', name: 'Quiz Champion',      desc: 'Completed the trivia quiz',      locked: true },
-        { id: 'memory_start',   icon: '🃏', name: 'Card Collector',     desc: 'Started the memory game',        locked: true },
-        { id: 'memory_win',     icon: '🌟', name: 'Memory Master',      desc: 'Matched all cards!',             locked: true },
-        { id: 'spin_globe',     icon: '🌍', name: 'Globe Trotter',      desc: 'Spun the globe once',            locked: true },
+        { id: 'quiz_start',    icon: '\uD83E\uDDE0', name: 'Knowledge Seeker', desc: 'Started the trivia quiz',             locked: true },
+        { id: 'quiz_perfect',  icon: '\uD83C\uDF96\uFE0F', name: 'Tourism Genius',   desc: 'Got a perfect quiz score!',         locked: true },
+        { id: 'quiz_complete', icon: '\uD83D\uDCDA', name: 'Quiz Champion',    desc: 'Completed the trivia quiz',           locked: true },
+        { id: 'memory_start',  icon: '\uD83C\uDCCF', name: 'Card Collector',  desc: 'Started the memory game',             locked: true },
+        { id: 'memory_win',    icon: '\uD83C\uDF1F', name: 'Memory Master',   desc: 'Matched all cards!',                  locked: true },
+        { id: 'spin_globe',    icon: '\uD83C\uDF0D', name: 'Globe Trotter',   desc: 'Spun the globe once',                 locked: true },
+        { id: 'level_5',       icon: '\u2B50',         name: 'Rising Star',     desc: 'Reached Level 5!',                    locked: true },
+        { id: 'level_10',      icon: '\uD83D\uDC8E', name: 'Tourism Legend',  desc: 'Reached Level 10!',                   locked: true },
+        { id: 'streak_3',      icon: '\uD83D\uDD25', name: 'On Fire',         desc: '3-day play streak!',                  locked: true },
+        { id: 'streak_7',      icon: '\uD83C\uDF0B', name: 'Unstoppable',     desc: '7-day play streak!',                  locked: true },
+        { id: 'speed_demon',   icon: '\u26A1',         name: 'Speed Demon',     desc: 'Won memory game in under 60s',        locked: true },
+        { id: 'scramble_win',  icon: '\uD83D\uDD24', name: 'Word Wizard',     desc: 'Completed a Word Scramble round',     locked: true },
+        { id: 'flag_perfect',  icon: '\uD83C\uDFF3\uFE0F', name: 'Flag Expert',     desc: 'Perfect score on Flag Guesser',       locked: true },
+        { id: 'ai_player',     icon: '\uD83E\uDD16', name: 'AI Challenger',   desc: 'Used AI-generated quiz questions',    locked: true },
     ];
 
     const unlockedBadges = new Set(JSON.parse(localStorage.getItem('fp_badges') || '[]'));
+    // Sync badges from progress data
+    (ProgressManager.getData().badges || []).forEach(b => unlockedBadges.add(b));
 
     function renderBadges() {
         const grid = document.getElementById('badgesGrid');
+        if (!grid) return;
         grid.innerHTML = '';
         BADGE_DEFS.forEach(b => {
             const unlocked = unlockedBadges.has(b.id);
             const card = document.createElement('div');
             card.className = 'badge-card ' + (unlocked ? 'unlocked' : 'locked');
-            card.innerHTML = `
-                ${unlocked ? '<span class="badge-unlocked-label">✓ Unlocked</span>' : ''}
-                <span class="badge-icon">${b.icon}</span>
-                <div class="badge-name">${b.name}</div>
-                <div class="badge-desc">${b.desc}</div>
-            `;
+            card.innerHTML = (unlocked ? '<span class="badge-unlocked-label">\u2713 Unlocked</span>' : '') +
+                '<span class="badge-icon">' + b.icon + '</span>' +
+                '<div class="badge-name">' + b.name + '</div>' +
+                '<div class="badge-desc">' + b.desc + '</div>';
             grid.appendChild(card);
         });
     }
@@ -1323,8 +820,11 @@
         if (unlockedBadges.has(id)) return;
         unlockedBadges.add(id);
         localStorage.setItem('fp_badges', JSON.stringify([...unlockedBadges]));
+        const d = ProgressManager.getData();
+        if (!d.badges) d.badges = [];
+        if (!d.badges.includes(id)) { d.badges.push(id); ProgressManager.save(); }
         const b = BADGE_DEFS.find(x => x.id === id);
-        if (b) showToast(`Badge unlocked: <strong>${b.name}</strong> ${b.icon}`, b.icon);
+        if (b) showToast('Badge unlocked: <strong>' + b.name + '</strong> ' + b.icon, b.icon);
         renderBadges();
     }
 
@@ -1337,135 +837,182 @@
     (function() {
         const canvas = document.getElementById('confetti-canvas');
         const ctx = canvas.getContext('2d');
-        let pieces = [];
-        let running = false;
-
-        window.launchConfetti = function(duration = 2800) {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        let pieces = [], running = false;
+        window.launchConfetti = function(duration) {
+            duration = duration || 2800;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
             const colors = ['#D4AF37','#3B82F6','#10B981','#EC4899','#F97316','#FFFFFF','#7C3AED'];
-            for (let i = 0; i < 160; i++) {
-                pieces.push({
-                    x: Math.random() * canvas.width,
-                    y: -10 - Math.random() * 60,
-                    r: 4 + Math.random() * 6,
-                    d: 2 + Math.random() * 5,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    tilt: Math.random() * 10 - 5,
-                    tiltDelta: (Math.random() * 0.2) - 0.1,
-                    shape: Math.random() > 0.5 ? 'circle' : 'rect'
-                });
+            for(let i=0;i<160;i++){
+                pieces.push({ x:Math.random()*canvas.width, y:-10-Math.random()*60, r:4+Math.random()*6, d:2+Math.random()*5, color:colors[Math.floor(Math.random()*colors.length)], tilt:Math.random()*10-5, tiltDelta:(Math.random()*0.2)-0.1, shape:Math.random()>0.5?'circle':'rect' });
             }
-            if (!running) { running = true; animConfetti(); }
-            setTimeout(() => { pieces = []; running = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }, duration);
+            if(!running){running=true;animConfetti();}
+            setTimeout(()=>{pieces=[];running=false;ctx.clearRect(0,0,canvas.width,canvas.height);},duration);
         };
-
         function animConfetti() {
-            if (!running) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            pieces.forEach(p => {
-                ctx.save();
-                ctx.fillStyle = p.color;
-                ctx.globalAlpha = 0.85;
-                if (p.shape === 'circle') {
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fill();
-                } else {
-                    ctx.translate(p.x, p.y);
-                    ctx.rotate(p.tilt);
-                    ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
-                }
+            if(!running)return;
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            pieces.forEach(p=>{
+                ctx.save(); ctx.fillStyle=p.color; ctx.globalAlpha=0.85;
+                if(p.shape==='circle'){ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();}
+                else{ctx.translate(p.x,p.y);ctx.rotate(p.tilt);ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);}
                 ctx.restore();
-                p.y += p.d;
-                p.x += Math.sin(p.y / 30) * 1.5;
-                p.tilt += p.tiltDelta;
-                if (p.y > canvas.height + 20) {
-                    p.y = -10;
-                    p.x = Math.random() * canvas.width;
-                }
+                p.y+=p.d; p.x+=Math.sin(p.y/30)*1.5; p.tilt+=p.tiltDelta;
+                if(p.y>canvas.height+20){p.y=-10;p.x=Math.random()*canvas.width;}
             });
             requestAnimationFrame(animConfetti);
         }
     })();
 
-
     /* ================================================================
        TRIVIA QUIZ
     ================================================================ */
     (function() {
-        const questions = [
-            {
-                q: 'What is the capital city of Ghana?',
-                opts: ['Cape Coast', 'Kumasi', 'Accra', 'Tamale'],
-                ans: 2,
-                fact: '🏙️ Accra is Ghana\'s capital and largest city, home to over 2 million people!'
-            },
-            {
-                q: 'Which ancient Ghanaian landmark is a UNESCO World Heritage Site known for its role in the transatlantic slave trade?',
-                opts: ['Kakum National Park', 'Cape Coast Castle', 'Boti Falls', 'Mole National Park'],
-                ans: 1,
-                fact: '🏰 Cape Coast Castle was one of the largest slave-trading posts in West Africa and is now a powerful museum.'
-            },
-            {
-                q: 'What does the term "UNESCO World Heritage Site" signify for a location?',
-                opts: ['It has great shopping', 'It is of outstanding universal value to humanity', 'It has the most tourists', 'It was built before 1900'],
-                ans: 1,
-                fact: '🌐 UNESCO designates sites of "outstanding universal value" to protect cultural and natural heritage worldwide.'
-            },
-            {
-                q: 'Which African country welcomes the most international tourists annually?',
-                opts: ['Ghana', 'Kenya', 'Morocco', 'South Africa'],
-                ans: 2,
-                fact: '🏜️ Morocco consistently tops African tourism charts, attracting over 13 million visitors per year!'
-            },
-            {
-                q: 'What is the Kempinski brand famous for in hospitality?',
-                opts: ['Budget hostel chains', 'Luxury five-star hotels worldwide', 'Airport lounges only', 'Adventure camping resorts'],
-                ans: 1,
-                fact: '🏨 Kempinski is Europe\'s oldest luxury hotel group, founded in 1897! Francis interned at their Gold Coast City property.'
-            },
-            {
-                q: 'Which ocean borders Ghana\'s southern coastline?',
-                opts: ['Indian Ocean', 'Pacific Ocean', 'Arctic Ocean', 'Atlantic Ocean'],
-                ans: 3,
-                fact: '🌊 Ghana sits on the Gulf of Guinea, part of the Atlantic Ocean — giving it beautiful coastal tourism potential!'
-            },
-            {
-                q: 'The Harvard Aspire Leaders Program is focused on developing which group of people?',
-                opts: ['Senior corporate executives', 'Young emerging leaders from around the world', 'Harvard alumni only', 'US government officials'],
-                ans: 1,
-                fact: '🎓 The Harvard Aspire Leaders Program is a highly competitive program for young global leaders — Francis was in Cohort 5!'
-            },
-            {
-                q: 'What does "sustainable tourism" primarily aim to do?',
-                opts: ['Maximise tourist spending', 'Build more hotels', 'Minimise negative environmental and cultural impacts while benefiting local communities', 'Ban all tourism'],
-                ans: 2,
-                fact: '♻️ Sustainable tourism is the future! It balances economic growth with protecting environments and cultures.'
-            },
-            {
-                q: 'Which Ghanaian university is home to the Tourism Management department that runs the Luban Workshop Restaurant?',
-                opts: ['University of Ghana', 'Kwame Nkrumah University', 'University of Cape Coast', 'Ashesi University'],
-                ans: 2,
-                fact: '🎓 The University of Cape Coast (UCC) in the Central Region is where Francis studies Tourism Management!'
-            },
-            {
-                q: 'What is the primary function of a Destination Management Organization (DMO)?',
-                opts: ['Collect taxes from tourists', 'Promote and manage tourism for a destination', 'Build roads and airports', 'Regulate airline pricing'],
-                ans: 1,
-                fact: '📊 DMOs are the strategic brains behind destination marketing — helping places attract visitors while protecting local communities!'
-            }
+        const easyQuestions = [
+            { q: 'What is the capital city of Ghana?', opts: ['Cape Coast','Kumasi','Accra','Tamale'], ans: 2, fact: 'Accra is Ghana's capital and largest city, home to over 2 million people!' },
+            { q: 'Which ancient Ghanaian landmark is a UNESCO World Heritage Site known for its role in the transatlantic slave trade?', opts: ['Kakum National Park','Cape Coast Castle','Boti Falls','Mole National Park'], ans: 1, fact: 'Cape Coast Castle was one of the largest slave-trading posts in West Africa and is now a powerful museum.' },
+            { q: 'What does the term "UNESCO World Heritage Site" signify for a location?', opts: ['It has great shopping','It is of outstanding universal value to humanity','It has the most tourists','It was built before 1900'], ans: 1, fact: 'UNESCO designates sites of "outstanding universal value" to protect cultural and natural heritage worldwide.' },
+            { q: 'Which African country welcomes the most international tourists annually?', opts: ['Ghana','Kenya','Morocco','South Africa'], ans: 2, fact: 'Morocco consistently tops African tourism charts, attracting over 13 million visitors per year!' },
+            { q: 'What is the Kempinski brand famous for in hospitality?', opts: ['Budget hostel chains','Luxury five-star hotels worldwide','Airport lounges only','Adventure camping resorts'], ans: 1, fact: 'Kempinski is Europe's oldest luxury hotel group, founded in 1897! Francis interned at their Gold Coast City property.' },
+            { q: 'Which ocean borders Ghana's southern coastline?', opts: ['Indian Ocean','Pacific Ocean','Arctic Ocean','Atlantic Ocean'], ans: 3, fact: 'Ghana sits on the Gulf of Guinea, part of the Atlantic Ocean, giving it beautiful coastal tourism potential!' },
+            { q: 'The Harvard Aspire Leaders Program is focused on developing which group?', opts: ['Senior corporate executives','Young emerging leaders from around the world','Harvard alumni only','US government officials'], ans: 1, fact: 'The Harvard Aspire Leaders Program is a highly competitive program for young global leaders. Francis was in Cohort 5!' },
+            { q: 'What does "sustainable tourism" primarily aim to do?', opts: ['Maximise tourist spending','Build more hotels','Minimise negative environmental and cultural impacts while benefiting local communities','Ban all tourism'], ans: 2, fact: 'Sustainable tourism is the future! It balances economic growth with protecting environments and cultures.' },
+            { q: 'Which Ghanaian university runs the Tourism Management department with a Luban Workshop Restaurant?', opts: ['University of Ghana','Kwame Nkrumah University','University of Cape Coast','Ashesi University'], ans: 2, fact: 'The University of Cape Coast (UCC) in the Central Region is where Francis studies Tourism Management!' },
+            { q: 'What is the primary function of a Destination Management Organization (DMO)?', opts: ['Collect taxes from tourists','Promote and manage tourism for a destination','Build roads and airports','Regulate airline pricing'], ans: 1, fact: 'DMOs are the strategic brains behind destination marketing, helping places attract visitors while protecting local communities!' }
         ];
 
-        let currentQ = 0, score = 0, answered = false;
+        const mediumQuestions = [
+            { q: 'Which African city hosted the 2010 FIFA World Cup final?', opts: ['Cape Town','Johannesburg','Pretoria','Durban'], ans: 1, fact: 'Johannesburg's Soccer City stadium hosted the 2010 World Cup final between Spain and Netherlands.' },
+            { q: 'What is the world's longest river?', opts: ['Amazon','Congo','Nile','Yangtze'], ans: 2, fact: 'The Nile river stretches 6,650km, making it Earth's longest river, flowing through 11 African countries.' },
+            { q: 'In which country is the Great Barrier Reef located?', opts: ['Indonesia','Philippines','Maldives','Australia'], ans: 3, fact: 'Australia's Great Barrier Reef is the world's largest coral reef system, covering 2,300km.' },
+            { q: 'The Sahara is the world's largest what?', opts: ['Cold desert','Rainforest','Savanna','Hot desert'], ans: 3, fact: 'The Sahara covers about 9.2 million km², roughly the size of the United States!' },
+            { q: 'Which country has the most UNESCO World Heritage Sites?', opts: ['France','Spain','Italy','Egypt'], ans: 2, fact: 'Italy has 58 UNESCO World Heritage Sites, more than any other country!' },
+            { q: 'Approximately what percentage of the world's countries are in Africa?', opts: ['~15%','~22%','~28%','~35%'], ans: 2, fact: 'Africa has 54 countries, about 28% of all 195 countries in the world!' },
+            { q: 'Which island is the world's largest?', opts: ['Australia','Borneo','Madagascar','Greenland'], ans: 3, fact: 'Greenland covers 2.16 million km², making it the world's largest island (Australia is a continent).' },
+            { q: 'What does 'ecotourism' primarily focus on?', opts: ['Luxury resorts','Urban tourism','Responsible travel to natural areas','Sports tourism'], ans: 2, fact: 'Ecotourism is one of the fastest-growing sectors in the tourism industry worldwide.' },
+            { q: 'Which language has the most speakers in Africa?', opts: ['Arabic','Hausa','Amharic','Swahili'], ans: 3, fact: 'Swahili (Kiswahili) is spoken by over 200 million people across East and Central Africa.' },
+            { q: 'Which hotel chain has the most properties globally?', opts: ['Hilton','Marriott','IHG','Wyndham'], ans: 3, fact: 'Wyndham Hotels & Resorts has over 9,000 properties globally, making it the world's largest by property count.' }
+        ];
+
+        const hardQuestions = [
+            { q: 'The "Golden Triangle" in Indian tourism refers to which three cities?', opts: ['Mumbai-Goa-Jaipur','Delhi-Agra-Jaipur','Chennai-Hyderabad-Bengaluru','Delhi-Mumbai-Kolkata'], ans: 1, fact: 'Delhi, Agra, and Jaipur form India's famous Golden Triangle, showcasing Mughal and Rajput heritage.' },
+            { q: 'Which Ghanaian festival is known as the "Deer-Hunting Festival"?', opts: ['Homowo','Odwira','Aboakyer','Kundum'], ans: 2, fact: 'The Aboakyer Festival of the Effutu people in Winneba, Ghana, involves a deer hunt to appease the gods.' },
+            { q: 'What does UNWTO stand for in tourism?', opts: ['United Nations World Travel Organization','United Nations World Tourism Organization','Universal Network for World Tourism Operations','United Nations Worldwide Travel Office'], ans: 1, fact: 'The UNWTO is the UN agency responsible for promoting responsible, sustainable, and universally accessible tourism.' },
+            { q: 'In tourism management, "overtourism" refers to...', opts: ['Marketing too many destinations','When visitor numbers exceed a destination's sustainable capacity','Having too many tour operators','Running too many airline routes'], ans: 1, fact: 'Overtourism is a growing crisis in cities like Venice, Barcelona, and Bali, threatening local life and heritage.' },
+            { q: 'The concept of "carrying capacity" in tourism means...', opts: ['Maximum weight on tourist transport','The revenue capacity of a hotel','Maximum visitors a destination can sustain without damage','Number of tourists a guide can manage'], ans: 2, fact: 'Carrying capacity is central to sustainable tourism planning. Exceeding it leads to environmental and social damage.' },
+            { q: 'Which West African country was the first in sub-Saharan Africa to gain independence?', opts: ['Nigeria','Senegal','Ghana','Ivory Coast'], ans: 2, fact: 'Ghana gained independence on March 6, 1957 under Kwame Nkrumah, becoming a symbol of African liberation.' },
+            { q: 'The "Blue Economy" in tourism relates primarily to...', opts: ['Sky tourism and aviation','Ocean and coastal tourism resources','Budget travel economics','Digital/online tourism marketing'], ans: 1, fact: 'The Blue Economy covers sustainable use of ocean resources, a growing area for coastal nations like Ghana.' },
+            { q: 'Which international body awards the "Blue Flag" certification to beaches?', opts: ['UNESCO','UNWTO','Foundation for Environmental Education','World Bank'], ans: 2, fact: 'The Foundation for Environmental Education (FEE) awards Blue Flags to beaches meeting strict environmental standards.' },
+            { q: 'What is "yield management" in hospitality?', opts: ['Managing farm yield near resorts','Strategy to maximize revenue by adjusting prices based on demand','Managing the hotel kitchen output','Calculating staff productivity'], ans: 1, fact: 'Yield management (revenue management) allows hotels and airlines to maximize revenue by dynamic pricing strategies.' },
+            { q: 'Cape Coast in Ghana was historically significant because it was...', opts: ['Ghana's first capital after independence','The largest slave-trading port in West Africa during the colonial era','The birthplace of Kwame Nkrumah','The location of Ghana's first university'], ans: 1, fact: 'Cape Coast Castle was the largest slave-trading post in West Africa, now a UNESCO World Heritage Site and museum.' }
+        ];
+
+        let aiMode = false;
+        let geminiKey = localStorage.getItem('fp_gemini_key') || '';
+        let activeQuestions = [];
+        const AI_PROMPT = 'Generate 5 multiple choice trivia questions about world tourism, African geography, or hospitality management. For each question return JSON array: [{"q":"question","opts":["A","B","C","D"],"ans":0,"fact":"interesting fact"}]. Return only the JSON array, no markdown.';
+        let currentQ = 0, score = 0, answered = false, xpEarned = 0;
+
+        // AI Mode Panel
+        const aiToggle = document.getElementById('aiToggleSwitch');
+        const aiKeyRow = document.getElementById('aiKeyRow');
+        const aiKeyInput = document.getElementById('aiKeyInput');
+        const aiStatusText = document.getElementById('aiStatusText');
+
+        if (geminiKey) aiKeyInput.value = geminiKey;
+
+        document.getElementById('aiModeToggle').addEventListener('click', function(e) {
+            if (e.target.closest('#aiKeyRow')) return;
+            aiMode = !aiMode;
+            aiToggle.classList.toggle('on', aiMode);
+            aiKeyRow.classList.toggle('visible', aiMode);
+            if (aiMode) {
+                aiStatusText.innerHTML = 'AI Mode is ON. ' + (geminiKey ? 'Key saved. Questions will be AI-generated.' : 'Enter your API key below.');
+            } else {
+                aiStatusText.innerHTML = 'AI Mode is OFF. <a href="https://aistudio.google.com" target="_blank" rel="noopener">Get a free key at aistudio.google.com</a>';
+            }
+        });
+
+        document.getElementById('aiKeySaveBtn').addEventListener('click', function() {
+            geminiKey = aiKeyInput.value.trim();
+            localStorage.setItem('fp_gemini_key', geminiKey);
+            aiStatusText.textContent = geminiKey ? 'Key saved! AI questions will load when you start the quiz.' : 'No key entered.';
+        });
+
+        function getDiffBadge() {
+            const diff = ProgressManager.getDifficulty();
+            const map = { easy: ['\uD83D\uDFE2 Easy Mode','easy'], medium: ['\uD83D\uDFE1 Medium Mode','medium'], hard: ['\uD83D\uDD34 Hard Mode','hard'] };
+            const [label, cls] = map[diff];
+            return '<div class="difficulty-badge ' + cls + '">' + label + '</div>';
+        }
+
+        function getStaticQuestions() {
+            const diff = ProgressManager.getDifficulty();
+            if (diff === 'medium') return shuffle([...mediumQuestions]).slice(0, 10);
+            if (diff === 'hard') return shuffle([...hardQuestions]).slice(0, 10);
+            return shuffle([...easyQuestions]).slice(0, 10);
+        }
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+            return a;
+        }
+
+        async function fetchAIQuestions() {
+            if (!geminiKey) return [];
+            const prompt = AI_PROMPT;
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
+                const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + geminiKey, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+                    signal: controller.signal
+                });
+                clearTimeout(timeout);
+                if (!res.ok) return [];
+                const data = await res.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                const jsonMatch = text.match(/\[.*\]/s);
+                if (!jsonMatch) return [];
+                const parsed = JSON.parse(jsonMatch[0]);
+                if (Array.isArray(parsed)) return parsed.slice(0, 5);
+            } catch(e) { return []; }
+            return [];
+        }
+
+        async function startQuiz() {
+            document.getElementById('diffBadgeWrap').innerHTML = getDiffBadge();
+            currentQ = 0; score = 0; answered = false; xpEarned = 0;
+
+            if (aiMode && geminiKey) {
+                aiStatusText.textContent = '\uD83E\uDD16 AI is generating questions...';
+                const aiQs = await fetchAIQuestions();
+                if (aiQs.length > 0) {
+                    unlockBadge('ai_player');
+                    const staticFill = getStaticQuestions().slice(0, 10 - aiQs.length);
+                    activeQuestions = [...aiQs, ...staticFill];
+                    aiStatusText.textContent = '\uD83E\uDD16 AI generated ' + aiQs.length + ' questions!';
+                } else {
+                    activeQuestions = getStaticQuestions();
+                    aiStatusText.innerHTML = 'AI fetch failed. Using static questions. <a href="https://aistudio.google.com" target="_blank" rel="noopener">Check your key</a>';
+                }
+            } else {
+                activeQuestions = getStaticQuestions();
+            }
+
+            unlockBadge('quiz_start');
+            renderQuestion();
+        }
 
         function renderQuestion() {
-            const q = questions[currentQ];
+            const q = activeQuestions[currentQ];
             document.getElementById('quizBody').style.display = '';
             document.getElementById('quizResult').style.display = 'none';
-            document.getElementById('quizProgress').style.width = (currentQ / questions.length * 100) + '%';
-            document.getElementById('quizCounter').textContent = `Question ${currentQ + 1} of ${questions.length}`;
-            document.getElementById('quizScoreDisplay').textContent = `Score: ${score}`;
+            document.getElementById('quizProgress').style.width = (currentQ / activeQuestions.length * 100) + '%';
+            document.getElementById('quizCounter').textContent = 'Question ' + (currentQ+1) + ' of ' + activeQuestions.length;
+            document.getElementById('quizScoreDisplay').textContent = 'Score: ' + score;
             document.getElementById('quizQuestion').textContent = q.q;
             document.getElementById('quizFeedback').textContent = '';
             document.getElementById('quizFeedback').className = 'quiz-feedback';
@@ -1478,7 +1025,7 @@
             q.opts.forEach((o, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-option';
-                btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${o}`;
+                btn.innerHTML = '<span class="opt-letter">' + letters[i] + '</span>' + o;
                 btn.addEventListener('click', () => selectAnswer(i, btn));
                 opts.appendChild(btn);
             });
@@ -1487,36 +1034,30 @@
         function selectAnswer(idx, btn) {
             if (answered) return;
             answered = true;
-            const q = questions[currentQ];
-            const opts = document.querySelectorAll('.quiz-option');
-            opts.forEach(b => b.disabled = true);
-
+            const q = activeQuestions[currentQ];
+            document.querySelectorAll('.quiz-option').forEach(b => b.disabled = true);
             const fb = document.getElementById('quizFeedback');
             if (idx === q.ans) {
                 score++;
                 btn.classList.add('correct');
-                fb.textContent = '✅ Correct! ' + q.fact;
+                fb.textContent = '\u2705 Correct! ' + (q.fact || '');
                 fb.className = 'quiz-feedback good';
+                ProgressManager.addXP(10);
+                xpEarned += 10;
             } else {
                 btn.classList.add('wrong');
-                opts[q.ans].classList.add('correct');
-                fb.textContent = '❌ Not quite. ' + q.fact;
+                document.querySelectorAll('.quiz-option')[q.ans].classList.add('correct');
+                fb.textContent = '\u274C Not quite. ' + (q.fact || '');
                 fb.className = 'quiz-feedback bad';
             }
-
-            document.getElementById('quizScoreDisplay').textContent = `Score: ${score}`;
+            document.getElementById('quizScoreDisplay').textContent = 'Score: ' + score;
             document.getElementById('quizNextBtn').style.display = 'block';
-            document.getElementById('quizNextBtn').textContent =
-                currentQ < questions.length - 1 ? 'Next Question →' : 'See My Results 🎯';
+            document.getElementById('quizNextBtn').textContent = currentQ < activeQuestions.length-1 ? 'Next Question \u2192' : 'See My Results \uD83C\uDFAF';
         }
 
         document.getElementById('quizNextBtn').addEventListener('click', () => {
             currentQ++;
-            if (currentQ < questions.length) {
-                renderQuestion();
-            } else {
-                showResult();
-            }
+            if (currentQ < activeQuestions.length) { renderQuestion(); } else { showResult(); }
         });
 
         function showResult() {
@@ -1524,74 +1065,82 @@
             document.getElementById('quizBody').style.display = 'none';
             const res = document.getElementById('quizResult');
             res.style.display = 'block';
+            const pct = Math.round((score / activeQuestions.length) * 100);
 
-            const pct = Math.round((score / questions.length) * 100);
+            // Bonus XP
+            ProgressManager.addXP(25); xpEarned += 25;
+            if (pct === 100) { ProgressManager.addXP(75); xpEarned += 75; }
+
             let emoji, title, msg;
-            if (pct === 100) {
-                emoji = '🏆'; title = 'PERFECT SCORE!'; msg = 'You\'re a certified Tourism Genius, Francis! Absolutely flawless!';
-                unlockBadge('quiz_perfect');
-                launchConfetti(4000);
-            } else if (pct >= 70) {
-                emoji = '🌟'; title = 'Excellent Work!'; msg = 'You really know your stuff! A future tourism strategist indeed.';
-                launchConfetti(2000);
-            } else if (pct >= 50) {
-                emoji = '👍'; title = 'Solid Effort!'; msg = 'Good job! Keep exploring and you\'ll get them all next time.';
-            } else {
-                emoji = '📚'; title = 'Keep Learning!'; msg = 'Every expert started somewhere. Hit retry and crush it!';
-            }
+            if (pct === 100) { emoji='\uD83C\uDFC6'; title='PERFECT SCORE!'; msg='You're a certified Tourism Genius! Absolutely flawless!'; unlockBadge('quiz_perfect'); launchConfetti(4000); }
+            else if (pct >= 70) { emoji='\uD83C\uDF1F'; title='Excellent Work!'; msg='You really know your stuff! A future tourism strategist indeed.'; launchConfetti(2000); }
+            else if (pct >= 50) { emoji='\uD83D\uDC4D'; title='Solid Effort!'; msg='Good job! Keep exploring and you'll get them all next time.'; }
+            else { emoji='\uD83D\uDCDA'; title='Keep Learning!'; msg='Every expert started somewhere. Hit retry and crush it!'; }
 
             document.getElementById('resultEmoji').textContent = emoji;
             document.getElementById('resultTitle').textContent = title;
-            document.getElementById('resultScore').textContent = `${score} / ${questions.length}`;
-            document.getElementById('resultMsg').textContent = msg;
-
+            document.getElementById('resultScore').textContent = score + ' / ' + activeQuestions.length;
+            document.getElementById('resultMsg').textContent = msg + ' (+' + xpEarned + ' XP earned!)';
             unlockBadge('quiz_complete');
         }
 
-        document.getElementById('retryQuizBtn').addEventListener('click', () => {
-            currentQ = 0; score = 0;
-            renderQuestion();
-        });
+        document.getElementById('retryQuizBtn').addEventListener('click', () => { startQuiz(); });
 
-        // Start
-        unlockBadge('quiz_start');
-        renderQuestion();
+        // Start quiz
+        startQuiz();
     })();
-
 
     /* ================================================================
        MEMORY CARD GAME
     ================================================================ */
     (function() {
-        const destinations = [
-            { emoji: '🏖️', name: 'Beach' },
-            { emoji: '🗼', name: 'Paris' },
-            { emoji: '🏔️', name: 'Mountains' },
-            { emoji: '🌴', name: 'Tropics' },
-            { emoji: '🦁', name: 'Safari' },
-            { emoji: '🏯', name: 'Castle' },
-            { emoji: '🌊', name: 'Ocean' },
-            { emoji: '🌋', name: 'Volcano' },
+        const allDestinations = [
+            { emoji: '\uD83C\uDFD6\uFE0F', name: 'Beach' },
+            { emoji: '\uD83D\uDDFC', name: 'Paris' },
+            { emoji: '\uD83C\uDFD4\uFE0F', name: 'Mountains' },
+            { emoji: '\uD83C\uDF34', name: 'Tropics' },
+            { emoji: '\uD83E\uDD81', name: 'Safari' },
+            { emoji: '\uD83C\uDFF0', name: 'Castle' },
+            { emoji: '\uD83C\uDF0A', name: 'Ocean' },
+            { emoji: '\uD83C\uDF0B', name: 'Volcano' },
+            { emoji: '\u26E9\uFE0F', name: 'Shrine' },
+            { emoji: '\uD83C\uDFDB\uFE0F', name: 'Temple' },
+            { emoji: '\uD83D\uDC2C', name: 'Dolphin' },
+            { emoji: '\uD83C\uDF3A', name: 'Flowers' },
         ];
 
-        let cards = [], flipped = [], matched = 0, moves = 0, startTime = null, timerInterval = null, locked = false, started = false;
+        // Level thresholds: 8 pairs for Lv1-3, 10 pairs for Lv4-6, 12 pairs for Lv7+
+        const PAIR_THRESHOLDS = [{ minLevel: 7, pairs: 12 }, { minLevel: 4, pairs: 10 }, { minLevel: 1, pairs: 8 }];
+
+        function getMemoryPairCount() {
+            const level = ProgressManager.getData().level;
+            for (const t of PAIR_THRESHOLDS) { if (level >= t.minLevel) return t.pairs; }
+            return 8;
+        }
 
         function shuffle(arr) {
             const a = [...arr];
-            for (let i = a.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [a[i], a[j]] = [a[j], a[i]];
-            }
+            for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
             return a;
         }
 
+        let cards=[], flipped=[], matched=0, moves=0, startTime=null, timerInterval=null, locked=false, started=false, pairCount=8;
+
         function initGame() {
-            cards = shuffle([...destinations, ...destinations].map((d, i) => ({ ...d, id: i })));
-            flipped = []; matched = 0; moves = 0; locked = false; started = false;
+            pairCount = getMemoryPairCount();
+            const dest = allDestinations.slice(0, pairCount);
+            cards = shuffle([...dest, ...dest].map((d,i) => ({...d, id:i})));
+            flipped=[]; matched=0; moves=0; locked=false; started=false;
             document.getElementById('memMoves').textContent = 0;
             document.getElementById('memMatches').textContent = 0;
+            document.getElementById('memTotal').textContent = pairCount;
             document.getElementById('memTimer').textContent = '0s';
             if (timerInterval) clearInterval(timerInterval);
+
+            const grid = document.getElementById('memoryGrid');
+            grid.className = 'memory-grid reveal visible';
+            if (pairCount === 12) grid.classList.add('memory-grid-24');
+            else if (pairCount === 10) grid.classList.add('memory-grid-20');
             renderGrid();
         }
 
@@ -1602,7 +1151,7 @@
                 const el = document.createElement('div');
                 el.className = 'mem-card';
                 el.dataset.idx = idx;
-                el.innerHTML = `<div class="mem-card-inner"><div class="mem-card-face mem-back"></div><div class="mem-card-face mem-front">${card.emoji}</div></div>`;
+                el.innerHTML = '<div class="mem-card-inner"><div class="mem-card-face mem-back"></div><div class="mem-card-face mem-front">' + card.emoji + '</div></div>';
                 el.addEventListener('click', () => handleCardClick(el, idx));
                 grid.appendChild(el);
             });
@@ -1611,39 +1160,38 @@
         function handleCardClick(el, idx) {
             if (locked || el.classList.contains('flipped') || el.classList.contains('matched')) return;
             if (!started) {
-                started = true;
-                startTime = Date.now();
+                started = true; startTime = Date.now();
                 timerInterval = setInterval(() => {
-                    document.getElementById('memTimer').textContent = Math.floor((Date.now() - startTime) / 1000) + 's';
+                    document.getElementById('memTimer').textContent = Math.floor((Date.now()-startTime)/1000) + 's';
                 }, 500);
                 unlockBadge('memory_start');
             }
             el.classList.add('flipped');
-            flipped.push({ el, idx });
+            flipped.push({el, idx});
             if (flipped.length === 2) {
-                locked = true;
-                moves++;
+                locked = true; moves++;
                 document.getElementById('memMoves').textContent = moves;
                 const [a, b] = flipped;
                 if (cards[a.idx].name === cards[b.idx].name) {
                     a.el.classList.add('matched'); b.el.classList.add('matched');
-                    matched++;
-                    document.getElementById('memMatches').textContent = matched;
+                    matched++; document.getElementById('memMatches').textContent = matched;
                     flipped = []; locked = false;
-                    if (matched === 8) {
+                    if (matched === pairCount) {
                         clearInterval(timerInterval);
-                        const t = Math.floor((Date.now() - startTime) / 1000);
+                        const t = Math.floor((Date.now()-startTime)/1000);
+                        let bonusXP = 50;
+                        if (t < 30) bonusXP += 50;
+                        else if (t < 60) bonusXP += 25;
+                        ProgressManager.addXP(bonusXP);
                         setTimeout(() => {
-                            showToast(`🌟 You matched all cards in ${moves} moves & ${t}s!`, '🌟');
+                            showToast('\uD83C\uDF1F You matched all ' + pairCount + ' pairs in ' + moves + ' moves & ' + t + 's! +' + bonusXP + ' XP!', '\uD83C\uDF1F');
                             launchConfetti(3000);
                             unlockBadge('memory_win');
+                            if (t < 60) unlockBadge('speed_demon');
                         }, 350);
                     }
                 } else {
-                    setTimeout(() => {
-                        a.el.classList.remove('flipped'); b.el.classList.remove('flipped');
-                        flipped = []; locked = false;
-                    }, 900);
+                    setTimeout(() => { a.el.classList.remove('flipped'); b.el.classList.remove('flipped'); flipped=[]; locked=false; }, 900);
                 }
             }
         }
@@ -1658,71 +1206,42 @@
     ================================================================ */
     (function() {
         const destinations = [
-            { name: 'Cape Coast 🇬🇭', emoji: '🏰', desc: 'Your home ground!', fact: 'Cape Coast is Ghana\'s former colonial capital, rich in history and stunning coastline.' },
-            { name: 'Accra 🇬🇭', emoji: '🏙️', desc: 'Ghana\'s vibrant capital', fact: 'Accra is one of West Africa\'s fastest-growing cities and a hub for business and culture.' },
-            { name: 'Nairobi 🇰🇪', emoji: '🦁', desc: 'Gateway to the Savanna', fact: 'Nairobi has the only national park in a capital city — you can see lions with skyscrapers in the background!' },
-            { name: 'Marrakech 🇲🇦', emoji: '🕌', desc: 'The Red City awaits', fact: 'Marrakech\'s medina (old city) is a UNESCO World Heritage Site, famous for its bustling souks.' },
-            { name: 'Dubai 🇦🇪', emoji: '🏙️', desc: 'Future of Tourism', fact: 'Dubai received over 17 million international visitors in 2023, making it one of the world\'s most visited cities.' },
-            { name: 'Paris 🇫🇷', emoji: '🗼', desc: 'City of Light & Love', fact: 'France is the world\'s most visited country with ~90 million tourists annually. C\'est magnifique!' },
-            { name: 'Tokyo 🇯🇵', emoji: '⛩️', desc: 'Innovation meets tradition', fact: 'Tokyo has more Michelin-starred restaurants than any other city in the world!' },
-            { name: 'Serengeti 🇹🇿', emoji: '🦒', desc: 'Greatest wildlife spectacle', fact: 'The Serengeti hosts the world\'s largest animal migration — over 1.5 million wildebeest!' },
-            { name: 'Maldives 🇲🇻', emoji: '🌊', desc: 'Paradise on Earth', fact: 'The Maldives sits just 1.5m above sea level on average, making it highly vulnerable to rising seas.' },
-            { name: 'New York 🇺🇸', emoji: '🗽', desc: 'The City that Never Sleeps', fact: 'New York City has over 800 languages spoken — the most linguistically diverse city on Earth!' },
-            { name: 'Cairo 🇪🇬', emoji: '🏜️', desc: 'Land of the Pharaohs', fact: 'The Great Pyramid of Giza is the only surviving wonder of the ancient world — 4,500 years old!' },
-            { name: 'Victoria Falls 🇿🇼', emoji: '💦', desc: 'The Smoke that Thunders', fact: 'Victoria Falls is the world\'s largest waterfall by total area — 1,708m wide and 108m tall!' },
+            { name: 'Cape Coast \uD83C\uDDEC\uD83C\uDDED', emoji: '\uD83C\uDFF0', desc: 'Your home ground!', fact: 'Cape Coast is Ghana's former colonial capital, rich in history and stunning coastline.' },
+            { name: 'Accra \uD83C\uDDEC\uD83C\uDDED', emoji: '\uD83C\uDFD9\uFE0F', desc: 'Ghana's vibrant capital', fact: 'Accra is one of West Africa's fastest-growing cities and a hub for business and culture.' },
+            { name: 'Nairobi \uD83C\uDDF0\uD83C\uDDEA', emoji: '\uD83E\uDD81', desc: 'Gateway to the Savanna', fact: 'Nairobi has the only national park in a capital city. You can see lions with skyscrapers in the background!' },
+            { name: 'Marrakech \uD83C\uDDF2\uD83C\uDDE6', emoji: '\uD83D\uDD4C', desc: 'The Red City awaits', fact: 'Marrakech's medina (old city) is a UNESCO World Heritage Site, famous for its bustling souks.' },
+            { name: 'Dubai \uD83C\uDDE6\uD83C\uDDEA', emoji: '\uD83C\uDFD9\uFE0F', desc: 'Future of Tourism', fact: 'Dubai received over 17 million international visitors in 2023, making it one of the world's most visited cities.' },
+            { name: 'Paris \uD83C\uDDEB\uD83C\uDDF7', emoji: '\uD83D\uDDFC', desc: 'City of Light & Love', fact: 'France is the world's most visited country with ~90 million tourists annually.' },
+            { name: 'Tokyo \uD83C\uDDEF\uD83C\uDDF5', emoji: '\u26E9\uFE0F', desc: 'Innovation meets tradition', fact: 'Tokyo has more Michelin-starred restaurants than any other city in the world!' },
+            { name: 'Serengeti \uD83C\uDDF9\uD83C\uDDFF', emoji: '\uD83E\uDD92', desc: 'Greatest wildlife spectacle', fact: 'The Serengeti hosts the world's largest animal migration. Over 1.5 million wildebeest!' },
+            { name: 'Maldives \uD83C\uDDF2\uD83C\uDDFB', emoji: '\uD83C\uDF0A', desc: 'Paradise on Earth', fact: 'The Maldives sits just 1.5m above sea level on average, making it highly vulnerable to rising seas.' },
+            { name: 'New York \uD83C\uDDFA\uD83C\uDDF8', emoji: '\uD83D\uDDFD', desc: 'The City that Never Sleeps', fact: 'New York City has over 800 languages spoken. The most linguistically diverse city on Earth!' },
+            { name: 'Cairo \uD83C\uDDEA\uD83C\uDDEC', emoji: '\uD83C\uDFDC\uFE0F', desc: 'Land of the Pharaohs', fact: 'The Great Pyramid of Giza is the only surviving wonder of the ancient world. 4,500 years old!' },
+            { name: 'Victoria Falls \uD83C\uDDFF\uD83C\uDDFC', emoji: '\uD83D\uDCA6', desc: 'The Smoke that Thunders', fact: 'Victoria Falls is the world's largest waterfall by total area. 1,708m wide and 108m tall!' },
         ];
 
         const canvas = document.getElementById('globe-wheel');
         const ctx = canvas.getContext('2d');
-        const CX = canvas.width / 2, CY = canvas.height / 2, R = CX - 10;
-        const slice = (Math.PI * 2) / destinations.length;
-
-        const colors = [
-            '#0A2463','#1E3A8A','#1a56c4','#0e3080','#2546a0',
-            '#D4AF37','#c49b20','#b88a10','#e0bf50','#c8a830',
-            '#1a3a78','#0d2a60'
-        ];
-
-        let angle = 0, spinning = false;
+        const CX = canvas.width/2, CY = canvas.height/2, R = CX-10;
+        const slice = (Math.PI*2)/destinations.length;
+        const colors = ['#0A2463','#1E3A8A','#1a56c4','#0e3080','#2546a0','#D4AF37','#c49b20','#b88a10','#e0bf50','#c8a830','#1a3a78','#0d2a60'];
+        let angle=0, spinning=false;
 
         function drawWheel(rot) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            destinations.forEach((d, i) => {
-                const start = i * slice + rot;
-                const end = start + slice;
-                ctx.beginPath();
-                ctx.moveTo(CX, CY);
-                ctx.arc(CX, CY, R, start, end);
-                ctx.closePath();
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(255,255,255,0.15)';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                ctx.save();
-                ctx.translate(CX, CY);
-                ctx.rotate(start + slice / 2);
-                ctx.textAlign = 'right';
-                ctx.fillStyle = '#ffffff';
-                ctx.font = 'bold 11px Montserrat, sans-serif';
-                ctx.fillText(d.emoji + ' ' + d.name.split(' ')[0], R - 10, 4);
-                ctx.restore();
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            destinations.forEach((d,i) => {
+                const start=i*slice+rot, end=start+slice;
+                ctx.beginPath(); ctx.moveTo(CX,CY); ctx.arc(CX,CY,R,start,end); ctx.closePath();
+                ctx.fillStyle=colors[i%colors.length]; ctx.fill();
+                ctx.strokeStyle='rgba(255,255,255,0.15)'; ctx.lineWidth=1.5; ctx.stroke();
+                ctx.save(); ctx.translate(CX,CY); ctx.rotate(start+slice/2);
+                ctx.textAlign='right'; ctx.fillStyle='#ffffff'; ctx.font='bold 11px Montserrat, sans-serif';
+                ctx.fillText(d.emoji+' '+d.name.split(' ')[0], R-10, 4); ctx.restore();
             });
-
-            // Center circle
-            ctx.beginPath();
-            ctx.arc(CX, CY, 26, 0, Math.PI * 2);
-            ctx.fillStyle = '#D4AF37';
-            ctx.fill();
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-
-            ctx.font = 'bold 18px serif';
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#0A2463';
-            ctx.fillText('🌍', CX, CY + 7);
+            ctx.beginPath(); ctx.arc(CX,CY,26,0,Math.PI*2); ctx.fillStyle='#D4AF37'; ctx.fill();
+            ctx.strokeStyle='#fff'; ctx.lineWidth=3; ctx.stroke();
+            ctx.font='bold 18px serif'; ctx.textAlign='center'; ctx.fillStyle='#0A2463';
+            ctx.fillText('\uD83C\uDF0D', CX, CY+7);
         }
 
         drawWheel(0);
@@ -1730,51 +1249,352 @@
         document.getElementById('spinBtn').addEventListener('click', () => {
             if (spinning) return;
             spinning = true;
-            const spinAmount = Math.PI * 2 * (8 + Math.random() * 8);
+            const spinAmount = Math.PI*2*(8+Math.random()*8);
             const duration = 3500;
             const start = performance.now();
             const startAngle = angle;
-
-            function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-
+            function easeOut(t) { return 1-Math.pow(1-t,3); }
             function frame(now) {
-                const elapsed = now - start;
-                const progress = Math.min(elapsed / duration, 1);
-                angle = startAngle + spinAmount * easeOut(progress);
+                const elapsed=now-start, progress=Math.min(elapsed/duration,1);
+                angle=startAngle+spinAmount*easeOut(progress);
                 drawWheel(angle);
-
-                if (progress < 1) {
-                    requestAnimationFrame(frame);
-                } else {
-                    spinning = false;
-                    // Figure out which slice is at the pointer (right side = angle 0 in canvas context)
-                    const norm = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
-                    const pointerAngle = (Math.PI * 2 - norm) % (Math.PI * 2); // pointer is at the right
-                    const idx = Math.floor(pointerAngle / slice) % destinations.length;
-                    const dest = destinations[idx];
-
-                    document.getElementById('spinEmoji').textContent = dest.emoji;
-                    document.getElementById('spinName').textContent = dest.name;
-                    document.getElementById('spinDesc').textContent = dest.desc;
-                    const factEl = document.getElementById('spinFact');
-                    factEl.textContent = '💡 ' + dest.fact;
-                    factEl.style.display = 'block';
-
+                if(progress<1){ requestAnimationFrame(frame); }
+                else {
+                    spinning=false;
+                    const norm=((angle%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+                    const pointerAngle=(Math.PI*2-norm)%(Math.PI*2);
+                    const idx=Math.floor(pointerAngle/slice)%destinations.length;
+                    const dest=destinations[idx];
+                    document.getElementById('spinEmoji').textContent=dest.emoji;
+                    document.getElementById('spinName').textContent=dest.name;
+                    document.getElementById('spinDesc').textContent=dest.desc;
+                    const factEl=document.getElementById('spinFact');
+                    factEl.textContent='\uD83D\uDCA1 '+dest.fact; factEl.style.display='block';
+                    ProgressManager.addXP(5);
                     unlockBadge('spin_globe');
-                    showToast(`Next stop: ${dest.name}! ${dest.emoji}`, dest.emoji);
+                    showToast('Next stop: '+dest.name+'! '+dest.emoji, dest.emoji);
                 }
             }
-
             requestAnimationFrame(frame);
         });
     })();
 
-
     /* ================================================================
-       QUOTES CAROUSEL
+       WORD SCRAMBLE GAME
     ================================================================ */
     (function() {
-        const quotes = [
+        const scrambleWords = {
+            easy:   ['ACCRA','GHANA','SAFARI','HOTEL','BEACH','GUIDE','TOURS','LODGE','OCEAN','TRAIL','EGYPT','KENYA'],
+            medium: ['TOURISM','PASSPORT','CULTURE','CLIMATE','AIRPORT','CUSTOMS','EMBASSY','NAVIGATE','FESTIVAL','HERITAGE','LATITUDE','STRATEGY'],
+            hard:   ['ITINERARY','HOSPITALITY','DESTINATION','GEOGRAPHY','LONGITUDE','ADVENTURE','EXPEDITION','SUSTAINABLE','ECOTOURISM','DIPLOMAT','LANDSCAPE','ARCHIPELAGO','PENINSULA','EQUATOR','BRANDING','MARKETING']
+        };
+
+        const TOTAL_ROUNDS = 10;
+        const TIMER_SECS = 30;
+        let gameWords = [], roundIdx = 0, gameScore = 0, gameXP = 0;
+        let timerInterval = null, timeLeft = TIMER_SECS, hintUsed = false, roundActive = false;
+
+        function shuffle(arr) {
+            const a=[...arr];
+            for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+            return a;
+        }
+
+        function scrambleWord(word) {
+            let s;
+            do { s = shuffle(word.split('')).join(''); } while (s === word && word.length > 1);
+            return s;
+        }
+
+        function getWordBank() {
+            const diff = ProgressManager.getDifficulty();
+            if (diff === 'hard') return [...scrambleWords.hard];
+            if (diff === 'medium') return [...scrambleWords.medium];
+            return [...scrambleWords.easy];
+        }
+
+        function startGame() {
+            const bank = shuffle(getWordBank());
+            gameWords = bank.slice(0, TOTAL_ROUNDS);
+            roundIdx = 0; gameScore = 0; gameXP = 0;
+            document.getElementById('scrambleGameArea').style.display = '';
+            document.getElementById('scrambleResult').style.display = 'none';
+            showRound();
+        }
+
+        function showRound() {
+            if (roundIdx >= gameWords.length) { endGame(); return; }
+            hintUsed = false; roundActive = true;
+            timeLeft = TIMER_SECS;
+            const word = gameWords[roundIdx];
+            const scrambled = scrambleWord(word);
+
+            document.getElementById('scrambleRound').textContent = 'Round ' + (roundIdx+1) + ' of ' + TOTAL_ROUNDS;
+            document.getElementById('scrambleScore').textContent = 'Score: ' + gameScore;
+            document.getElementById('scrambleXP').textContent = 'XP: +' + gameXP;
+            document.getElementById('scrambleHint').textContent = '';
+            document.getElementById('scrambleInput').value = '';
+            document.getElementById('scrambleInput').className = 'scramble-input';
+            document.getElementById('scrambleTimerFill').style.width = '100%';
+            document.getElementById('scrambleTimerFill').className = 'scramble-timer-fill';
+            document.getElementById('scrambleTimerText').textContent = TIMER_SECS + 's remaining';
+
+            // Render tiles
+            const tilesEl = document.getElementById('scrambleLetters');
+            tilesEl.innerHTML = '';
+            scrambled.split('').forEach(ch => {
+                const tile = document.createElement('div');
+                tile.className = 'scramble-tile';
+                tile.textContent = ch;
+                tilesEl.appendChild(tile);
+            });
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const pct = (timeLeft / TIMER_SECS) * 100;
+                document.getElementById('scrambleTimerFill').style.width = pct + '%';
+                document.getElementById('scrambleTimerText').textContent = timeLeft + 's remaining';
+                if (timeLeft <= 10) document.getElementById('scrambleTimerFill').className = 'scramble-timer-fill danger';
+                if (timeLeft <= 0) { clearInterval(timerInterval); handleWrong(); }
+            }, 1000);
+
+            document.getElementById('scrambleInput').focus();
+        }
+
+        function handleCorrect() {
+            if (!roundActive) return;
+            roundActive = false;
+            clearInterval(timerInterval);
+            gameScore++;
+            const xp = 15 + timeLeft;
+            gameXP += xp;
+            ProgressManager.addXP(xp);
+            document.getElementById('scrambleInput').className = 'scramble-input correct';
+            document.getElementById('scrambleHint').textContent = '\u2705 Correct! +' + xp + ' XP';
+            setTimeout(() => { roundIdx++; showRound(); }, 1200);
+        }
+
+        function handleWrong() {
+            if (!roundActive) return;
+            roundActive = false;
+            clearInterval(timerInterval);
+            const word = gameWords[roundIdx];
+            document.getElementById('scrambleInput').className = 'scramble-input wrong';
+            document.getElementById('scrambleHint').textContent = '\u274C Time\'s up! The word was: ' + word;
+            setTimeout(() => { roundIdx++; showRound(); }, 1800);
+        }
+
+        document.getElementById('scrambleSubmit').addEventListener('click', () => {
+            if (!roundActive) return;
+            const val = document.getElementById('scrambleInput').value.trim().toUpperCase();
+            if (val === gameWords[roundIdx]) { handleCorrect(); }
+            else {
+                document.getElementById('scrambleInput').className = 'scramble-input wrong';
+                setTimeout(() => { document.getElementById('scrambleInput').className = 'scramble-input'; }, 500);
+            }
+        });
+
+        document.getElementById('scrambleInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('scrambleSubmit').click();
+        });
+
+        document.getElementById('scrambleHintBtn').addEventListener('click', () => {
+            if (!roundActive || hintUsed) return;
+            hintUsed = true;
+            const word = gameWords[roundIdx];
+            ProgressManager.addXP(-5); gameXP = Math.max(0, gameXP - 5);
+            document.getElementById('scrambleHint').textContent = '\uD83D\uDCA1 Hint: The word starts with "' + word[0] + '" and has ' + word.length + ' letters.';
+        });
+
+        document.getElementById('scrambleSkip').addEventListener('click', () => {
+            if (!roundActive) return;
+            roundActive = false;
+            clearInterval(timerInterval);
+            const word = gameWords[roundIdx];
+            document.getElementById('scrambleHint').textContent = 'Skipped! The word was: ' + word;
+            setTimeout(() => { roundIdx++; showRound(); }, 1200);
+        });
+
+        function endGame() {
+            clearInterval(timerInterval);
+            document.getElementById('scrambleGameArea').style.display = 'none';
+            document.getElementById('scrambleResult').style.display = 'block';
+            const pct = Math.round((gameScore / TOTAL_ROUNDS) * 100);
+            let emoji, title, msg;
+            if (pct === 100) { emoji='\uD83C\uDFC6'; title='Perfect Scrambler!'; msg='You unscrambled every word! Word Wizard indeed!'; launchConfetti(3000); }
+            else if (pct >= 70) { emoji='\uD83C\uDF1F'; title='Great job!'; msg='Excellent vocabulary! Tourism terms are your forte.'; }
+            else { emoji='\uD83D\uDCDA'; title='Keep practising!'; msg='Travel words can be tricky. Try again to improve!'; }
+            document.getElementById('scrambleResultEmoji').textContent = emoji;
+            document.getElementById('scrambleResultTitle').textContent = title;
+            document.getElementById('scrambleResultScore').textContent = gameScore + ' / ' + TOTAL_ROUNDS;
+            document.getElementById('scrambleResultMsg').textContent = msg + ' Total XP earned: +' + gameXP;
+            unlockBadge('scramble_win');
+        }
+
+        document.getElementById('scramblePlayAgain').addEventListener('click', startGame);
+
+        startGame();
+    })();
+
+    /* ================================================================
+       FLAG GUESSER GAME
+    ================================================================ */
+    (function() {
+        const flagData = [
+            { flag: '\uD83C\uDDEC\uD83C\uDDED', name: 'Ghana',        hint: 'West African country on the Gulf of Guinea' },
+            { flag: '\uD83C\uDDF3\uD83C\uDDEC', name: 'Nigeria',      hint: "Africa's most populous country" },
+            { flag: '\uD83C\uDDFF\uD83C\uDDE6', name: 'South Africa', hint: 'Nation at the southern tip of Africa' },
+            { flag: '\uD83C\uDDF0\uD83C\uDDEA', name: 'Kenya',        hint: 'Home of the Maasai Mara safari' },
+            { flag: '\uD83C\uDDEA\uD83C\uDDEC', name: 'Egypt',        hint: 'Land of the Pharaohs and Pyramids' },
+            { flag: '\uD83C\uDDF2\uD83C\uDDE6', name: 'Morocco',      hint: 'The Red City of Marrakech is here' },
+            { flag: '\uD83C\uDDF9\uD83C\uDDFF', name: 'Tanzania',     hint: 'Home of Serengeti and Kilimanjaro' },
+            { flag: '\uD83C\uDDF8\uD83C\uDDF3', name: 'Senegal',      hint: 'The westernmost country in Africa' },
+            { flag: '\uD83C\uDDEB\uD83C\uDDF7', name: 'France',       hint: 'Most visited country in the world' },
+            { flag: '\uD83C\uDDEF\uD83C\uDDF5', name: 'Japan',        hint: 'Land of the Rising Sun' },
+            { flag: '\uD83C\uDDE7\uD83C\uDDF7', name: 'Brazil',       hint: 'Home of the Amazon and Carnival' },
+            { flag: '\uD83C\uDDEE\uD83C\uDDF3', name: 'India',        hint: 'Land of the Taj Mahal' },
+            { flag: '\uD83C\uDDE6\uD83C\uDDFA', name: 'Australia',    hint: 'Land Down Under with Great Barrier Reef' },
+            { flag: '\uD83C\uDDEE\uD83C\uDDF9', name: 'Italy',        hint: 'Most UNESCO World Heritage Sites' },
+            { flag: '\uD83C\uDDE6\uD83C\uDDEA', name: 'UAE',          hint: 'Home of Dubai, city of the future' },
+            { flag: '\uD83C\uDDE8\uD83C\uDDEE', name: 'Ivory Coast',  hint: 'Francophone West African nation' },
+            { flag: '\uD83C\uDDE8\uD83C\uDDF2', name: 'Cameroon',     hint: 'Africa in miniature' },
+            { flag: '\uD83C\uDDF7\uD83C\uDDFC', name: 'Rwanda',       hint: 'Land of a Thousand Hills' },
+            { flag: '\uD83C\uDDEA\uD83C\uDDF9', name: 'Ethiopia',     hint: "Africa's oldest independent country" },
+            { flag: '\uD83C\uDDE6\uD83C\uDDF4', name: 'Angola',       hint: 'Oil-rich southern African nation' }
+        ];
+
+        const TOTAL_QUESTIONS = 20;
+        let gameQueue = [], qIdx = 0, flagScore = 0, perfectRound = true;
+        let timerInterval = null, timeLeft = 0, hintUsed = false, answered = false;
+
+        // Timer scales with level: Lv7+ = 5s, Lv4-6 = 10s, Lv1-3 = no timer (0)
+        const FLAG_TIMERS = [{ minLevel: 7, secs: 5 }, { minLevel: 4, secs: 10 }, { minLevel: 1, secs: 0 }];
+
+        function getTimerDuration() {
+            const level = ProgressManager.getData().level;
+            for (const t of FLAG_TIMERS) { if (level >= t.minLevel) return t.secs; }
+            return 0;
+        }
+
+        function shuffle(arr) {
+            const a=[...arr];
+            for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+            return a;
+        }
+
+        function startGame() {
+            gameQueue = shuffle([...flagData]).slice(0, TOTAL_QUESTIONS);
+            qIdx = 0; flagScore = 0; perfectRound = true;
+            document.getElementById('flagGameArea').style.display = '';
+            document.getElementById('flagResult').style.display = 'none';
+            showQuestion();
+        }
+
+        function showQuestion() {
+            if (qIdx >= gameQueue.length) { endGame(); return; }
+            hintUsed = false; answered = false;
+            const current = gameQueue[qIdx];
+            document.getElementById('flagQuestion').textContent = 'Question ' + (qIdx+1) + ' of ' + TOTAL_QUESTIONS;
+            document.getElementById('flagScore').textContent = 'Score: ' + flagScore;
+            document.getElementById('flagDisplay').textContent = current.flag;
+            document.getElementById('flagHintText').textContent = '';
+            document.getElementById('flagHintBtn').disabled = false;
+
+            // Build 4 options
+            const others = shuffle(flagData.filter(f => f.name !== current.name)).slice(0, 3);
+            const opts = shuffle([current, ...others]);
+
+            const optsEl = document.getElementById('flagOptions');
+            optsEl.innerHTML = '';
+            opts.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'flag-option';
+                btn.textContent = opt.name;
+                btn.addEventListener('click', () => selectFlag(opt.name === current.name, btn, optsEl, current.name));
+                optsEl.appendChild(btn);
+            });
+
+            // Timer
+            if (timerInterval) clearInterval(timerInterval);
+            const timerDur = getTimerDuration();
+            const timerFill = document.getElementById('flagTimerFill');
+            if (timerDur > 0) {
+                timerFill.style.width = '100%';
+                timeLeft = timerDur;
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timerFill.style.width = (timeLeft / timerDur * 100) + '%';
+                    if (timeLeft <= 0) { clearInterval(timerInterval); handleFlagTimeout(optsEl, current.name); }
+                }, 1000);
+            } else {
+                timerFill.style.width = '0%';
+            }
+        }
+
+        function selectFlag(correct, btn, optsEl, correctName) {
+            if (answered) return;
+            answered = true;
+            clearInterval(timerInterval);
+            Array.from(optsEl.querySelectorAll('.flag-option')).forEach(b => { b.disabled = true; if (b.textContent === correctName) b.classList.add('correct'); });
+            if (correct) {
+                btn.classList.add('correct');
+                flagScore++;
+                const xp = hintUsed ? 10 : 15;
+                ProgressManager.addXP(xp);
+            } else {
+                btn.classList.add('wrong');
+                perfectRound = false;
+            }
+            setTimeout(() => { qIdx++; showQuestion(); }, 1500);
+        }
+
+        function handleFlagTimeout(optsEl, correctName) {
+            if (answered) return;
+            answered = true;
+            Array.from(optsEl.querySelectorAll('.flag-option')).forEach(b => { b.disabled = true; if (b.textContent === correctName) b.classList.add('correct'); });
+            perfectRound = false;
+            setTimeout(() => { qIdx++; showQuestion(); }, 1500);
+        }
+
+        document.getElementById('flagHintBtn').addEventListener('click', () => {
+            if (hintUsed || answered) return;
+            hintUsed = true;
+            document.getElementById('flagHintBtn').disabled = true;
+            const current = gameQueue[qIdx];
+            document.getElementById('flagHintText').textContent = '\uD83D\uDCA1 ' + current.hint;
+        });
+
+        function endGame() {
+            clearInterval(timerInterval);
+            document.getElementById('flagGameArea').style.display = 'none';
+            document.getElementById('flagResult').style.display = 'block';
+            const pct = Math.round((flagScore / TOTAL_QUESTIONS) * 100);
+            let emoji, title, msg;
+            if (pct === 100) { emoji='\uD83C\uDFC6'; title='Flag Master!'; msg='Perfect score! You know every flag!'; launchConfetti(3000); }
+            else if (pct >= 75) { emoji='\uD83C\uDF1F'; title='Flag Expert!'; msg='Excellent! You know your flags well.'; }
+            else if (pct >= 50) { emoji='\uD83D\uDC4D'; title='Getting There!'; msg='Good effort! Keep exploring world flags.'; }
+            else { emoji='\uD83D\uDCDA'; title='Keep Learning!'; msg='Flag knowledge takes practice. Try again!'; }
+
+            if (perfectRound) { ProgressManager.addXP(50); unlockBadge('flag_perfect'); msg += ' PERFECT ROUND! +50 bonus XP!'; }
+
+            document.getElementById('flagResultEmoji').textContent = emoji;
+            document.getElementById('flagResultTitle').textContent = title;
+            document.getElementById('flagResultScore').textContent = flagScore + ' / ' + TOTAL_QUESTIONS;
+            document.getElementById('flagResultMsg').textContent = msg;
+        }
+
+        document.getElementById('flagPlayAgain').addEventListener('click', startGame);
+
+        startGame();
+    })();
+
+
+    /* ================================================================
+       QUOTES CAROUSEL + LIVE FETCH
+    ================================================================ */
+    (function() {
+        let quotes = [
             { text: 'Tourism is not just about visiting places — it\'s about transforming perspectives.', author: '— Francis Pwavwe' },
             { text: 'The world is a book, and those who do not travel read only one page.', author: '— Saint Augustine' },
             { text: 'Leadership is not about being in charge. It\'s about taking care of those in your charge.', author: '— Simon Sinek' },
@@ -1783,29 +1603,48 @@
             { text: 'The best investment you can make is in yourself.', author: '— Warren Buffett' },
             { text: 'Innovation distinguishes between a leader and a follower.', author: '— Steve Jobs' },
         ];
-
-        let current = 0;
-        const carousel = document.getElementById('quoteCarousel');
-        const dotsEl = document.getElementById('quoteDots');
+        let current = 0, liveLoaded = false;
 
         function render() {
+            const carousel = document.getElementById('quoteCarousel');
+            const dotsEl = document.getElementById('quoteDots');
+            if (!carousel || !dotsEl) return;
             carousel.innerHTML = '';
             dotsEl.innerHTML = '';
             quotes.forEach((q, i) => {
                 const slide = document.createElement('div');
                 slide.className = 'quote-slide' + (i === current ? ' active' : '');
-                slide.innerHTML = `<div class="quote-text">${q.text}</div><div class="quote-author">${q.author}</div>`;
+                slide.innerHTML = '<div class="quote-text">' + q.text + '</div><div class="quote-author">' + q.author + '</div>';
                 carousel.appendChild(slide);
-
                 const dot = document.createElement('button');
                 dot.className = 'quote-dot' + (i === current ? ' active' : '');
                 dot.addEventListener('click', () => { current = i; render(); });
                 dotsEl.appendChild(dot);
             });
+            if (liveLoaded) {
+                const wrap = document.getElementById('quoteLiveBadgeWrap');
+                if (wrap && !wrap.querySelector('.quote-live-badge')) {
+                    wrap.innerHTML = '<span class="quote-live-badge">\u2728 Live quotes loaded</span>';
+                }
+            }
         }
 
         render();
-        setInterval(() => { current = (current + 1) % quotes.length; render(); }, 5500);
+        setInterval(() => { current = (current+1) % quotes.length; render(); }, 5500);
+
+        // Fetch live quotes
+        fetch('https://api.quotable.io/quotes/random?limit=3&tags=inspirational|travel|leadership')
+            .then(r => r.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    data.forEach(q => { quotes.push({ text: q.content, author: '— ' + q.author }); });
+                } else if (Array.isArray(data.results)) {
+                    data.results.forEach(q => { quotes.push({ text: q.content, author: '— ' + q.author }); });
+                }
+                liveLoaded = true;
+                render();
+            })
+            .catch(() => {}); // Silent fallback
     })();
 
     </script>
