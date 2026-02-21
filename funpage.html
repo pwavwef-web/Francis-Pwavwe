@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Francis's Fun Zone 🎉 | AZ Learner</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & VARIABLES ===== */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary-blue: #0A2463;
+            --royal-blue: #1E3A8A;
+            --light-blue: #3B82F6;
+            --accent-gold: #D4AF37;
+            --vivid-gold: #FFD700;
+            --white: #FFFFFF;
+            --off-white: #F8FAFC;
+            --light-gray: #E2E8F0;
+            --medium-gray: #64748B;
+            --dark-gray: #1E293B;
+            --text-dark: #0F172A;
+            --fun-purple: #7C3AED;
+            --fun-pink: #EC4899;
+            --fun-green: #10B981;
+            --fun-orange: #F97316;
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            background: var(--primary-blue);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* ===== PARTICLE CANVAS ===== */
+        #particle-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== GENERAL LAYOUT ===== */
+        .page-wrap {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title span {
+            color: var(--accent-gold);
+        }
+
+        .section-line {
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--light-blue));
+            margin: 0 auto 1rem;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: var(--light-gray);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== NAV ===== */
+        .fun-nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 0.9rem 0;
+            background: rgba(10, 36, 99, 0.92);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .fun-nav .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-brand {
+            font-family: var(--font-heading);
+            font-weight: 900;
+            font-size: 1.15rem;
+            color: var(--accent-gold);
+            letter-spacing: 1.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.25rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--accent-gold);
+        }
+
+        .back-home {
+            color: var(--accent-gold) !important;
+            border: 1px solid var(--accent-gold) !important;
+            padding: 0.35rem 0.9rem !important;
+        }
+
+        .back-home:hover {
+            background: var(--accent-gold) !important;
+            color: var(--primary-blue) !important;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.4rem 1.2rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(212,175,55,0); }
+        }
+
+        .hero-title {
+            font-family: var(--font-heading);
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 900;
+            color: var(--white);
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title .gold { color: var(--accent-gold); }
+
+        .typewriter-wrap {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--light-gray);
+            margin-bottom: 2.5rem;
+            min-height: 2.2em;
+        }
+
+        .typewriter {
+            border-right: 3px solid var(--accent-gold);
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            animation: blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: var(--accent-gold); }
+        }
+
+        .hero-emoji-row {
+            font-size: 2.5rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-emoji-row span {
+            animation: bounce-emoji 1.4s ease-in-out infinite;
+            display: inline-block;
+        }
+        .hero-emoji-row span:nth-child(1) { animation-delay: 0s; }
+        .hero-emoji-row span:nth-child(2) { animation-delay: 0.15s; }
+        .hero-emoji-row span:nth-child(3) { animation-delay: 0.30s; }
+        .hero-emoji-row span:nth-child(4) { animation-delay: 0.45s; }
+        .hero-emoji-row span:nth-child(5) { animation-delay: 0.60s; }
+        .hero-emoji-row span:nth-child(6) { animation-delay: 0.75s; }
+
+        @keyframes bounce-emoji {
+            0%, 100% { transform: translateY(0) scale(1); }
+            40% { transform: translateY(-14px) scale(1.1); }
+            60% { transform: translateY(-6px) scale(1.05); }
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2.2rem;
+            border-radius: 6px;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+            text-decoration: none;
+        }
+
+        .btn:hover { transform: translateY(-3px); }
+
+        .btn-gold {
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+        }
+        .btn-gold:hover { box-shadow: 0 10px 25px rgba(212,175,55,0.4); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+        .btn-outline:hover {
+            background: var(--white);
+            color: var(--primary-blue);
+            box-shadow: 0 10px 25px rgba(255,255,255,0.2);
+        }
+
+        .btn-blue {
+            background: var(--light-blue);
+            color: var(--white);
+        }
+        .btn-blue:hover { box-shadow: 0 10px 25px rgba(59,130,246,0.4); }
+
+        /* ===== STATS BAR ===== */
+        .stats-bar {
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(8px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            color: var(--accent-gold);
+            line-height: 1;
+            margin-bottom: 0.35rem;
+        }
+
+        .stat-label {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ===== TRIVIA SECTION ===== */
+        .trivia-section {
+            background: rgba(255,255,255,0.04);
+        }
+
+        .quiz-card {
+            background: rgba(255,255,255,0.07);
+            border: 1px solid rgba(255,255,255,0.12);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .quiz-progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 3px;
+            margin-bottom: 1.75rem;
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--light-blue), var(--accent-gold));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .quiz-counter {
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .quiz-score-display {
+            background: rgba(212,175,55,0.15);
+            border: 1px solid rgba(212,175,55,0.4);
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+        }
+
+        .quiz-question {
+            font-family: var(--font-heading);
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 2rem;
+            line-height: 1.4;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 550px) {
+            .quiz-options { grid-template-columns: 1fr; }
+        }
+
+        .quiz-option {
+            background: rgba(255,255,255,0.08);
+            border: 2px solid rgba(255,255,255,0.15);
+            color: var(--white);
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: left;
+            transition: background 0.2s, border-color 0.2s, transform 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .quiz-option .opt-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.12);
+            font-weight: 700;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .quiz-option:hover:not(:disabled) {
+            background: rgba(59,130,246,0.2);
+            border-color: var(--light-blue);
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.correct {
+            background: rgba(16,185,129,0.25);
+            border-color: var(--fun-green);
+            animation: pulse-correct 0.4s ease;
+        }
+
+        .quiz-option.correct .opt-letter {
+            background: var(--fun-green);
+        }
+
+        .quiz-option.wrong {
+            background: rgba(239,68,68,0.2);
+            border-color: #EF4444;
+        }
+
+        @keyframes pulse-correct {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+
+        .quiz-option:disabled { cursor: not-allowed; }
+
+        .quiz-feedback {
+            min-height: 2.5rem;
+            color: var(--light-gray);
+            font-size: 0.95rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .quiz-feedback.good { color: var(--fun-green); }
+        .quiz-feedback.bad { color: #EF4444; }
+
+        .quiz-next-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--royal-blue), var(--light-blue));
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .quiz-next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59,130,246,0.35);
+        }
+
+        /* Quiz Result */
+        .quiz-result {
+            text-align: center;
+            display: none;
+        }
+
+        .result-emoji {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: result-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes result-pop {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .result-title {
+            font-family: var(--font-heading);
+            font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .result-score {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-heading);
+        }
+
+        .result-msg {
+            color: var(--light-gray);
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ===== MEMORY GAME ===== */
+        .memory-section {
+            background: rgba(0,0,0,0.15);
+        }
+
+        .memory-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .memory-stat {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--white);
+            padding: 0.5rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .memory-stat span {
+            color: var(--accent-gold);
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        @media (max-width: 550px) {
+            .memory-grid { grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
+        }
+
+        .mem-card {
+            aspect-ratio: 1;
+            cursor: pointer;
+            perspective: 600px;
+            border-radius: 10px;
+        }
+
+        .mem-card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+        }
+
+        .mem-card.flipped .mem-card-inner,
+        .mem-card.matched .mem-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .mem-card-face {
+            position: absolute;
+            inset: 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        .mem-back {
+            background: linear-gradient(135deg, var(--royal-blue), #1a3f7a);
+            border: 2px solid rgba(255,255,255,0.15);
+        }
+
+        .mem-back::after {
+            content: '?';
+            font-family: var(--font-heading);
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 900;
+            color: rgba(255,255,255,0.35);
+        }
+
+        .mem-front {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            transform: rotateY(180deg);
+        }
+
+        .mem-card.matched .mem-front {
+            background: rgba(16,185,129,0.25);
+            border-color: var(--fun-green);
+            box-shadow: 0 0 18px rgba(16,185,129,0.4);
+        }
+
+        /* ===== SPIN THE GLOBE ===== */
+        .spin-section {
+            background: rgba(255,255,255,0.04);
+        }
+
+        .globe-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .wheel-container {
+            position: relative;
+            width: min(380px, 90vw);
+            height: min(380px, 90vw);
+        }
+
+        #globe-wheel {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 30px rgba(59,130,246,0.4));
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: 50%;
+            right: -14px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-top: 18px solid transparent;
+            border-bottom: 18px solid transparent;
+            border-right: 30px solid var(--accent-gold);
+            filter: drop-shadow(0 0 6px rgba(212,175,55,0.6));
+        }
+
+        .spin-result-card {
+            background: rgba(255,255,255,0.08);
+            border: 2px solid var(--accent-gold);
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .spin-result-emoji {
+            font-size: 3.5rem;
+            line-height: 1;
+        }
+
+        .spin-result-name {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+        }
+
+        .spin-result-desc {
+            color: var(--light-gray);
+            font-size: 0.95rem;
+        }
+
+        .spin-result-fact {
+            background: rgba(255,255,255,0.06);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--light-gray);
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== ACHIEVEMENTS ===== */
+        .achievements-section {
+            background: rgba(0,0,0,0.15);
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .badge-card {
+            background: rgba(255,255,255,0.06);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 14px;
+            padding: 1.75rem 1.25rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge-card.locked {
+            opacity: 0.45;
+            filter: grayscale(0.8);
+        }
+
+        .badge-card.unlocked {
+            border-color: var(--accent-gold);
+            animation: badge-unlock 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes badge-unlock {
+            0% { transform: scale(0.8); opacity: 0; }
+            60% { transform: scale(1.08); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .badge-card.unlocked:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(212,175,55,0.25);
+        }
+
+        .badge-icon {
+            font-size: 3rem;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .badge-name {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--white);
+            margin-bottom: 0.4rem;
+        }
+
+        .badge-desc {
+            color: var(--medium-gray);
+            font-size: 0.82rem;
+        }
+
+        .badge-unlocked-label {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.6rem;
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        /* ===== QUOTE CAROUSEL ===== */
+        .quotes-section {
+            background: linear-gradient(135deg, var(--primary-blue), #122d72);
+        }
+
+        .quote-carousel {
+            max-width: 750px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            min-height: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quote-slide {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: translateX(60px);
+        }
+
+        .quote-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            position: relative;
+        }
+
+        .quote-text {
+            font-family: var(--font-heading);
+            font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.55;
+            margin-bottom: 1.25rem;
+        }
+
+        .quote-text::before { content: '\201C'; color: var(--accent-gold); font-size: 2em; line-height: 0.3; vertical-align: -0.5em; margin-right: 0.1em; }
+        .quote-text::after { content: '\201D'; color: var(--accent-gold); font-size: 2em; line-height: 0.3; vertical-align: -0.5em; margin-left: 0.1em; }
+
+        .quote-author {
+            color: var(--accent-gold);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .quote-dots {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .quote-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .quote-dot.active {
+            background: var(--accent-gold);
+            transform: scale(1.3);
+        }
+
+        /* ===== FOOTER ===== */
+        .fun-footer {
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .fun-footer p {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .fun-footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .fun-footer a:hover { text-decoration: underline; }
+
+        /* ===== CONFETTI CANVAS ===== */
+        #confetti-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: flex-end;
+        }
+
+        .toast {
+            background: rgba(10, 36, 99, 0.95);
+            border: 1px solid var(--accent-gold);
+            color: var(--white);
+            padding: 0.9rem 1.4rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            max-width: 300px;
+            animation: toast-in 0.4s ease forwards;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        @keyframes toast-in {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes toast-out {
+            from { opacity: 1; transform: translateX(0); }
+            to { opacity: 0; transform: translateX(50px); }
+        }
+
+        .toast .toast-icon { margin-right: 0.4rem; }
+
+        /* ===== SCROLL FADE ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.65s ease, transform 0.65s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particle-canvas"></canvas>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="page-wrap">
+
+        <!-- NAV -->
+        <nav class="fun-nav">
+            <div class="container">
+                <a href="index.html" class="nav-brand">🌍 FRANCIS PWAVWE</a>
+                <ul class="nav-links">
+                    <li><a href="#trivia">Trivia</a></li>
+                    <li><a href="#memory">Memory</a></li>
+                    <li><a href="#spin">Globe Spin</a></li>
+                    <li><a href="#achievements">Badges</a></li>
+                    <li><a href="index.html" class="back-home">← Portfolio</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-inner container">
+                <div class="hero-badge">🎉 Welcome to Francis's Fun Zone</div>
+                <h1 class="hero-title">
+                    Play. Learn.<br>
+                    <span class="gold">Explore.</span>
+                </h1>
+                <div class="typewriter-wrap">
+                    <span class="typewriter" id="typewriterEl"></span>
+                </div>
+                <div class="hero-emoji-row">
+                    <span>✈️</span>
+                    <span>🌍</span>
+                    <span>🏆</span>
+                    <span>🎓</span>
+                    <span>🏨</span>
+                    <span>🌴</span>
+                </div>
+                <div class="hero-cta-group">
+                    <a href="#trivia" class="btn btn-gold">🧠 Take the Quiz</a>
+                    <a href="#memory" class="btn btn-outline">🃏 Memory Game</a>
+                    <a href="#spin" class="btn btn-blue">🌐 Spin the Globe</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATS -->
+        <div class="stats-bar reveal">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">Trivia Questions</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="16">0</div>
+                        <div class="stat-label">Memory Cards</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="12">0</div>
+                        <div class="stat-label">Globe Destinations</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="6">0</div>
+                        <div class="stat-label">Badges to Earn</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== TRIVIA SECTION ===== -->
+        <section id="trivia" class="trivia-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">🧠 Tourism <span>Trivia</span> Challenge</h2>
+                    <div class="section-line"></div>
+                    <p class="section-subtitle">Think you know your way around the world? 10 questions on Ghana, Africa & global tourism.</p>
+                </div>
+
+                <div class="quiz-card reveal" id="quizCard">
+                    <!-- Progress -->
+                    <div class="quiz-progress-bar">
+                        <div class="quiz-progress-fill" id="quizProgress" style="width: 0%"></div>
+                    </div>
+
+                    <!-- Meta -->
+                    <div class="quiz-meta">
+                        <span class="quiz-counter" id="quizCounter">Question 1 of 10</span>
+                        <span class="quiz-score-display" id="quizScoreDisplay">Score: 0</span>
+                    </div>
+
+                    <!-- Question body -->
+                    <div id="quizBody">
+                        <p class="quiz-question" id="quizQuestion"></p>
+                        <div class="quiz-options" id="quizOptions"></div>
+                        <p class="quiz-feedback" id="quizFeedback"></p>
+                        <button class="quiz-next-btn" id="quizNextBtn" style="display:none">Next Question →</button>
+                    </div>
+
+                    <!-- Result -->
+                    <div class="quiz-result" id="quizResult">
+                        <div class="result-emoji" id="resultEmoji"></div>
+                        <div class="result-title" id="resultTitle"></div>
+                        <div class="result-score" id="resultScore"></div>
+                        <p class="result-msg" id="resultMsg"></p>
+                        <div class="result-actions">
+                            <button class="btn btn-gold" id="retryQuizBtn">🔄 Try Again</button>
+                            <a href="#memory" class="btn btn-outline">🃏 Play Memory Game</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== MEMORY GAME ===== -->
+        <section id="memory" class="memory-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">🃏 Travel <span>Memory</span> Game</h2>
+                    <div class="section-line"></div>
+                    <p class="section-subtitle">Match all 8 travel destination pairs. How fast can you clear the board?</p>
+                </div>
+
+                <div class="memory-controls reveal">
+                    <div class="memory-stat">Moves: <span id="memMoves">0</span></div>
+                    <div class="memory-stat">Matches: <span id="memMatches">0</span>/8</div>
+                    <div class="memory-stat">⏱️ <span id="memTimer">0s</span></div>
+                    <button class="btn btn-gold" id="memResetBtn">🔄 New Game</button>
+                </div>
+
+                <div class="memory-grid reveal" id="memoryGrid"></div>
+            </div>
+        </section>
+
+        <!-- ===== SPIN THE GLOBE ===== -->
+        <section id="spin" class="spin-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">🌐 Spin the <span>Globe</span></h2>
+                    <div class="section-line"></div>
+                    <p class="section-subtitle">Where will your next adventure take you? Spin to discover your dream destination!</p>
+                </div>
+
+                <div class="globe-wrapper reveal">
+                    <div class="wheel-container">
+                        <canvas id="globe-wheel" width="380" height="380"></canvas>
+                        <div class="wheel-pointer"></div>
+                    </div>
+                    <button class="btn btn-gold" id="spinBtn" style="font-size:1.1rem; padding: 1rem 2.5rem;">🌍 Spin the Globe!</button>
+                    <div class="spin-result-card" id="spinResult">
+                        <div class="spin-result-emoji" id="spinEmoji">🌐</div>
+                        <div class="spin-result-name" id="spinName">Ready to Spin?</div>
+                        <div class="spin-result-desc" id="spinDesc">Hit the button and see where the world takes you!</div>
+                        <div class="spin-result-fact" id="spinFact" style="display:none"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ACHIEVEMENTS ===== -->
+        <section id="achievements" class="achievements-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">🏆 <span>Achievements</span></h2>
+                    <div class="section-line"></div>
+                    <p class="section-subtitle">Earn badges by playing. How many can you unlock?</p>
+                </div>
+
+                <div class="badges-grid reveal" id="badgesGrid"></div>
+            </div>
+        </section>
+
+        <!-- ===== QUOTES ===== -->
+        <section id="quotes" class="quotes-section">
+            <div class="container">
+                <div class="section-header reveal">
+                    <h2 class="section-title">💡 Words to <span>Live By</span></h2>
+                    <div class="section-line"></div>
+                </div>
+
+                <div class="quote-carousel reveal" id="quoteCarousel"></div>
+                <div class="quote-dots reveal" id="quoteDots"></div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="fun-footer">
+            <div class="container">
+                <p>Made with ❤️ for <strong style="color: var(--accent-gold)">Francis Pwavwe</strong> — Tourism Strategist & Founder of AZ Learner</p>
+                <p><a href="index.html">← Back to Portfolio</a> &nbsp;|&nbsp; <a href="https://azlearner.me" target="_blank" rel="noopener">Visit AZ Learner →</a></p>
+            </div>
+        </footer>
+
+    </div><!-- end page-wrap -->
+
+    <script>
+    /* ================================================================
+       PARTICLE BACKGROUND
+    ================================================================ */
+    (function() {
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        const emojis = ['✈️','🌍','🏖️','🗺️','🌴','🏔️','🎒','🧭','🏛️','⭐','🌊','🦁','🦅','🌺'];
+        let W, H, particles = [];
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+        }
+
+        function createParticle() {
+            return {
+                x: Math.random() * W,
+                y: H + 30,
+                emoji: emojis[Math.floor(Math.random() * emojis.length)],
+                size: 16 + Math.random() * 18,
+                speedY: 0.4 + Math.random() * 0.7,
+                speedX: (Math.random() - 0.5) * 0.4,
+                opacity: 0.12 + Math.random() * 0.2,
+                rot: Math.random() * Math.PI * 2,
+                rotSpeed: (Math.random() - 0.5) * 0.015
+            };
+        }
+
+        function init() {
+            resize();
+            for (let i = 0; i < 22; i++) {
+                const p = createParticle();
+                p.y = Math.random() * H;
+                particles.push(p);
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            particles.forEach((p, i) => {
+                ctx.save();
+                ctx.globalAlpha = p.opacity;
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rot);
+                ctx.font = p.size + 'px serif';
+                ctx.fillText(p.emoji, -p.size / 2, p.size / 2);
+                ctx.restore();
+                p.y -= p.speedY;
+                p.x += p.speedX;
+                p.rot += p.rotSpeed;
+                if (p.y < -40) particles[i] = createParticle();
+            });
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', resize);
+        init();
+        draw();
+    })();
+
+
+    /* ================================================================
+       TYPEWRITER
+    ================================================================ */
+    (function() {
+        const el = document.getElementById('typewriterEl');
+        const lines = [
+            'Future International Tourism Strategist 🌍',
+            'Founder of AZ Learner 🎓',
+            'Harvard Aspire Leaders Cohort 5 🏆',
+            'Kempinski Hospitality Intern 🏨',
+            'Cape Coast, Ghana 🇬🇭',
+            'Strategic Thinker. Digital Innovator. 💡'
+        ];
+        let li = 0, ci = 0, deleting = false;
+        function tick() {
+            const cur = lines[li];
+            el.textContent = deleting ? cur.slice(0, ci--) : cur.slice(0, ci++);
+            let delay = deleting ? 40 : 70;
+            if (!deleting && ci > cur.length) { delay = 1800; deleting = true; }
+            else if (deleting && ci < 0) { ci = 0; deleting = false; li = (li + 1) % lines.length; delay = 400; }
+            setTimeout(tick, delay);
+        }
+        tick();
+    })();
+
+
+    /* ================================================================
+       SCROLL REVEAL
+    ================================================================ */
+    (function() {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    })();
+
+
+    /* ================================================================
+       COUNTER ANIMATION
+    ================================================================ */
+    (function() {
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    const el = e.target;
+                    const target = parseInt(el.dataset.target, 10);
+                    let cur = 0;
+                    const step = Math.ceil(target / 40);
+                    const t = setInterval(() => {
+                        cur = Math.min(cur + step, target);
+                        el.textContent = cur;
+                        if (cur >= target) clearInterval(t);
+                    }, 35);
+                    io.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('[data-target]').forEach(el => io.observe(el));
+    })();
+
+
+    /* ================================================================
+       TOAST HELPER
+    ================================================================ */
+    function showToast(msg, icon = '🎉') {
+        const c = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerHTML = `<span class="toast-icon">${icon}</span>${msg}`;
+        c.appendChild(t);
+        setTimeout(() => {
+            t.style.animation = 'toast-out 0.4s ease forwards';
+            setTimeout(() => t.remove(), 400);
+        }, 3500);
+    }
+
+
+    /* ================================================================
+       ACHIEVEMENT SYSTEM
+    ================================================================ */
+    const BADGE_DEFS = [
+        { id: 'quiz_start',     icon: '🧠', name: 'Knowledge Seeker',  desc: 'Started the trivia quiz',        locked: true },
+        { id: 'quiz_perfect',   icon: '🏅', name: 'Tourism Genius',     desc: 'Got a perfect quiz score!',      locked: true },
+        { id: 'quiz_complete',  icon: '📚', name: 'Quiz Champion',      desc: 'Completed the trivia quiz',      locked: true },
+        { id: 'memory_start',   icon: '🃏', name: 'Card Collector',     desc: 'Started the memory game',        locked: true },
+        { id: 'memory_win',     icon: '🌟', name: 'Memory Master',      desc: 'Matched all cards!',             locked: true },
+        { id: 'spin_globe',     icon: '🌍', name: 'Globe Trotter',      desc: 'Spun the globe once',            locked: true },
+    ];
+
+    const unlockedBadges = new Set(JSON.parse(localStorage.getItem('fp_badges') || '[]'));
+
+    function renderBadges() {
+        const grid = document.getElementById('badgesGrid');
+        grid.innerHTML = '';
+        BADGE_DEFS.forEach(b => {
+            const unlocked = unlockedBadges.has(b.id);
+            const card = document.createElement('div');
+            card.className = 'badge-card ' + (unlocked ? 'unlocked' : 'locked');
+            card.innerHTML = `
+                ${unlocked ? '<span class="badge-unlocked-label">✓ Unlocked</span>' : ''}
+                <span class="badge-icon">${b.icon}</span>
+                <div class="badge-name">${b.name}</div>
+                <div class="badge-desc">${b.desc}</div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    function unlockBadge(id) {
+        if (unlockedBadges.has(id)) return;
+        unlockedBadges.add(id);
+        localStorage.setItem('fp_badges', JSON.stringify([...unlockedBadges]));
+        const b = BADGE_DEFS.find(x => x.id === id);
+        if (b) showToast(`Badge unlocked: <strong>${b.name}</strong> ${b.icon}`, b.icon);
+        renderBadges();
+    }
+
+    renderBadges();
+
+
+    /* ================================================================
+       CONFETTI
+    ================================================================ */
+    (function() {
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let pieces = [];
+        let running = false;
+
+        window.launchConfetti = function(duration = 2800) {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const colors = ['#D4AF37','#3B82F6','#10B981','#EC4899','#F97316','#FFFFFF','#7C3AED'];
+            for (let i = 0; i < 160; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: -10 - Math.random() * 60,
+                    r: 4 + Math.random() * 6,
+                    d: 2 + Math.random() * 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.random() * 10 - 5,
+                    tiltDelta: (Math.random() * 0.2) - 0.1,
+                    shape: Math.random() > 0.5 ? 'circle' : 'rect'
+                });
+            }
+            if (!running) { running = true; animConfetti(); }
+            setTimeout(() => { pieces = []; running = false; ctx.clearRect(0, 0, canvas.width, canvas.height); }, duration);
+        };
+
+        function animConfetti() {
+            if (!running) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            pieces.forEach(p => {
+                ctx.save();
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = 0.85;
+                if (p.shape === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.tilt);
+                    ctx.fillRect(-p.r, -p.r / 2, p.r * 2, p.r);
+                }
+                ctx.restore();
+                p.y += p.d;
+                p.x += Math.sin(p.y / 30) * 1.5;
+                p.tilt += p.tiltDelta;
+                if (p.y > canvas.height + 20) {
+                    p.y = -10;
+                    p.x = Math.random() * canvas.width;
+                }
+            });
+            requestAnimationFrame(animConfetti);
+        }
+    })();
+
+
+    /* ================================================================
+       TRIVIA QUIZ
+    ================================================================ */
+    (function() {
+        const questions = [
+            {
+                q: 'What is the capital city of Ghana?',
+                opts: ['Cape Coast', 'Kumasi', 'Accra', 'Tamale'],
+                ans: 2,
+                fact: '🏙️ Accra is Ghana\'s capital and largest city, home to over 2 million people!'
+            },
+            {
+                q: 'Which ancient Ghanaian landmark is a UNESCO World Heritage Site known for its role in the transatlantic slave trade?',
+                opts: ['Kakum National Park', 'Cape Coast Castle', 'Boti Falls', 'Mole National Park'],
+                ans: 1,
+                fact: '🏰 Cape Coast Castle was one of the largest slave-trading posts in West Africa and is now a powerful museum.'
+            },
+            {
+                q: 'What does the term "UNESCO World Heritage Site" signify for a location?',
+                opts: ['It has great shopping', 'It is of outstanding universal value to humanity', 'It has the most tourists', 'It was built before 1900'],
+                ans: 1,
+                fact: '🌐 UNESCO designates sites of "outstanding universal value" to protect cultural and natural heritage worldwide.'
+            },
+            {
+                q: 'Which African country welcomes the most international tourists annually?',
+                opts: ['Ghana', 'Kenya', 'Morocco', 'South Africa'],
+                ans: 2,
+                fact: '🏜️ Morocco consistently tops African tourism charts, attracting over 13 million visitors per year!'
+            },
+            {
+                q: 'What is the Kempinski brand famous for in hospitality?',
+                opts: ['Budget hostel chains', 'Luxury five-star hotels worldwide', 'Airport lounges only', 'Adventure camping resorts'],
+                ans: 1,
+                fact: '🏨 Kempinski is Europe\'s oldest luxury hotel group, founded in 1897! Francis interned at their Gold Coast City property.'
+            },
+            {
+                q: 'Which ocean borders Ghana\'s southern coastline?',
+                opts: ['Indian Ocean', 'Pacific Ocean', 'Arctic Ocean', 'Atlantic Ocean'],
+                ans: 3,
+                fact: '🌊 Ghana sits on the Gulf of Guinea, part of the Atlantic Ocean — giving it beautiful coastal tourism potential!'
+            },
+            {
+                q: 'The Harvard Aspire Leaders Program is focused on developing which group of people?',
+                opts: ['Senior corporate executives', 'Young emerging leaders from around the world', 'Harvard alumni only', 'US government officials'],
+                ans: 1,
+                fact: '🎓 The Harvard Aspire Leaders Program is a highly competitive program for young global leaders — Francis was in Cohort 5!'
+            },
+            {
+                q: 'What does "sustainable tourism" primarily aim to do?',
+                opts: ['Maximise tourist spending', 'Build more hotels', 'Minimise negative environmental and cultural impacts while benefiting local communities', 'Ban all tourism'],
+                ans: 2,
+                fact: '♻️ Sustainable tourism is the future! It balances economic growth with protecting environments and cultures.'
+            },
+            {
+                q: 'Which Ghanaian university is home to the Tourism Management department that runs the Luban Workshop Restaurant?',
+                opts: ['University of Ghana', 'Kwame Nkrumah University', 'University of Cape Coast', 'Ashesi University'],
+                ans: 2,
+                fact: '🎓 The University of Cape Coast (UCC) in the Central Region is where Francis studies Tourism Management!'
+            },
+            {
+                q: 'What is the primary function of a Destination Management Organization (DMO)?',
+                opts: ['Collect taxes from tourists', 'Promote and manage tourism for a destination', 'Build roads and airports', 'Regulate airline pricing'],
+                ans: 1,
+                fact: '📊 DMOs are the strategic brains behind destination marketing — helping places attract visitors while protecting local communities!'
+            }
+        ];
+
+        let currentQ = 0, score = 0, answered = false;
+
+        function renderQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('quizBody').style.display = '';
+            document.getElementById('quizResult').style.display = 'none';
+            document.getElementById('quizProgress').style.width = (currentQ / questions.length * 100) + '%';
+            document.getElementById('quizCounter').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+            document.getElementById('quizScoreDisplay').textContent = `Score: ${score}`;
+            document.getElementById('quizQuestion').textContent = q.q;
+            document.getElementById('quizFeedback').textContent = '';
+            document.getElementById('quizFeedback').className = 'quiz-feedback';
+            document.getElementById('quizNextBtn').style.display = 'none';
+            answered = false;
+
+            const opts = document.getElementById('quizOptions');
+            opts.innerHTML = '';
+            const letters = ['A','B','C','D'];
+            q.opts.forEach((o, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerHTML = `<span class="opt-letter">${letters[i]}</span>${o}`;
+                btn.addEventListener('click', () => selectAnswer(i, btn));
+                opts.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(idx, btn) {
+            if (answered) return;
+            answered = true;
+            const q = questions[currentQ];
+            const opts = document.querySelectorAll('.quiz-option');
+            opts.forEach(b => b.disabled = true);
+
+            const fb = document.getElementById('quizFeedback');
+            if (idx === q.ans) {
+                score++;
+                btn.classList.add('correct');
+                fb.textContent = '✅ Correct! ' + q.fact;
+                fb.className = 'quiz-feedback good';
+            } else {
+                btn.classList.add('wrong');
+                opts[q.ans].classList.add('correct');
+                fb.textContent = '❌ Not quite. ' + q.fact;
+                fb.className = 'quiz-feedback bad';
+            }
+
+            document.getElementById('quizScoreDisplay').textContent = `Score: ${score}`;
+            document.getElementById('quizNextBtn').style.display = 'block';
+            document.getElementById('quizNextBtn').textContent =
+                currentQ < questions.length - 1 ? 'Next Question →' : 'See My Results 🎯';
+        }
+
+        document.getElementById('quizNextBtn').addEventListener('click', () => {
+            currentQ++;
+            if (currentQ < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        });
+
+        function showResult() {
+            document.getElementById('quizProgress').style.width = '100%';
+            document.getElementById('quizBody').style.display = 'none';
+            const res = document.getElementById('quizResult');
+            res.style.display = 'block';
+
+            const pct = Math.round((score / questions.length) * 100);
+            let emoji, title, msg;
+            if (pct === 100) {
+                emoji = '🏆'; title = 'PERFECT SCORE!'; msg = 'You\'re a certified Tourism Genius, Francis! Absolutely flawless!';
+                unlockBadge('quiz_perfect');
+                launchConfetti(4000);
+            } else if (pct >= 70) {
+                emoji = '🌟'; title = 'Excellent Work!'; msg = 'You really know your stuff! A future tourism strategist indeed.';
+                launchConfetti(2000);
+            } else if (pct >= 50) {
+                emoji = '👍'; title = 'Solid Effort!'; msg = 'Good job! Keep exploring and you\'ll get them all next time.';
+            } else {
+                emoji = '📚'; title = 'Keep Learning!'; msg = 'Every expert started somewhere. Hit retry and crush it!';
+            }
+
+            document.getElementById('resultEmoji').textContent = emoji;
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultScore').textContent = `${score} / ${questions.length}`;
+            document.getElementById('resultMsg').textContent = msg;
+
+            unlockBadge('quiz_complete');
+        }
+
+        document.getElementById('retryQuizBtn').addEventListener('click', () => {
+            currentQ = 0; score = 0;
+            renderQuestion();
+        });
+
+        // Start
+        unlockBadge('quiz_start');
+        renderQuestion();
+    })();
+
+
+    /* ================================================================
+       MEMORY CARD GAME
+    ================================================================ */
+    (function() {
+        const destinations = [
+            { emoji: '🏖️', name: 'Beach' },
+            { emoji: '🗼', name: 'Paris' },
+            { emoji: '🏔️', name: 'Mountains' },
+            { emoji: '🌴', name: 'Tropics' },
+            { emoji: '🦁', name: 'Safari' },
+            { emoji: '🏯', name: 'Castle' },
+            { emoji: '🌊', name: 'Ocean' },
+            { emoji: '🌋', name: 'Volcano' },
+        ];
+
+        let cards = [], flipped = [], matched = 0, moves = 0, startTime = null, timerInterval = null, locked = false, started = false;
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function initGame() {
+            cards = shuffle([...destinations, ...destinations].map((d, i) => ({ ...d, id: i })));
+            flipped = []; matched = 0; moves = 0; locked = false; started = false;
+            document.getElementById('memMoves').textContent = 0;
+            document.getElementById('memMatches').textContent = 0;
+            document.getElementById('memTimer').textContent = '0s';
+            if (timerInterval) clearInterval(timerInterval);
+            renderGrid();
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+            cards.forEach((card, idx) => {
+                const el = document.createElement('div');
+                el.className = 'mem-card';
+                el.dataset.idx = idx;
+                el.innerHTML = `<div class="mem-card-inner"><div class="mem-card-face mem-back"></div><div class="mem-card-face mem-front">${card.emoji}</div></div>`;
+                el.addEventListener('click', () => handleCardClick(el, idx));
+                grid.appendChild(el);
+            });
+        }
+
+        function handleCardClick(el, idx) {
+            if (locked || el.classList.contains('flipped') || el.classList.contains('matched')) return;
+            if (!started) {
+                started = true;
+                startTime = Date.now();
+                timerInterval = setInterval(() => {
+                    document.getElementById('memTimer').textContent = Math.floor((Date.now() - startTime) / 1000) + 's';
+                }, 500);
+                unlockBadge('memory_start');
+            }
+            el.classList.add('flipped');
+            flipped.push({ el, idx });
+            if (flipped.length === 2) {
+                locked = true;
+                moves++;
+                document.getElementById('memMoves').textContent = moves;
+                const [a, b] = flipped;
+                if (cards[a.idx].name === cards[b.idx].name) {
+                    a.el.classList.add('matched'); b.el.classList.add('matched');
+                    matched++;
+                    document.getElementById('memMatches').textContent = matched;
+                    flipped = []; locked = false;
+                    if (matched === 8) {
+                        clearInterval(timerInterval);
+                        const t = Math.floor((Date.now() - startTime) / 1000);
+                        setTimeout(() => {
+                            showToast(`🌟 You matched all cards in ${moves} moves & ${t}s!`, '🌟');
+                            launchConfetti(3000);
+                            unlockBadge('memory_win');
+                        }, 350);
+                    }
+                } else {
+                    setTimeout(() => {
+                        a.el.classList.remove('flipped'); b.el.classList.remove('flipped');
+                        flipped = []; locked = false;
+                    }, 900);
+                }
+            }
+        }
+
+        document.getElementById('memResetBtn').addEventListener('click', initGame);
+        initGame();
+    })();
+
+
+    /* ================================================================
+       SPIN THE GLOBE
+    ================================================================ */
+    (function() {
+        const destinations = [
+            { name: 'Cape Coast 🇬🇭', emoji: '🏰', desc: 'Your home ground!', fact: 'Cape Coast is Ghana\'s former colonial capital, rich in history and stunning coastline.' },
+            { name: 'Accra 🇬🇭', emoji: '🏙️', desc: 'Ghana\'s vibrant capital', fact: 'Accra is one of West Africa\'s fastest-growing cities and a hub for business and culture.' },
+            { name: 'Nairobi 🇰🇪', emoji: '🦁', desc: 'Gateway to the Savanna', fact: 'Nairobi has the only national park in a capital city — you can see lions with skyscrapers in the background!' },
+            { name: 'Marrakech 🇲🇦', emoji: '🕌', desc: 'The Red City awaits', fact: 'Marrakech\'s medina (old city) is a UNESCO World Heritage Site, famous for its bustling souks.' },
+            { name: 'Dubai 🇦🇪', emoji: '🏙️', desc: 'Future of Tourism', fact: 'Dubai received over 17 million international visitors in 2023, making it one of the world\'s most visited cities.' },
+            { name: 'Paris 🇫🇷', emoji: '🗼', desc: 'City of Light & Love', fact: 'France is the world\'s most visited country with ~90 million tourists annually. C\'est magnifique!' },
+            { name: 'Tokyo 🇯🇵', emoji: '⛩️', desc: 'Innovation meets tradition', fact: 'Tokyo has more Michelin-starred restaurants than any other city in the world!' },
+            { name: 'Serengeti 🇹🇿', emoji: '🦒', desc: 'Greatest wildlife spectacle', fact: 'The Serengeti hosts the world\'s largest animal migration — over 1.5 million wildebeest!' },
+            { name: 'Maldives 🇲🇻', emoji: '🌊', desc: 'Paradise on Earth', fact: 'The Maldives sits just 1.5m above sea level on average, making it highly vulnerable to rising seas.' },
+            { name: 'New York 🇺🇸', emoji: '🗽', desc: 'The City that Never Sleeps', fact: 'New York City has over 800 languages spoken — the most linguistically diverse city on Earth!' },
+            { name: 'Cairo 🇪🇬', emoji: '🏜️', desc: 'Land of the Pharaohs', fact: 'The Great Pyramid of Giza is the only surviving wonder of the ancient world — 4,500 years old!' },
+            { name: 'Victoria Falls 🇿🇼', emoji: '💦', desc: 'The Smoke that Thunders', fact: 'Victoria Falls is the world\'s largest waterfall by total area — 1,708m wide and 108m tall!' },
+        ];
+
+        const canvas = document.getElementById('globe-wheel');
+        const ctx = canvas.getContext('2d');
+        const CX = canvas.width / 2, CY = canvas.height / 2, R = CX - 10;
+        const slice = (Math.PI * 2) / destinations.length;
+
+        const colors = [
+            '#0A2463','#1E3A8A','#1a56c4','#0e3080','#2546a0',
+            '#D4AF37','#c49b20','#b88a10','#e0bf50','#c8a830',
+            '#1a3a78','#0d2a60'
+        ];
+
+        let angle = 0, spinning = false;
+
+        function drawWheel(rot) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            destinations.forEach((d, i) => {
+                const start = i * slice + rot;
+                const end = start + slice;
+                ctx.beginPath();
+                ctx.moveTo(CX, CY);
+                ctx.arc(CX, CY, R, start, end);
+                ctx.closePath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.translate(CX, CY);
+                ctx.rotate(start + slice / 2);
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 11px Montserrat, sans-serif';
+                ctx.fillText(d.emoji + ' ' + d.name.split(' ')[0], R - 10, 4);
+                ctx.restore();
+            });
+
+            // Center circle
+            ctx.beginPath();
+            ctx.arc(CX, CY, 26, 0, Math.PI * 2);
+            ctx.fillStyle = '#D4AF37';
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.font = 'bold 18px serif';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#0A2463';
+            ctx.fillText('🌍', CX, CY + 7);
+        }
+
+        drawWheel(0);
+
+        document.getElementById('spinBtn').addEventListener('click', () => {
+            if (spinning) return;
+            spinning = true;
+            const spinAmount = Math.PI * 2 * (8 + Math.random() * 8);
+            const duration = 3500;
+            const start = performance.now();
+            const startAngle = angle;
+
+            function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+
+            function frame(now) {
+                const elapsed = now - start;
+                const progress = Math.min(elapsed / duration, 1);
+                angle = startAngle + spinAmount * easeOut(progress);
+                drawWheel(angle);
+
+                if (progress < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    spinning = false;
+                    // Figure out which slice is at the pointer (right side = angle 0 in canvas context)
+                    const norm = ((angle % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+                    const pointerAngle = (Math.PI * 2 - norm) % (Math.PI * 2); // pointer is at the right
+                    const idx = Math.floor(pointerAngle / slice) % destinations.length;
+                    const dest = destinations[idx];
+
+                    document.getElementById('spinEmoji').textContent = dest.emoji;
+                    document.getElementById('spinName').textContent = dest.name;
+                    document.getElementById('spinDesc').textContent = dest.desc;
+                    const factEl = document.getElementById('spinFact');
+                    factEl.textContent = '💡 ' + dest.fact;
+                    factEl.style.display = 'block';
+
+                    unlockBadge('spin_globe');
+                    showToast(`Next stop: ${dest.name}! ${dest.emoji}`, dest.emoji);
+                }
+            }
+
+            requestAnimationFrame(frame);
+        });
+    })();
+
+
+    /* ================================================================
+       QUOTES CAROUSEL
+    ================================================================ */
+    (function() {
+        const quotes = [
+            { text: 'Tourism is not just about visiting places — it\'s about transforming perspectives.', author: '— Francis Pwavwe' },
+            { text: 'The world is a book, and those who do not travel read only one page.', author: '— Saint Augustine' },
+            { text: 'Leadership is not about being in charge. It\'s about taking care of those in your charge.', author: '— Simon Sinek' },
+            { text: 'Education is the most powerful weapon which you can use to change the world.', author: '— Nelson Mandela' },
+            { text: 'Africa is not a dark continent. It\'s the brightest, most colourful, most dynamic place on Earth.', author: '— Aliko Dangote' },
+            { text: 'The best investment you can make is in yourself.', author: '— Warren Buffett' },
+            { text: 'Innovation distinguishes between a leader and a follower.', author: '— Steve Jobs' },
+        ];
+
+        let current = 0;
+        const carousel = document.getElementById('quoteCarousel');
+        const dotsEl = document.getElementById('quoteDots');
+
+        function render() {
+            carousel.innerHTML = '';
+            dotsEl.innerHTML = '';
+            quotes.forEach((q, i) => {
+                const slide = document.createElement('div');
+                slide.className = 'quote-slide' + (i === current ? ' active' : '');
+                slide.innerHTML = `<div class="quote-text">${q.text}</div><div class="quote-author">${q.author}</div>`;
+                carousel.appendChild(slide);
+
+                const dot = document.createElement('button');
+                dot.className = 'quote-dot' + (i === current ? ' active' : '');
+                dot.addEventListener('click', () => { current = i; render(); });
+                dotsEl.appendChild(dot);
+            });
+        }
+
+        render();
+        setInterval(() => { current = (current + 1) % quotes.length; render(); }, 5500);
+    })();
+
+    </script>
+</body>
+</html>
