@@ -1282,6 +1282,16 @@ a {
     margin: 0;
 }
 
+.footer-link {
+    color: #D4AF37;
+    text-decoration: none;
+}
+
+.footer-links {
+    margin-top: 8px;
+    font-size: 0.9em;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 968px) {
     .nav-menu {

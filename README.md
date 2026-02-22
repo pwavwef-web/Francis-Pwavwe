@@ -65,13 +65,20 @@ A secure Flutter application exclusively for Francis Pwavwe to:
 ## 📂 Structure
 
 ```
-├── index.html              # Main website
+├── index.html              # Main website (personal portfolio)
 ├── styles.css              # Website styling
 ├── script.js               # Website JavaScript + Firebase integration
 ├── francis.dart            # Admin panel application
 ├── pubspec.yaml            # Flutter dependencies
 ├── firebase.json           # Firebase configuration
 ├── firestore.rules         # Database security rules
+├── fp-index.html           # Francis Pwavwe Productions — landing page
+├── fp-about.html           # Productions — brand story & mission
+├── fp-podcast.html         # Productions — Blue Mind Radio episode archive
+├── fp-blog.html            # Productions — written thought-pieces feed
+├── fp-productions.html     # Productions — video & media portfolio
+├── fp-collaborate.html     # Productions — collaboration enquiry form
+├── fp-contact.html         # Productions — contact form & social links
 ├── README.md               # This file
 ├── README_FRANCIS.md       # Admin panel documentation
 ├── QUICKSTART.md           # Quick setup guide
