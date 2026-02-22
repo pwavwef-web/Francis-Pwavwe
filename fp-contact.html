@@ -283,7 +283,8 @@
         await addDoc(collection(db, 'messages'), { name, email, subject, message, sentAt: serverTimestamp(), source: 'fp-contact' });
         document.getElementById('contact-form').style.display = 'none';
         document.getElementById('contact-success').classList.remove('hidden');
-      } catch (_) {
+      } catch (err) {
+        console.error('Contact form submission failed:', err);
         errEl.textContent = 'Something went wrong. Please email directly at pwavwef@gmail.com.';
         errEl.classList.remove('hidden');
         btn.disabled = false;

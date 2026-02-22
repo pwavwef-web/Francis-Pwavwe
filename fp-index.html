@@ -360,7 +360,7 @@
           tags.innerHTML = ep.tags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('');
         }
       }
-    } catch (_) { /* Firestore unavailable or no data yet */ }
+    } catch (err) { console.error('Failed to load latest episode from Firestore:', err); }
 
     // --- Featured thought ---
     try {
@@ -382,7 +382,7 @@
           document.querySelector('#featured-thought .tag-pill').textContent = th.category;
         }
       }
-    } catch (_) {}
+    } catch (err) { console.error('Failed to load featured thought from Firestore:', err); }
 
     // --- Subscribe form ---
     document.getElementById('subscribe-form').addEventListener('submit', async (e) => {
@@ -394,7 +394,8 @@
         await addDoc(collection(db, 'subscribers'), { name, email, subscribedAt: serverTimestamp() });
         document.getElementById('subscribe-msg').classList.remove('hidden');
         e.target.reset();
-      } catch (_) {
+      } catch (err) {
+        console.error('Newsletter subscription failed:', err);
         document.getElementById('subscribe-msg').textContent = 'Something went wrong. Please try again.';
         document.getElementById('subscribe-msg').classList.remove('hidden');
       }

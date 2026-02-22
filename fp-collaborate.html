@@ -228,8 +228,8 @@
               <select id="c-budget" class="form-input">
                 <option value="" disabled selected>Select a range (optional)</option>
                 <option value="Under GHS 500">Under GHS 500</option>
-                <option value="GHS 500–2,000">GHS 500 – 2,000</option>
-                <option value="GHS 2,000–5,000">GHS 2,000 – 5,000</option>
+                <option value="GHS 500–2,000">GHS 500–2,000</option>
+                <option value="GHS 2,000–5,000">GHS 2,000–5,000</option>
                 <option value="GHS 5,000+">GHS 5,000+</option>
                 <option value="To be discussed">To be discussed</option>
               </select>
@@ -319,7 +319,8 @@
         });
         document.getElementById('collab-form').style.display = 'none';
         document.getElementById('collab-success').classList.remove('hidden');
-      } catch (_) {
+      } catch (err) {
+        console.error('Collaboration form submission failed:', err);
         errEl.textContent = 'Something went wrong. Please try again or email directly.';
         errEl.classList.remove('hidden');
         btn.disabled = false;

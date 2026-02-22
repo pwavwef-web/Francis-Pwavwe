@@ -259,7 +259,8 @@
         }
         allEpisodes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderEpisodes(allEpisodes);
-      } catch (_) {
+      } catch (err) {
+        console.error('Failed to load podcast episodes from Firestore:', err);
         document.getElementById('episodes-loading').style.display = 'none';
         document.getElementById('episodes-placeholder').classList.remove('hidden');
       }

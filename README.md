@@ -65,7 +65,7 @@ A secure Flutter application exclusively for Francis Pwavwe to:
 ## 📂 Structure
 
 ```
-├── index.html              # Main website
+├── index.html              # Main website / personal portfolio
 ├── styles.css              # Website styling
 ├── script.js               # Website JavaScript + Firebase integration
 ├── francis.dart            # Admin panel application
@@ -78,6 +78,20 @@ A secure Flutter application exclusively for Francis Pwavwe to:
 ├── IMPLEMENTATION.md       # Complete implementation guide
 └── DEPLOYMENT.md           # Website deployment guide
 ```
+
+## 🎬 Francis Pwavwe Productions Pages
+
+| File | Route | Purpose |
+|------|-------|---------|
+| `fp-index.html` | `/fp-index.html` | Productions landing / hero page |
+| `fp-about.html` | `/fp-about.html` | Brand story and mission |
+| `fp-podcast.html` | `/fp-podcast.html` | Blue Mind Radio — episode archive |
+| `fp-blog.html` | `/fp-blog.html` | Written thought-pieces feed |
+| `fp-productions.html` | `/fp-productions.html` | Video and media portfolio |
+| `fp-collaborate.html` | `/fp-collaborate.html` | Collaboration enquiry form |
+| `fp-contact.html` | `/fp-contact.html` | Contact form and social links |
+
+See [FRANCIS-PWAVWE-PRODUCTION-README.md](FRANCIS-PWAVWE-PRODUCTION-README.md) for full design brief and roadmap.
 
 ## 🎨 Color Palette
 

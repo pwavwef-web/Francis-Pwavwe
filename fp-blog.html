@@ -239,7 +239,8 @@
         }
         allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderPosts(allPosts);
-      } catch (_) {
+      } catch (err) {
+        console.error('Failed to load blog posts from Firestore:', err);
         document.getElementById('posts-loading').style.display = 'none';
         document.getElementById('posts-placeholder').classList.remove('hidden');
       }

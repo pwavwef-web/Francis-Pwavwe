@@ -301,7 +301,8 @@
         }
         allProds = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderProds(allProds);
-      } catch (_) {
+      } catch (err) {
+        console.error('Failed to load productions from Firestore:', err);
         document.getElementById('prods-loading').style.display = 'none';
         document.getElementById('prods-placeholder').classList.remove('hidden');
       }
