@@ -373,7 +373,8 @@
       if (!thSnap.empty) {
         const th = thSnap.docs[0].data();
         document.getElementById('thought-title').textContent = th.title || 'Untitled';
-        document.getElementById('thought-excerpt').textContent = (th.content || '').substring(0, 220) + '…';
+        const excerpt = (th.content || '').substring(0, 220);
+        document.getElementById('thought-excerpt').textContent = excerpt + (th.content && th.content.length > 220 ? '…' : '');
         if (th.timestamp?.toDate) {
           document.getElementById('thought-date').textContent = th.timestamp.toDate().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
         }

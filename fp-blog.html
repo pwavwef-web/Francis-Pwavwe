@@ -142,7 +142,7 @@
           </div>
           <div class="p-6 flex flex-col flex-1">
             <div class="flex items-center gap-2 mb-3">
-              <span class="tag-pill" style="background:rgba(251,191,36,0.15);border-color:rgba(251,191,36,0.4);color:#fbbf24;">Tourism</span>
+              <span class="tag-pill gold">Tourism</span>
               <span class="font-inter text-fp-muted/60 text-xs">Mar 2025</span>
             </div>
             <h3 class="font-poppins font-bold text-fp-light text-base mb-3 leading-snug flex-1">Rethinking African Tourism: From Spectacle to Story</h3>
@@ -230,14 +230,14 @@
 
     async function loadPosts() {
       try {
-        const q = query(collection(db, 'thoughts'), orderBy('timestamp', 'desc'));
+        const q = query(collection(db, 'thoughts'), where('category', '!=', 'Podcast'), orderBy('category'), orderBy('timestamp', 'desc'));
         const snap = await getDocs(q);
         document.getElementById('posts-loading').style.display = 'none';
         if (snap.empty) {
           document.getElementById('posts-placeholder').classList.remove('hidden');
           return;
         }
-        allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.category !== 'Podcast');
+        allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         renderPosts(allPosts);
       } catch (_) {
         document.getElementById('posts-loading').style.display = 'none';
