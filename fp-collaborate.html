@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collaborate — Francis Pwavwe Productions</title>
+  <meta name="description" content="Collaborate with Francis Pwavwe Productions — podcast guest spots, brand partnerships, event coverage, and more.">
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-gold:#fbbf24;--fp-accent:#6366f1;--fp-light:#f8fafc;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .nav-link{display:inline-flex;align-items:center;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.875rem;color:#94a3b8;transition:color .2s,background .2s;font-family:'Inter',sans-serif;font-weight:400;text-decoration:none}
+    .nav-link:hover,.nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .nav-link.active{color:#fbbf24}
+    .mobile-nav-link{display:block;padding:0.6rem 1rem;border-radius:0.375rem;font-size:0.9rem;color:#94a3b8;text-decoration:none;transition:color .2s,background .2s}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .mobile-nav-link.active{color:#fbbf24}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;transition:border-color .2s,transform .2s}
+    .card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-2px)}
+    input,textarea,select{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:0.5rem;color:#f8fafc;padding:0.75rem 1rem;width:100%;font-family:'Inter',sans-serif;font-size:0.9rem;transition:border-color .2s;outline:none}
+    input:focus,textarea:focus,select:focus{border-color:#6366f1}
+    input::placeholder,textarea::placeholder{color:#475569}
+    select option{background:#1e293b;color:#f8fafc}
+    label{display:block;font-size:0.85rem;font-weight:500;color:#cbd5e1;margin-bottom:0.4rem}
+    .btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.85rem 2rem;background:#1e40af;color:#f8fafc;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:background .2s,transform .15s;border:none;cursor:pointer;font-size:0.95rem;width:100%}
+    .btn-primary:hover:not(:disabled){background:#2563eb;transform:translateY(-1px)}
+    .btn-primary:disabled{opacity:.6;cursor:not-allowed}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spin{animation:spin 1s linear infinite}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="fp-index.html" class="flex flex-col leading-none gap-0.5">
+        <span class="text-white text-sm tracking-wide fp-poppins" style="font-weight:800">FRANCIS PWAVWE</span>
+        <span class="text-xs tracking-[0.25em] fp-poppins fp-gold" style="font-weight:500">PRODUCTIONS</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="fp-index.html" class="nav-link">Home</a>
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link active">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+      </div>
+      <button id="menuBtn" class="md:hidden text-[#f8fafc] p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="fp-index.html" class="mobile-nav-link">Home</a>
+        <a href="fp-about.html" class="mobile-nav-link">About</a>
+        <a href="fp-podcast.html" class="mobile-nav-link">Podcast</a>
+        <a href="fp-blog.html" class="mobile-nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="mobile-nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="mobile-nav-link active">Collaborate</a>
+        <a href="fp-contact.html" class="mobile-nav-link">Contact</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="pt-32 pb-20 px-4" style="background:linear-gradient(180deg,#0d1117 0%,#0a0a0f 100%)">
+  <div class="max-w-3xl mx-auto text-center">
+    <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-4 fp-poppins">WORK TOGETHER</p>
+    <h1 class="fp-poppins text-5xl sm:text-6xl font-black text-white mb-4">Let's Collaborate</h1>
+    <p class="text-xl fp-muted max-w-xl mx-auto">Got a project, an idea, or an invitation? Francis Pwavwe Productions is open to meaningful partnerships. Tell us what you have in mind.</p>
+  </div>
+</section>
+
+<!-- WHAT'S AVAILABLE -->
+<section style="padding:3rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-3 fp-poppins">COLLABORATION TYPES</p>
+      <h2 class="fp-poppins text-2xl font-bold text-white">What's on offer</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
+      <div class="card p-6">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:rgba(251,191,36,.1)">
+          <i data-lucide="mic" class="w-5 h-5" style="color:#fbbf24"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Podcast Guest</h3>
+        <p class="text-sm fp-muted leading-relaxed">Join Francis on Blue Mind Radio for a recorded conversation. Best for thought leaders, creatives, and anyone with a story worth hearing.</p>
+      </div>
+      <div class="card p-6">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:rgba(99,102,241,.1)">
+          <i data-lucide="megaphone" class="w-5 h-5" style="color:#6366f1"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Sponsored Content</h3>
+        <p class="text-sm fp-muted leading-relaxed">Product features, episode sponsorships, or brand mentions woven authentically into podcast and written content. Only aligned brands considered.</p>
+      </div>
+      <div class="card p-6">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:rgba(16,185,129,.1)">
+          <i data-lucide="video" class="w-5 h-5" style="color:#34d399"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Event Coverage</h3>
+        <p class="text-sm fp-muted leading-relaxed">On-the-ground documentation of events, festivals, launches, and ceremonies. Full video production and photography coverage available.</p>
+      </div>
+      <div class="card p-6">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:rgba(30,64,175,.15)">
+          <i data-lucide="briefcase" class="w-5 h-5" style="color:#93c5fd"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Brand Partnership</h3>
+        <p class="text-sm fp-muted leading-relaxed">Long-form brand partnerships where Francis Pwavwe Productions becomes an ambassador or co-creator. Built on genuine shared values.</p>
+      </div>
+      <div class="card p-6">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:rgba(239,68,68,.1)">
+          <i data-lucide="pencil-ruler" class="w-5 h-5" style="color:#f87171"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Content Creation</h3>
+        <p class="text-sm fp-muted leading-relaxed">Scripted videos, social content, copywriting, and photography. Ideal for organisations that need quality creative output without a full team.</p>
+      </div>
+      <div class="card p-6">
+        <div class="w-11 h-11 rounded-xl flex items-center justify-center mb-4" style="background:rgba(168,85,247,.1)">
+          <i data-lucide="sparkles" class="w-5 h-5" style="color:#c084fc"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Something Else?</h3>
+        <p class="text-sm fp-muted leading-relaxed">Got an idea that doesn't fit a box? Send it anyway. The most interesting collaborations are always the unexpected ones.</p>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="max-w-xl mx-auto">
+      <div class="text-center mb-8">
+        <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-3 fp-poppins">ENQUIRY FORM</p>
+        <h2 class="fp-poppins text-2xl font-bold text-white">Send your proposal</h2>
+        <p class="fp-muted text-sm mt-2">Fill in the details below and Francis will be in touch within 48 hours.</p>
+      </div>
+
+      <form id="collabForm" class="space-y-5">
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label for="collabName">Full Name <span class="text-red-400">*</span></label>
+            <input type="text" id="collabName" placeholder="Your full name" required>
+          </div>
+          <div>
+            <label for="collabEmail">Email Address <span class="text-red-400">*</span></label>
+            <input type="email" id="collabEmail" placeholder="you@example.com" required>
+          </div>
+        </div>
+        <div>
+          <label for="collabOrg">Organisation <span class="fp-muted" style="font-weight:400">(optional)</span></label>
+          <input type="text" id="collabOrg" placeholder="Company or organisation name">
+        </div>
+        <div>
+          <label for="collabType">Collaboration Type <span class="text-red-400">*</span></label>
+          <select id="collabType" required>
+            <option value="" disabled selected>Select a type…</option>
+            <option value="Podcast Guest">Podcast Guest</option>
+            <option value="Sponsored Content">Sponsored Content</option>
+            <option value="Event Coverage">Event Coverage</option>
+            <option value="Brand Partnership">Brand Partnership</option>
+            <option value="Content Creation">Content Creation</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="collabMessage">Your Message <span class="text-red-400">*</span></label>
+          <textarea id="collabMessage" rows="5" placeholder="Tell Francis about your project, idea, or proposal…" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary" id="collabBtn">
+          <i data-lucide="send" class="w-4 h-4"></i> Send Proposal
+        </button>
+      </form>
+
+      <div id="collabSuccess" class="hidden mt-6 p-6 rounded-xl text-center" style="background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3)">
+        <i data-lucide="check-circle-2" class="w-10 h-10 mx-auto mb-3" style="color:#34d399"></i>
+        <h3 class="fp-poppins font-bold text-white mb-1">Proposal received!</h3>
+        <p class="text-sm fp-muted">Thanks for reaching out. Francis will review your proposal and get back to you within 48 hours.</p>
+      </div>
+
+      <div id="collabError" class="hidden mt-4 p-4 rounded-lg text-sm text-red-400" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3)">
+        Something went wrong. Please try again or email <a href="mailto:pwavwef@gmail.com" class="underline">pwavwef@gmail.com</a>.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:3rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href="fp-index.html" class="inline-flex flex-col leading-none gap-0.5 mb-3">
+          <span class="text-white fp-poppins text-sm" style="font-weight:800">FRANCIS PWAVWE</span>
+          <span class="text-xs tracking-[0.25em] fp-gold fp-poppins" style="font-weight:500">PRODUCTIONS</span>
+        </a>
+        <p class="text-xs fp-muted leading-relaxed">Clarity. Purpose. Production.<br>Cape Coast, Ghana.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Pages</p>
+        <div class="flex flex-col gap-2">
+          <a href="fp-about.html" class="text-sm fp-muted hover:text-white transition-colors">About</a>
+          <a href="fp-podcast.html" class="text-sm fp-muted hover:text-white transition-colors">Podcast</a>
+          <a href="fp-blog.html" class="text-sm fp-muted hover:text-white transition-colors">Thoughts</a>
+          <a href="fp-productions.html" class="text-sm fp-muted hover:text-white transition-colors">Productions</a>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Connect</p>
+        <div class="flex flex-col gap-2">
+          <a href="francis.html" class="text-sm fp-muted hover:text-white transition-colors">Personal Portfolio</a>
+          <a href="https://azlearner.me" target="_blank" rel="noopener" class="text-sm fp-muted hover:text-white transition-colors">AZ Learner</a>
+          <a href="fp-contact.html" class="text-sm fp-muted hover:text-white transition-colors">Contact</a>
+          <a href="fp-collaborate.html" class="text-sm fp-muted hover:text-white transition-colors">Collaborate</a>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+      <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" class="fp-muted hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="fp-muted hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="fp-muted hover:text-white transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter/X" class="fp-muted hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+  lucide.createIcons();
+</script>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+  import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI',
+    authDomain: 'francis-pwavwe.firebaseapp.com',
+    projectId: 'francis-pwavwe',
+    storageBucket: 'francis-pwavwe.firebasestorage.app',
+    messagingSenderId: '658069378543',
+    appId: '1:658069378543:web:87b1dcb0dd27d3255bd21a'
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const form = document.getElementById('collabForm');
+  const btn = document.getElementById('collabBtn');
+  const successEl = document.getElementById('collabSuccess');
+  const errorEl = document.getElementById('collabError');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorEl.classList.add('hidden');
+    const name = document.getElementById('collabName').value.trim();
+    const email = document.getElementById('collabEmail').value.trim();
+    const organization = document.getElementById('collabOrg').value.trim();
+    const collaborationType = document.getElementById('collabType').value;
+    const message = document.getElementById('collabMessage').value.trim();
+    if (!name || !email || !collaborationType || !message) return;
+
+    btn.disabled = true;
+    btn.innerHTML = '<svg class="w-4 h-4 spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg> Sending…';
+
+    try {
+      await addDoc(collection(db, 'collaborations'), {
+        name, email, organization, collaborationType, message,
+        submittedAt: serverTimestamp()
+      });
+      form.classList.add('hidden');
+      successEl.classList.remove('hidden');
+      lucide.createIcons();
+    } catch(err) {
+      errorEl.classList.remove('hidden');
+      btn.disabled = false;
+      btn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i> Send Proposal';
+      lucide.createIcons();
+    }
+  });
+</script>
+</body>
+</html>

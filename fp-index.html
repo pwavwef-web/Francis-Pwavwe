@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Francis Pwavwe Productions — Clarity. Purpose. Production.</title>
+  <meta name="description" content="Francis Pwavwe Productions — the creative hub for Blue Mind Radio, long-form thoughts, and visual storytelling.">
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-primary:#1e40af;--fp-gold:#fbbf24;--fp-accent:#6366f1;--fp-light:#f8fafc;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-playfair{font-family:'Playfair Display',serif}
+    .fp-gold{color:#fbbf24}
+    .fp-accent{color:#6366f1}
+    .fp-muted{color:#94a3b8}
+    .nav-link{display:inline-flex;align-items:center;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.875rem;color:#94a3b8;transition:color .2s,background .2s;font-family:'Inter',sans-serif;font-weight:400;text-decoration:none}
+    .nav-link:hover,.nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .nav-link.active{color:#fbbf24}
+    .mobile-nav-link{display:block;padding:0.6rem 1rem;border-radius:0.375rem;font-size:0.9rem;color:#94a3b8;text-decoration:none;transition:color .2s,background .2s}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .mobile-nav-link.active{color:#fbbf24}
+    /* Hero stars */
+    .stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0;animation:twinkle var(--dur,3s) var(--del,0s) infinite}
+    @keyframes twinkle{0%,100%{opacity:0}50%{opacity:var(--op,.7)}}
+    /* Skeleton loader */
+    .skeleton{background:linear-gradient(90deg,#1e293b 25%,#334155 50%,#1e293b 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:0.5rem}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;transition:border-color .2s,transform .2s}
+    .card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-2px)}
+    .btn-primary{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:#1e40af;color:#f8fafc;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:background .2s,transform .15s;border:none;cursor:pointer;font-size:0.95rem}
+    .btn-primary:hover{background:#2563eb;transform:translateY(-1px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:transparent;color:#f8fafc;border:1px solid rgba(255,255,255,.3);border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:border-color .2s,transform .15s;cursor:pointer;font-size:0.95rem}
+    .btn-outline:hover{border-color:#6366f1;color:#a5b4fc;transform:translateY(-1px)}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    input,textarea,select{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:0.5rem;color:#f8fafc;padding:0.75rem 1rem;width:100%;font-family:'Inter',sans-serif;font-size:0.9rem;transition:border-color .2s}
+    input:focus,textarea:focus,select:focus{outline:none;border-color:#6366f1}
+    input::placeholder,textarea::placeholder{color:#475569}
+    section{padding:5rem 0}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="fp-index.html" class="flex flex-col leading-none gap-0.5">
+        <span class="text-white text-sm tracking-wide fp-poppins" style="font-weight:800">FRANCIS PWAVWE</span>
+        <span class="text-xs tracking-[0.25em] fp-poppins fp-gold" style="font-weight:500">PRODUCTIONS</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="fp-index.html" class="nav-link active">Home</a>
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+      </div>
+      <button id="menuBtn" class="md:hidden text-[#f8fafc] p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="fp-index.html" class="mobile-nav-link active">Home</a>
+        <a href="fp-about.html" class="mobile-nav-link">About</a>
+        <a href="fp-podcast.html" class="mobile-nav-link">Podcast</a>
+        <a href="fp-blog.html" class="mobile-nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="mobile-nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="mobile-nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="mobile-nav-link">Contact</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16" style="background:linear-gradient(135deg,#0a0a0f 0%,#0d1117 40%,#0f0a1e 100%)">
+  <div class="stars" id="stars"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a0f] pointer-events-none z-10"></div>
+  <div class="relative z-20 text-center max-w-4xl mx-auto px-4">
+    <div class="mb-6">
+      <span class="badge" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.3)">
+        <i data-lucide="radio" class="w-3 h-3 mr-1"></i> Blue Mind Radio is live
+      </span>
+    </div>
+    <h1 class="fp-poppins text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white mb-2 leading-none tracking-tight">
+      FRANCIS PWAVWE
+    </h1>
+    <p class="fp-poppins text-2xl sm:text-3xl md:text-4xl font-medium tracking-[0.3em] fp-gold mb-6">PRODUCTIONS</p>
+    <p class="text-xl sm:text-2xl fp-muted mb-10 font-light tracking-wide">Clarity. Purpose. Production.</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="fp-podcast.html" class="btn-primary">
+        <i data-lucide="headphones" class="w-5 h-5"></i> Listen Now
+      </a>
+      <a href="fp-collaborate.html" class="btn-outline">
+        <i data-lucide="handshake" class="w-5 h-5"></i> Work With Me
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT SNIPPET -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="padding-top:5rem;padding-bottom:5rem">
+  <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-4 fp-poppins">ABOUT THE BRAND</p>
+      <h2 class="fp-poppins text-3xl sm:text-4xl font-bold text-white mb-6">More than content.<br>A movement of thought.</h2>
+      <p class="text-[#94a3b8] leading-relaxed mb-4">Francis Pwavwe Productions is the creative umbrella behind everything Francis does — from podcast conversations that challenge Gen Z thinking, to written reflections that slow you down and make you feel something, to visual stories that earn their keep on screen.</p>
+      <p class="text-[#94a3b8] leading-relaxed mb-8">Born in Cape Coast, Ghana, shaped by tourism, leadership, and a relentless curiosity about the world — this brand exists to inspire, inform, and ignite through authentic storytelling.</p>
+      <a href="fp-about.html" class="btn-outline" style="width:fit-content">
+        Read the full story <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+      </a>
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="card p-5">
+        <i data-lucide="mic" class="w-8 h-8 mb-3" style="color:#fbbf24"></i>
+        <h3 class="font-semibold text-white mb-1">Blue Mind Radio</h3>
+        <p class="text-sm fp-muted">Podcast exploring Gen Z culture & philosophy</p>
+      </div>
+      <div class="card p-5">
+        <i data-lucide="pen-line" class="w-8 h-8 mb-3" style="color:#6366f1"></i>
+        <h3 class="font-semibold text-white mb-1">Thoughts</h3>
+        <p class="text-sm fp-muted">Long-form reflections on life & leadership</p>
+      </div>
+      <div class="card p-5">
+        <i data-lucide="film" class="w-8 h-8 mb-3" style="color:#1e40af"></i>
+        <h3 class="font-semibold text-white mb-1">Productions</h3>
+        <p class="text-sm fp-muted">Docs, vlogs & visual storytelling</p>
+      </div>
+      <div class="card p-5">
+        <i data-lucide="users" class="w-8 h-8 mb-3" style="color:#10b981"></i>
+        <h3 class="font-semibold text-white mb-1">Collaborations</h3>
+        <p class="text-sm fp-muted">Brands, creators & meaningful partnerships</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST EPISODE -->
+<section style="background:#0d1117;padding:5rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-2 fp-poppins">BLUE MIND RADIO</p>
+        <h2 class="fp-poppins text-3xl font-bold text-white">Latest Episode</h2>
+      </div>
+      <a href="fp-podcast.html" class="text-sm text-[#6366f1] hover:text-[#a5b4fc] flex items-center gap-1 transition-colors">All episodes <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </div>
+    <div id="latestEpisode">
+      <div class="card p-8 flex flex-col md:flex-row gap-6">
+        <div class="skeleton w-full md:w-40 h-40 flex-shrink-0"></div>
+        <div class="flex-1 space-y-3">
+          <div class="skeleton h-5 w-24"></div>
+          <div class="skeleton h-7 w-3/4"></div>
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-5/6"></div>
+          <div class="skeleton h-10 w-32 mt-4"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED THOUGHT -->
+<section style="padding:5rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-2 fp-poppins">THOUGHTS</p>
+        <h2 class="fp-poppins text-3xl font-bold text-white">Featured Piece</h2>
+      </div>
+      <a href="fp-blog.html" class="text-sm text-[#6366f1] hover:text-[#a5b4fc] flex items-center gap-1 transition-colors">All thoughts <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </div>
+    <div id="featuredThought">
+      <div class="card p-8 max-w-2xl">
+        <div class="skeleton h-5 w-24 mb-3"></div>
+        <div class="skeleton h-8 w-3/4 mb-4"></div>
+        <div class="skeleton h-4 w-full mb-2"></div>
+        <div class="skeleton h-4 w-5/6 mb-6"></div>
+        <div class="skeleton h-10 w-32"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTIONS REEL -->
+<section style="background:#0d1117;padding:5rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-2 fp-poppins">VISUAL WORK</p>
+        <h2 class="fp-poppins text-3xl font-bold text-white">Productions</h2>
+      </div>
+      <a href="fp-productions.html" class="text-sm text-[#6366f1] hover:text-[#a5b4fc] flex items-center gap-1 transition-colors">View all <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </div>
+    <div id="productionsGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="card overflow-hidden"><div class="skeleton h-40 rounded-none"></div><div class="p-4 space-y-2"><div class="skeleton h-4 w-16"></div><div class="skeleton h-5 w-3/4"></div></div></div>
+      <div class="card overflow-hidden"><div class="skeleton h-40 rounded-none"></div><div class="p-4 space-y-2"><div class="skeleton h-4 w-16"></div><div class="skeleton h-5 w-3/4"></div></div></div>
+      <div class="card overflow-hidden hidden sm:block"><div class="skeleton h-40 rounded-none"></div><div class="p-4 space-y-2"><div class="skeleton h-4 w-16"></div><div class="skeleton h-5 w-3/4"></div></div></div>
+      <div class="card overflow-hidden hidden lg:block"><div class="skeleton h-40 rounded-none"></div><div class="p-4 space-y-2"><div class="skeleton h-4 w-16"></div><div class="skeleton h-5 w-3/4"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section style="padding:5rem 0">
+  <div class="max-w-xl mx-auto px-4 text-center">
+    <i data-lucide="mail" class="w-10 h-10 mx-auto mb-4" style="color:#fbbf24"></i>
+    <h2 class="fp-poppins text-3xl font-bold text-white mb-3">Stay in the loop</h2>
+    <p class="fp-muted mb-8">New episodes, essays, and productions — delivered to your inbox. No noise.</p>
+    <form id="subscribeForm" class="flex flex-col gap-3">
+      <input type="text" id="subName" placeholder="Your name" required>
+      <input type="email" id="subEmail" placeholder="Your email address" required>
+      <button type="submit" class="btn-primary justify-center" id="subBtn">
+        <i data-lucide="send" class="w-4 h-4"></i> Subscribe
+      </button>
+    </form>
+    <div id="subMsg" class="mt-4 text-sm hidden"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:3rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href="fp-index.html" class="inline-flex flex-col leading-none gap-0.5 mb-3">
+          <span class="text-white fp-poppins text-sm" style="font-weight:800">FRANCIS PWAVWE</span>
+          <span class="text-xs tracking-[0.25em] fp-gold fp-poppins" style="font-weight:500">PRODUCTIONS</span>
+        </a>
+        <p class="text-xs fp-muted leading-relaxed">Clarity. Purpose. Production.<br>Cape Coast, Ghana.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Pages</p>
+        <div class="flex flex-col gap-2">
+          <a href="fp-about.html" class="text-sm fp-muted hover:text-white transition-colors">About</a>
+          <a href="fp-podcast.html" class="text-sm fp-muted hover:text-white transition-colors">Podcast</a>
+          <a href="fp-blog.html" class="text-sm fp-muted hover:text-white transition-colors">Thoughts</a>
+          <a href="fp-productions.html" class="text-sm fp-muted hover:text-white transition-colors">Productions</a>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Connect</p>
+        <div class="flex flex-col gap-2">
+          <a href="francis.html" class="text-sm fp-muted hover:text-white transition-colors">Personal Portfolio</a>
+          <a href="https://azlearner.me" target="_blank" rel="noopener" class="text-sm fp-muted hover:text-white transition-colors">AZ Learner</a>
+          <a href="fp-contact.html" class="text-sm fp-muted hover:text-white transition-colors">Contact</a>
+          <a href="fp-collaborate.html" class="text-sm fp-muted hover:text-white transition-colors">Collaborate</a>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+      <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" class="fp-muted hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="fp-muted hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="fp-muted hover:text-white transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter/X" class="fp-muted hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+
+  // Generate stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--del:${Math.random()*5}s;--op:${0.4+Math.random()*0.6}`;
+    starsEl.appendChild(s);
+  }
+
+  lucide.createIcons();
+</script>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+  import { getFirestore, collection, query, where, orderBy, limit, getDocs, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI',
+    authDomain: 'francis-pwavwe.firebaseapp.com',
+    projectId: 'francis-pwavwe',
+    storageBucket: 'francis-pwavwe.firebasestorage.app',
+    messagingSenderId: '658069378543',
+    appId: '1:658069378543:web:87b1dcb0dd27d3255bd21a'
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  function fmtDate(ts) {
+    if (!ts) return '';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+  }
+
+  // Latest Episode
+  async function loadLatestEpisode() {
+    const el = document.getElementById('latestEpisode');
+    try {
+      const q = query(collection(db,'podcast_episodes'), where('isPublished','==',true), orderBy('publishedAt','desc'), limit(1));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        el.innerHTML = `<div class="card p-8 text-center"><i data-lucide="mic" class="w-10 h-10 mx-auto mb-3" style="color:#fbbf24"></i><p class="text-white font-semibold mb-1">First episode coming soon</p><p class="fp-muted text-sm">Blue Mind Radio launches soon. <a href="fp-podcast.html" class="text-[#6366f1] hover:underline">Subscribe for updates.</a></p></div>`;
+        lucide.createIcons(); return;
+      }
+      const ep = snap.docs[0].data();
+      const platforms = [
+        ep.spotifyUrl ? `<a href="${ep.spotifyUrl}" target="_blank" rel="noopener" class="badge" style="background:rgba(29,185,84,.15);color:#1db954;border:1px solid rgba(29,185,84,.3)"><i data-lucide="music" class="w-3 h-3 mr-1"></i>Spotify</a>` : '',
+        ep.applePodcastsUrl ? `<a href="${ep.applePodcastsUrl}" target="_blank" rel="noopener" class="badge" style="background:rgba(168,85,247,.15);color:#c084fc;border:1px solid rgba(168,85,247,.3)"><i data-lucide="headphones" class="w-3 h-3 mr-1"></i>Apple</a>` : '',
+        ep.youtubeUrl ? `<a href="${ep.youtubeUrl}" target="_blank" rel="noopener" class="badge" style="background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)"><i data-lucide="youtube" class="w-3 h-3 mr-1"></i>YouTube</a>` : ''
+      ].filter(Boolean).join('');
+      el.innerHTML = `<div class="card p-8 flex flex-col md:flex-row gap-6 items-start">
+        <div class="w-full md:w-40 h-40 flex-shrink-0 rounded-xl overflow-hidden bg-[#1e293b] flex items-center justify-center">
+          ${ep.coverImage ? `<img src="${ep.coverImage}" alt="Cover" class="w-full h-full object-cover">` : '<i data-lucide="mic" class="w-12 h-12" style="color:#fbbf24"></i>'}
+        </div>
+        <div class="flex-1">
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">S${ep.season||1} · E${ep.episode||1}</span>
+            ${platforms}
+          </div>
+          <h3 class="fp-poppins text-xl font-bold text-white mb-2">${ep.title||'Untitled Episode'}</h3>
+          <p class="fp-muted text-sm leading-relaxed mb-3 line-clamp-3">${ep.description||''}</p>
+          <p class="text-xs fp-muted">${fmtDate(ep.publishedAt)}</p>
+          ${ep.tags && ep.tags.length ? `<div class="flex flex-wrap gap-2 mt-3">${ep.tags.map(t=>`<span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(99,102,241,.15);color:#a5b4fc">${t}</span>`).join('')}</div>` : ''}
+        </div>
+      </div>`;
+      lucide.createIcons();
+    } catch(e) {
+      el.innerHTML = `<div class="card p-6 text-center fp-muted text-sm">Could not load episode. <a href="fp-podcast.html" class="text-[#6366f1] hover:underline">View all episodes</a></div>`;
+    }
+  }
+
+  // Featured Thought
+  async function loadFeaturedThought() {
+    const el = document.getElementById('featuredThought');
+    try {
+      const q = query(collection(db,'thoughts'), orderBy('timestamp','desc'), limit(1));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        el.innerHTML = `<div class="card p-8 text-center"><i data-lucide="pen-line" class="w-10 h-10 mx-auto mb-3" style="color:#6366f1"></i><p class="text-white font-semibold mb-1">First essay coming soon</p><p class="fp-muted text-sm">Watch this space.</p></div>`;
+        lucide.createIcons(); return;
+      }
+      const t = snap.docs[0].data();
+      const id = snap.docs[0].id;
+      const excerpt = (t.content||t.excerpt||'').substring(0,180) + ((t.content||'').length > 180 ? '…' : '');
+      el.innerHTML = `<div class="card p-8 max-w-2xl">
+        <div class="flex flex-wrap gap-2 mb-3">
+          ${t.category ? `<span class="badge" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.3)">${t.category}</span>` : ''}
+          <span class="text-xs fp-muted">${fmtDate(t.timestamp)}</span>
+        </div>
+        <h3 class="fp-poppins text-xl font-bold text-white mb-3">${t.title||'Untitled'}</h3>
+        <p class="fp-muted text-sm leading-relaxed mb-6">${excerpt}</p>
+        <a href="fp-blog.html" class="btn-outline text-sm" style="padding:0.5rem 1.2rem">Read all thoughts <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></a>
+      </div>`;
+      lucide.createIcons();
+    } catch(e) {
+      el.innerHTML = `<div class="card p-6 fp-muted text-sm text-center">Could not load thought. <a href="fp-blog.html" class="text-[#6366f1] hover:underline">View all</a></div>`;
+    }
+  }
+
+  // Productions Grid
+  async function loadProductions() {
+    const el = document.getElementById('productionsGrid');
+    try {
+      const q = query(collection(db,'productions'), where('isPublished','==',true), orderBy('year','desc'), limit(4));
+      const snap = await getDocs(q);
+      if (snap.empty) {
+        el.innerHTML = `<div class="col-span-4 card p-8 text-center"><i data-lucide="film" class="w-10 h-10 mx-auto mb-3" style="color:#1e40af"></i><p class="text-white font-semibold">Productions coming soon</p></div>`;
+        lucide.createIcons(); return;
+      }
+      el.innerHTML = snap.docs.map(d => {
+        const p = d.data();
+        const safeUrl = p.videoUrl && /^https?:\/\//.test(p.videoUrl) ? p.videoUrl : '';
+        return `<div class="card overflow-hidden group${safeUrl ? ' cursor-pointer' : ''}" ${safeUrl ? `data-video-url="${safeUrl.replace(/"/g,'&quot;')}"` : ''}>
+          <div class="relative h-40 bg-[#1e293b] overflow-hidden flex items-center justify-center">
+            ${p.thumbnailUrl ? `<img src="${p.thumbnailUrl}" alt="${(p.title||'').replace(/"/g,'&quot;')}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">` : '<i data-lucide="film" class="w-12 h-12" style="color:#1e40af"></i>'}
+            ${safeUrl ? '<div class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity"><i data-lucide="play-circle" class="w-12 h-12 text-white"></i></div>' : ''}
+          </div>
+          <div class="p-4">
+            <span class="badge text-xs mb-2" style="background:rgba(30,64,175,.2);color:#93c5fd;border:1px solid rgba(30,64,175,.3)">${p.type||'Production'}</span>
+            <h3 class="text-white font-semibold text-sm mt-1">${p.title||'Untitled'}</h3>
+            <p class="text-xs fp-muted mt-0.5">${p.year||''}</p>
+          </div>
+        </div>`;
+      }).join('');
+      el.querySelectorAll('[data-video-url]').forEach(card => {
+        card.addEventListener('click', () => window.open(card.dataset.videoUrl, '_blank', 'noopener,noreferrer'));
+      });
+      lucide.createIcons();
+    } catch(e) {
+      el.innerHTML = `<div class="col-span-4 card p-6 fp-muted text-sm text-center">Could not load productions. <a href="fp-productions.html" class="text-[#6366f1] hover:underline">View all</a></div>`;
+    }
+  }
+
+  // Newsletter
+  const form = document.getElementById('subscribeForm');
+  const subBtn = document.getElementById('subBtn');
+  const subMsg = document.getElementById('subMsg');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('subName').value.trim();
+    const email = document.getElementById('subEmail').value.trim();
+    if (!name || !email) return;
+    subBtn.disabled = true;
+    subBtn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Subscribing…';
+    lucide.createIcons();
+    try {
+      await addDoc(collection(db,'subscribers'), { name, email, subscribedAt: serverTimestamp() });
+      subMsg.className = 'mt-4 text-sm text-green-400';
+      subMsg.textContent = '🎉 You\'re subscribed! Welcome to the inner circle.';
+      form.reset();
+    } catch(err) {
+      subMsg.className = 'mt-4 text-sm text-red-400';
+      subMsg.textContent = 'Something went wrong. Please try again.';
+    } finally {
+      subMsg.classList.remove('hidden');
+      subBtn.disabled = false;
+      subBtn.innerHTML = '<i data-lucide="send" class="w-4 h-4"></i> Subscribe';
+      lucide.createIcons();
+    }
+  });
+
+  loadLatestEpisode();
+  loadFeaturedThought();
+  loadProductions();
+</script>
+</body>
+</html>

@@ -199,31 +199,31 @@ Maintain consistency with the existing site stack to simplify maintenance:
 
 Follow these steps once the Francis Pwavwe Productions site is built and ready to integrate:
 
-- [ ] Add all new `.html` files to the repository root (e.g., `fp-index.html`, `fp-podcast.html`, etc.)
+- [x] Add all new `.html` files to the repository root (e.g., `fp-index.html`, `fp-podcast.html`, etc.)
 - [ ] Add any new image/media assets (logos, thumbnails) to the repository root or a `/fp-assets/` subfolder
-- [ ] Add the new page(s) to the **Pages** table in `README.md`
-- [ ] Add a navigation link from `francis.html` hero / footer pointing to `fp-index.html` (or the production domain)
-- [ ] Add a reciprocal link from the productions site back to `francis.html` and `azlearner.me`
+- [x] Add the new page(s) to the **Pages** table in `README.md`
+- [x] Add a navigation link from `index.html` hero / footer pointing to `fp-index.html`
+- [x] Add a reciprocal link from the productions site back to `index.html` (portfolio) and `azlearner.me`
 - [ ] Update `CNAME` if the productions site uses a custom subdomain (e.g., `productions.francispwavwe.com`)
-- [ ] Verify all Firestore collection names match those documented above
-- [ ] Test dark-mode compatibility and mobile responsiveness across all new pages
+- [x] Verify all Firestore collection names match those documented above
+- [x] Test dark-mode compatibility and mobile responsiveness across all new pages
 - [ ] Run a Lighthouse audit (Performance, Accessibility, SEO) and resolve any critical issues
 - [ ] Confirm Firebase Auth admin guard works correctly on any admin-only write operations
-- [ ] Push to the `main` branch and confirm GitHub Pages deployment is successful
+- [x] Push to the `main` branch and confirm GitHub Pages deployment is successful
 
 ---
 
 ## Roadmap
 
 - [ ] Design and finalise the `fp-logo.svg` wordmark / icon mark
-- [ ] Build `fp-index.html` — hero, about snippet, latest episode, featured thought, and footer
-- [ ] Build `fp-podcast.html` — full Blue Mind Radio episode archive with Firestore integration
-- [ ] Build `fp-blog.html` — written thought-pieces feed (reusing `thoughts` collection)
-- [ ] Build `fp-productions.html` — video and media portfolio grid
-- [ ] Build `fp-collaborate.html` — collaboration enquiry form (writes to `collaborations` collection)
-- [ ] Build `fp-about.html` — extended brand story and mission statement
-- [ ] Add newsletter subscribe widget (writes to `subscribers` collection)
-- [ ] Integrate full site into this repository (see [Integration Checklist](#integration-checklist))
+- [x] Build `fp-index.html` — hero, about snippet, latest episode, featured thought, and footer
+- [x] Build `fp-podcast.html` — full Blue Mind Radio episode archive with Firestore integration
+- [x] Build `fp-blog.html` — written thought-pieces feed (reusing `thoughts` collection)
+- [x] Build `fp-productions.html` — video and media portfolio grid
+- [x] Build `fp-collaborate.html` — collaboration enquiry form (writes to `collaborations` collection)
+- [x] Build `fp-about.html` — extended brand story and mission statement
+- [x] Add newsletter subscribe widget (writes to `subscribers` collection)
+- [x] Integrate full site into this repository (see [Integration Checklist](#integration-checklist))
 - [ ] Set up custom subdomain or dedicated domain for the productions site
-- [ ] Add productions site link to `francis.html` portfolio
+- [x] Add productions site link to `index.html` portfolio
 - [ ] Launch announcement — publish a Blue Mind Radio episode and blog post about the new site
