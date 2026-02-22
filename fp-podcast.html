@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Mind Radio — Francis Pwavwe Productions</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta name="description" content="Blue Mind Radio — the podcast by Francis Pwavwe exploring Gen Z culture, philosophy, and personal growth." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'fp-dark': '#0a0a0f', 'fp-primary': '#1e40af', 'fp-gold': '#fbbf24',
+            'fp-accent': '#6366f1', 'fp-light': '#f8fafc', 'fp-muted': '#94a3b8',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0a0a0f; font-family: 'Inter', sans-serif; color: #f8fafc; }
+    .gold-line { width: 60px; height: 3px; background: #fbbf24; }
+    .nav-link { transition: color 0.2s ease; }
+    .nav-link:hover { color: #fbbf24; }
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+    .section-divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); }
+    .tag-pill { background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.4); color: #a5b4fc; font-size: 0.75rem; padding: 2px 10px; border-radius: 9999px; cursor: pointer; transition: all 0.2s ease; display: inline-block; }
+    .tag-pill:hover, .tag-pill.active { background: rgba(99,102,241,0.45); border-color: #6366f1; color: #fff; }
+    .tag-pill.gold { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.4); color: #fbbf24; }
+    .tag-pill.gold:hover, .tag-pill.gold.active { background: rgba(251,191,36,0.3); }
+    .ep-card { background: #111118; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; transition: border-color 0.2s ease, transform 0.2s ease; }
+    .ep-card:hover { border-color: rgba(251,191,36,0.2); transform: translateY(-2px); }
+    .episode-hidden { display: none; }
+    #search-box:focus { outline: none; border-color: rgba(251,191,36,0.4); }
+    .platform-btn { border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 6px 14px; font-size: 0.75rem; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+    .platform-btn:hover { border-color: rgba(251,191,36,0.4); color: #fbbf24; }
+    .loading-state { color: #94a3b8; text-align: center; padding: 48px; }
+  </style>
+</head>
+<body class="bg-fp-dark text-fp-light">
+
+  <!-- ===== NAV ===== -->
+  <nav class="fixed top-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+      <a href="fp-index.html" class="flex flex-col leading-tight">
+        <span class="font-poppins font-extrabold text-lg text-fp-light tracking-tight">FRANCIS PWAVWE</span>
+        <span class="font-poppins font-medium text-xs text-fp-gold tracking-[0.25em] uppercase">Productions</span>
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm text-fp-muted font-inter">
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link text-fp-gold">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Blog</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+        <a href="index.html" class="nav-link text-fp-muted/60 text-xs border border-white/10 rounded px-3 py-1 hover:border-fp-gold/40">Portfolio ↗</a>
+      </div>
+      <button id="hamburger" class="md:hidden text-fp-muted focus:outline-none" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden bg-[#0d0d14] border-t border-white/5 px-5 py-4 flex flex-col gap-4 text-fp-muted text-sm">
+      <a href="fp-about.html" class="nav-link">About</a>
+      <a href="fp-podcast.html" class="text-fp-gold">Podcast</a>
+      <a href="fp-blog.html" class="nav-link">Blog</a>
+      <a href="fp-productions.html" class="nav-link">Productions</a>
+      <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+      <a href="fp-contact.html" class="nav-link">Contact</a>
+      <a href="index.html" class="nav-link text-fp-muted/60 text-xs">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="pt-36 pb-14 px-5 text-center" style="background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.2) 0%, rgba(10,10,15,0) 65%);">
+    <div class="max-w-3xl mx-auto">
+      <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4">Francis Pwavwe Productions</p>
+      <div class="w-16 h-16 rounded-full bg-fp-accent/20 flex items-center justify-center mx-auto mb-5">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-fp-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+      </div>
+      <h1 class="font-poppins font-extrabold text-4xl sm:text-5xl text-fp-light mb-4">Blue Mind Radio</h1>
+      <p class="font-inter font-light text-fp-muted text-lg max-w-xl mx-auto leading-relaxed">
+        Honest conversations about Gen Z culture, philosophy, and what it means to grow on purpose.
+      </p>
+    </div>
+  </header>
+
+  <!-- ===== SEARCH & FILTER ===== -->
+  <section class="py-8 px-5 border-b border-white/5 sticky top-[72px] z-40 bg-[#0a0a0f]/95 backdrop-blur-sm">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <input
+        id="search-box"
+        type="search"
+        placeholder="Search episodes…"
+        class="bg-[#111118] border border-white/10 rounded-lg px-4 py-2.5 text-fp-light placeholder-fp-muted/50 text-sm font-inter w-full sm:w-72 transition-colors"
+      />
+      <div id="tag-filters" class="flex flex-wrap gap-2">
+        <button class="tag-pill gold active" data-tag="all">All</button>
+        <button class="tag-pill" data-tag="Gen Z">Gen Z</button>
+        <button class="tag-pill" data-tag="Philosophy">Philosophy</button>
+        <button class="tag-pill" data-tag="Growth">Growth</button>
+        <button class="tag-pill" data-tag="Culture">Culture</button>
+        <button class="tag-pill" data-tag="Leadership">Leadership</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EPISODES ===== -->
+  <section class="py-14 px-5">
+    <div class="max-w-5xl mx-auto">
+      <div id="episodes-container">
+        <!-- Loading state -->
+        <div id="episodes-loading" class="loading-state">
+          <svg class="w-8 h-8 mx-auto mb-4 animate-spin text-fp-muted/40" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+          <p class="font-inter text-sm">Loading episodes…</p>
+        </div>
+
+        <!-- Static placeholder cards (shown before Firestore loads / as fallback) -->
+        <div id="episodes-list" class="grid gap-5" style="display:none;">
+          <!-- Cards injected by JS -->
+        </div>
+
+        <!-- Placeholder shown when collection is empty -->
+        <div id="episodes-placeholder" class="hidden grid gap-5">
+          <div class="ep-card p-8 grid md:grid-cols-4 gap-6">
+            <div class="md:col-span-1 bg-gradient-to-br from-[#6366f1]/20 to-[#1e40af]/10 rounded-xl flex items-center justify-center min-h-[120px]">
+              <span class="font-poppins font-bold text-fp-accent text-3xl">01</span>
+            </div>
+            <div class="md:col-span-3">
+              <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="tag-pill">Gen Z</span>
+                <span class="tag-pill">Philosophy</span>
+                <span class="font-inter text-fp-muted text-xs">S1 · Ep 1</span>
+              </div>
+              <h3 class="font-poppins font-bold text-fp-light text-lg mb-2">Who Are We When No One Is Watching?</h3>
+              <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-5">In the debut episode, Francis explores the tension between digital performance and authentic selfhood — asking what it really means to know yourself in an age of curated identity.</p>
+              <div class="flex flex-wrap gap-3">
+                <a href="#" class="platform-btn text-fp-muted">
+                  <svg class="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                  Spotify
+                </a>
+                <a href="#" class="platform-btn text-fp-muted">
+                  <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+                  YouTube
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="ep-card p-8 grid md:grid-cols-4 gap-6">
+            <div class="md:col-span-1 bg-gradient-to-br from-[#fbbf24]/10 to-[#6366f1]/10 rounded-xl flex items-center justify-center min-h-[120px]">
+              <span class="font-poppins font-bold text-fp-gold text-3xl">02</span>
+            </div>
+            <div class="md:col-span-3">
+              <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="tag-pill">Growth</span>
+                <span class="tag-pill">Culture</span>
+                <span class="font-inter text-fp-muted text-xs">S1 · Ep 2</span>
+              </div>
+              <h3 class="font-poppins font-bold text-fp-light text-lg mb-2">The Discipline of Slow</h3>
+              <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-5">Speed is the currency of our era — but what do we lose when we optimise everything? This episode makes a case for slowness as a radical act of resistance.</p>
+              <div class="flex flex-wrap gap-3">
+                <a href="#" class="platform-btn text-fp-muted">
+                  <svg class="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                  Spotify
+                </a>
+                <a href="#" class="platform-btn text-fp-muted">
+                  <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+                  YouTube
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p id="no-results" class="hidden font-inter text-fp-muted text-sm text-center py-12">No episodes match your search. Try a different keyword or tag.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="border-t border-white/5 py-10 px-5">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="font-inter text-fp-muted text-xs">© <span id="year"></span> Francis Pwavwe Productions.</p>
+      <div class="flex gap-6 text-sm text-fp-muted">
+        <a href="fp-index.html" class="nav-link">Home</a>
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-blog.html" class="nav-link">Blog</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="index.html" class="nav-link text-fp-muted/50">Portfolio ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase + logic -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore, collection, query, where, orderBy, getDocs }
+      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
+      authDomain: "francis-pwavwe.firebaseapp.com",
+      projectId: "francis-pwavwe",
+      storageBucket: "francis-pwavwe.firebasestorage.app",
+      messagingSenderId: "658069378543",
+      appId: "1:658069378543:web:87b1dcb0dd27d3255bd21a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allEpisodes = [];
+
+    function buildEpisodeCard(ep) {
+      const tags = (ep.tags || []).slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('');
+      const epNum = String(ep.episode || '').padStart(2, '0');
+      const spotifyBtn = ep.spotifyUrl
+        ? `<a href="${ep.spotifyUrl}" target="_blank" rel="noopener" class="platform-btn text-fp-muted"><svg class="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>Spotify</a>` : '';
+      const ytBtn = ep.youtubeUrl
+        ? `<a href="${ep.youtubeUrl}" target="_blank" rel="noopener" class="platform-btn text-fp-muted"><svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>YouTube</a>` : '';
+      const date = ep.publishedAt?.toDate ? ep.publishedAt.toDate().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'}) : '';
+      const cover = ep.coverImage
+        ? `<img src="${ep.coverImage}" alt="Episode cover" class="w-full h-full object-cover rounded-xl" />`
+        : `<span class="font-poppins font-bold text-fp-accent text-3xl">${epNum}</span>`;
+
+      return `<div class="ep-card p-8 grid md:grid-cols-4 gap-6" data-tags="${(ep.tags||[]).join(',')}" data-title="${(ep.title||'').toLowerCase()}">
+        <div class="md:col-span-1 bg-gradient-to-br from-[#6366f1]/20 to-[#1e40af]/10 rounded-xl flex items-center justify-center min-h-[120px] overflow-hidden">${cover}</div>
+        <div class="md:col-span-3">
+          <div class="flex flex-wrap items-center gap-2 mb-3">${tags}<span class="font-inter text-fp-muted text-xs">S${ep.season||1} · Ep ${ep.episode||'?'}</span>${date ? `<span class="font-inter text-fp-muted/60 text-xs">· ${date}</span>` : ''}</div>
+          <h3 class="font-poppins font-bold text-fp-light text-lg mb-2">${ep.title||'Untitled'}</h3>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-5">${ep.description||''}</p>
+          <div class="flex flex-wrap gap-3">${spotifyBtn}${ytBtn}</div>
+        </div>
+      </div>`;
+    }
+
+    async function loadEpisodes() {
+      try {
+        const q = query(
+          collection(db, 'podcast_episodes'),
+          where('isPublished', '==', true),
+          orderBy('publishedAt', 'desc')
+        );
+        const snap = await getDocs(q);
+        document.getElementById('episodes-loading').style.display = 'none';
+        if (snap.empty) {
+          document.getElementById('episodes-placeholder').classList.remove('hidden');
+          return;
+        }
+        allEpisodes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderEpisodes(allEpisodes);
+      } catch (err) {
+        console.error('Failed to load podcast episodes from Firestore:', err);
+        document.getElementById('episodes-loading').style.display = 'none';
+        document.getElementById('episodes-placeholder').classList.remove('hidden');
+      }
+    }
+
+    function renderEpisodes(episodes) {
+      const list = document.getElementById('episodes-list');
+      list.style.display = 'grid';
+      list.innerHTML = episodes.map(buildEpisodeCard).join('');
+      document.getElementById('no-results').classList.toggle('hidden', episodes.length > 0);
+    }
+
+    loadEpisodes();
+
+    // Search
+    document.getElementById('search-box').addEventListener('input', applyFilters);
+    // Tag filters
+    let activeTag = 'all';
+    document.getElementById('tag-filters').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-tag]');
+      if (!btn) return;
+      activeTag = btn.dataset.tag;
+      document.querySelectorAll('[data-tag]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    });
+
+    function applyFilters() {
+      const searchVal = document.getElementById('search-box').value.toLowerCase();
+      // If we have Firestore data, filter that
+      if (allEpisodes.length) {
+        const filtered = allEpisodes.filter(ep => {
+          const matchTag = activeTag === 'all' || (ep.tags || []).includes(activeTag);
+          const matchSearch = !searchVal || (ep.title||'').toLowerCase().includes(searchVal) || (ep.description||'').toLowerCase().includes(searchVal);
+          return matchTag && matchSearch;
+        });
+        renderEpisodes(filtered);
+      } else {
+        // Filter static placeholder cards
+        document.querySelectorAll('.ep-card').forEach(card => {
+          const tags = (card.dataset.tags || '').split(',');
+          const title = card.dataset.title || '';
+          const matchTag = activeTag === 'all' || tags.includes(activeTag);
+          const matchSearch = !searchVal || title.includes(searchVal);
+          card.style.display = matchTag && matchSearch ? '' : 'none';
+        });
+      }
+    }
+  </script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

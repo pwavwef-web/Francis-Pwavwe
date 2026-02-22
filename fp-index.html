@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Francis Pwavwe Productions — Clarity. Purpose. Production.</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta name="description" content="Francis Pwavwe Productions — the creative hub for Blue Mind Radio, long-form thought pieces, and video productions by Francis Pwavwe." />
+  <meta property="og:title" content="Francis Pwavwe Productions" />
+  <meta property="og:description" content="Clarity. Purpose. Production." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'fp-dark': '#0a0a0f',
+            'fp-primary': '#1e40af',
+            'fp-gold': '#fbbf24',
+            'fp-accent': '#6366f1',
+            'fp-light': '#f8fafc',
+            'fp-muted': '#94a3b8',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0a0a0f; font-family: 'Inter', sans-serif; color: #f8fafc; }
+    .hero-gradient { background: radial-gradient(ellipse at 50% 0%, rgba(30,64,175,0.35) 0%, rgba(10,10,15,0) 70%), radial-gradient(ellipse at 80% 80%, rgba(99,102,241,0.15) 0%, transparent 60%); }
+    .gold-line { width: 60px; height: 3px; background: #fbbf24; }
+    .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .nav-link { transition: color 0.2s ease; }
+    .nav-link:hover { color: #fbbf24; }
+    .btn-gold { background: #fbbf24; color: #0a0a0f; font-family: 'Poppins', sans-serif; font-weight: 700; transition: all 0.2s ease; }
+    .btn-gold:hover { background: #f59e0b; transform: translateY(-1px); }
+    .btn-outline { border: 2px solid #f8fafc; color: #f8fafc; font-family: 'Poppins', sans-serif; font-weight: 600; transition: all 0.2s ease; }
+    .btn-outline:hover { border-color: #fbbf24; color: #fbbf24; }
+    .tag-pill { background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.4); color: #a5b4fc; font-size: 0.75rem; padding: 2px 10px; border-radius: 9999px; }
+    .section-divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); }
+    /* mobile nav toggle */
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+  </style>
+</head>
+<body class="bg-fp-dark text-fp-light">
+
+  <!-- ===== NAV ===== -->
+  <nav class="fixed top-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+      <a href="fp-index.html" class="flex flex-col leading-tight">
+        <span class="font-poppins font-extrabold text-lg text-fp-light tracking-tight">FRANCIS PWAVWE</span>
+        <span class="font-poppins font-medium text-xs text-fp-gold tracking-[0.25em] uppercase">Productions</span>
+      </a>
+      <!-- Desktop links -->
+      <div class="hidden md:flex items-center gap-7 text-sm text-fp-muted font-inter">
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Blog</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+        <a href="index.html" class="nav-link text-fp-muted/60 text-xs border border-white/10 rounded px-3 py-1 hover:border-fp-gold/40">Portfolio ↗</a>
+      </div>
+      <!-- Mobile hamburger -->
+      <button id="hamburger" class="md:hidden text-fp-muted focus:outline-none" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden bg-[#0d0d14] border-t border-white/5 px-5 py-4 flex flex-col gap-4 text-fp-muted text-sm">
+      <a href="fp-about.html" class="nav-link">About</a>
+      <a href="fp-podcast.html" class="nav-link">Podcast</a>
+      <a href="fp-blog.html" class="nav-link">Blog</a>
+      <a href="fp-productions.html" class="nav-link">Productions</a>
+      <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+      <a href="fp-contact.html" class="nav-link">Contact</a>
+      <a href="index.html" class="nav-link text-fp-muted/60 text-xs">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero-gradient min-h-screen flex flex-col items-center justify-center text-center px-5 pt-24 pb-16">
+    <div class="max-w-4xl mx-auto">
+      <p class="font-poppins font-medium text-fp-gold text-sm tracking-[0.3em] uppercase mb-6">Francis Pwavwe Productions</p>
+      <h1 class="font-poppins font-extrabold text-5xl sm:text-6xl md:text-7xl text-fp-light leading-tight mb-6">
+        Clarity.<br class="hidden sm:block" />
+        <span class="text-fp-gold">Purpose.</span><br class="hidden sm:block" />
+        Production.
+      </h1>
+      <p class="font-inter font-light text-fp-muted text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+        A creative platform for ideas that matter — where Blue Mind Radio, long-form thought pieces, and intentional video productions come to life.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="fp-podcast.html" class="btn-gold px-8 py-4 rounded-lg text-sm tracking-wide inline-block">Listen Now →</a>
+        <a href="fp-collaborate.html" class="btn-outline px-8 py-4 rounded-lg text-sm tracking-wide inline-block">Work With Me</a>
+      </div>
+    </div>
+    <!-- scroll cue -->
+    <div class="mt-16 animate-bounce text-fp-muted/40">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT SNIPPET ===== -->
+  <section class="py-20 px-5">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-14 items-center">
+      <div>
+        <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4">The Story</p>
+        <h2 class="font-poppins font-bold text-3xl sm:text-4xl text-fp-light mb-6 leading-snug">Built on curiosity.<br />Driven by purpose.</h2>
+        <div class="gold-line mb-7"></div>
+        <p class="font-inter font-light text-fp-muted text-base leading-relaxed mb-5">
+          Francis Pwavwe Productions is the creative umbrella for everything Francis builds — from deep podcast conversations to documentary-quality video work. It started as a passion project and grew into a platform with a clear identity.
+        </p>
+        <p class="font-inter font-light text-fp-muted text-base leading-relaxed mb-8">
+          Based in Cape Coast, Ghana, and anchored in the belief that thoughtful content can shift perspectives, Francis Pwavwe Productions exists to create with intention.
+        </p>
+        <a href="fp-about.html" class="font-poppins font-semibold text-fp-gold text-sm border-b border-fp-gold/40 pb-0.5 hover:border-fp-gold transition-colors">Read the full story →</a>
+      </div>
+      <div class="relative">
+        <div class="bg-gradient-to-br from-[#1e40af]/20 to-[#6366f1]/10 rounded-2xl p-8 border border-white/5">
+          <blockquote class="font-playfair italic text-fp-light text-xl leading-relaxed mb-4">
+            "The world doesn't need more noise — it needs more clarity."
+          </blockquote>
+          <p class="font-inter text-fp-muted text-sm">— Francis Pwavwe</p>
+        </div>
+        <div class="absolute -bottom-4 -right-4 w-24 h-24 rounded-full border border-fp-gold/20 opacity-50"></div>
+        <div class="absolute -top-4 -left-4 w-16 h-16 rounded-full border border-fp-accent/20 opacity-50"></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider max-w-5xl mx-auto" />
+
+  <!-- ===== LATEST EPISODE ===== -->
+  <section class="py-20 px-5">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-10">
+        <div>
+          <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-2">Blue Mind Radio</p>
+          <h2 class="font-poppins font-bold text-2xl sm:text-3xl text-fp-light">Latest Episode</h2>
+        </div>
+        <a href="fp-podcast.html" class="hidden sm:block font-poppins text-sm text-fp-muted hover:text-fp-gold transition-colors">All episodes →</a>
+      </div>
+      <!-- Episode card — populated by Firestore; static fallback shown on load -->
+      <div id="latest-episode" class="card-hover bg-[#111118] border border-white/5 rounded-2xl overflow-hidden">
+        <div class="grid md:grid-cols-3">
+          <div class="bg-gradient-to-br from-[#1e40af]/30 to-[#6366f1]/20 flex items-center justify-center min-h-[200px] md:min-h-full">
+            <div class="text-center p-8">
+              <div class="w-16 h-16 rounded-full bg-fp-gold/20 flex items-center justify-center mx-auto mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-fp-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+              </div>
+              <p class="font-poppins font-bold text-fp-gold text-sm">Blue Mind Radio</p>
+            </div>
+          </div>
+          <div class="md:col-span-2 p-8 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-3 mb-3">
+                <span class="tag-pill">Season 1</span>
+                <span class="tag-pill">Gen Z</span>
+              </div>
+              <h3 id="ep-title" class="font-poppins font-bold text-fp-light text-xl mb-3">Loading latest episode…</h3>
+              <p id="ep-desc" class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-6">Fetching from Blue Mind Radio archive. If this persists, check back soon.</p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <a id="ep-spotify" href="fp-podcast.html" class="btn-gold px-5 py-2 rounded-lg text-xs inline-block">Listen on Spotify</a>
+              <a href="fp-podcast.html" class="btn-outline px-5 py-2 rounded-lg text-xs inline-block">All Episodes</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider max-w-5xl mx-auto" />
+
+  <!-- ===== FEATURED THOUGHT ===== -->
+  <section class="py-20 px-5">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-10">
+        <div>
+          <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-2">Written Work</p>
+          <h2 class="font-poppins font-bold text-2xl sm:text-3xl text-fp-light">Featured Thought</h2>
+        </div>
+        <a href="fp-blog.html" class="hidden sm:block font-poppins text-sm text-fp-muted hover:text-fp-gold transition-colors">All thoughts →</a>
+      </div>
+      <div id="featured-thought" class="card-hover bg-[#111118] border border-white/5 rounded-2xl p-8">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="tag-pill">Philosophy</span>
+          <span class="font-inter text-fp-muted text-xs" id="thought-date">—</span>
+        </div>
+        <h3 id="thought-title" class="font-poppins font-bold text-fp-light text-2xl mb-4 leading-snug">Loading…</h3>
+        <p id="thought-excerpt" class="font-inter font-light text-fp-muted text-base leading-relaxed mb-6">Fetching from the Thoughts archive.</p>
+        <a href="fp-blog.html" class="font-poppins font-semibold text-fp-gold text-sm border-b border-fp-gold/40 pb-0.5 hover:border-fp-gold transition-colors">Read more →</a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider max-w-5xl mx-auto" />
+
+  <!-- ===== PRODUCTIONS REEL ===== -->
+  <section class="py-20 px-5">
+    <div class="max-w-5xl mx-auto">
+      <div class="flex items-center justify-between mb-10">
+        <div>
+          <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-2">Portfolio</p>
+          <h2 class="font-poppins font-bold text-2xl sm:text-3xl text-fp-light">Productions</h2>
+        </div>
+        <a href="fp-productions.html" class="hidden sm:block font-poppins text-sm text-fp-muted hover:text-fp-gold transition-colors">Full reel →</a>
+      </div>
+      <div id="productions-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Static placeholders -->
+        <div class="card-hover bg-[#111118] border border-white/5 rounded-xl overflow-hidden">
+          <div class="h-44 bg-gradient-to-br from-[#1e40af]/25 to-[#6366f1]/15 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-fp-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.069A1 1 0 0121 8.882v6.236a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          </div>
+          <div class="p-5">
+            <span class="tag-pill mb-3 inline-block">Documentary</span>
+            <h4 class="font-poppins font-semibold text-fp-light text-sm mb-1">Coming Soon</h4>
+            <p class="font-inter text-fp-muted text-xs">2025</p>
+          </div>
+        </div>
+        <div class="card-hover bg-[#111118] border border-white/5 rounded-xl overflow-hidden">
+          <div class="h-44 bg-gradient-to-br from-[#fbbf24]/10 to-[#1e40af]/15 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-fp-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.069A1 1 0 0121 8.882v6.236a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          </div>
+          <div class="p-5">
+            <span class="tag-pill mb-3 inline-block">Vlog</span>
+            <h4 class="font-poppins font-semibold text-fp-light text-sm mb-1">Coming Soon</h4>
+            <p class="font-inter text-fp-muted text-xs">2025</p>
+          </div>
+        </div>
+        <div class="card-hover bg-[#111118] border border-white/5 rounded-xl overflow-hidden">
+          <div class="h-44 bg-gradient-to-br from-[#6366f1]/20 to-[#0a0a0f] flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-fp-muted/40" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.069A1 1 0 0121 8.882v6.236a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          </div>
+          <div class="p-5">
+            <span class="tag-pill mb-3 inline-block">Short Film</span>
+            <h4 class="font-poppins font-semibold text-fp-light text-sm mb-1">Coming Soon</h4>
+            <p class="font-inter text-fp-muted text-xs">2025</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider max-w-5xl mx-auto" />
+
+  <!-- ===== NEWSLETTER ===== -->
+  <section class="py-20 px-5">
+    <div class="max-w-2xl mx-auto text-center">
+      <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4">Stay in the loop</p>
+      <h2 class="font-poppins font-bold text-3xl sm:text-4xl text-fp-light mb-4">Ideas worth keeping up with.</h2>
+      <p class="font-inter font-light text-fp-muted text-base mb-10">Get notified when new episodes drop, new thoughts land, and new productions go live. No spam — just signal.</p>
+      <form id="subscribe-form" class="flex flex-col sm:flex-row gap-3 justify-center">
+        <input type="text" id="sub-name" placeholder="Your name" required
+          class="flex-1 bg-[#111118] border border-white/10 rounded-lg px-5 py-3 text-fp-light placeholder-fp-muted/50 text-sm focus:outline-none focus:border-fp-gold/50 font-inter" />
+        <input type="email" id="sub-email" placeholder="Your email" required
+          class="flex-1 bg-[#111118] border border-white/10 rounded-lg px-5 py-3 text-fp-light placeholder-fp-muted/50 text-sm focus:outline-none focus:border-fp-gold/50 font-inter" />
+        <button type="submit" class="btn-gold px-7 py-3 rounded-lg text-sm whitespace-nowrap">Subscribe</button>
+      </form>
+      <p id="subscribe-msg" class="mt-4 text-sm text-fp-gold hidden">You're in. Thank you!</p>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="border-t border-white/5 py-12 px-5">
+    <div class="max-w-5xl mx-auto">
+      <div class="grid sm:grid-cols-3 gap-10 mb-10">
+        <div>
+          <p class="font-poppins font-extrabold text-fp-light text-base mb-1">FRANCIS PWAVWE</p>
+          <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.25em] uppercase mb-4">Productions</p>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">Clarity. Purpose. Production.<br/>Cape Coast, Ghana.</p>
+        </div>
+        <div>
+          <p class="font-poppins font-semibold text-fp-light text-sm mb-4">Pages</p>
+          <div class="flex flex-col gap-2 text-sm text-fp-muted">
+            <a href="fp-about.html" class="nav-link">About</a>
+            <a href="fp-podcast.html" class="nav-link">Podcast</a>
+            <a href="fp-blog.html" class="nav-link">Blog</a>
+            <a href="fp-productions.html" class="nav-link">Productions</a>
+            <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+            <a href="fp-contact.html" class="nav-link">Contact</a>
+          </div>
+        </div>
+        <div>
+          <p class="font-poppins font-semibold text-fp-light text-sm mb-4">Connect</p>
+          <div class="flex flex-col gap-2 text-sm text-fp-muted">
+            <a href="https://azlearner.me" target="_blank" rel="noopener" class="nav-link">AZ Learner ↗</a>
+            <a href="index.html" class="nav-link">Personal Portfolio ↗</a>
+          </div>
+          <div class="flex gap-4 mt-5">
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" class="text-fp-muted hover:text-fp-gold transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
+            <a href="https://twitter.com/" target="_blank" rel="noopener" aria-label="X / Twitter" class="text-fp-muted hover:text-fp-gold transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <a href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="YouTube" class="text-fp-muted hover:text-fp-gold transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/5 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="font-inter text-fp-muted text-xs">© <span id="year"></span> Francis Pwavwe Productions. All rights reserved.</p>
+        <p class="font-inter text-fp-muted/50 text-xs">Built with intention.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore, collection, query, where, orderBy, limit, addDoc, serverTimestamp, getDocs }
+      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
+      authDomain: "francis-pwavwe.firebaseapp.com",
+      projectId: "francis-pwavwe",
+      storageBucket: "francis-pwavwe.firebasestorage.app",
+      messagingSenderId: "658069378543",
+      appId: "1:658069378543:web:87b1dcb0dd27d3255bd21a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // --- Latest episode ---
+    try {
+      const epQ = query(
+        collection(db, 'podcast_episodes'),
+        where('isPublished', '==', true),
+        orderBy('publishedAt', 'desc'),
+        limit(1)
+      );
+      const epSnap = await getDocs(epQ);
+      if (!epSnap.empty) {
+        const ep = epSnap.docs[0].data();
+        document.getElementById('ep-title').textContent = ep.title || 'Untitled Episode';
+        document.getElementById('ep-desc').textContent = ep.description || '';
+        if (ep.spotifyUrl) {
+          const a = document.getElementById('ep-spotify');
+          a.href = ep.spotifyUrl;
+          a.textContent = 'Listen on Spotify';
+        }
+        const tags = document.querySelector('#latest-episode .flex.items-center.gap-3');
+        if (ep.tags && ep.tags.length && tags) {
+          tags.innerHTML = ep.tags.slice(0, 3).map(t => `<span class="tag-pill">${t}</span>`).join('');
+        }
+      }
+    } catch (err) { console.error('Failed to load latest episode from Firestore:', err); }
+
+    // --- Featured thought ---
+    try {
+      const thQ = query(
+        collection(db, 'thoughts'),
+        orderBy('timestamp', 'desc'),
+        limit(1)
+      );
+      const thSnap = await getDocs(thQ);
+      if (!thSnap.empty) {
+        const th = thSnap.docs[0].data();
+        document.getElementById('thought-title').textContent = th.title || 'Untitled';
+        const excerpt = (th.content || '').substring(0, 220);
+        document.getElementById('thought-excerpt').textContent = excerpt + (th.content && th.content.length > 220 ? '…' : '');
+        if (th.timestamp?.toDate) {
+          document.getElementById('thought-date').textContent = th.timestamp.toDate().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+        }
+        if (th.category) {
+          document.querySelector('#featured-thought .tag-pill').textContent = th.category;
+        }
+      }
+    } catch (err) { console.error('Failed to load featured thought from Firestore:', err); }
+
+    // --- Subscribe form ---
+    document.getElementById('subscribe-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('sub-name').value.trim();
+      const email = document.getElementById('sub-email').value.trim();
+      if (!name || !email) return;
+      try {
+        await addDoc(collection(db, 'subscribers'), { name, email, subscribedAt: serverTimestamp() });
+        document.getElementById('subscribe-msg').classList.remove('hidden');
+        e.target.reset();
+      } catch (err) {
+        console.error('Newsletter subscription failed:', err);
+        document.getElementById('subscribe-msg').textContent = 'Something went wrong. Please try again.';
+        document.getElementById('subscribe-msg').classList.remove('hidden');
+      }
+    });
+  </script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

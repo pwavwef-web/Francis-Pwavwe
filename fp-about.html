@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Francis Pwavwe Productions</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta name="description" content="The story behind Francis Pwavwe Productions — a creative platform built on clarity, purpose, and intentional production." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'fp-dark': '#0a0a0f', 'fp-primary': '#1e40af', 'fp-gold': '#fbbf24',
+            'fp-accent': '#6366f1', 'fp-light': '#f8fafc', 'fp-muted': '#94a3b8',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0a0a0f; font-family: 'Inter', sans-serif; color: #f8fafc; }
+    .gold-line { width: 60px; height: 3px; background: #fbbf24; }
+    .nav-link { transition: color 0.2s ease; }
+    .nav-link:hover { color: #fbbf24; }
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+    .section-divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); }
+    .milestone-dot { width: 14px; height: 14px; background: #fbbf24; border-radius: 9999px; flex-shrink: 0; margin-top: 4px; }
+    .value-card { background: #111118; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 28px; transition: border-color 0.2s ease; }
+    .value-card:hover { border-color: rgba(251,191,36,0.25); }
+  </style>
+</head>
+<body class="bg-fp-dark text-fp-light">
+
+  <!-- ===== NAV ===== -->
+  <nav class="fixed top-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+      <a href="fp-index.html" class="flex flex-col leading-tight">
+        <span class="font-poppins font-extrabold text-lg text-fp-light tracking-tight">FRANCIS PWAVWE</span>
+        <span class="font-poppins font-medium text-xs text-fp-gold tracking-[0.25em] uppercase">Productions</span>
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm text-fp-muted font-inter">
+        <a href="fp-about.html" class="nav-link text-fp-gold">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Blog</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+        <a href="index.html" class="nav-link text-fp-muted/60 text-xs border border-white/10 rounded px-3 py-1 hover:border-fp-gold/40">Portfolio ↗</a>
+      </div>
+      <button id="hamburger" class="md:hidden text-fp-muted focus:outline-none" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden bg-[#0d0d14] border-t border-white/5 px-5 py-4 flex flex-col gap-4 text-fp-muted text-sm">
+      <a href="fp-about.html" class="text-fp-gold">About</a>
+      <a href="fp-podcast.html" class="nav-link">Podcast</a>
+      <a href="fp-blog.html" class="nav-link">Blog</a>
+      <a href="fp-productions.html" class="nav-link">Productions</a>
+      <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+      <a href="fp-contact.html" class="nav-link">Contact</a>
+      <a href="index.html" class="nav-link text-fp-muted/60 text-xs">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="pt-36 pb-16 px-5 text-center" style="background: radial-gradient(ellipse at 50% 0%, rgba(30,64,175,0.25) 0%, rgba(10,10,15,0) 65%);">
+    <div class="max-w-3xl mx-auto">
+      <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4">Our Story</p>
+      <h1 class="font-poppins font-extrabold text-4xl sm:text-5xl md:text-6xl text-fp-light mb-6 leading-tight">Built on Curiosity.<br />Driven by Purpose.</h1>
+      <div class="gold-line mx-auto"></div>
+    </div>
+  </header>
+
+  <!-- ===== BRAND STORY ===== -->
+  <section class="py-16 px-5">
+    <div class="max-w-3xl mx-auto">
+      <p class="font-inter font-light text-fp-muted text-lg leading-relaxed mb-7">
+        Francis Pwavwe Productions began not with a grand announcement, but with a quiet decision — a decision to stop letting ideas stay ideas. As a Tourism Management student at the University of Cape Coast and the founder of <a href="https://azlearner.me" target="_blank" class="text-fp-gold hover:underline">AZ Learner</a>, Francis had always been drawn to the intersection of culture, knowledge, and communication.
+      </p>
+      <p class="font-inter font-light text-fp-muted text-lg leading-relaxed mb-7">
+        The podcast came first. <strong class="text-fp-light font-normal">Blue Mind Radio</strong> was born out of a need to have real conversations — the kind that happen between young people navigating a world that rarely pauses long enough to reflect. Season 1 opened with questions about Gen Z identity, philosophy, and what it means to grow up purposefully in an era of information overload.
+      </p>
+
+      <blockquote class="font-playfair italic text-fp-light text-2xl leading-relaxed border-l-4 border-fp-gold pl-6 my-10">
+        "The world doesn't need more noise — it needs more clarity. That's what I set out to make."
+      </blockquote>
+
+      <p class="font-inter font-light text-fp-muted text-lg leading-relaxed mb-7">
+        The written work followed. Blog pieces that were too long for social media and too personal for an academic journal found their home in the Thoughts archive. Each piece is an attempt to think out loud — on tourism, on leadership, on what it means to build something lasting.
+      </p>
+      <p class="font-inter font-light text-fp-muted text-lg leading-relaxed mb-7">
+        The video and media productions came later, shaped by a belief that documentary-quality storytelling doesn't require a Hollywood budget — it requires a clear point of view and the patience to wait for the right moment.
+      </p>
+      <p class="font-inter font-light text-fp-muted text-lg leading-relaxed mb-10">
+        Francis Pwavwe Productions is not a media company in the traditional sense. It is a creative practice — one that treats every episode, every essay, and every frame as an opportunity to contribute something of genuine value to the people who choose to spend their attention here.
+      </p>
+    </div>
+  </section>
+
+  <hr class="section-divider max-w-4xl mx-auto" />
+
+  <!-- ===== MISSION ===== -->
+  <section class="py-16 px-5 text-center">
+    <div class="max-w-3xl mx-auto">
+      <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4">Mission</p>
+      <h2 class="font-poppins font-bold text-3xl sm:text-4xl text-fp-light mb-8 leading-snug">
+        To create with intention.<br />To share with generosity.<br />To build what lasts.
+      </h2>
+      <p class="font-inter font-light text-fp-muted text-base leading-relaxed">
+        Every production under the Francis Pwavwe Productions banner is guided by three principles: <em class="text-fp-light">clarity</em> — saying exactly what needs to be said, nothing more; <em class="text-fp-light">purpose</em> — knowing why this work exists; and <em class="text-fp-light">production</em> — not leaving the work in your head.
+      </p>
+    </div>
+  </section>
+
+  <hr class="section-divider max-w-4xl mx-auto" />
+
+  <!-- ===== VALUES ===== -->
+  <section class="py-16 px-5">
+    <div class="max-w-5xl mx-auto">
+      <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4 text-center">What we stand for</p>
+      <h2 class="font-poppins font-bold text-2xl sm:text-3xl text-fp-light mb-12 text-center">Core Values</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="value-card">
+          <div class="w-10 h-10 rounded-full bg-fp-gold/15 flex items-center justify-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          </div>
+          <h3 class="font-poppins font-bold text-fp-light text-base mb-3">Intellectual Honesty</h3>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">We say what we actually think, even when it's uncomfortable. The audience deserves the real conversation.</p>
+        </div>
+        <div class="value-card">
+          <div class="w-10 h-10 rounded-full bg-fp-accent/15 flex items-center justify-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          <h3 class="font-poppins font-bold text-fp-light text-base mb-3">Depth Over Volume</h3>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">One thoughtful piece is worth more than ten shallow ones. We resist the pressure to create for its own sake.</p>
+        </div>
+        <div class="value-card">
+          <div class="w-10 h-10 rounded-full bg-fp-primary/25 flex items-center justify-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          </div>
+          <h3 class="font-poppins font-bold text-fp-light text-base mb-3">Community First</h3>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">This platform exists in service of the audience and collaborators who make the work meaningful. Growth is shared.</p>
+        </div>
+        <div class="value-card">
+          <div class="w-10 h-10 rounded-full bg-fp-gold/15 flex items-center justify-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+          </div>
+          <h3 class="font-poppins font-bold text-fp-light text-base mb-3">Craft &amp; Quality</h3>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">Whether it's audio mixing, essay editing, or video colour grading — we care about the finish. Details signal respect for the audience.</p>
+        </div>
+        <div class="value-card">
+          <div class="w-10 h-10 rounded-full bg-fp-accent/15 flex items-center justify-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h3 class="font-poppins font-bold text-fp-light text-base mb-3">African Perspective</h3>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">Our stories are rooted in Ghana and the African experience — unashamed, unborrowed, and offered to the world on our own terms.</p>
+        </div>
+        <div class="value-card">
+          <div class="w-10 h-10 rounded-full bg-fp-primary/25 flex items-center justify-center mb-5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h3 class="font-poppins font-bold text-fp-light text-base mb-3">Bias Toward Action</h3>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">The best idea unpublished helps nobody. We ship — then refine. Production is the practice.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider max-w-4xl mx-auto" />
+
+  <!-- ===== MILESTONES ===== -->
+  <section class="py-16 px-5">
+    <div class="max-w-3xl mx-auto">
+      <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4">Timeline</p>
+      <h2 class="font-poppins font-bold text-2xl sm:text-3xl text-fp-light mb-10">Key Milestones</h2>
+      <div class="flex flex-col gap-8">
+        <div class="flex gap-5">
+          <div class="flex flex-col items-center">
+            <div class="milestone-dot"></div>
+            <div class="flex-1 w-px bg-white/10 mt-2"></div>
+          </div>
+          <div class="pb-8">
+            <p class="font-poppins font-medium text-fp-gold text-xs mb-1">2022</p>
+            <h4 class="font-poppins font-semibold text-fp-light text-base mb-2">AZ Learner Founded</h4>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">The education technology platform that became the first proof of Francis's ability to build something meaningful from scratch — and a continuing mission to make quality education accessible in Africa.</p>
+          </div>
+        </div>
+        <div class="flex gap-5">
+          <div class="flex flex-col items-center">
+            <div class="milestone-dot"></div>
+            <div class="flex-1 w-px bg-white/10 mt-2"></div>
+          </div>
+          <div class="pb-8">
+            <p class="font-poppins font-medium text-fp-gold text-xs mb-1">2024</p>
+            <h4 class="font-poppins font-semibold text-fp-light text-base mb-2">Blue Mind Radio Launches</h4>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">Season 1 of the podcast debuts — exploring Gen Z culture, personal philosophy, and the experience of growing up in a hyper-connected world. Available on Spotify, Apple Podcasts, and YouTube.</p>
+          </div>
+        </div>
+        <div class="flex gap-5">
+          <div class="flex flex-col items-center">
+            <div class="milestone-dot"></div>
+            <div class="flex-1 w-px bg-white/10 mt-2"></div>
+          </div>
+          <div class="pb-8">
+            <p class="font-poppins font-medium text-fp-gold text-xs mb-1">2025</p>
+            <h4 class="font-poppins font-semibold text-fp-light text-base mb-2">Francis Pwavwe Productions Established</h4>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">The creative umbrella brand is formalised — bringing the podcast, written work, and video productions under a single identity. This website is the home base.</p>
+          </div>
+        </div>
+        <div class="flex gap-5">
+          <div class="flex flex-col items-center">
+            <div class="milestone-dot opacity-40"></div>
+          </div>
+          <div>
+            <p class="font-poppins font-medium text-fp-muted text-xs mb-1">Ongoing</p>
+            <h4 class="font-poppins font-semibold text-fp-muted text-base mb-2">The Work Continues…</h4>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">New episodes, long-form essays, and video productions are in development. <a href="fp-collaborate.html" class="text-fp-gold hover:underline">Collaborate</a> to be part of what comes next.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="py-16 px-5 text-center" style="background: radial-gradient(ellipse at 50% 50%, rgba(30,64,175,0.12) 0%, transparent 70%);">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="font-poppins font-bold text-3xl sm:text-4xl text-fp-light mb-6">Ready to collaborate?</h2>
+      <p class="font-inter font-light text-fp-muted text-base mb-8">Whether you're a brand, a fellow creator, or someone with an idea worth making — the door is open.</p>
+      <a href="fp-collaborate.html" class="inline-block bg-fp-gold text-fp-dark font-poppins font-bold px-10 py-4 rounded-lg text-sm tracking-wide hover:bg-amber-400 transition-colors">Work With Me →</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="border-t border-white/5 py-10 px-5 text-center">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="font-inter text-fp-muted text-xs">© <span id="year"></span> Francis Pwavwe Productions.</p>
+      <div class="flex gap-6 text-sm text-fp-muted">
+        <a href="fp-index.html" class="nav-link">Home</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Blog</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+        <a href="index.html" class="nav-link text-fp-muted/50">Portfolio ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

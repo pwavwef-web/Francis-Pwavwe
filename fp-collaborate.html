@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collaborate — Francis Pwavwe Productions</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta name="description" content="Work with Francis Pwavwe Productions — pitch a collaboration, brand partnership, or creative project." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'fp-dark': '#0a0a0f', 'fp-primary': '#1e40af', 'fp-gold': '#fbbf24',
+            'fp-accent': '#6366f1', 'fp-light': '#f8fafc', 'fp-muted': '#94a3b8',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0a0a0f; font-family: 'Inter', sans-serif; color: #f8fafc; }
+    .nav-link { transition: color 0.2s ease; }
+    .nav-link:hover { color: #fbbf24; }
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+    .form-input {
+      width: 100%;
+      background: #111118;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.2s ease;
+    }
+    .form-input:focus { outline: none; border-color: rgba(251,191,36,0.4); }
+    .form-input::placeholder { color: rgba(148,163,184,0.4); }
+    .form-label { display: block; font-family: 'Poppins', sans-serif; font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .collab-type-btn { border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px 16px; cursor: pointer; transition: all 0.2s ease; text-align: left; background: #111118; }
+    .collab-type-btn:hover, .collab-type-btn.selected { border-color: #fbbf24; background: rgba(251,191,36,0.08); }
+    .collab-type-btn.selected .type-icon { color: #fbbf24; }
+    .value-item { display: flex; align-items: flex-start; gap: 14px; }
+    .value-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  </style>
+</head>
+<body class="bg-fp-dark text-fp-light">
+
+  <!-- ===== NAV ===== -->
+  <nav class="fixed top-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+      <a href="fp-index.html" class="flex flex-col leading-tight">
+        <span class="font-poppins font-extrabold text-lg text-fp-light tracking-tight">FRANCIS PWAVWE</span>
+        <span class="font-poppins font-medium text-xs text-fp-gold tracking-[0.25em] uppercase">Productions</span>
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm text-fp-muted font-inter">
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Blog</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link text-fp-gold">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+        <a href="index.html" class="nav-link text-fp-muted/60 text-xs border border-white/10 rounded px-3 py-1 hover:border-fp-gold/40">Portfolio ↗</a>
+      </div>
+      <button id="hamburger" class="md:hidden text-fp-muted focus:outline-none" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden bg-[#0d0d14] border-t border-white/5 px-5 py-4 flex flex-col gap-4 text-fp-muted text-sm">
+      <a href="fp-about.html" class="nav-link">About</a>
+      <a href="fp-podcast.html" class="nav-link">Podcast</a>
+      <a href="fp-blog.html" class="nav-link">Blog</a>
+      <a href="fp-productions.html" class="nav-link">Productions</a>
+      <a href="fp-collaborate.html" class="text-fp-gold">Collaborate</a>
+      <a href="fp-contact.html" class="nav-link">Contact</a>
+      <a href="index.html" class="nav-link text-fp-muted/60 text-xs">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- ===== HEADER ===== -->
+  <header class="pt-36 pb-14 px-5 text-center" style="background: radial-gradient(ellipse at 50% 0%, rgba(30,64,175,0.2) 0%, rgba(10,10,15,0) 65%);">
+    <div class="max-w-3xl mx-auto">
+      <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4">Work Together</p>
+      <h1 class="font-poppins font-extrabold text-4xl sm:text-5xl text-fp-light mb-4">Let's Make Something</h1>
+      <p class="font-inter font-light text-fp-muted text-lg max-w-xl mx-auto leading-relaxed">
+        Whether you're a brand, a fellow creator, or someone with an idea worth bringing to life — this is where it starts.
+      </p>
+    </div>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <section class="py-10 px-5 pb-20">
+    <div class="max-w-6xl mx-auto grid lg:grid-cols-5 gap-16">
+
+      <!-- LEFT: Info -->
+      <div class="lg:col-span-2">
+        <h2 class="font-poppins font-bold text-fp-light text-xl mb-6">What I can help with</h2>
+        <div class="flex flex-col gap-6 mb-10">
+          <div class="value-item">
+            <div class="value-icon bg-fp-gold/15">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-poppins font-semibold text-fp-light text-sm mb-1">Podcast Guest / Feature</h4>
+              <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">Appear on Blue Mind Radio or co-create a special episode with your audience in mind.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon bg-fp-accent/15">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.069A1 1 0 0121 8.882v6.236a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-poppins font-semibold text-fp-light text-sm mb-1">Video Production</h4>
+              <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">Brand films, documentary work, campaign ads, and short-form content.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon bg-fp-primary/25">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            </div>
+            <div>
+              <h4 class="font-poppins font-semibold text-fp-light text-sm mb-1">Written Content</h4>
+              <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">Long-form essays, thought leadership pieces, and content strategy consulting.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon bg-fp-gold/15">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-poppins font-semibold text-fp-light text-sm mb-1">Brand Partnership</h4>
+              <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">Authentic brand integrations for products and services aligned with this platform's values.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#111118] border border-white/5 rounded-xl p-5">
+          <p class="font-poppins font-semibold text-fp-light text-sm mb-2">A note on fit</p>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed">
+            I only take on projects I can genuinely stand behind. If there's alignment in values and creative vision, I'll respond within 48 hours.
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT: Form -->
+      <div class="lg:col-span-3">
+        <div class="bg-[#0d0d14] border border-white/5 rounded-2xl p-8">
+          <h2 class="font-poppins font-bold text-fp-light text-xl mb-2">Pitch Your Idea</h2>
+          <p class="font-inter font-light text-fp-muted text-sm mb-8">Fill in the details below and I'll be in touch.</p>
+
+          <!-- Success message (hidden by default) -->
+          <div id="collab-success" class="hidden bg-fp-gold/10 border border-fp-gold/30 rounded-xl p-6 text-center mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-fp-gold mx-auto mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <h3 class="font-poppins font-bold text-fp-light text-lg mb-2">Enquiry received!</h3>
+            <p class="font-inter text-fp-muted text-sm">Thank you for reaching out. I'll be in touch within 48 hours.</p>
+          </div>
+
+          <form id="collab-form" class="flex flex-col gap-6" novalidate>
+
+            <!-- Type selector -->
+            <div>
+              <label class="form-label">Collaboration type *</label>
+              <div class="grid grid-cols-2 gap-3" id="type-selector">
+                <button type="button" class="collab-type-btn" data-val="Podcast Guest">
+                  <p class="font-poppins font-semibold text-fp-light text-sm mb-0.5">Podcast Guest</p>
+                  <p class="font-inter text-fp-muted text-xs">Blue Mind Radio appearance</p>
+                </button>
+                <button type="button" class="collab-type-btn" data-val="Video Production">
+                  <p class="font-poppins font-semibold text-fp-light text-sm mb-0.5">Video Production</p>
+                  <p class="font-inter text-fp-muted text-xs">Brand film, doc, ad</p>
+                </button>
+                <button type="button" class="collab-type-btn" data-val="Brand Partnership">
+                  <p class="font-poppins font-semibold text-fp-light text-sm mb-0.5">Brand Partnership</p>
+                  <p class="font-inter text-fp-muted text-xs">Sponsorship or integration</p>
+                </button>
+                <button type="button" class="collab-type-btn" data-val="Other">
+                  <p class="font-poppins font-semibold text-fp-light text-sm mb-0.5">Other</p>
+                  <p class="font-inter text-fp-muted text-xs">Tell me more below</p>
+                </button>
+              </div>
+              <input type="hidden" id="collab-type" />
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label class="form-label" for="c-name">Your name *</label>
+                <input type="text" id="c-name" class="form-input" placeholder="Jane Mensah" required />
+              </div>
+              <div>
+                <label class="form-label" for="c-org">Organisation / Brand</label>
+                <input type="text" id="c-org" class="form-input" placeholder="Optional" />
+              </div>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label class="form-label" for="c-email">Email *</label>
+                <input type="email" id="c-email" class="form-input" placeholder="jane@brand.com" required />
+              </div>
+              <div>
+                <label class="form-label" for="c-phone">Phone / WhatsApp</label>
+                <input type="tel" id="c-phone" class="form-input" placeholder="+233 … (optional)" />
+              </div>
+            </div>
+
+            <div>
+              <label class="form-label" for="c-subject">Project / Idea title *</label>
+              <input type="text" id="c-subject" class="form-input" placeholder="What are we making?" required />
+            </div>
+
+            <div>
+              <label class="form-label" for="c-message">Tell me more *</label>
+              <textarea id="c-message" rows="5" class="form-input resize-none" placeholder="Describe your idea, the audience it's for, your timeline, and any other details…" required></textarea>
+            </div>
+
+            <div>
+              <label class="form-label" for="c-budget">Budget range</label>
+              <select id="c-budget" class="form-input">
+                <option value="" disabled selected>Select a range (optional)</option>
+                <option value="Under GHS 500">Under GHS 500</option>
+                <option value="GHS 500–2,000">GHS 500–2,000</option>
+                <option value="GHS 2,000–5,000">GHS 2,000–5,000</option>
+                <option value="GHS 5,000+">GHS 5,000+</option>
+                <option value="To be discussed">To be discussed</option>
+              </select>
+            </div>
+
+            <p id="collab-error" class="hidden text-red-400 text-sm font-inter"></p>
+
+            <button type="submit" id="collab-submit"
+              class="bg-fp-gold text-fp-dark font-poppins font-bold py-4 rounded-xl text-sm tracking-wide hover:bg-amber-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Send Enquiry →
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="border-t border-white/5 py-10 px-5">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="font-inter text-fp-muted text-xs">© <span id="year"></span> Francis Pwavwe Productions.</p>
+      <div class="flex gap-6 text-sm text-fp-muted">
+        <a href="fp-index.html" class="nav-link">Home</a>
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+        <a href="index.html" class="nav-link text-fp-muted/50">Portfolio ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore, collection, addDoc, serverTimestamp }
+      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
+      authDomain: "francis-pwavwe.firebaseapp.com",
+      projectId: "francis-pwavwe",
+      storageBucket: "francis-pwavwe.firebasestorage.app",
+      messagingSenderId: "658069378543",
+      appId: "1:658069378543:web:87b1dcb0dd27d3255bd21a"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Type selector
+    document.getElementById('type-selector').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-val]');
+      if (!btn) return;
+      document.querySelectorAll('[data-val]').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('collab-type').value = btn.dataset.val;
+    });
+
+    document.getElementById('collab-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errEl = document.getElementById('collab-error');
+      errEl.classList.add('hidden');
+
+      const type = document.getElementById('collab-type').value;
+      const name = document.getElementById('c-name').value.trim();
+      const email = document.getElementById('c-email').value.trim();
+      const subject = document.getElementById('c-subject').value.trim();
+      const message = document.getElementById('c-message').value.trim();
+
+      if (!type) { errEl.textContent = 'Please select a collaboration type.'; errEl.classList.remove('hidden'); return; }
+      if (!name || !email || !subject || !message) { errEl.textContent = 'Please fill in all required fields.'; errEl.classList.remove('hidden'); return; }
+
+      const btn = document.getElementById('collab-submit');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        await addDoc(collection(db, 'collaborations'), {
+          type,
+          name,
+          organisation: document.getElementById('c-org').value.trim(),
+          email,
+          phone: document.getElementById('c-phone').value.trim(),
+          subject,
+          message,
+          budget: document.getElementById('c-budget').value,
+          submittedAt: serverTimestamp()
+        });
+        document.getElementById('collab-form').style.display = 'none';
+        document.getElementById('collab-success').classList.remove('hidden');
+      } catch (err) {
+        console.error('Collaboration form submission failed:', err);
+        errEl.textContent = 'Something went wrong. Please try again or email directly.';
+        errEl.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'Send Enquiry →';
+      }
+    });
+  </script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
