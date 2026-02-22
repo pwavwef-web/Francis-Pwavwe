@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productions — Francis Pwavwe Productions</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <meta name="description" content="Video and media productions by Francis Pwavwe — documentary, short film, vlog, and more." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'fp-dark': '#0a0a0f', 'fp-primary': '#1e40af', 'fp-gold': '#fbbf24',
+            'fp-accent': '#6366f1', 'fp-light': '#f8fafc', 'fp-muted': '#94a3b8',
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0a0a0f; font-family: 'Inter', sans-serif; color: #f8fafc; }
+    .nav-link { transition: color 0.2s ease; }
+    .nav-link:hover { color: #fbbf24; }
+    #mobile-menu { display: none; }
+    #mobile-menu.open { display: block; }
+    .tag-pill { background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.4); color: #a5b4fc; font-size: 0.75rem; padding: 2px 10px; border-radius: 9999px; cursor: pointer; transition: all 0.2s ease; display: inline-block; }
+    .tag-pill:hover, .tag-pill.active { background: rgba(99,102,241,0.45); border-color: #6366f1; color: #fff; }
+    .tag-pill.gold { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.4); color: #fbbf24; }
+    .tag-pill.gold:hover, .tag-pill.gold.active { background: rgba(251,191,36,0.3); }
+    .prod-card { background: #111118; border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; overflow: hidden; transition: border-color 0.2s ease, transform 0.2s ease; }
+    .prod-card:hover { border-color: rgba(251,191,36,0.2); transform: translateY(-3px); }
+    .prod-card .thumbnail { height: 200px; background: linear-gradient(135deg, rgba(30,64,175,0.25), rgba(99,102,241,0.15)); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .play-btn { width: 48px; height: 48px; background: rgba(251,191,36,0.2); border: 2px solid rgba(251,191,36,0.4); border-radius: 9999px; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+    .prod-card:hover .play-btn { background: rgba(251,191,36,0.35); }
+  </style>
+</head>
+<body class="bg-fp-dark text-fp-light">
+
+  <!-- ===== NAV ===== -->
+  <nav class="fixed top-0 w-full z-50 bg-[#0a0a0f]/90 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+      <a href="fp-index.html" class="flex flex-col leading-tight">
+        <span class="font-poppins font-extrabold text-lg text-fp-light tracking-tight">FRANCIS PWAVWE</span>
+        <span class="font-poppins font-medium text-xs text-fp-gold tracking-[0.25em] uppercase">Productions</span>
+      </a>
+      <div class="hidden md:flex items-center gap-7 text-sm text-fp-muted font-inter">
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Blog</a>
+        <a href="fp-productions.html" class="nav-link text-fp-gold">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+        <a href="index.html" class="nav-link text-fp-muted/60 text-xs border border-white/10 rounded px-3 py-1 hover:border-fp-gold/40">Portfolio ↗</a>
+      </div>
+      <button id="hamburger" class="md:hidden text-fp-muted focus:outline-none" aria-label="Open menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden bg-[#0d0d14] border-t border-white/5 px-5 py-4 flex flex-col gap-4 text-fp-muted text-sm">
+      <a href="fp-about.html" class="nav-link">About</a>
+      <a href="fp-podcast.html" class="nav-link">Podcast</a>
+      <a href="fp-blog.html" class="nav-link">Blog</a>
+      <a href="fp-productions.html" class="text-fp-gold">Productions</a>
+      <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+      <a href="fp-contact.html" class="nav-link">Contact</a>
+      <a href="index.html" class="nav-link text-fp-muted/60 text-xs">← Back to Portfolio</a>
+    </div>
+  </nav>
+
+  <!-- ===== HEADER ===== -->
+  <header class="pt-36 pb-14 px-5 text-center" style="background: radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.15) 0%, rgba(10,10,15,0) 65%);">
+    <div class="max-w-3xl mx-auto">
+      <p class="font-poppins font-medium text-fp-gold text-xs tracking-[0.3em] uppercase mb-4">Visual Work</p>
+      <h1 class="font-poppins font-extrabold text-4xl sm:text-5xl text-fp-light mb-4">Productions</h1>
+      <p class="font-inter font-light text-fp-muted text-lg max-w-xl mx-auto leading-relaxed">
+        Documentaries, short films, vlogs, and media productions — every frame made with intention.
+      </p>
+    </div>
+  </header>
+
+  <!-- ===== TYPE FILTER ===== -->
+  <section class="py-8 px-5 border-b border-white/5 sticky top-[72px] z-40 bg-[#0a0a0f]/95 backdrop-blur-sm">
+    <div class="max-w-5xl mx-auto flex flex-wrap gap-2" id="type-filters">
+      <button class="tag-pill gold active" data-type="all">All</button>
+      <button class="tag-pill" data-type="Documentary">Documentary</button>
+      <button class="tag-pill" data-type="Short Film">Short Film</button>
+      <button class="tag-pill" data-type="Vlog">Vlog</button>
+      <button class="tag-pill" data-type="Ad">Ad</button>
+      <button class="tag-pill" data-type="Photo Series">Photo Series</button>
+    </div>
+  </section>
+
+  <!-- ===== PRODUCTIONS GRID ===== -->
+  <section class="py-14 px-5">
+    <div class="max-w-6xl mx-auto">
+
+      <div id="prods-loading" class="text-center py-16 text-fp-muted">
+        <svg class="w-8 h-8 mx-auto mb-4 animate-spin text-fp-muted/40" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+        <p class="font-inter text-sm">Loading productions…</p>
+      </div>
+
+      <div id="prods-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display:none;"></div>
+
+      <!-- Static placeholders -->
+      <div id="prods-placeholder" class="hidden grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="prod-card" data-type="Documentary">
+          <div class="thumbnail">
+            <div class="play-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="tag-pill text-xs">Documentary</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-poppins font-bold text-fp-light text-base mb-2">Untitled Documentary</h3>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-4">A short documentary exploring the untold stories behind Cape Coast's tourism landscape and the people who shape it.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-inter text-fp-muted/60 text-xs">Self · 2025</span>
+              <a href="#" class="font-poppins font-semibold text-fp-gold text-xs hover:underline">Watch →</a>
+            </div>
+          </div>
+        </div>
+        <div class="prod-card" data-type="Vlog" style="background: #111118;">
+          <div class="thumbnail" style="background: linear-gradient(135deg, rgba(251,191,36,0.1), rgba(30,64,175,0.15));">
+            <div class="play-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="tag-pill text-xs">Vlog</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-poppins font-bold text-fp-light text-base mb-2">Day in My Life — UCC Campus</h3>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-4">A candid look at student life at the University of Cape Coast — from lecture halls to late-night study sessions.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-inter text-fp-muted/60 text-xs">Self · 2024</span>
+              <a href="#" class="font-poppins font-semibold text-fp-gold text-xs hover:underline">Watch →</a>
+            </div>
+          </div>
+        </div>
+        <div class="prod-card" data-type="Short Film" style="background: #111118;">
+          <div class="thumbnail" style="background: linear-gradient(135deg, rgba(99,102,241,0.25), rgba(10,10,15,0.5));">
+            <div class="play-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="tag-pill text-xs">Short Film</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-poppins font-bold text-fp-light text-base mb-2">The Weight of a Name</h3>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-4">A quiet, introspective short film about identity, family, and what it means to carry your heritage forward.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-inter text-fp-muted/60 text-xs">Self · 2025</span>
+              <a href="#" class="font-poppins font-semibold text-fp-gold text-xs hover:underline">Watch →</a>
+            </div>
+          </div>
+        </div>
+        <div class="prod-card" data-type="Ad" style="background: #111118;">
+          <div class="thumbnail" style="background: linear-gradient(135deg, rgba(30,64,175,0.3), rgba(99,102,241,0.1));">
+            <div class="play-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="tag-pill text-xs">Ad</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-poppins font-bold text-fp-light text-base mb-2">Brand Campaign — Coming Soon</h3>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-4">A creative brand campaign currently in pre-production. Details to be revealed on launch.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-inter text-fp-muted/60 text-xs">Brand · 2025</span>
+              <span class="font-poppins font-semibold text-fp-muted/50 text-xs">In production</span>
+            </div>
+          </div>
+        </div>
+        <div class="prod-card" data-type="Photo Series" style="background: #111118;">
+          <div class="thumbnail" style="background: linear-gradient(135deg, rgba(251,191,36,0.08), rgba(30,64,175,0.2));">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-fp-muted/30" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <div class="absolute top-3 left-3">
+              <span class="tag-pill text-xs">Photo Series</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-poppins font-bold text-fp-light text-base mb-2">Ghana Through a Blue Lens</h3>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-4">A visual essay — twelve photographs exploring the textures, colours, and contradictions of life in coastal Ghana.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-inter text-fp-muted/60 text-xs">Self · 2024</span>
+              <a href="#" class="font-poppins font-semibold text-fp-gold text-xs hover:underline">View →</a>
+            </div>
+          </div>
+        </div>
+        <div class="prod-card" data-type="Documentary" style="background: #111118;">
+          <div class="thumbnail" style="background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(251,191,36,0.08));">
+            <div class="play-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="absolute top-3 left-3">
+              <span class="tag-pill text-xs">Documentary</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-poppins font-bold text-fp-light text-base mb-2">AZ Learner: The Origin Story</h3>
+            <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-4">A mini-documentary tracing the founding of AZ Learner — from the first sketch on paper to a live platform serving students across Ghana.</p>
+            <div class="flex items-center justify-between">
+              <span class="font-inter text-fp-muted/60 text-xs">Self · 2025</span>
+              <a href="#" class="font-poppins font-semibold text-fp-gold text-xs hover:underline">Watch →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p id="no-results" class="hidden font-inter text-fp-muted text-sm text-center py-12">No productions match this filter.</p>
+    </div>
+  </section>
+
+  <!-- ===== COLLABORATE CTA ===== -->
+  <section class="py-16 px-5 text-center border-t border-white/5">
+    <div class="max-w-2xl mx-auto">
+      <h2 class="font-poppins font-bold text-2xl sm:text-3xl text-fp-light mb-4">Want to make something together?</h2>
+      <p class="font-inter font-light text-fp-muted text-base mb-8">If you have a project that needs a creative partner — pitch it.</p>
+      <a href="fp-collaborate.html" class="inline-block bg-fp-gold text-fp-dark font-poppins font-bold px-10 py-4 rounded-lg text-sm tracking-wide hover:bg-amber-400 transition-colors">Start a Conversation →</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="border-t border-white/5 py-10 px-5">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="font-inter text-fp-muted text-xs">© <span id="year"></span> Francis Pwavwe Productions.</p>
+      <div class="flex gap-6 text-sm text-fp-muted">
+        <a href="fp-index.html" class="nav-link">Home</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Blog</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="index.html" class="nav-link text-fp-muted/50">Portfolio ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore, collection, query, where, orderBy, getDocs }
+      from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI",
+      authDomain: "francis-pwavwe.firebaseapp.com",
+      projectId: "francis-pwavwe",
+      storageBucket: "francis-pwavwe.firebasestorage.app",
+      messagingSenderId: "658069378543",
+      appId: "1:658069378543:web:87b1dcb0dd27d3255bd21a"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let allProds = [];
+
+    function buildCard(p) {
+      const thumb = p.thumbnailUrl
+        ? `<img src="${p.thumbnailUrl}" alt="${p.title}" class="w-full h-full object-cover" />`
+        : `<div class="play-btn"><svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-fp-gold ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>`;
+      const link = p.videoUrl
+        ? `<a href="${p.videoUrl}" target="_blank" rel="noopener" class="font-poppins font-semibold text-fp-gold text-xs hover:underline">Watch →</a>`
+        : `<span class="font-poppins text-fp-muted/50 text-xs">Coming soon</span>`;
+      return `<div class="prod-card" data-type="${p.type||''}">
+        <div class="thumbnail" style="background:linear-gradient(135deg, rgba(30,64,175,0.25), rgba(99,102,241,0.15));">
+          ${thumb}
+          <div class="absolute top-3 left-3"><span class="tag-pill text-xs">${p.type||'Video'}</span></div>
+        </div>
+        <div class="p-6">
+          <h3 class="font-poppins font-bold text-fp-light text-base mb-2">${p.title||'Untitled'}</h3>
+          <p class="font-inter font-light text-fp-muted text-sm leading-relaxed mb-4">${p.description||''}</p>
+          <div class="flex items-center justify-between">
+            <span class="font-inter text-fp-muted/60 text-xs">${p.client||'Self'} · ${p.year||''}</span>
+            ${link}
+          </div>
+        </div>
+      </div>`;
+    }
+
+    async function loadProds() {
+      try {
+        const q = query(collection(db, 'productions'), where('isPublished', '==', true), orderBy('year', 'desc'));
+        const snap = await getDocs(q);
+        document.getElementById('prods-loading').style.display = 'none';
+        if (snap.empty) {
+          document.getElementById('prods-placeholder').classList.remove('hidden');
+          return;
+        }
+        allProds = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderProds(allProds);
+      } catch (_) {
+        document.getElementById('prods-loading').style.display = 'none';
+        document.getElementById('prods-placeholder').classList.remove('hidden');
+      }
+    }
+
+    function renderProds(prods) {
+      const list = document.getElementById('prods-list');
+      list.style.display = 'grid';
+      list.innerHTML = prods.map(buildCard).join('');
+      document.getElementById('no-results').classList.toggle('hidden', prods.length > 0);
+    }
+
+    loadProds();
+
+    let activeType = 'all';
+    document.getElementById('type-filters').addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-type]');
+      if (!btn) return;
+      activeType = btn.dataset.type;
+      document.querySelectorAll('[data-type]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (allProds.length) {
+        const filtered = activeType === 'all' ? allProds : allProds.filter(p => p.type === activeType);
+        renderProds(filtered);
+      } else {
+        document.querySelectorAll('.prod-card').forEach(card => {
+          const match = activeType === 'all' || card.dataset.type === activeType;
+          card.style.display = match ? '' : 'none';
+        });
+        const visible = [...document.querySelectorAll('.prod-card')].filter(c => c.style.display !== 'none');
+        document.getElementById('no-results').classList.toggle('hidden', visible.length > 0);
+      }
+    });
+  </script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>
