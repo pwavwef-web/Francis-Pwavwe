@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blue Mind Radio — Francis Pwavwe Productions</title>
+  <meta name="description" content="Blue Mind Radio — exploring Gen Z culture, philosophy, and personal growth. Episode archive.">
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-primary:#1e40af;--fp-gold:#fbbf24;--fp-accent:#6366f1;--fp-light:#f8fafc;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .nav-link{display:inline-flex;align-items:center;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.875rem;color:#94a3b8;transition:color .2s,background .2s;font-family:'Inter',sans-serif;font-weight:400;text-decoration:none}
+    .nav-link:hover,.nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .nav-link.active{color:#fbbf24}
+    .mobile-nav-link{display:block;padding:0.6rem 1rem;border-radius:0.375rem;font-size:0.9rem;color:#94a3b8;text-decoration:none;transition:color .2s,background .2s}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .mobile-nav-link.active{color:#fbbf24}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;transition:border-color .2s,transform .2s}
+    .card:hover{border-color:rgba(99,102,241,.4)}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .skeleton{background:linear-gradient(90deg,#1e293b 25%,#334155 50%,#1e293b 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:0.5rem}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .filter-btn{padding:0.4rem 1rem;border-radius:9999px;font-size:0.8rem;font-weight:500;border:1px solid rgba(255,255,255,.15);color:#94a3b8;background:transparent;cursor:pointer;transition:all .2s}
+    .filter-btn:hover,.filter-btn.active{background:#6366f1;border-color:#6366f1;color:#fff}
+    .platform-btn{display:inline-flex;align-items:center;gap:0.3rem;padding:0.35rem 0.8rem;border-radius:0.375rem;font-size:0.75rem;font-weight:600;text-decoration:none;transition:opacity .2s;border:none}
+    .platform-btn:hover{opacity:0.8}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="fp-index.html" class="flex flex-col leading-none gap-0.5">
+        <span class="text-white text-sm tracking-wide fp-poppins" style="font-weight:800">FRANCIS PWAVWE</span>
+        <span class="text-xs tracking-[0.25em] fp-poppins fp-gold" style="font-weight:500">PRODUCTIONS</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="fp-index.html" class="nav-link">Home</a>
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link active">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+      </div>
+      <button id="menuBtn" class="md:hidden text-[#f8fafc] p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="fp-index.html" class="mobile-nav-link">Home</a>
+        <a href="fp-about.html" class="mobile-nav-link">About</a>
+        <a href="fp-podcast.html" class="mobile-nav-link active">Podcast</a>
+        <a href="fp-blog.html" class="mobile-nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="mobile-nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="mobile-nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="mobile-nav-link">Contact</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="pt-32 pb-20 px-4" style="background:linear-gradient(180deg,#0d1117 0%,#0a0a0f 100%)">
+  <div class="max-w-4xl mx-auto text-center">
+    <div class="inline-flex items-center gap-2 mb-6">
+      <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+      <span class="text-xs font-semibold tracking-[0.2em] fp-gold fp-poppins">BLUE MIND RADIO</span>
+    </div>
+    <h1 class="fp-poppins text-5xl sm:text-6xl font-black text-white mb-4">Blue Mind Radio</h1>
+    <p class="text-xl fp-muted max-w-xl mx-auto mb-8">Exploring Gen Z culture, philosophy, and personal growth — one honest conversation at a time.</p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#1db954;color:#fff"><i data-lucide="music" class="w-3.5 h-3.5"></i> Spotify</a>
+      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#9333ea;color:#fff"><i data-lucide="headphones" class="w-3.5 h-3.5"></i> Apple Podcasts</a>
+      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#ef4444;color:#fff"><i data-lucide="youtube" class="w-3.5 h-3.5"></i> YouTube</a>
+    </div>
+  </div>
+</section>
+
+<!-- EPISODES -->
+<section style="padding:3rem 0 5rem">
+  <div class="max-w-4xl mx-auto px-4">
+    <!-- Filters -->
+    <div id="tagFilters" class="flex flex-wrap gap-2 mb-8">
+      <button class="filter-btn active" data-tag="all">All Episodes</button>
+    </div>
+
+    <!-- Episode list -->
+    <div id="episodeList" class="space-y-4">
+      <!-- Skeletons -->
+      <div class="card p-6 flex gap-5">
+        <div class="skeleton w-24 h-24 flex-shrink-0 rounded-lg"></div>
+        <div class="flex-1 space-y-2">
+          <div class="skeleton h-4 w-24"></div>
+          <div class="skeleton h-6 w-3/4"></div>
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-2/3"></div>
+        </div>
+      </div>
+      <div class="card p-6 flex gap-5">
+        <div class="skeleton w-24 h-24 flex-shrink-0 rounded-lg"></div>
+        <div class="flex-1 space-y-2">
+          <div class="skeleton h-4 w-24"></div>
+          <div class="skeleton h-6 w-3/4"></div>
+          <div class="skeleton h-4 w-full"></div>
+          <div class="skeleton h-4 w-2/3"></div>
+        </div>
+      </div>
+      <div class="card p-6 flex gap-5">
+        <div class="skeleton w-24 h-24 flex-shrink-0 rounded-lg"></div>
+        <div class="flex-1 space-y-2">
+          <div class="skeleton h-4 w-24"></div>
+          <div class="skeleton h-6 w-3/4"></div>
+          <div class="skeleton h-4 w-full"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="noEpisodes" class="hidden text-center py-16">
+      <div class="text-6xl mb-4">🎙️</div>
+      <h3 class="fp-poppins text-xl font-bold text-white mb-2">Episodes coming soon</h3>
+      <p class="fp-muted text-sm">Blue Mind Radio is gearing up. Follow us on social to be the first to know.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:3rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href="fp-index.html" class="inline-flex flex-col leading-none gap-0.5 mb-3">
+          <span class="text-white fp-poppins text-sm" style="font-weight:800">FRANCIS PWAVWE</span>
+          <span class="text-xs tracking-[0.25em] fp-gold fp-poppins" style="font-weight:500">PRODUCTIONS</span>
+        </a>
+        <p class="text-xs fp-muted leading-relaxed">Clarity. Purpose. Production.<br>Cape Coast, Ghana.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Pages</p>
+        <div class="flex flex-col gap-2">
+          <a href="fp-about.html" class="text-sm fp-muted hover:text-white transition-colors">About</a>
+          <a href="fp-podcast.html" class="text-sm fp-muted hover:text-white transition-colors">Podcast</a>
+          <a href="fp-blog.html" class="text-sm fp-muted hover:text-white transition-colors">Thoughts</a>
+          <a href="fp-productions.html" class="text-sm fp-muted hover:text-white transition-colors">Productions</a>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Connect</p>
+        <div class="flex flex-col gap-2">
+          <a href="francis.html" class="text-sm fp-muted hover:text-white transition-colors">Personal Portfolio</a>
+          <a href="https://azlearner.me" target="_blank" rel="noopener" class="text-sm fp-muted hover:text-white transition-colors">AZ Learner</a>
+          <a href="fp-contact.html" class="text-sm fp-muted hover:text-white transition-colors">Contact</a>
+          <a href="fp-collaborate.html" class="text-sm fp-muted hover:text-white transition-colors">Collaborate</a>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+      <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" class="fp-muted hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="fp-muted hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="fp-muted hover:text-white transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter/X" class="fp-muted hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+  lucide.createIcons();
+</script>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+  import { getFirestore, collection, query, where, orderBy, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI',
+    authDomain: 'francis-pwavwe.firebaseapp.com',
+    projectId: 'francis-pwavwe',
+    storageBucket: 'francis-pwavwe.firebasestorage.app',
+    messagingSenderId: '658069378543',
+    appId: '1:658069378543:web:87b1dcb0dd27d3255bd21a'
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  let allEpisodes = [];
+  let activeTag = 'all';
+
+  function fmtDate(ts) {
+    if (!ts) return '';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' });
+  }
+
+  function renderEpisodes(episodes) {
+    const list = document.getElementById('episodeList');
+    const noEp = document.getElementById('noEpisodes');
+    if (!episodes.length) {
+      list.innerHTML = '';
+      noEp.classList.remove('hidden');
+      return;
+    }
+    noEp.classList.add('hidden');
+    list.innerHTML = episodes.map(ep => {
+      const platforms = [
+        ep.spotifyUrl ? `<a href="${ep.spotifyUrl}" target="_blank" rel="noopener" class="platform-btn" style="background:#1db954;color:#fff"><i data-lucide="music" class="w-3 h-3"></i>Spotify</a>` : '',
+        ep.applePodcastsUrl ? `<a href="${ep.applePodcastsUrl}" target="_blank" rel="noopener" class="platform-btn" style="background:#9333ea;color:#fff"><i data-lucide="headphones" class="w-3 h-3"></i>Apple</a>` : '',
+        ep.youtubeUrl ? `<a href="${ep.youtubeUrl}" target="_blank" rel="noopener" class="platform-btn" style="background:#ef4444;color:#fff"><i data-lucide="youtube" class="w-3 h-3"></i>YouTube</a>` : ''
+      ].filter(Boolean).join('');
+      return `<article class="card p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-start">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl overflow-hidden bg-[#1e293b] flex items-center justify-center text-4xl">
+          ${ep.coverImage ? `<img src="${ep.coverImage}" alt="Cover" class="w-full h-full object-cover">` : '🎙️'}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap gap-2 mb-2">
+            <span class="badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">S${ep.season||1} · E${ep.episode||1}</span>
+            ${ep.tags && ep.tags.length ? ep.tags.map(t=>`<span class="badge" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)">${t}</span>`).join('') : ''}
+          </div>
+          <h3 class="fp-poppins font-bold text-white text-base sm:text-lg mb-1">${ep.title||'Untitled'}</h3>
+          <p class="text-sm fp-muted leading-relaxed mb-3 line-clamp-3">${ep.description||''}</p>
+          <div class="flex flex-wrap items-center gap-2">
+            ${platforms}
+            ${ep.publishedAt ? `<span class="text-xs fp-muted ml-auto">${fmtDate(ep.publishedAt)}</span>` : ''}
+          </div>
+        </div>
+      </article>`;
+    }).join('');
+    lucide.createIcons();
+  }
+
+  function buildTagFilters(episodes) {
+    const tagSet = new Set();
+    episodes.forEach(ep => (ep.tags||[]).forEach(t => tagSet.add(t)));
+    const container = document.getElementById('tagFilters');
+    tagSet.forEach(tag => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.dataset.tag = tag;
+      btn.textContent = tag;
+      btn.addEventListener('click', () => {
+        activeTag = tag;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderEpisodes(activeTag === 'all' ? allEpisodes : allEpisodes.filter(ep => (ep.tags||[]).includes(activeTag)));
+      });
+      container.appendChild(btn);
+    });
+    // "all" button
+    document.querySelector('[data-tag="all"]').addEventListener('click', function() {
+      activeTag = 'all';
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      renderEpisodes(allEpisodes);
+    });
+  }
+
+  async function loadEpisodes() {
+    try {
+      const q = query(collection(db,'podcast_episodes'), where('isPublished','==',true), orderBy('publishedAt','desc'));
+      const snap = await getDocs(q);
+      allEpisodes = snap.docs.map(d => d.data());
+      buildTagFilters(allEpisodes);
+      renderEpisodes(allEpisodes);
+    } catch(e) {
+      document.getElementById('episodeList').innerHTML = `<div class="card p-8 text-center fp-muted text-sm">Could not load episodes. Please try again later.</div>`;
+    }
+  }
+
+  loadEpisodes();
+</script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Francis Pwavwe Productions</title>
+  <meta name="description" content="The story behind Francis Pwavwe Productions — Tourism student, Cadet Leader, Podcaster, and creator.">
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-primary:#1e40af;--fp-gold:#fbbf24;--fp-accent:#6366f1;--fp-light:#f8fafc;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-playfair{font-family:'Playfair Display',serif}
+    .fp-gold{color:#fbbf24}
+    .fp-accent{color:#6366f1}
+    .fp-muted{color:#94a3b8}
+    .nav-link{display:inline-flex;align-items:center;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.875rem;color:#94a3b8;transition:color .2s,background .2s;font-family:'Inter',sans-serif;font-weight:400;text-decoration:none}
+    .nav-link:hover,.nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .nav-link.active{color:#fbbf24}
+    .mobile-nav-link{display:block;padding:0.6rem 1rem;border-radius:0.375rem;font-size:0.9rem;color:#94a3b8;text-decoration:none;transition:color .2s,background .2s}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .mobile-nav-link.active{color:#fbbf24}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;transition:border-color .2s,transform .2s}
+    .card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-2px)}
+    .btn-primary{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:#1e40af;color:#f8fafc;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:background .2s,transform .15s;border:none;cursor:pointer;font-size:0.95rem}
+    .btn-primary:hover{background:#2563eb;transform:translateY(-1px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:transparent;color:#f8fafc;border:1px solid rgba(255,255,255,.3);border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:border-color .2s,transform .15s;cursor:pointer;font-size:0.95rem}
+    .btn-outline:hover{border-color:#6366f1;color:#a5b4fc;transform:translateY(-1px)}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .pullquote{font-family:'Playfair Display',serif;font-style:italic;font-size:1.35rem;line-height:1.7;color:#f8fafc;border-left:3px solid #fbbf24;padding-left:1.5rem;margin:2rem 0}
+    .timeline-dot{width:12px;height:12px;border-radius:50%;background:#fbbf24;flex-shrink:0;margin-top:5px}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="fp-index.html" class="flex flex-col leading-none gap-0.5">
+        <span class="text-white text-sm tracking-wide fp-poppins" style="font-weight:800">FRANCIS PWAVWE</span>
+        <span class="text-xs tracking-[0.25em] fp-poppins fp-gold" style="font-weight:500">PRODUCTIONS</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="fp-index.html" class="nav-link">Home</a>
+        <a href="fp-about.html" class="nav-link active">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+      </div>
+      <button id="menuBtn" class="md:hidden text-[#f8fafc] p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="fp-index.html" class="mobile-nav-link">Home</a>
+        <a href="fp-about.html" class="mobile-nav-link active">About</a>
+        <a href="fp-podcast.html" class="mobile-nav-link">Podcast</a>
+        <a href="fp-blog.html" class="mobile-nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="mobile-nav-link">Productions</a>
+        <a href="fp-collaborate.html" class="mobile-nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="mobile-nav-link">Contact</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="pt-32 pb-20 px-4" style="background:linear-gradient(180deg,#0d1117 0%,#0a0a0f 100%)">
+  <div class="max-w-4xl mx-auto text-center">
+    <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-4 fp-poppins">THE STORY</p>
+    <h1 class="fp-poppins text-5xl sm:text-6xl font-black text-white mb-4">About</h1>
+    <div class="flex flex-col items-center leading-none gap-1 mb-6">
+      <span class="fp-poppins text-2xl text-white" style="font-weight:800">FRANCIS PWAVWE</span>
+      <span class="fp-poppins tracking-[0.3em] fp-gold" style="font-weight:500;font-size:0.9rem">PRODUCTIONS</span>
+    </div>
+    <p class="fp-muted text-lg max-w-xl mx-auto">A creative umbrella built on curiosity, discipline, and the belief that good stories change people.</p>
+  </div>
+</section>
+
+<!-- STORY SECTION -->
+<section style="padding:5rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-5 gap-16 items-start">
+      <!-- Main story -->
+      <div class="lg:col-span-3 space-y-6">
+        <p class="text-xs font-semibold tracking-[0.2em] fp-gold fp-poppins">WHO WE ARE</p>
+        <h2 class="fp-poppins text-3xl font-bold text-white">Built from real questions, real experiences.</h2>
+        <p class="text-[#94a3b8] leading-relaxed">Francis Pwavwe is a Tourism Management student at the University of Cape Coast, a Cadet Leader, and a storyteller who believes that the best content comes from people who have actually lived what they're talking about. That conviction is the foundation of everything produced under this name.</p>
+        <p class="text-[#94a3b8] leading-relaxed">The journey started not with a plan, but with a question: why is it so hard to find content that both challenges you intellectually and feels genuinely human? <em class="text-white">Blue Mind Radio</em> was the first answer — a podcast that invites young people to sit with ideas a little longer than the algorithm wants them to. Then came the essays, the video work, and eventually the productions brand.</p>
+
+        <blockquote class="pullquote">
+          "Every piece of content we make is a letter to someone who needed to hear exactly that — at exactly that moment."
+        </blockquote>
+
+        <p class="text-[#94a3b8] leading-relaxed">Francis is also the founder of <a href="https://azlearner.me" target="_blank" rel="noopener" class="text-[#6366f1] hover:underline">AZ Learner</a>, an educational platform built to make learning accessible for students across Africa. The same values that drive AZ Learner — clarity, accessibility, impact — are at work in every Francis Pwavwe Production.</p>
+        <p class="text-[#94a3b8] leading-relaxed">Cape Coast is not just a location on a map; it's a perspective. A place steeped in history, culture, and the tension between where Africa has been and where it's going. That perspective shapes every word written, every episode recorded, every frame shot.</p>
+      </div>
+
+      <!-- Timeline / sidebar -->
+      <div class="lg:col-span-2 space-y-6">
+        <p class="text-xs font-semibold tracking-[0.2em] fp-gold fp-poppins">MILESTONES</p>
+        <div class="space-y-5">
+          <div class="flex gap-4">
+            <div class="timeline-dot mt-1"></div>
+            <div>
+              <p class="text-white font-semibold text-sm">University of Cape Coast</p>
+              <p class="text-xs fp-muted">Tourism Management · Ongoing</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="timeline-dot mt-1" style="background:#6366f1"></div>
+            <div>
+              <p class="text-white font-semibold text-sm">Cadet Leader</p>
+              <p class="text-xs fp-muted">Discipline, service, leadership</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="timeline-dot mt-1" style="background:#1e40af"></div>
+            <div>
+              <p class="text-white font-semibold text-sm">Blue Mind Radio launched</p>
+              <p class="text-xs fp-muted">Gen Z podcast · Cape Coast</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="timeline-dot mt-1" style="background:#10b981"></div>
+            <div>
+              <p class="text-white font-semibold text-sm">AZ Learner founded</p>
+              <p class="text-xs fp-muted">azlearner.me · EdTech for Africa</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="timeline-dot mt-1" style="background:#fbbf24"></div>
+            <div>
+              <p class="text-white font-semibold text-sm">Francis Pwavwe Productions</p>
+              <p class="text-xs fp-muted">The creative umbrella · 2025</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card p-6 mt-6">
+          <i data-lucide="quote" class="w-6 h-6 mb-3 fp-gold"></i>
+          <p class="fp-playfair italic text-[#f8fafc] text-base leading-relaxed">"Tourism taught me that every place has a story worth telling. Productions is how I tell them."</p>
+          <p class="text-xs fp-muted mt-3">— Francis Pwavwe</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section style="background:#0d1117;padding:5rem 0">
+  <div class="max-w-3xl mx-auto px-4 text-center">
+    <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-4 fp-poppins">OUR MISSION</p>
+    <h2 class="fp-poppins text-4xl sm:text-5xl font-black text-white mb-6 leading-tight">
+      "To inspire, inform, and ignite through <span class="fp-gold">authentic storytelling</span>."
+    </h2>
+    <p class="fp-muted text-lg leading-relaxed">That's the north star. Every episode, every essay, every production — measured against it. If it doesn't do at least one of those three things, it doesn't go out.</p>
+  </div>
+</section>
+
+<!-- WHAT WE DO -->
+<section style="padding:5rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-3 fp-poppins">THE WORK</p>
+      <h2 class="fp-poppins text-3xl font-bold text-white">What we do</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <a href="fp-podcast.html" class="card p-6 block text-decoration-none group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(251,191,36,.1)">
+          <i data-lucide="mic" class="w-6 h-6" style="color:#fbbf24"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Podcast</h3>
+        <p class="text-sm fp-muted leading-relaxed">Blue Mind Radio explores Gen Z culture, philosophy, personal growth, and the ideas that shape how we live.</p>
+        <span class="text-xs text-[#6366f1] group-hover:underline mt-3 inline-block">Listen →</span>
+      </a>
+      <a href="fp-blog.html" class="card p-6 block text-decoration-none group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(99,102,241,.1)">
+          <i data-lucide="pen-line" class="w-6 h-6" style="color:#6366f1"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Thoughts</h3>
+        <p class="text-sm fp-muted leading-relaxed">Long-form written reflections on tourism, leadership, identity, and the places where all three intersect.</p>
+        <span class="text-xs text-[#6366f1] group-hover:underline mt-3 inline-block">Read →</span>
+      </a>
+      <a href="fp-productions.html" class="card p-6 block text-decoration-none group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(30,64,175,.15)">
+          <i data-lucide="film" class="w-6 h-6" style="color:#93c5fd"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Video Productions</h3>
+        <p class="text-sm fp-muted leading-relaxed">Documentaries, vlogs, short films, and brand content — visual stories that earn their keep on screen.</p>
+        <span class="text-xs text-[#6366f1] group-hover:underline mt-3 inline-block">Watch →</span>
+      </a>
+      <a href="fp-collaborate.html" class="card p-6 block text-decoration-none group">
+        <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(16,185,129,.1)">
+          <i data-lucide="handshake" class="w-6 h-6" style="color:#34d399"></i>
+        </div>
+        <h3 class="fp-poppins font-bold text-white mb-2">Collaborations</h3>
+        <p class="text-sm fp-muted leading-relaxed">Brand partnerships, podcast guests, event coverage, and sponsored content — for work that aligns with the mission.</p>
+        <span class="text-xs text-[#6366f1] group-hover:underline mt-3 inline-block">Collaborate →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="background:#0d1117;padding:4rem 0">
+  <div class="max-w-xl mx-auto px-4 text-center">
+    <h2 class="fp-poppins text-2xl font-bold text-white mb-4">Ready to work together?</h2>
+    <p class="fp-muted mb-6">Whether you want to collaborate, be a podcast guest, or commission a production — the door is open.</p>
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <a href="fp-collaborate.html" class="btn-primary justify-center"><i data-lucide="handshake" class="w-4 h-4"></i> Collaborate</a>
+      <a href="fp-contact.html" class="btn-outline justify-center"><i data-lucide="mail" class="w-4 h-4"></i> Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:3rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href="fp-index.html" class="inline-flex flex-col leading-none gap-0.5 mb-3">
+          <span class="text-white fp-poppins text-sm" style="font-weight:800">FRANCIS PWAVWE</span>
+          <span class="text-xs tracking-[0.25em] fp-gold fp-poppins" style="font-weight:500">PRODUCTIONS</span>
+        </a>
+        <p class="text-xs fp-muted leading-relaxed">Clarity. Purpose. Production.<br>Cape Coast, Ghana.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Pages</p>
+        <div class="flex flex-col gap-2">
+          <a href="fp-about.html" class="text-sm fp-muted hover:text-white transition-colors">About</a>
+          <a href="fp-podcast.html" class="text-sm fp-muted hover:text-white transition-colors">Podcast</a>
+          <a href="fp-blog.html" class="text-sm fp-muted hover:text-white transition-colors">Thoughts</a>
+          <a href="fp-productions.html" class="text-sm fp-muted hover:text-white transition-colors">Productions</a>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Connect</p>
+        <div class="flex flex-col gap-2">
+          <a href="francis.html" class="text-sm fp-muted hover:text-white transition-colors">Personal Portfolio</a>
+          <a href="https://azlearner.me" target="_blank" rel="noopener" class="text-sm fp-muted hover:text-white transition-colors">AZ Learner</a>
+          <a href="fp-contact.html" class="text-sm fp-muted hover:text-white transition-colors">Contact</a>
+          <a href="fp-collaborate.html" class="text-sm fp-muted hover:text-white transition-colors">Collaborate</a>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+      <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" class="fp-muted hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="fp-muted hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="fp-muted hover:text-white transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter/X" class="fp-muted hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+  lucide.createIcons();
+</script>
+</body>
+</html>
