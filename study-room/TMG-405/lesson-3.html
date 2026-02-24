@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 3 — Development of Visitor Attractions | TMG 405</title>
+  <meta name="description" content="TMG 405 Lesson 3: Development of visitor attractions — design, the development process, and factors influencing success and failure.">
+  <link rel="icon" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif} .fp-muted{color:#94a3b8}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .content-section{background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:2rem;margin-bottom:1.5rem}
+    .content-section h2{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;color:#f8fafc;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+    .content-section h3{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;color:#e2e8f0;margin:1.25rem 0 0.5rem}
+    .content-section h4{color:#e2e8f0;font-weight:600;margin:1rem 0 0.4rem}
+    .content-section p{color:#94a3b8;line-height:1.75;margin-bottom:0.75rem;font-size:0.9375rem}
+    .content-section ul,.content-section ol{color:#94a3b8;line-height:1.75;padding-left:1.25rem;margin-bottom:0.75rem;font-size:0.9375rem}
+    .content-section li{margin-bottom:0.4rem}
+    .definition-box{background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.25);border-radius:0.75rem;padding:1rem 1.25rem;margin:1rem 0}
+    .definition-box p{color:#6ee7b7;margin:0;font-style:italic}
+    .key-point{background:rgba(251,191,36,.07);border-left:3px solid #fbbf24;padding:0.75rem 1rem;border-radius:0 0.5rem 0.5rem 0;margin:0.75rem 0}
+    .key-point p{color:#fde68a;margin:0;font-size:0.875rem}
+    .step-card{background:#1e293b;border:1px solid rgba(16,185,129,.15);border-radius:0.75rem;padding:1rem 1.25rem;margin-bottom:0.75rem;display:flex;gap:1rem;align-items:flex-start}
+    .step-num{min-width:2rem;height:2rem;background:rgba(16,185,129,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#34d399;flex-shrink:0}
+    .factor-card{background:#1e293b;border-radius:0.75rem;padding:1rem;margin-bottom:0.75rem}
+    .factor-success{border-left:3px solid #34d399}
+    .factor-failure{border-left:3px solid #f87171}
+    .factor-card h4{font-weight:600;font-size:0.875rem;margin-bottom:0.3rem}
+    .factor-card p{color:#64748b;font-size:0.8125rem;margin:0}
+    /* Quiz */
+    .quiz-section{background:#0f172a;border:1px solid rgba(16,185,129,.3);border-radius:1rem;padding:2rem}
+    .quiz-input{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:0.5rem;color:#f8fafc;padding:0.875rem 1rem;width:100%;font-family:'Inter',sans-serif;font-size:0.9rem;transition:border-color .2s;resize:vertical}
+    .quiz-input:focus{outline:none;border-color:#34d399}
+    .quiz-input::placeholder{color:#475569}
+    .btn-quiz{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:#065f46;color:#fff;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;border:none;cursor:pointer;font-size:0.9rem;transition:background .2s,transform .15s}
+    .btn-quiz:hover{background:#059669;transform:translateY(-1px)}
+    .btn-quiz:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-secondary-quiz{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:transparent;color:#6ee7b7;border:1px solid rgba(16,185,129,.4);border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;font-size:0.9rem;transition:border-color .2s}
+    .btn-secondary-quiz:hover{border-color:#34d399;color:#fff}
+    .question-card{background:#1e293b;border:1px solid rgba(255,255,255,.08);border-radius:0.75rem;padding:1.25rem;margin-bottom:1rem}
+    .question-card .q-num{font-size:0.75rem;font-weight:700;color:#34d399;text-transform:uppercase;letter-spacing:.08em;margin-bottom:0.4rem}
+    .question-card .q-text{color:#e2e8f0;font-size:0.9375rem;margin-bottom:0.75rem;font-weight:500}
+    .score-badge{display:inline-flex;align-items:center;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.8rem;font-weight:700}
+    .feedback-card{background:#1e293b;border:1px solid rgba(16,185,129,.15);border-radius:0.75rem;padding:1.25rem;margin-bottom:0.75rem}
+    .feedback-card .fb-q{color:#6ee7b7;font-size:0.875rem;font-weight:600;margin-bottom:0.4rem}
+    .feedback-card .fb-answer{color:#94a3b8;font-size:0.8125rem;margin-bottom:0.5rem}
+    .feedback-card .fb-feedback{color:#a5f3fc;font-size:0.8125rem;line-height:1.6}
+    .api-key-area{background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:0.75rem;padding:1.25rem;margin-bottom:1.5rem}
+    .api-key-input{background:#0f172a;border:1px solid rgba(255,255,255,.1);border-radius:0.5rem;color:#f8fafc;padding:0.625rem 0.875rem;font-family:'Inter',sans-serif;font-size:0.875rem;width:100%;transition:border-color .2s}
+    .api-key-input:focus{outline:none;border-color:#34d399}
+    .nav-link-lesson{color:#94a3b8;text-decoration:none;font-size:0.875rem;transition:color .2s;display:flex;align-items:center;gap:0.25rem}
+    .nav-link-lesson:hover{color:#f8fafc}
+    .toc-link{display:block;color:#94a3b8;text-decoration:none;font-size:0.875rem;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+    .toc-link:hover{color:#34d399} .toc-link:last-child{border-bottom:none}
+  </style>
+</head>
+<body>
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="../../index.html" class="nav-link-lesson"><i data-lucide="home" class="w-4 h-4"></i></a>
+        <span class="text-white/20">/</span>
+        <a href="../../study-room/index.html" class="nav-link-lesson">Study Room</a>
+        <span class="text-white/20">/</span>
+        <a href="index.html" class="nav-link-lesson">TMG 405</a>
+        <span class="text-white/20">/</span>
+        <span class="text-[#6ee7b7] text-sm font-semibold">Lesson 3</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="lesson-2.html" class="text-xs fp-muted hover:text-white flex items-center gap-1 transition-colors"><i data-lucide="arrow-left" class="w-3 h-3"></i> Prev</a>
+        <a href="lesson-4.html" class="text-xs text-[#34d399] hover:text-white flex items-center gap-1 transition-colors">Next <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-20">
+  <div class="lg:grid lg:grid-cols-[1fr_260px] lg:gap-10">
+    <main>
+      <div class="mb-8">
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="badge" style="background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.3)">
+            <i data-lucide="building-2" class="w-3 h-3 mr-1"></i> TMG 405 · Lesson 3
+          </span>
+        </div>
+        <h1 class="fp-poppins text-3xl sm:text-4xl font-black text-white mb-3 leading-tight">Development of Visitor Attractions</h1>
+        <p class="text-[#94a3b8] leading-relaxed mb-4">
+          From concept to opening day — this lesson examines how visitor attractions are designed and developed, 
+          and what determines whether they succeed or fail in the long term.
+        </p>
+        <div class="flex flex-wrap gap-4 text-sm fp-muted">
+          <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> ~30 min read</span>
+          <span class="flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4"></i> 3 sub-topics</span>
+          <span class="flex items-center gap-1"><i data-lucide="brain" class="w-4 h-4"></i> AI Quiz included</span>
+        </div>
+      </div>
+
+      <!-- 3.1 DESIGNING VISITOR ATTRACTIONS -->
+      <div class="content-section" id="design">
+        <h2><i data-lucide="pen-tool" class="w-5 h-5" style="color:#34d399"></i> 3.1 Designing Visitor Attractions</h2>
+        <p>
+          Designing a visitor attraction is a creative and strategic process that translates a concept into 
+          a physical and experiential reality. Good design must simultaneously serve aesthetic, functional, 
+          commercial, safety and accessibility goals.
+        </p>
+
+        <h3>Core Principles of Visitor Attraction Design</h3>
+
+        <h4>Visitor-Centred Design (User Experience First)</h4>
+        <p>
+          Effective attractions are designed around the visitor's journey, not the operator's convenience. 
+          This means mapping the visitor's path from arrival to departure, identifying every touchpoint, 
+          and designing each to be intuitive, welcoming and memorable. Techniques from <strong style="color:#e2e8f0">human-centred design (HCD)</strong> 
+          and <strong style="color:#e2e8f0">service design thinking</strong> are increasingly applied.
+        </p>
+
+        <h4>Narrative &amp; Theming</h4>
+        <p>
+          The most successful attractions are built around a compelling story or theme that gives coherence 
+          to every design decision — architecture, landscaping, wayfinding, uniforms, sound design and 
+          even food menus. Walt Disney's principle of <strong style="color:#e2e8f0">"story is king"</strong> 
+          remains the gold standard in the industry.
+        </p>
+
+        <h4>Flow &amp; Circulation Design</h4>
+        <p>
+          Physical layout must manage the movement of potentially thousands of visitors safely and efficiently. 
+          Poor circulation leads to bottlenecks, overcrowding, visitor frustration and safety risks. 
+          Design tools include:
+        </p>
+        <ul>
+          <li>Zone-based planning (separating high-traffic areas from quieter zones)</li>
+          <li>Queue management systems (virtual queuing, timed entry)</li>
+          <li>Clear wayfinding signage and intuitive pathways</li>
+        </ul>
+
+        <h4>Accessibility &amp; Universal Design</h4>
+        <p>
+          Attractions must be designed to be accessible to all visitors — including those with physical 
+          disabilities, visual impairments, hearing difficulties or cognitive differences. Universal design 
+          benefits everyone, not just those with accessibility needs.
+        </p>
+
+        <h4>Environmental Sustainability in Design</h4>
+        <p>
+          Modern attraction design increasingly incorporates sustainable principles: minimising energy 
+          consumption, reducing waste, using local and recycled materials, preserving natural habitats, 
+          and creating attractions that educate visitors about environmental responsibility.
+        </p>
+
+        <h4>Safety &amp; Security</h4>
+        <p>
+          From emergency evacuation routes to ride engineering, food handling protocols to crowd management, 
+          safety must be embedded in design from the earliest stages — not added as an afterthought.
+        </p>
+
+        <div class="key-point">
+          <p>💡 Design shapes visitor behaviour. The physical environment communicates expectations, creates mood, 
+          and determines whether visitors spend more time (and money) or leave frustrated.</p>
+        </div>
+      </div>
+
+      <!-- 3.2 DEVELOPMENT PROCESS -->
+      <div class="content-section" id="process">
+        <h2><i data-lucide="git-branch" class="w-5 h-5" style="color:#60a5fa"></i> 3.2 The Visitor Attraction Development Process</h2>
+        <p>
+          Developing a visitor attraction is a multi-stage process that typically takes several years 
+          from initial concept to opening. Each stage presents distinct challenges and decision points.
+        </p>
+
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Concept Development</h4>
+            <p style="color:#64748b;font-size:0.875rem;margin:0">
+              Generating the initial idea — identifying a gap in the market, a community need, or a natural/cultural asset 
+              that could form the basis for an attraction. Involves brainstorming, benchmarking and early-stage 
+              stakeholder consultation.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Feasibility Study</h4>
+            <p style="color:#64748b;font-size:0.875rem;margin:0">
+              A rigorous analysis of whether the concept is viable. Components include: market analysis 
+              (demand assessment, competitor analysis), site assessment, financial modelling (capital requirements, 
+              revenue projections, break-even analysis), legal and environmental impact assessment.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Masterplanning &amp; Design Development</h4>
+            <p style="color:#64748b;font-size:0.875rem;margin:0">
+              Translating the concept into a physical plan. Architects, landscape designers, experience designers, 
+              engineers and theming specialists collaborate on the masterplan. Multiple design iterations are tested 
+              against visitor flow models, budget constraints and sustainability criteria.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Securing Funding &amp; Approvals</h4>
+            <p style="color:#64748b;font-size:0.875rem;margin:0">
+              Identifying and securing capital — from private investors, government grants, development banks, 
+              philanthropists or a combination. Simultaneously obtaining planning permissions, environmental 
+              clearances and other regulatory approvals.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Construction &amp; Installation</h4>
+            <p style="color:#64748b;font-size:0.875rem;margin:0">
+              Building and installing the attraction. This stage requires careful project management to 
+              control costs, manage timelines, maintain quality standards and handle unexpected challenges 
+              (weather, supply chain disruption, geological issues).
+            </p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">6</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Recruitment, Training &amp; Testing</h4>
+            <p style="color:#64748b;font-size:0.875rem;margin:0">
+              Hiring and training all operational staff before opening. Conducting "soft openings" with 
+              invited guests to test systems, identify weaknesses and gather early feedback before 
+              full public launch.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">7</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Opening &amp; Marketing Launch</h4>
+            <p style="color:#64748b;font-size:0.875rem;margin:0">
+              The public opening, typically accompanied by a marketing campaign. First impressions matter 
+              enormously — word-of-mouth and early online reviews shape reputation for years. 
+              Media coverage, influencer partnerships and community events often mark opening day.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-card">
+          <div class="step-num">8</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Ongoing Operations, Evaluation &amp; Reinvestment</h4>
+            <p style="color:#64748b;font-size:0.875rem;margin:0">
+              The development process does not end at opening. Successful attractions continuously 
+              monitor visitor satisfaction, review performance data, invest in improvements and 
+              periodically refresh or expand the offer to sustain long-term viability.
+            </p>
+          </div>
+        </div>
+
+        <div class="definition-box">
+          <p>The development of a visitor attraction is best understood as an <strong>iterative cycle</strong>, 
+          not a linear sequence. Lessons from each stage feed back into planning for the next.</p>
+        </div>
+      </div>
+
+      <!-- 3.3 FACTORS INFLUENCING SUCCESS AND FAILURE -->
+      <div class="content-section" id="factors">
+        <h2><i data-lucide="trending-up" class="w-5 h-5" style="color:#fbbf24"></i> 3.3 Factors Influencing Success and Failure</h2>
+        <p>
+          Many visitor attractions fail within their first few years of operation, while others become 
+          enduring, iconic destinations. Understanding what drives success and failure is essential for 
+          both planners and managers.
+        </p>
+
+        <h3>Factors Driving Success</h3>
+        <div class="factor-card factor-success">
+          <h4 style="color:#34d399">✅ Strong Unique Selling Proposition (USP)</h4>
+          <p>A clear, compelling reason for visitors to choose this attraction over alternatives. 
+          Uniqueness is one of the strongest predictors of long-term viability.</p>
+        </div>
+        <div class="factor-card factor-success">
+          <h4 style="color:#34d399">✅ Accessible Location &amp; Good Transport Links</h4>
+          <p>Even the most spectacular attraction will underperform if it is difficult or expensive to reach. 
+          Proximity to major population centres or tourism routes is a significant advantage.</p>
+        </div>
+        <div class="factor-card factor-success">
+          <h4 style="color:#34d399">✅ Consistent Quality Management</h4>
+          <p>Maintaining high standards of visitor experience, cleanliness, safety and hospitality 
+          consistently, not just on opening day or during inspections.</p>
+        </div>
+        <div class="factor-card factor-success">
+          <h4 style="color:#34d399">✅ Effective Marketing &amp; Branding</h4>
+          <p>Reaching the right audiences through appropriate channels with a consistent, authentic 
+          brand identity that reflects the attraction's actual offer.</p>
+        </div>
+        <div class="factor-card factor-success">
+          <h4 style="color:#34d399">✅ Financial Sustainability &amp; Diversified Revenue</h4>
+          <p>Attractions that rely on a single revenue stream (e.g., admissions only) are vulnerable. 
+          Successful attractions diversify income through retail, events, corporate hire, memberships and partnerships.</p>
+        </div>
+        <div class="factor-card factor-success">
+          <h4 style="color:#34d399">✅ Adaptability &amp; Continuous Innovation</h4>
+          <p>Regular refreshment of the product offer, embracing new technologies and responding 
+          to changing visitor expectations to prevent attraction fatigue.</p>
+        </div>
+        <div class="factor-card factor-success">
+          <h4 style="color:#34d399">✅ Skilled, Motivated Staff</h4>
+          <p>People deliver experience. Well-trained, enthusiastic and engaged staff transform 
+          an ordinary visit into an extraordinary one.</p>
+        </div>
+
+        <h3>Factors Driving Failure</h3>
+        <div class="factor-card factor-failure">
+          <h4 style="color:#f87171">❌ Poor Market Research &amp; Demand Overestimation</h4>
+          <p>Building an attraction based on enthusiasm rather than evidence. 
+          Overestimating visitor numbers leads to financial collapse when projected revenues do not materialise.</p>
+        </div>
+        <div class="factor-card factor-failure">
+          <h4 style="color:#f87171">❌ Cost Overruns &amp; Undercapitalisation</h4>
+          <p>Development costs frequently exceed projections. Attractions that open without adequate 
+          financial reserves cannot absorb early-stage losses while building an audience.</p>
+        </div>
+        <div class="factor-card factor-failure">
+          <h4 style="color:#f87171">❌ Poor Location or Access</h4>
+          <p>Inaccessible sites, inadequate parking, unreliable public transport or competition 
+          from better-positioned attractions in the region.</p>
+        </div>
+        <div class="factor-card factor-failure">
+          <h4 style="color:#f87171">❌ Weak or Inconsistent Visitor Experience</h4>
+          <p>Negative word-of-mouth and poor online reviews resulting from disappointing, 
+          overpriced or poorly managed visits. In the age of social media, a bad reputation spreads rapidly.</p>
+        </div>
+        <div class="factor-card factor-failure">
+          <h4 style="color:#f87171">❌ Failure to Reinvest &amp; Innovate</h4>
+          <p>Attractions that stagnate — relying on the same product year after year without refreshing 
+          or expanding — lose relevance and repeat visitors.</p>
+        </div>
+        <div class="factor-card factor-failure">
+          <h4 style="color:#f87171">❌ External Shocks</h4>
+          <p>Economic recessions, pandemics, natural disasters, political instability and security 
+          threats can devastate visitor numbers in ways that even well-managed attractions cannot control.</p>
+        </div>
+        <div class="factor-card factor-failure">
+          <h4 style="color:#f87171">❌ Regulatory &amp; Environmental Non-compliance</h4>
+          <p>Failure to comply with safety regulations, planning conditions or environmental obligations 
+          can result in fines, legal action, reputational damage or forced closure.</p>
+        </div>
+
+        <div class="key-point">
+          <p>💡 <strong>Poon (1993)</strong> argues that the most successful tourism products are those that offer 
+          "new tourism" experiences — flexible, authentic, personalised and environmentally responsible. 
+          Visitor attractions that align with these values consistently outperform those that do not.</p>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div style="background:#111827;border:1px solid rgba(16,185,129,.2);border-radius:1rem;padding:1.5rem;margin-bottom:2rem">
+        <h2 class="fp-poppins text-base font-bold text-white mb-3 flex items-center gap-2">
+          <i data-lucide="check-circle" class="w-5 h-5" style="color:#34d399"></i> Lesson Summary
+        </h2>
+        <ul style="color:#94a3b8;padding-left:1.2rem;line-height:1.8;font-size:0.9rem">
+          <li>Designing visitor attractions requires balancing aesthetics, visitor flow, accessibility, sustainability and safety.</li>
+          <li>The development process moves from concept through feasibility, design, funding, construction, testing, launch and ongoing reinvestment.</li>
+          <li>Success factors include a strong USP, accessible location, quality management, effective marketing and diversified revenue.</li>
+          <li>Failure is often caused by poor demand research, cost overruns, weak visitor experience and failure to innovate.</li>
+        </ul>
+      </div>
+
+      <!-- AI QUIZ -->
+      <div class="quiz-section" id="quiz">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(16,185,129,.15)">
+            <i data-lucide="brain" class="w-5 h-5" style="color:#34d399"></i>
+          </div>
+          <div>
+            <h2 class="fp-poppins text-xl font-bold text-white">AI-Powered Quiz</h2>
+            <p class="text-xs fp-muted">Powered by Google Gemini</p>
+          </div>
+        </div>
+        <p class="text-sm fp-muted mb-6 leading-relaxed">
+          Test your knowledge on the development of visitor attractions — design principles, the development process, 
+          and the factors that determine success or failure.
+        </p>
+
+        <div class="api-key-area" id="apiKeyArea">
+          <div class="flex items-start gap-3">
+            <i data-lucide="key" class="w-5 h-5 mt-0.5" style="color:#34d399;flex-shrink:0"></i>
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-white mb-1">Google Gemini API Key</p>
+              <p class="text-xs fp-muted mb-3">
+                Get a free key at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" class="text-[#34d399] hover:underline">aistudio.google.com</a>. Stored locally in your browser only.
+              </p>
+              <div class="flex gap-2">
+                <input type="password" id="apiKeyInput" class="api-key-input" placeholder="AIzaSy...">
+                <button onclick="saveApiKey()" class="btn-quiz" style="white-space:nowrap;padding:0.625rem 1rem">Save Key</button>
+              </div>
+              <p id="apiKeyMsg" class="text-xs mt-2 hidden"></p>
+            </div>
+          </div>
+        </div>
+
+        <div id="quizControls">
+          <div class="flex flex-wrap gap-3 mb-6">
+            <button id="generateBtn" onclick="generateQuiz()" class="btn-quiz">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Generate Quiz Questions
+            </button>
+            <button id="resetBtn" onclick="resetQuiz()" class="btn-secondary-quiz hidden">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i> New Quiz
+            </button>
+          </div>
+          <div id="questionsContainer" class="hidden">
+            <div id="questionsList"></div>
+            <button id="submitBtn" onclick="submitAnswers()" class="btn-quiz mt-2">
+              <i data-lucide="send" class="w-4 h-4"></i> Submit &amp; Get Marks
+            </button>
+          </div>
+          <div id="resultsContainer" class="hidden">
+            <div id="scoreDisplay" class="flex items-center gap-4 mb-6 p-4 rounded-xl" style="background:#1e293b"></div>
+            <h3 class="fp-poppins text-base font-bold text-white mb-3">Question-by-Question Feedback</h3>
+            <div id="feedbackList"></div>
+          </div>
+          <div id="quizStatus" class="hidden text-sm fp-muted flex items-center gap-2 py-2">
+            <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>
+            <span id="quizStatusText">Loading…</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mt-10">
+        <a href="lesson-2.html" class="text-sm text-[#94a3b8] hover:text-white flex items-center gap-1 transition-colors">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Lesson 2
+        </a>
+        <a href="lesson-4.html" class="btn-quiz">Lesson 4 <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+      </div>
+    </main>
+
+    <aside class="hidden lg:block">
+      <div class="sticky top-24">
+        <div style="background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:1.25rem">
+          <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Contents</p>
+          <a href="#design" class="toc-link">3.1 Designing Attractions</a>
+          <a href="#process" class="toc-link">3.2 Development Process</a>
+          <a href="#factors" class="toc-link">3.3 Success &amp; Failure Factors</a>
+          <a href="#quiz" class="toc-link" style="color:#6ee7b7">🎯 AI Quiz</a>
+        </div>
+        <div style="background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:1.25rem;margin-top:1rem">
+          <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Course Lessons</p>
+          <a href="lesson-1.html" class="toc-link">Lesson 1</a>
+          <a href="lesson-2.html" class="toc-link">Lesson 2</a>
+          <a href="lesson-3.html" class="toc-link" style="color:#6ee7b7;font-weight:600">Lesson 3 (current)</a>
+          <a href="lesson-4.html" class="toc-link">Lesson 4</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:2rem 0">
+  <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs fp-muted">TMG 405 · Lesson 3 · Development of Visitor Attractions</p>
+    <a href="index.html" class="text-xs text-[#34d399] hover:text-white transition-colors flex items-center gap-1">
+      <i data-lucide="arrow-left" class="w-3 h-3"></i> Back to course
+    </a>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const LESSON_CONTEXT = `
+Lesson: Development of Visitor Attractions (TMG 405 — Lesson 3)
+
+Key topics:
+1. Designing Visitor Attractions
+   - Visitor-centred design / human-centred design (HCD)
+   - Narrative and theming (Walt Disney's "story is king")
+   - Flow and circulation design (zone-based planning, queue management, wayfinding)
+   - Accessibility and universal design
+   - Environmental sustainability in design
+   - Safety and security
+
+2. The Visitor Attraction Development Process (8 stages)
+   - Concept development
+   - Feasibility study (market analysis, financial modelling, EIA)
+   - Masterplanning and design development
+   - Securing funding and approvals
+   - Construction and installation
+   - Recruitment, training and testing (soft openings)
+   - Opening and marketing launch
+   - Ongoing operations, evaluation and reinvestment
+
+3. Factors Influencing Success and Failure
+   Success: strong USP, accessible location, quality management, effective marketing, diversified revenue, adaptability, skilled staff
+   Failure: poor market research, cost overruns, undercapitalisation, poor location, weak visitor experience, failure to innovate, external shocks, regulatory non-compliance
+   - Poon (1993): "new tourism" — flexible, authentic, personalised, environmentally responsible
+`;
+
+  const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+  let generatedQuestions = [];
+
+  function esc(str) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function getApiKey() { return localStorage.getItem('tmg405_gemini_key') || ''; }
+
+  function saveApiKey() {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    const msg = document.getElementById('apiKeyMsg');
+    if (!key) { msg.textContent = 'Please enter a valid key.'; msg.className = 'text-xs mt-2 text-red-400'; msg.classList.remove('hidden'); return; }
+    localStorage.setItem('tmg405_gemini_key', key);
+    msg.textContent = '✓ API key saved.'; msg.className = 'text-xs mt-2 text-green-400'; msg.classList.remove('hidden');
+    document.getElementById('apiKeyInput').value = '';
+  }
+
+  function showStatus(text, show = true) {
+    const el = document.getElementById('quizStatus');
+    document.getElementById('quizStatusText').textContent = text;
+    el.classList.toggle('hidden', !show); lucide.createIcons();
+  }
+
+  async function callGemini(prompt) {
+    const key = getApiKey();
+    if (!key) throw new Error('No API key found. Please save your Gemini API key above.');
+    const res = await fetch(`${GEMINI_API_URL}?key=${encodeURIComponent(key)}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 2048 } })
+    });
+    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err?.error?.message || `API error: ${res.status}`); }
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  }
+
+  async function generateQuiz() {
+    const btn = document.getElementById('generateBtn'); btn.disabled = true;
+    showStatus('Generating quiz questions…');
+    try {
+      const prompt = `You are a Tourism Management lecturer. Based on the lesson content below, generate exactly 5 short-answer quiz questions testing understanding, application and critical analysis.
+
+${LESSON_CONTEXT}
+
+Return ONLY a valid JSON array (no markdown, no extra text):
+[{"id":1,"question":"..."},{"id":2,"question":"..."},{"id":3,"question":"..."},{"id":4,"question":"..."},{"id":5,"question":"..."}]`;
+      const raw = await callGemini(prompt);
+      const jsonMatch = raw.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) throw new Error('Could not parse questions.');
+      generatedQuestions = JSON.parse(jsonMatch[0]);
+      document.getElementById('questionsList').innerHTML = generatedQuestions.map(q => `
+        <div class="question-card"><div class="q-num">Question ${esc(q.id)}</div><div class="q-text">${esc(q.question)}</div>
+        <textarea class="quiz-input" id="answer_${esc(q.id)}" rows="3" placeholder="Type your answer here…"></textarea></div>`).join('');
+      document.getElementById('questionsContainer').classList.remove('hidden');
+      document.getElementById('resetBtn').classList.remove('hidden');
+      btn.textContent = 'Questions Generated ✓'; showStatus('', false);
+    } catch (e) { showStatus('', false); alert('Error: ' + e.message); btn.disabled = false; }
+  }
+
+  async function submitAnswers() {
+    const btn = document.getElementById('submitBtn'); btn.disabled = true;
+    showStatus('Analysing answers…');
+    const answers = generatedQuestions.map(q => ({ id: q.id, question: q.question, answer: (document.getElementById(`answer_${q.id}`)?.value || '').trim() }));
+    const unanswered = answers.filter(a => !a.answer).length;
+    if (unanswered > 0 && !confirm(`${unanswered} unanswered question(s). Submit anyway?`)) { showStatus('', false); btn.disabled = false; return; }
+    try {
+      const prompt = `Tourism Management lecturer evaluating answers.
+
+${LESSON_CONTEXT}
+
+Questions and student answers:
+${answers.map(a => `Q${a.id}: ${a.question}\nStudent: ${a.answer || '(no answer)'}`).join('\n\n')}
+
+Award marks out of 10 per question. Return ONLY valid JSON (no markdown):
+{"totalScore":<n>,"totalPossible":${answers.length * 10},"percentage":<n>,"grade":"<A/B/C/D/F>","overallFeedback":"<2-3 sentences>","results":[{"id":1,"score":<0-10>,"feedback":"<specific>"},…]}`;
+      const raw = await callGemini(prompt);
+      const jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('Could not parse evaluation.');
+      const ev = JSON.parse(jsonMatch[0]);
+      const cols = { A: '#34d399', B: '#60a5fa', C: '#fbbf24', D: '#fb923c', F: '#f87171' };
+      const col = cols[ev.grade] || '#94a3b8';
+      document.getElementById('scoreDisplay').innerHTML = `
+        <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(16,185,129,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${ev.totalScore}<span class="text-lg text-[#94a3b8]">/${ev.totalPossible}</span></div><div class="text-xs fp-muted mt-0.5">Total Score</div></div>
+        <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(16,185,129,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${Math.round(ev.percentage)}%</div><div class="text-xs fp-muted mt-0.5">Percentage</div></div>
+        <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(16,185,129,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${ev.grade}</div><div class="text-xs fp-muted mt-0.5">Grade</div></div>
+        <div class="flex-1 text-sm fp-muted leading-relaxed italic">"${esc(ev.overallFeedback)}"</div>`;
+      document.getElementById('feedbackList').innerHTML = ev.results.map(r => {
+        const q = answers.find(a => a.id === r.id);
+        const sc = r.score >= 8 ? '#34d399' : r.score >= 6 ? '#60a5fa' : r.score >= 4 ? '#fbbf24' : '#f87171';
+        return `<div class="feedback-card"><div class="flex items-start justify-between gap-4 mb-2"><div class="fb-q">Q${esc(r.id)}: ${esc(q?.question)}</div><span class="score-badge flex-shrink-0" style="background:rgba(16,185,129,.1);color:${sc};border:1px solid ${sc}33">${esc(r.score)}/10</span></div><div class="fb-answer"><span style="color:#64748b">Your answer:</span> ${q?.answer ? esc(q.answer) : '<em>No answer</em>'}</div><div class="fb-feedback">💬 ${esc(r.feedback)}</div></div>`;
+      }).join('');
+      document.getElementById('questionsContainer').classList.add('hidden');
+      document.getElementById('resultsContainer').classList.remove('hidden');
+      showStatus('', false);
+      document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) { showStatus('', false); alert('Error: ' + e.message); btn.disabled = false; }
+  }
+
+  function resetQuiz() {
+    generatedQuestions = [];
+    ['questionsContainer','resultsContainer'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    ['questionsList','feedbackList','scoreDisplay'].forEach(id => { document.getElementById(id).innerHTML = ''; });
+    const gb = document.getElementById('generateBtn'); gb.disabled = false;
+    gb.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate Quiz Questions';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('resetBtn').classList.add('hidden');
+    showStatus('', false); lucide.createIcons();
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = getApiKey();
+    if (saved) { const m = document.getElementById('apiKeyMsg'); m.textContent = '✓ API key is saved and ready.'; m.className = 'text-xs mt-2 text-green-400'; m.classList.remove('hidden'); }
+  });
+</script>
+</body>
+</html>

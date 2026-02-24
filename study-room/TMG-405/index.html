@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TMG 405 — Visitor Attractions Management | Study Room</title>
+  <meta name="description" content="TMG 405: Visitor Attractions Management course materials, lesson notes and AI-powered quizzes.">
+  <link rel="icon" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-primary:#1e40af;--fp-gold:#fbbf24;--fp-accent:#6366f1;--fp-light:#f8fafc;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-accent{color:#6366f1}
+    .fp-muted{color:#94a3b8}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;transition:border-color .2s,transform .2s}
+    .card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-3px)}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .btn-primary{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:#1e40af;color:#f8fafc;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:background .2s,transform .15s;border:none;cursor:pointer;font-size:0.95rem}
+    .btn-primary:hover{background:#2563eb;transform:translateY(-1px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:transparent;color:#f8fafc;border:1px solid rgba(255,255,255,.3);border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:border-color .2s,transform .15s;cursor:pointer;font-size:0.95rem}
+    .btn-outline:hover{border-color:#6366f1;color:#a5b4fc;transform:translateY(-1px)}
+    .lesson-card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;padding:2rem;transition:border-color .25s,transform .25s;text-decoration:none;display:block;color:#f8fafc}
+    .lesson-card:hover{border-color:#6366f1;transform:translateY(-4px);box-shadow:0 20px 40px rgba(99,102,241,.15)}
+    .progress-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.1)}
+    .progress-fill{height:4px;border-radius:2px;background:linear-gradient(90deg,#6366f1,#fbbf24);transition:width .5s ease}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-3">
+        <a href="../../index.html" class="text-[#94a3b8] hover:text-white text-sm transition-colors flex items-center gap-1">
+          <i data-lucide="home" class="w-4 h-4"></i> Home
+        </a>
+        <span class="text-white/20">/</span>
+        <a href="../index.html" class="text-[#94a3b8] hover:text-white text-sm transition-colors">Study Room</a>
+        <span class="text-white/20">/</span>
+        <span class="text-[#fbbf24] text-sm font-semibold fp-poppins">TMG 405</span>
+      </div>
+      <span class="badge" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.3)">
+        <i data-lucide="book-open" class="w-3 h-3 mr-1"></i> Study Room
+      </span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="pt-32 pb-16 px-4 max-w-5xl mx-auto">
+  <div class="mb-4">
+    <span class="badge" style="background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">
+      <i data-lucide="graduation-cap" class="w-3 h-3 mr-1"></i> Tourism Management
+    </span>
+  </div>
+  <h1 class="fp-poppins text-4xl sm:text-5xl font-black text-white mb-3 leading-tight">
+    TMG 405
+  </h1>
+  <p class="fp-poppins text-xl sm:text-2xl text-[#94a3b8] font-medium mb-6">Visitor Attractions Management</p>
+  <p class="text-[#94a3b8] max-w-2xl leading-relaxed mb-8">
+    Comprehensive course materials covering the nature, classification, development, and experiential design 
+    of visitor attractions within the tourism system. Each lesson ends with an AI-powered quiz to test 
+    and reinforce your understanding.
+  </p>
+  <div class="flex flex-wrap gap-4 mb-12">
+    <div class="flex items-center gap-2 text-sm fp-muted">
+      <i data-lucide="layers" class="w-4 h-4"></i>
+      <span>4 Lessons</span>
+    </div>
+    <div class="flex items-center gap-2 text-sm fp-muted">
+      <i data-lucide="brain" class="w-4 h-4"></i>
+      <span>AI-Powered Quizzes</span>
+    </div>
+    <div class="flex items-center gap-2 text-sm fp-muted">
+      <i data-lucide="map" class="w-4 h-4"></i>
+      <span>University of Cape Coast — Level 400</span>
+    </div>
+  </div>
+</section>
+
+<!-- LESSONS GRID -->
+<section class="pb-24 px-4 max-w-5xl mx-auto">
+  <h2 class="fp-poppins text-2xl font-bold text-white mb-8">
+    Course Lessons
+  </h2>
+  <div class="grid md:grid-cols-2 gap-6">
+
+    <!-- Lesson 1 -->
+    <a href="lesson-1.html" class="lesson-card">
+      <div class="flex items-start justify-between mb-4">
+        <span class="badge" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.3)">Lesson 1</span>
+        <i data-lucide="arrow-right" class="w-5 h-5 text-[#6366f1] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+      </div>
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(99,102,241,.15)">
+        <i data-lucide="compass" class="w-6 h-6" style="color:#6366f1"></i>
+      </div>
+      <h3 class="fp-poppins text-lg font-bold text-white mb-2">Nature & Purpose of Visitor Attractions</h3>
+      <p class="text-sm fp-muted leading-relaxed mb-4">Definitions, components, purpose, and the concept of visitor attraction management within the tourism system.</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(99,102,241,.1);color:#a5b4fc">Definitions</span>
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(99,102,241,.1);color:#a5b4fc">Components</span>
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(99,102,241,.1);color:#a5b4fc">Management Concepts</span>
+      </div>
+    </a>
+
+    <!-- Lesson 2 -->
+    <a href="lesson-2.html" class="lesson-card">
+      <div class="flex items-start justify-between mb-4">
+        <span class="badge" style="background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">Lesson 2</span>
+        <i data-lucide="arrow-right" class="w-5 h-5 text-[#fbbf24]"></i>
+      </div>
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(251,191,36,.12)">
+        <i data-lucide="list" class="w-6 h-6" style="color:#fbbf24"></i>
+      </div>
+      <h3 class="fp-poppins text-lg font-bold text-white mb-2">Classifications of Visitor Attractions</h3>
+      <p class="text-sm fp-muted leading-relaxed mb-4">Typologies and categorisation of visitor attractions, and understanding the visitor attraction product.</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(251,191,36,.1);color:#fbbf24">Typologies</span>
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(251,191,36,.1);color:#fbbf24">Attraction Product</span>
+      </div>
+    </a>
+
+    <!-- Lesson 3 -->
+    <a href="lesson-3.html" class="lesson-card">
+      <div class="flex items-start justify-between mb-4">
+        <span class="badge" style="background:rgba(16,185,129,.12);color:#34d399;border:1px solid rgba(16,185,129,.3)">Lesson 3</span>
+        <i data-lucide="arrow-right" class="w-5 h-5" style="color:#34d399"></i>
+      </div>
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(16,185,129,.12)">
+        <i data-lucide="building-2" class="w-6 h-6" style="color:#34d399"></i>
+      </div>
+      <h3 class="fp-poppins text-lg font-bold text-white mb-2">Development of Visitor Attractions</h3>
+      <p class="text-sm fp-muted leading-relaxed mb-4">Designing visitor attractions, the development process, and factors influencing success and failure.</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(16,185,129,.1);color:#34d399">Design</span>
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(16,185,129,.1);color:#34d399">Development</span>
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(16,185,129,.1);color:#34d399">Success Factors</span>
+      </div>
+    </a>
+
+    <!-- Lesson 4 -->
+    <a href="lesson-4.html" class="lesson-card">
+      <div class="flex items-start justify-between mb-4">
+        <span class="badge" style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.3)">Lesson 4</span>
+        <i data-lucide="arrow-right" class="w-5 h-5" style="color:#f87171"></i>
+      </div>
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style="background:rgba(239,68,68,.12)">
+        <i data-lucide="sparkles" class="w-6 h-6" style="color:#f87171"></i>
+      </div>
+      <h3 class="fp-poppins text-lg font-bold text-white mb-2">The Visitor Experience Design</h3>
+      <p class="text-sm fp-muted leading-relaxed mb-4">Experience economy model, the role of interpretation, and the role of technology in visitor attraction design.</p>
+      <div class="flex flex-wrap gap-2">
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(239,68,68,.1);color:#f87171">Experience Economy</span>
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(239,68,68,.1);color:#f87171">Interpretation</span>
+        <span class="text-xs px-2 py-0.5 rounded-full" style="background:rgba(239,68,68,.1);color:#f87171">Technology</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:2rem 0">
+  <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs fp-muted">TMG 405 · Visitor Attractions Management · University of Cape Coast</p>
+    <a href="../../index.html" class="text-xs text-[#6366f1] hover:text-[#a5b4fc] transition-colors flex items-center gap-1">
+      <i data-lucide="home" class="w-3 h-3"></i> Back to main site
+    </a>
+  </div>
+</footer>
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

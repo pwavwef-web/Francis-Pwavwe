@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 2 — Classifications of Visitor Attractions | TMG 405</title>
+  <meta name="description" content="TMG 405 Lesson 2: Classifications of visitor attractions — typologies and the visitor attraction product.">
+  <link rel="icon" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-gold:#fbbf24;--fp-accent:#6366f1}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .content-section{background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:2rem;margin-bottom:1.5rem}
+    .content-section h2{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;color:#f8fafc;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+    .content-section h3{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;color:#e2e8f0;margin:1.25rem 0 0.5rem}
+    .content-section p{color:#94a3b8;line-height:1.75;margin-bottom:0.75rem;font-size:0.9375rem}
+    .content-section ul{color:#94a3b8;line-height:1.75;padding-left:1.25rem;margin-bottom:0.75rem;font-size:0.9375rem}
+    .content-section ul li{margin-bottom:0.4rem}
+    .content-section table{width:100%;border-collapse:collapse;font-size:0.875rem;margin:1rem 0}
+    .content-section th{text-align:left;padding:0.625rem 0.75rem;background:#1e293b;color:#e2e8f0;font-weight:600;border-bottom:1px solid rgba(255,255,255,.1)}
+    .content-section td{padding:0.625rem 0.75rem;color:#94a3b8;border-bottom:1px solid rgba(255,255,255,.05)}
+    .content-section tr:hover td{background:rgba(255,255,255,.02)}
+    .definition-box{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.25);border-radius:0.75rem;padding:1rem 1.25rem;margin:1rem 0}
+    .definition-box p{color:#c7d2fe;margin:0;font-style:italic}
+    .key-point{background:rgba(251,191,36,.07);border-left:3px solid #fbbf24;padding:0.75rem 1rem;border-radius:0 0.5rem 0.5rem 0;margin:0.75rem 0}
+    .key-point p{color:#fde68a;margin:0;font-size:0.875rem}
+    .type-card{background:#1e293b;border:1px solid rgba(255,255,255,.08);border-radius:0.75rem;padding:1rem;margin-bottom:0.75rem}
+    .type-card h4{color:#e2e8f0;font-weight:600;font-size:0.875rem;margin-bottom:0.3rem}
+    .type-card p{color:#64748b;font-size:0.8125rem;margin:0}
+    /* Quiz styles */
+    .quiz-section{background:#0f172a;border:1px solid rgba(251,191,36,.3);border-radius:1rem;padding:2rem}
+    .quiz-input{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:0.5rem;color:#f8fafc;padding:0.875rem 1rem;width:100%;font-family:'Inter',sans-serif;font-size:0.9rem;transition:border-color .2s;resize:vertical}
+    .quiz-input:focus{outline:none;border-color:#fbbf24}
+    .quiz-input::placeholder{color:#475569}
+    .btn-quiz{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:#b45309;color:#fff;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;border:none;cursor:pointer;font-size:0.9rem;transition:background .2s,transform .15s}
+    .btn-quiz:hover{background:#d97706;transform:translateY(-1px)}
+    .btn-quiz:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-secondary-quiz{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:transparent;color:#fde68a;border:1px solid rgba(251,191,36,.4);border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;font-size:0.9rem;transition:border-color .2s}
+    .btn-secondary-quiz:hover{border-color:#fbbf24;color:#fff}
+    .question-card{background:#1e293b;border:1px solid rgba(255,255,255,.08);border-radius:0.75rem;padding:1.25rem;margin-bottom:1rem}
+    .question-card .q-num{font-size:0.75rem;font-weight:700;color:#fbbf24;text-transform:uppercase;letter-spacing:.08em;margin-bottom:0.4rem}
+    .question-card .q-text{color:#e2e8f0;font-size:0.9375rem;margin-bottom:0.75rem;font-weight:500}
+    .score-badge{display:inline-flex;align-items:center;gap:0.3rem;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.8rem;font-weight:700}
+    .feedback-card{background:#1e293b;border:1px solid rgba(251,191,36,.15);border-radius:0.75rem;padding:1.25rem;margin-bottom:0.75rem}
+    .feedback-card .fb-q{color:#fde68a;font-size:0.875rem;font-weight:600;margin-bottom:0.4rem}
+    .feedback-card .fb-answer{color:#94a3b8;font-size:0.8125rem;margin-bottom:0.5rem}
+    .feedback-card .fb-feedback{color:#a5f3fc;font-size:0.8125rem;line-height:1.6}
+    .api-key-area{background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:0.75rem;padding:1.25rem;margin-bottom:1.5rem}
+    .api-key-input{background:#0f172a;border:1px solid rgba(255,255,255,.1);border-radius:0.5rem;color:#f8fafc;padding:0.625rem 0.875rem;font-family:'Inter',sans-serif;font-size:0.875rem;width:100%;transition:border-color .2s}
+    .api-key-input:focus{outline:none;border-color:#fbbf24}
+    .nav-link-lesson{color:#94a3b8;text-decoration:none;font-size:0.875rem;transition:color .2s;display:flex;align-items:center;gap:0.25rem}
+    .nav-link-lesson:hover{color:#f8fafc}
+    .toc-link{display:block;color:#94a3b8;text-decoration:none;font-size:0.875rem;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+    .toc-link:hover{color:#fbbf24}
+    .toc-link:last-child{border-bottom:none}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="../../index.html" class="nav-link-lesson"><i data-lucide="home" class="w-4 h-4"></i></a>
+        <span class="text-white/20">/</span>
+        <a href="../../study-room/index.html" class="nav-link-lesson">Study Room</a>
+        <span class="text-white/20">/</span>
+        <a href="index.html" class="nav-link-lesson">TMG 405</a>
+        <span class="text-white/20">/</span>
+        <span class="text-[#fde68a] text-sm font-semibold">Lesson 2</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="lesson-1.html" class="text-xs fp-muted hover:text-white flex items-center gap-1 transition-colors">
+          <i data-lucide="arrow-left" class="w-3 h-3"></i> Prev
+        </a>
+        <a href="lesson-3.html" class="text-xs text-[#fbbf24] hover:text-white flex items-center gap-1 transition-colors">
+          Next <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-20">
+  <div class="lg:grid lg:grid-cols-[1fr_260px] lg:gap-10">
+
+    <main>
+      <!-- Lesson Header -->
+      <div class="mb-8">
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="badge" style="background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">
+            <i data-lucide="list" class="w-3 h-3 mr-1"></i> TMG 405 · Lesson 2
+          </span>
+        </div>
+        <h1 class="fp-poppins text-3xl sm:text-4xl font-black text-white mb-3 leading-tight">
+          Classifications of Visitor Attractions
+        </h1>
+        <p class="text-[#94a3b8] leading-relaxed mb-4">
+          Explore how visitor attractions are categorised and why classification matters for planning, 
+          management and marketing. Understand the visitor attraction product in its full complexity.
+        </p>
+        <div class="flex flex-wrap gap-4 text-sm fp-muted">
+          <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> ~25 min read</span>
+          <span class="flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4"></i> 2 sub-topics</span>
+          <span class="flex items-center gap-1"><i data-lucide="brain" class="w-4 h-4"></i> AI Quiz included</span>
+        </div>
+      </div>
+
+      <!-- ─────────────────────────────────────────────
+           SUBTOPIC 1: TYPOLOGIES
+      ───────────────────────────────────────────── -->
+      <div class="content-section" id="typologies">
+        <h2><i data-lucide="grid" class="w-5 h-5" style="color:#fbbf24"></i> 2.1 Typologies of Visitor Attractions</h2>
+        <p>
+          Classifying visitor attractions helps planners, marketers and managers understand the competitive 
+          landscape, anticipate visitor needs, and design appropriate experiences and management strategies. 
+          Multiple classification frameworks exist, each with different emphases.
+        </p>
+
+        <h3>Classification by Origin / Genesis</h3>
+        <p>The most fundamental distinction is between attractions that exist naturally and those created by humans.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Description</th>
+              <th>Examples</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong style="color:#e2e8f0">Natural Attractions</strong></td>
+              <td>Formed by natural processes, not primarily constructed by humans</td>
+              <td>Waterfalls, caves, beaches, forests, wildlife reserves, scenic landscapes</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#e2e8f0">Man-made (Purpose-built)</strong></td>
+              <td>Deliberately created to attract and entertain visitors</td>
+              <td>Theme parks, museums, sports stadiums, aquariums, shopping malls</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#e2e8f0">Man-made (Not purpose-built)</strong></td>
+              <td>Created for another purpose but attracts visitors due to its significance</td>
+              <td>Cathedrals, castles, palaces, historic battlefields, industrial heritage</td>
+            </tr>
+            <tr>
+              <td><strong style="color:#e2e8f0">Special Events</strong></td>
+              <td>Temporary occurrences that draw visitors to a location</td>
+              <td>Festivals, carnivals, sporting championships, cultural fairs</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Classification by Ownership</h3>
+        <ul>
+          <li><strong style="color:#e2e8f0">Public sector attractions:</strong> Owned by government bodies; often subsidised; focus on access and public benefit (e.g., national parks, state museums).</li>
+          <li><strong style="color:#e2e8f0">Private sector attractions:</strong> Profit-driven; dependent on visitor revenue and market positioning (e.g., theme parks, private zoos).</li>
+          <li><strong style="color:#e2e8f0">Voluntary / third sector:</strong> Operated by charities, trusts or NGOs; typically focused on conservation or education (e.g., heritage trusts, wildlife charities).</li>
+          <li><strong style="color:#e2e8f0">Public-private partnerships (PPP):</strong> Jointly managed arrangements combining public access with private operational efficiency.</li>
+        </ul>
+
+        <h3>Classification by Scale &amp; Catchment Area</h3>
+        <p>
+          Attractions vary enormously in the geographic scale from which they draw visitors:
+        </p>
+        <ul>
+          <li><strong style="color:#e2e8f0">International attractions:</strong> Draw visitors from around the world (e.g., the Pyramids of Giza, Disneyland, the Great Wall of China).</li>
+          <li><strong style="color:#e2e8f0">National attractions:</strong> Significant primarily within their own country (e.g., major national parks, capital city museums).</li>
+          <li><strong style="color:#e2e8f0">Regional attractions:</strong> Draw visitors from surrounding regions (e.g., regional wildlife sanctuaries, heritage festivals).</li>
+          <li><strong style="color:#e2e8f0">Local attractions:</strong> Primarily serve residents of the immediate area (e.g., community gardens, local craft markets).</li>
+        </ul>
+
+        <h3>Classification by Theme / Subject Matter</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+          <div class="type-card">
+            <h4>🌿 Natural Heritage</h4>
+            <p>National parks, nature reserves, biosphere reserves, marine parks</p>
+          </div>
+          <div class="type-card">
+            <h4>🏛️ Cultural &amp; Historic Heritage</h4>
+            <p>UNESCO World Heritage Sites, museums, historic monuments, archaeological sites</p>
+          </div>
+          <div class="type-card">
+            <h4>🎢 Entertainment &amp; Leisure</h4>
+            <p>Theme parks, amusement parks, water parks, casinos, theatres</p>
+          </div>
+          <div class="type-card">
+            <h4>🏟️ Sport &amp; Activity</h4>
+            <p>Sports venues, adventure parks, water sports centres, golf resorts</p>
+          </div>
+          <div class="type-card">
+            <h4>🎨 Arts &amp; Culture</h4>
+            <p>Art galleries, performing arts centres, cultural villages, craft centres</p>
+          </div>
+          <div class="type-card">
+            <h4>🔬 Science &amp; Technology</h4>
+            <p>Science museums, planetariums, space centres, technology discovery centres</p>
+          </div>
+          <div class="type-card">
+            <h4>🌾 Rural &amp; Agritourism</h4>
+            <p>Working farms, botanical gardens, rural heritage sites, vineyards</p>
+          </div>
+          <div class="type-card">
+            <h4>🏙️ Urban &amp; Built Environment</h4>
+            <p>City walking tours, architectural landmarks, shopping districts, entertainment precincts</p>
+          </div>
+        </div>
+
+        <h3>Swarbrooke's Classification Framework (1995)</h3>
+        <p>
+          John Swarbrooke proposed one of the most widely cited frameworks, organising attractions into four categories:
+        </p>
+        <ol style="color:#94a3b8;padding-left:1.25rem;line-height:1.75;font-size:0.9375rem">
+          <li><strong style="color:#e2e8f0">Natural features</strong> (beaches, mountains, lakes, forests)</li>
+          <li><strong style="color:#e2e8f0">Man-made but not originally designed for tourism</strong> (cathedrals, stately homes, historic sites)</li>
+          <li><strong style="color:#e2e8f0">Man-made and purpose-built for tourism</strong> (theme parks, museums, entertainment complexes)</li>
+          <li><strong style="color:#e2e8f0">Special events</strong> (festivals, sporting events, cultural celebrations)</li>
+        </ol>
+
+        <div class="key-point">
+          <p>💡 <strong>Classification is not merely academic</strong> — it has direct implications for funding, regulation, 
+          conservation duties, and marketing strategy. A public heritage site has different obligations and 
+          opportunities than a privately owned theme park.</p>
+        </div>
+      </div>
+
+      <!-- ─────────────────────────────────────────────
+           SUBTOPIC 2: VISITOR ATTRACTION PRODUCT
+      ───────────────────────────────────────────── -->
+      <div class="content-section" id="product">
+        <h2><i data-lucide="package" class="w-5 h-5" style="color:#34d399"></i> 2.2 The Visitor Attraction Product</h2>
+        <p>
+          The visitor attraction product is not a single tangible item but a <strong style="color:#e2e8f0">complex bundle of 
+          benefits and experiences</strong> that visitors consume before, during and after their visit. 
+          Understanding this complexity is essential for effective product development and marketing.
+        </p>
+
+        <h3>The Three-Level Product Model Applied to Attractions</h3>
+        <p>
+          Drawing on Kotler's classic product levels, visitor attraction products can be understood at three levels:
+        </p>
+
+        <div class="definition-box">
+          <p><strong>Core Product (Benefit):</strong> The fundamental benefit the visitor seeks — entertainment, relaxation, 
+          education, adventure, nostalgia, social experience.</p>
+        </div>
+        <div class="definition-box">
+          <p><strong>Actual Product:</strong> The physical and service components — the exhibits, rides, guided tours, 
+          café, facilities and staff interactions that deliver the core benefit.</p>
+        </div>
+        <div class="definition-box">
+          <p><strong>Augmented Product:</strong> Additional enhancements that differentiate the attraction — loyalty 
+          programmes, mobile apps, virtual reality add-ons, annual pass schemes, pre-visit education packs.</p>
+        </div>
+
+        <h3>Characteristics of the Visitor Attraction Product</h3>
+
+        <h4 style="color:#e2e8f0;font-weight:600;margin:1rem 0 0.4rem">Intangibility</h4>
+        <p>The core product (the experience) cannot be touched, tasted or sampled in advance. 
+        Visitors must commit to purchase before consuming. This makes pre-visit marketing and reputation 
+        management especially important.</p>
+
+        <h4 style="color:#e2e8f0;font-weight:600;margin:1rem 0 0.4rem">Inseparability</h4>
+        <p>Production and consumption occur simultaneously — the visitor must be physically present for 
+        the experience to happen. This makes service quality at the point of contact critical.</p>
+
+        <h4 style="color:#e2e8f0;font-weight:600;margin:1rem 0 0.4rem">Variability / Heterogeneity</h4>
+        <p>The quality of the experience varies depending on staff mood, weather conditions, crowd levels, 
+        and individual visitor characteristics. Standardisation is challenging but essential for consistent 
+        visitor satisfaction.</p>
+
+        <h4 style="color:#e2e8f0;font-weight:600;margin:1rem 0 0.4rem">Perishability</h4>
+        <p>An unused capacity (an empty seat on a tour, an empty table in the café, a ghost-town queue) 
+        cannot be stored and sold later. This drives dynamic pricing, seasonal management, and pre-booking incentives.</p>
+
+        <h4 style="color:#e2e8f0;font-weight:600;margin:1rem 0 0.4rem">Complementarity</h4>
+        <p>The visitor attraction product interacts with other tourism products — accommodation, transport, 
+        dining — to create an overall destination experience. Poor complementary products can undermine 
+        an otherwise excellent attraction.</p>
+
+        <h3>The Visitor Attraction Product Mix</h3>
+        <p>
+          Well-managed attractions develop a <strong style="color:#e2e8f0">product mix</strong> to maximise revenue, 
+          satisfaction and repeat visitation:
+        </p>
+        <ul>
+          <li><strong style="color:#e2e8f0">Core experiences:</strong> The main exhibit, ride, natural feature.</li>
+          <li><strong style="color:#e2e8f0">Ancillary products:</strong> Food, merchandise, photography, parking.</li>
+          <li><strong style="color:#e2e8f0">Events and programming:</strong> Temporary exhibitions, seasonal events, workshops.</li>
+          <li><strong style="color:#e2e8f0">Digital products:</strong> Virtual tours, online learning, downloadable content.</li>
+          <li><strong style="color:#e2e8f0">Membership and loyalty:</strong> Annual passes, supporter schemes.</li>
+        </ul>
+
+        <h3>The Role of Theming in the Attraction Product</h3>
+        <p>
+          Theming involves applying a coherent narrative or aesthetic to every aspect of the visitor experience. 
+          Successful theming — as seen in Disney parks, Universal Studios, or cultural heritage villages — 
+          creates <strong style="color:#e2e8f0">immersion</strong>, which significantly elevates the perceived value 
+          of the product. Theming converts a collection of rides, shows and restaurants into a single, 
+          unified storyline that visitors emotionally invest in.
+        </p>
+
+        <h3>Product Life Cycle in Visitor Attractions</h3>
+        <p>
+          Like other products, visitor attractions move through a lifecycle: <strong style="color:#e2e8f0">Introduction → Growth → Maturity → Decline</strong>. 
+          Managers must reinvest, refresh and reposition the product to avoid decline — 
+          adding new exhibits, updating facilities, or redesigning the visitor journey. Failure to do so 
+          leads to "attraction fatigue," where repeat visitors see no reason to return.
+        </p>
+
+        <div class="key-point">
+          <p>💡 Understanding the visitor attraction product in its full complexity enables managers to 
+          make smarter decisions about pricing, investment, staff training and marketing messaging.</p>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div style="background:#111827;border:1px solid rgba(251,191,36,.2);border-radius:1rem;padding:1.5rem;margin-bottom:2rem">
+        <h2 class="fp-poppins text-base font-bold text-white mb-3 flex items-center gap-2">
+          <i data-lucide="check-circle" class="w-5 h-5" style="color:#fbbf24"></i> Lesson Summary
+        </h2>
+        <ul style="color:#94a3b8;padding-left:1.2rem;line-height:1.8;font-size:0.9rem">
+          <li>Visitor attractions can be classified by origin (natural vs. man-made), ownership, scale, and subject matter.</li>
+          <li>Swarbrooke's four-category framework is widely used in academic and applied settings.</li>
+          <li>The visitor attraction product is a complex bundle of core, actual and augmented benefits.</li>
+          <li>Key product characteristics include intangibility, inseparability, variability, perishability and complementarity.</li>
+          <li>Theming and product lifecycle management are critical to long-term competitiveness.</li>
+        </ul>
+      </div>
+
+      <!-- AI QUIZ -->
+      <div class="quiz-section" id="quiz">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(251,191,36,.15)">
+            <i data-lucide="brain" class="w-5 h-5" style="color:#fbbf24"></i>
+          </div>
+          <div>
+            <h2 class="fp-poppins text-xl font-bold text-white">AI-Powered Quiz</h2>
+            <p class="text-xs fp-muted">Powered by Google Gemini</p>
+          </div>
+        </div>
+        <p class="text-sm fp-muted mb-6 leading-relaxed">
+          Test your knowledge on classifications of visitor attractions and the visitor attraction product.
+        </p>
+
+        <div class="api-key-area" id="apiKeyArea">
+          <div class="flex items-start gap-3">
+            <i data-lucide="key" class="w-5 h-5 mt-0.5" style="color:#fbbf24;flex-shrink:0"></i>
+            <div class="flex-1">
+              <p class="text-sm font-semibold text-white mb-1">Google Gemini API Key</p>
+              <p class="text-xs fp-muted mb-3">
+                Enter your free Gemini API key to enable AI quizzes. 
+                Get one at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" 
+                class="text-[#fbbf24] hover:underline">aistudio.google.com</a>. 
+                Stored locally in your browser only.
+              </p>
+              <div class="flex gap-2">
+                <input type="password" id="apiKeyInput" class="api-key-input" placeholder="AIzaSy...">
+                <button onclick="saveApiKey()" class="btn-quiz" style="white-space:nowrap;padding:0.625rem 1rem">Save Key</button>
+              </div>
+              <p id="apiKeyMsg" class="text-xs mt-2 hidden"></p>
+            </div>
+          </div>
+        </div>
+
+        <div id="quizControls">
+          <div class="flex flex-wrap gap-3 mb-6">
+            <button id="generateBtn" onclick="generateQuiz()" class="btn-quiz">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Generate Quiz Questions
+            </button>
+            <button id="resetBtn" onclick="resetQuiz()" class="btn-secondary-quiz hidden">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i> New Quiz
+            </button>
+          </div>
+          <div id="questionsContainer" class="hidden">
+            <div id="questionsList"></div>
+            <button id="submitBtn" onclick="submitAnswers()" class="btn-quiz mt-2">
+              <i data-lucide="send" class="w-4 h-4"></i> Submit &amp; Get Marks
+            </button>
+          </div>
+          <div id="resultsContainer" class="hidden">
+            <div id="scoreDisplay" class="flex items-center gap-4 mb-6 p-4 rounded-xl" style="background:#1e293b"></div>
+            <h3 class="fp-poppins text-base font-bold text-white mb-3">Question-by-Question Feedback</h3>
+            <div id="feedbackList"></div>
+          </div>
+          <div id="quizStatus" class="hidden text-sm fp-muted flex items-center gap-2 py-2">
+            <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>
+            <span id="quizStatusText">Loading…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NAV -->
+      <div class="flex justify-between items-center mt-10">
+        <a href="lesson-1.html" class="text-sm text-[#94a3b8] hover:text-white flex items-center gap-1 transition-colors">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Lesson 1
+        </a>
+        <a href="lesson-3.html" class="btn-quiz">
+          Lesson 3 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="hidden lg:block">
+      <div class="sticky top-24">
+        <div style="background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:1.25rem">
+          <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Contents</p>
+          <a href="#typologies" class="toc-link">2.1 Typologies</a>
+          <a href="#product" class="toc-link">2.2 The Attraction Product</a>
+          <a href="#quiz" class="toc-link" style="color:#fde68a">🎯 AI Quiz</a>
+        </div>
+        <div style="background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:1.25rem;margin-top:1rem">
+          <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Course Lessons</p>
+          <a href="lesson-1.html" class="toc-link">Lesson 1</a>
+          <a href="lesson-2.html" class="toc-link" style="color:#fde68a;font-weight:600">Lesson 2 (current)</a>
+          <a href="lesson-3.html" class="toc-link">Lesson 3</a>
+          <a href="lesson-4.html" class="toc-link">Lesson 4</a>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:2rem 0">
+  <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs fp-muted">TMG 405 · Lesson 2 · Classifications of Visitor Attractions</p>
+    <a href="index.html" class="text-xs text-[#fbbf24] hover:text-white transition-colors flex items-center gap-1">
+      <i data-lucide="arrow-left" class="w-3 h-3"></i> Back to course
+    </a>
+  </div>
+</footer>
+
+<script>
+  lucide.createIcons();
+
+  const LESSON_CONTEXT = `
+Lesson: Classifications of Visitor Attractions (TMG 405 — Lesson 2)
+
+Key topics:
+1. Typologies of Visitor Attractions
+   - Classification by origin: natural, man-made purpose-built, man-made not purpose-built, special events
+   - Classification by ownership: public sector, private sector, voluntary/third sector, PPP
+   - Classification by scale: international, national, regional, local
+   - Classification by theme: natural heritage, cultural/historic heritage, entertainment, sport, arts, science, agritourism, urban
+   - Swarbrooke (1995) four-category framework
+
+2. The Visitor Attraction Product
+   - Three-level product model: core product (benefit), actual product, augmented product
+   - Characteristics: intangibility, inseparability, variability/heterogeneity, perishability, complementarity
+   - Product mix: core experiences, ancillary products, events/programming, digital products, membership
+   - Role of theming and immersion
+   - Product life cycle: Introduction → Growth → Maturity → Decline
+   - Attraction fatigue
+`;
+
+  const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+  let generatedQuestions = [];
+
+  function esc(str) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function getApiKey() { return localStorage.getItem('tmg405_gemini_key') || ''; }
+
+  function saveApiKey() {
+    const key = document.getElementById('apiKeyInput').value.trim();
+    const msg = document.getElementById('apiKeyMsg');
+    if (!key) { msg.textContent = 'Please enter a valid API key.'; msg.className = 'text-xs mt-2 text-red-400'; msg.classList.remove('hidden'); return; }
+    localStorage.setItem('tmg405_gemini_key', key);
+    msg.textContent = '✓ API key saved. You can now generate quizzes.';
+    msg.className = 'text-xs mt-2 text-green-400'; msg.classList.remove('hidden');
+    document.getElementById('apiKeyInput').value = '';
+  }
+
+  function showStatus(text, show = true) {
+    const el = document.getElementById('quizStatus');
+    document.getElementById('quizStatusText').textContent = text;
+    el.classList.toggle('hidden', !show); lucide.createIcons();
+  }
+
+  async function callGemini(prompt) {
+    const key = getApiKey();
+    if (!key) throw new Error('No API key found. Please save your Gemini API key above.');
+    const res = await fetch(`${GEMINI_API_URL}?key=${encodeURIComponent(key)}`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 2048 } })
+    });
+    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err?.error?.message || `API error: ${res.status}`); }
+    const data = await res.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  }
+
+  async function generateQuiz() {
+    const btn = document.getElementById('generateBtn'); btn.disabled = true;
+    showStatus('Generating quiz questions…');
+    try {
+      const prompt = `You are an academic lecturer for a Tourism Management course. Based on the following lesson content, generate exactly 5 short-answer quiz questions testing understanding, application and analysis.
+
+${LESSON_CONTEXT}
+
+Return ONLY a valid JSON array (no markdown, no extra text):
+[{"id":1,"question":"..."},{"id":2,"question":"..."},{"id":3,"question":"..."},{"id":4,"question":"..."},{"id":5,"question":"..."}]`;
+      const raw = await callGemini(prompt);
+      const jsonMatch = raw.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) throw new Error('Could not parse questions from AI response.');
+      generatedQuestions = JSON.parse(jsonMatch[0]);
+      renderQuestions();
+      document.getElementById('questionsContainer').classList.remove('hidden');
+      document.getElementById('resetBtn').classList.remove('hidden');
+      btn.textContent = 'Questions Generated ✓'; showStatus('', false);
+    } catch (e) { showStatus('', false); alert('Error: ' + e.message); btn.disabled = false; }
+  }
+
+  function renderQuestions() {
+    document.getElementById('questionsList').innerHTML = generatedQuestions.map(q => `
+      <div class="question-card">
+        <div class="q-num">Question ${esc(q.id)}</div>
+        <div class="q-text">${esc(q.question)}</div>
+        <textarea class="quiz-input" id="answer_${esc(q.id)}" rows="3" placeholder="Type your answer here…"></textarea>
+      </div>`).join('');
+  }
+
+  async function submitAnswers() {
+    const btn = document.getElementById('submitBtn'); btn.disabled = true;
+    showStatus('Analysing your answers and calculating marks…');
+    const answers = generatedQuestions.map(q => ({ id: q.id, question: q.question, answer: (document.getElementById(`answer_${q.id}`)?.value || '').trim() }));
+    const unanswered = answers.filter(a => !a.answer).length;
+    if (unanswered > 0 && !confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`)) { showStatus('', false); btn.disabled = false; return; }
+    try {
+      const prompt = `You are an academic lecturer for Tourism Management. Evaluate these student answers based on the lesson content.
+
+${LESSON_CONTEXT}
+
+Questions and answers:
+${answers.map(a => `Q${a.id}: ${a.question}\nStudent Answer: ${a.answer || '(no answer)'}`).join('\n\n')}
+
+Award marks out of 10 per question. Return ONLY a valid JSON object (no markdown):
+{"totalScore":<n>,"totalPossible":${answers.length * 10},"percentage":<n>,"grade":"<A/B/C/D/F>","overallFeedback":"<2-3 sentences>","results":[{"id":1,"score":<0-10>,"feedback":"<specific>"},…]}`;
+      const raw = await callGemini(prompt);
+      const jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('Could not parse evaluation.');
+      const evaluation = JSON.parse(jsonMatch[0]);
+      renderResults(answers, evaluation);
+      document.getElementById('questionsContainer').classList.add('hidden');
+      document.getElementById('resultsContainer').classList.remove('hidden');
+      showStatus('', false);
+      document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) { showStatus('', false); alert('Error: ' + e.message); btn.disabled = false; }
+  }
+
+  function renderResults(answers, ev) {
+    const cols = { A: '#34d399', B: '#60a5fa', C: '#fbbf24', D: '#fb923c', F: '#f87171' };
+    const col = cols[ev.grade] || '#94a3b8';
+    document.getElementById('scoreDisplay').innerHTML = `
+      <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(251,191,36,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${ev.totalScore}<span class="text-lg text-[#94a3b8]">/${ev.totalPossible}</span></div><div class="text-xs fp-muted mt-0.5">Total Score</div></div>
+      <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(251,191,36,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${Math.round(ev.percentage)}%</div><div class="text-xs fp-muted mt-0.5">Percentage</div></div>
+      <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(251,191,36,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${ev.grade}</div><div class="text-xs fp-muted mt-0.5">Grade</div></div>
+      <div class="flex-1 text-sm fp-muted leading-relaxed italic">"${esc(ev.overallFeedback)}"</div>`;
+    document.getElementById('feedbackList').innerHTML = ev.results.map(r => {
+      const q = answers.find(a => a.id === r.id);
+      const sc = r.score >= 8 ? '#34d399' : r.score >= 6 ? '#60a5fa' : r.score >= 4 ? '#fbbf24' : '#f87171';
+      return `<div class="feedback-card"><div class="flex items-start justify-between gap-4 mb-2"><div class="fb-q">Q${esc(r.id)}: ${esc(q?.question)}</div><span class="score-badge flex-shrink-0" style="background:rgba(251,191,36,.1);color:${sc};border:1px solid ${sc}33">${esc(r.score)}/10</span></div><div class="fb-answer"><span style="color:#64748b">Your answer:</span> ${q?.answer ? esc(q.answer) : '<em>No answer</em>'}</div><div class="fb-feedback">💬 ${esc(r.feedback)}</div></div>`;
+    }).join('');
+  }
+
+  function resetQuiz() {
+    generatedQuestions = [];
+    ['questionsContainer','resultsContainer'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    ['questionsList','feedbackList','scoreDisplay'].forEach(id => { document.getElementById(id).innerHTML = ''; });
+    const gb = document.getElementById('generateBtn'); gb.disabled = false;
+    gb.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate Quiz Questions';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('resetBtn').classList.add('hidden');
+    showStatus('', false); lucide.createIcons();
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = getApiKey();
+    if (saved) { const m = document.getElementById('apiKeyMsg'); m.textContent = '✓ API key is saved and ready.'; m.className = 'text-xs mt-2 text-green-400'; m.classList.remove('hidden'); }
+  });
+</script>
+</body>
+</html>
