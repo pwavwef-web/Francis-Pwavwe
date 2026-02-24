@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 5 — Operations and Facility Management | TMG 405</title>
+  <meta name="description" content="TMG 405 Lesson 5: Operations and facility management — staffing, HR, maintenance, visitor management, and safety and risk management.">
+  <link rel="icon" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif} .fp-muted{color:#94a3b8}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .content-section{background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:2rem;margin-bottom:1.5rem}
+    .content-section h2{font-family:'Poppins',sans-serif;font-size:1.25rem;font-weight:700;color:#f8fafc;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+    .content-section h3{font-family:'Poppins',sans-serif;font-size:1rem;font-weight:600;color:#e2e8f0;margin:1.25rem 0 0.5rem}
+    .content-section h4{color:#e2e8f0;font-weight:600;margin:1rem 0 0.4rem}
+    .content-section p{color:#94a3b8;line-height:1.75;margin-bottom:0.75rem;font-size:0.9375rem}
+    .content-section ul,.content-section ol{color:#94a3b8;line-height:1.75;padding-left:1.25rem;margin-bottom:0.75rem;font-size:0.9375rem}
+    .content-section li{margin-bottom:0.4rem}
+    .definition-box{background:rgba(251,146,60,.07);border:1px solid rgba(251,146,60,.25);border-radius:0.75rem;padding:1rem 1.25rem;margin:1rem 0}
+    .definition-box p{color:#fed7aa;margin:0;font-style:italic}
+    .key-point{background:rgba(251,191,36,.07);border-left:3px solid #fbbf24;padding:0.75rem 1rem;border-radius:0 0.5rem 0.5rem 0;margin:0.75rem 0}
+    .key-point p{color:#fde68a;margin:0;font-size:0.875rem}
+    .info-card{background:#1e293b;border:1px solid rgba(251,146,60,.12);border-radius:0.75rem;padding:1rem 1.25rem;margin-bottom:0.75rem}
+    .info-card h4{color:#fdba74;font-weight:600;font-size:0.875rem;margin-bottom:0.3rem}
+    .info-card p{color:#64748b;font-size:0.8125rem;margin:0}
+    .step-card{background:#1e293b;border:1px solid rgba(251,146,60,.15);border-radius:0.75rem;padding:1rem 1.25rem;margin-bottom:0.75rem;display:flex;gap:1rem;align-items:flex-start}
+    .step-num{min-width:2rem;height:2rem;background:rgba(251,146,60,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:#fb923c;flex-shrink:0}
+    /* Quiz */
+    .quiz-section{background:#0f172a;border:1px solid rgba(251,146,60,.3);border-radius:1rem;padding:2rem}
+    .quiz-input{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:0.5rem;color:#f8fafc;padding:0.875rem 1rem;width:100%;font-family:'Inter',sans-serif;font-size:0.9rem;transition:border-color .2s;resize:vertical}
+    .quiz-input:focus{outline:none;border-color:#fb923c}
+    .quiz-input::placeholder{color:#475569}
+    .btn-quiz{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:#7c2d12;color:#fff;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;border:none;cursor:pointer;font-size:0.9rem;transition:background .2s,transform .15s}
+    .btn-quiz:hover{background:#c2410c;transform:translateY(-1px)}
+    .btn-quiz:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .btn-secondary-quiz{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:transparent;color:#fdba74;border:1px solid rgba(251,146,60,.4);border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;font-size:0.9rem;transition:border-color .2s}
+    .btn-secondary-quiz:hover{border-color:#fb923c;color:#fff}
+    .question-card{background:#1e293b;border:1px solid rgba(255,255,255,.08);border-radius:0.75rem;padding:1.25rem;margin-bottom:1rem}
+    .question-card .q-num{font-size:0.75rem;font-weight:700;color:#fb923c;text-transform:uppercase;letter-spacing:.08em;margin-bottom:0.4rem}
+    .question-card .q-text{color:#e2e8f0;font-size:0.9375rem;margin-bottom:0.75rem;font-weight:500}
+    .score-badge{display:inline-flex;align-items:center;padding:0.3rem 0.75rem;border-radius:9999px;font-size:0.8rem;font-weight:700}
+    .feedback-card{background:#1e293b;border:1px solid rgba(251,146,60,.15);border-radius:0.75rem;padding:1.25rem;margin-bottom:0.75rem}
+    .feedback-card .fb-q{color:#fdba74;font-size:0.875rem;font-weight:600;margin-bottom:0.4rem}
+    .feedback-card .fb-answer{color:#94a3b8;font-size:0.8125rem;margin-bottom:0.5rem}
+    .feedback-card .fb-feedback{color:#a5f3fc;font-size:0.8125rem;line-height:1.6}
+    .nav-link-lesson{color:#94a3b8;text-decoration:none;font-size:0.875rem;transition:color .2s;display:flex;align-items:center;gap:0.25rem}
+    .nav-link-lesson:hover{color:#f8fafc}
+    .toc-link{display:block;color:#94a3b8;text-decoration:none;font-size:0.875rem;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
+    .toc-link:hover{color:#fb923c} .toc-link:last-child{border-bottom:none}
+  </style>
+</head>
+<body>
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-2 flex-wrap">
+        <a href="../../index.html" class="nav-link-lesson"><i data-lucide="home" class="w-4 h-4"></i></a>
+        <span class="text-white/20">/</span>
+        <a href="../../study-room/index.html" class="nav-link-lesson">Study Room</a>
+        <span class="text-white/20">/</span>
+        <a href="index.html" class="nav-link-lesson">TMG 405</a>
+        <span class="text-white/20">/</span>
+        <span class="text-[#fdba74] text-sm font-semibold">Lesson 5</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="lesson-4.html" class="text-xs fp-muted hover:text-white flex items-center gap-1 transition-colors"><i data-lucide="arrow-left" class="w-3 h-3"></i> Prev</a>
+        <a href="lesson-6.html" class="text-xs text-[#fb923c] hover:text-white flex items-center gap-1 transition-colors">Next <i data-lucide="arrow-right" class="w-3 h-3"></i></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-20">
+  <div class="lg:grid lg:grid-cols-[1fr_260px] lg:gap-10">
+    <main>
+      <div class="mb-8">
+        <div class="flex flex-wrap gap-2 mb-4">
+          <span class="badge" style="background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.3)">
+            <i data-lucide="settings" class="w-3 h-3 mr-1"></i> TMG 405 · Lesson 5
+          </span>
+        </div>
+        <h1 class="fp-poppins text-3xl sm:text-4xl font-black text-white mb-3 leading-tight">Operations and Facility Management</h1>
+        <p class="text-[#94a3b8] leading-relaxed mb-4">
+          Examine the day-to-day management of visitor attractions — from staffing and human resources to 
+          facility maintenance, visitor flow control, and the safety and risk management frameworks that 
+          keep attractions running smoothly and safely.
+        </p>
+        <div class="flex flex-wrap gap-4 text-sm fp-muted">
+          <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> ~35 min read</span>
+          <span class="flex items-center gap-1"><i data-lucide="layers" class="w-4 h-4"></i> 4 sub-topics</span>
+          <span class="flex items-center gap-1"><i data-lucide="brain" class="w-4 h-4"></i> AI Quiz included</span>
+        </div>
+      </div>
+
+      <!-- 5.1 STAFFING AND HR -->
+      <div class="content-section" id="staffing-hr">
+        <h2><i data-lucide="users" class="w-5 h-5" style="color:#fb923c"></i> 5.1 Staffing and HR Demands</h2>
+        <p>
+          People are at the heart of every visitor attraction. Staff deliver the experience that visitors remember, 
+          making human resource management one of the most critical operational functions. The quality, motivation 
+          and training of frontline staff directly determines visitor satisfaction and the overall quality of the 
+          attraction product.
+        </p>
+
+        <h3>The Nature of the Attraction Workforce</h3>
+        <p>
+          The workforce of a visitor attraction is characterised by several unique challenges:
+        </p>
+        <ul>
+          <li><strong style="color:#e2e8f0">Seasonality:</strong> Many attractions experience significant demand peaks (school holidays, summer season), requiring flexible staffing strategies including temporary, part-time and seasonal contracts.</li>
+          <li><strong style="color:#e2e8f0">Skills diversity:</strong> Attractions employ a wide range of roles — from curators and interpreters to maintenance crews, retail staff and security personnel — requiring diverse HR strategies.</li>
+          <li><strong style="color:#e2e8f0">High visitor-contact intensity:</strong> Frontline roles involve continuous public interaction, requiring strong interpersonal and communication skills alongside technical knowledge.</li>
+          <li><strong style="color:#e2e8f0">Volunteer reliance:</strong> Many heritage and cultural attractions depend heavily on volunteers, who bring passion and local knowledge but require their own management approaches.</li>
+        </ul>
+
+        <h3>Recruitment and Selection</h3>
+        <p>
+          Effective recruitment in visitor attractions must balance technical qualifications with the personal 
+          qualities essential for visitor-facing roles:
+        </p>
+        <ul>
+          <li>Competency-based recruitment frameworks aligned to visitor experience goals</li>
+          <li>Diversity and inclusion strategies to reflect the communities served</li>
+          <li>Recruitment of specialist staff (e.g., conservators, curators, heritage interpreters) alongside generalist hospitality roles</li>
+          <li>Effective onboarding that communicates the attraction's mission, values and standards</li>
+        </ul>
+
+        <h3>Training and Development</h3>
+        <p>
+          Ongoing training is critical to maintaining service quality and staff engagement:
+        </p>
+        <div class="info-card">
+          <h4>🎯 Interpretation and Communication Skills</h4>
+          <p>Training guides, docents and frontline staff to convey the attraction's story with accuracy, enthusiasm and sensitivity to diverse audiences.</p>
+        </div>
+        <div class="info-card">
+          <h4>🛡️ Health, Safety and Emergency Procedures</h4>
+          <p>All staff must be trained in site-specific safety protocols, emergency evacuation, first aid, and their responsibilities under relevant legislation.</p>
+        </div>
+        <div class="info-card">
+          <h4>🤝 Customer Service Excellence</h4>
+          <p>Handling complaints, managing visitor expectations, assisting visitors with accessibility needs, and creating moments of genuine hospitality.</p>
+        </div>
+        <div class="info-card">
+          <h4>📚 Specialist Knowledge</h4>
+          <p>Technical and subject-matter training relevant to the specific attraction type — archaeological methodology, conservation ethics, natural history, or hospitality operations.</p>
+        </div>
+
+        <h3>Workforce Scheduling and Labour Management</h3>
+        <p>
+          Matching staffing levels to visitor demand patterns is both operationally and financially critical:
+        </p>
+        <ul>
+          <li>Demand forecasting using historical visitor data, event calendars and booking systems</li>
+          <li>Rota management systems to ensure adequate cover during peaks without over-staffing during quiet periods</li>
+          <li>Labour cost management — wages typically represent the largest operating cost for most attractions</li>
+          <li>Multi-skilling staff to cover multiple operational areas during periods of variable demand</li>
+        </ul>
+
+        <h3>Staff Motivation and Retention</h3>
+        <p>
+          High staff turnover is costly and disruptive to service quality. Effective retention strategies include:
+        </p>
+        <ul>
+          <li>Competitive compensation and benefit packages, including perks unique to the attraction</li>
+          <li>Clear career progression pathways and professional development opportunities</li>
+          <li>Recognition programmes that celebrate staff contributions to visitor satisfaction</li>
+          <li>A positive organisational culture that connects staff to the attraction's purpose and mission</li>
+          <li>Regular performance feedback and two-way communication channels</li>
+        </ul>
+
+        <h3>Volunteer Management</h3>
+        <p>
+          Volunteers are a significant resource for many cultural and heritage attractions, but require structured management:
+        </p>
+        <ul>
+          <li>Clear role descriptions and defined boundaries of responsibility</li>
+          <li>Induction, training and ongoing support equivalent to paid staff requirements</li>
+          <li>Recognition and reward mechanisms that motivate intrinsic (non-financial) motivations</li>
+          <li>Insurance and liability coverage appropriate to volunteer roles</li>
+        </ul>
+
+        <div class="key-point">
+          <p>💡 The visitor experience is ultimately delivered by people. No amount of investment in physical 
+          facilities can compensate for poorly trained, demotivated or inadequate staffing.</p>
+        </div>
+      </div>
+
+      <!-- 5.2 MAINTENANCE -->
+      <div class="content-section" id="maintenance">
+        <h2><i data-lucide="wrench" class="w-5 h-5" style="color:#f97316"></i> 5.2 Maintenance of Facilities and Equipment</h2>
+        <p>
+          The physical condition of an attraction's facilities and equipment directly impacts visitor safety, 
+          satisfaction and the long-term sustainability of the attraction. A proactive maintenance strategy 
+          protects both the attraction's assets and its reputation.
+        </p>
+
+        <h3>Types of Maintenance</h3>
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Preventive (Planned) Maintenance</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Scheduled inspections, servicing and component replacement carried out before failures occur. Reduces downtime, extends asset life and is more cost-effective than reactive repairs.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Corrective (Reactive) Maintenance</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Repairs undertaken in response to equipment failures or facility defects. Necessary as a responsive measure but costly when it becomes the primary maintenance strategy.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Predictive Maintenance</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Uses condition monitoring technology (sensors, data analytics) to anticipate failures before they occur. Increasingly applied in larger attractions with complex mechanical and electronic systems.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Conservation Maintenance</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Specialist maintenance focused on preserving heritage structures, artefacts and natural features, often subject to regulatory requirements and guided by conservation principles.</p>
+          </div>
+        </div>
+
+        <h3>Key Facility Management Areas</h3>
+        <ul>
+          <li><strong style="color:#e2e8f0">Building and infrastructure:</strong> Structural integrity, roof, drainage, utilities (water, electricity, heating/cooling), accessibility infrastructure.</li>
+          <li><strong style="color:#e2e8f0">Visitor-facing spaces:</strong> Cleanliness and presentation standards for exhibit areas, toilets, catering spaces, retail units and pathways.</li>
+          <li><strong style="color:#e2e8f0">Rides and mechanical attractions:</strong> Regular statutory inspections, engineer certifications and safety testing for amusement rides and mechanical exhibits.</li>
+          <li><strong style="color:#e2e8f0">Grounds and landscaping:</strong> Maintenance of outdoor spaces, pathways, car parks, natural habitats and green infrastructure.</li>
+          <li><strong style="color:#e2e8f0">Technology and digital infrastructure:</strong> Servers, ticketing systems, interactive exhibits, AV equipment, Wi-Fi infrastructure and surveillance systems.</li>
+        </ul>
+
+        <h3>Asset Management Planning</h3>
+        <p>
+          A formal <strong style="color:#e2e8f0">asset management plan</strong> provides a strategic framework for:
+        </p>
+        <ul>
+          <li>Inventorying all physical assets with condition assessments</li>
+          <li>Prioritising maintenance expenditure based on criticality, condition and visitor impact</li>
+          <li>Planning capital renewal and replacement cycles</li>
+          <li>Demonstrating stewardship to funders, trustees and regulatory bodies</li>
+        </ul>
+
+        <div class="definition-box">
+          <p>"Effective facilities management is invisible to the visitor — they simply experience a clean, 
+          safe, well-functioning environment. It only becomes visible when it fails."</p>
+        </div>
+
+        <h3>Sustainable Facilities Management</h3>
+        <p>
+          Increasingly, attractions are integrating sustainability principles into their facilities management:
+        </p>
+        <ul>
+          <li>Energy efficiency audits and renewable energy installations</li>
+          <li>Water conservation measures and sustainable drainage systems</li>
+          <li>Waste reduction and recycling programmes</li>
+          <li>Environmentally preferable procurement for maintenance supplies and contracts</li>
+          <li>Green building standards (e.g., BREEAM, LEED) for new developments and major refurbishments</li>
+        </ul>
+
+        <div class="key-point">
+          <p>💡 Deferred maintenance is a false economy. Small, unresolved defects escalate into costly 
+          failures, safety hazards and reputational damage — all of which are far more expensive than 
+          proactive maintenance programmes.</p>
+        </div>
+      </div>
+
+      <!-- 5.3 VISITOR MANAGEMENT -->
+      <div class="content-section" id="visitor-management">
+        <h2><i data-lucide="map-pin" class="w-5 h-5" style="color:#fb923c"></i> 5.3 Visitor Management</h2>
+        <p>
+          Visitor management encompasses the strategies and techniques used to control, direct and enhance 
+          the movement of visitors through an attraction, balancing the quality of the visitor experience 
+          with the protection of the attraction's resources and the management of operational capacity.
+        </p>
+
+        <h3>Visitor Capacity and Carrying Capacity</h3>
+        <p>
+          Every attraction has limits to the number of visitors it can accommodate without degrading the 
+          visitor experience or causing environmental or heritage harm:
+        </p>
+        <ul>
+          <li><strong style="color:#e2e8f0">Physical carrying capacity:</strong> The maximum number of visitors an attraction can physically hold at one time without creating safety hazards.</li>
+          <li><strong style="color:#e2e8f0">Perceptual carrying capacity:</strong> The point at which visitor numbers begin to degrade the quality of the experience (e.g., crowding, noise, reduced access to exhibits).</li>
+          <li><strong style="color:#e2e8f0">Ecological carrying capacity:</strong> Relevant for natural and heritage sites — the threshold beyond which visitor pressure damages the resource (e.g., soil compaction, damage to artefacts).</li>
+          <li><strong style="color:#e2e8f0">Economic carrying capacity:</strong> The level of visitation that maximises revenue and operational efficiency.</li>
+        </ul>
+
+        <h3>Strategies for Managing Visitor Flow</h3>
+        <div class="info-card">
+          <h4>🎟️ Timed Entry and Pre-Booking Systems</h4>
+          <p>Distributing visitor arrivals across the day through mandatory or incentivised timed ticketing reduces queuing, prevents overcrowding and allows for more consistent staffing deployment.</p>
+        </div>
+        <div class="info-card">
+          <h4>🗺️ Spatial Distribution Strategies</h4>
+          <p>Designing visitor routes, signage and programming to disperse visitors across the attraction and reduce concentration at popular pinch-points.</p>
+        </div>
+        <div class="info-card">
+          <h4>📅 Temporal Distribution Strategies</h4>
+          <p>Pricing incentives, special events and targeted marketing to spread demand from peak to off-peak periods, improving asset utilisation and visitor experience year-round.</p>
+        </div>
+        <div class="info-card">
+          <h4>🔢 Queuing Management</h4>
+          <p>Virtual queuing systems, real-time wait time displays, entertainment in queue areas, and fast-track ticketing options to reduce the perceived and actual burden of waiting.</p>
+        </div>
+        <div class="info-card">
+          <h4>📊 Real-Time Visitor Monitoring</h4>
+          <p>Using footfall counters, Wi-Fi analytics, CCTV and booking data to monitor visitor numbers and distribution in real time, enabling dynamic management responses.</p>
+        </div>
+
+        <h3>Visitor Behaviour Management</h3>
+        <p>
+          Managing how visitors behave within an attraction protects both the resource and other visitors' experiences:
+        </p>
+        <ul>
+          <li><strong style="color:#e2e8f0">Clear communication</strong> of rules and expectations through signage, pre-visit information and staff briefings.</li>
+          <li><strong style="color:#e2e8f0">Physical barriers and zoning</strong> to prevent access to sensitive or dangerous areas.</li>
+          <li><strong style="color:#e2e8f0">Interpretive messaging</strong> that explains why certain behaviours are important, generating voluntary compliance through understanding rather than enforcement alone.</li>
+          <li><strong style="color:#e2e8f0">Trained staff presence</strong> in areas where behaviour requires active supervision.</li>
+        </ul>
+
+        <h3>Accessibility and Inclusive Visitor Management</h3>
+        <p>
+          Effective visitor management must consider the needs of all visitors, including those with physical, 
+          sensory, cognitive or social barriers to access:
+        </p>
+        <ul>
+          <li>Accessible routes, facilities and information formats</li>
+          <li>Pre-visit information enabling planning for visitors with specific requirements</li>
+          <li>Staff trained in disability awareness and inclusion</li>
+          <li>Consultation with disability and access groups in management planning</li>
+        </ul>
+
+        <div class="key-point">
+          <p>💡 The goal of visitor management is not simply crowd control — it is creating the conditions 
+          in which every visitor can have a high-quality, safe and meaningful experience, while protecting 
+          the attraction resource for future generations.</p>
+        </div>
+      </div>
+
+      <!-- 5.4 SAFETY AND RISK MANAGEMENT -->
+      <div class="content-section" id="safety-risk">
+        <h2><i data-lucide="shield-check" class="w-5 h-5" style="color:#f97316"></i> 5.4 Safety Procedures and Risk Management</h2>
+        <p>
+          Safety is a non-negotiable legal and ethical responsibility of visitor attraction management. 
+          A robust approach to risk management protects visitors, staff, volunteers and contractors — 
+          while also protecting the organisation from legal liability and reputational damage.
+        </p>
+
+        <h3>Legal Framework</h3>
+        <p>
+          Visitor attractions operate within a legislative framework governing health and safety obligations:
+        </p>
+        <ul>
+          <li><strong style="color:#e2e8f0">Occupiers' liability:</strong> Legal duty of care owed to all visitors (and, to a lesser extent, trespassers) to ensure premises are reasonably safe.</li>
+          <li><strong style="color:#e2e8f0">Health and Safety at Work legislation:</strong> Obligations to protect employees, contractors and the public from risks arising from work activities.</li>
+          <li><strong style="color:#e2e8f0">Fire safety regulations:</strong> Risk assessments, evacuation plans, equipment maintenance and staff training requirements.</li>
+          <li><strong style="color:#e2e8f0">Amusement ride safety regulations:</strong> Statutory inspection, certification and operating standards for mechanical rides and attractions.</li>
+          <li><strong style="color:#e2e8f0">Food safety legislation:</strong> Standards for catering operations, including hygiene, storage and allergen information.</li>
+        </ul>
+
+        <h3>The Risk Management Process</h3>
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Hazard Identification</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Systematically identify all potential sources of harm — physical hazards (slips, falls, structural risks), biological hazards, fire risks, crowd management risks, and more.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Risk Assessment</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Evaluate the likelihood and severity of harm from each identified hazard to determine the level of risk and prioritise management action.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Risk Control Measures</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Implement the "hierarchy of controls": eliminate the hazard; substitute with something safer; engineer controls; administrative controls; personal protective equipment (PPE).</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">4</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Documentation and Communication</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Record risk assessments formally; communicate control measures to all relevant staff through training, signage and standard operating procedures.</p>
+          </div>
+        </div>
+        <div class="step-card">
+          <div class="step-num">5</div>
+          <div>
+            <h4 style="color:#e2e8f0;font-weight:600;margin:0 0 0.3rem">Monitoring and Review</h4>
+            <p style="color:#94a3b8;font-size:0.875rem;margin:0">Regularly review risk assessments — especially after incidents, near-misses, operational changes or extreme weather events. Risk management is a continuous process, not a one-off exercise.</p>
+          </div>
+        </div>
+
+        <h3>Emergency Planning</h3>
+        <p>
+          All attractions require formal emergency plans that cover a range of scenarios:
+        </p>
+        <ul>
+          <li><strong style="color:#e2e8f0">Evacuation procedures:</strong> Clear, rehearsed procedures for evacuating the site, with designated assembly points, staff responsibilities and communication protocols.</li>
+          <li><strong style="color:#e2e8f0">Medical emergency response:</strong> First aid provision, defibrillator locations, liaison with emergency services and incident documentation.</li>
+          <li><strong style="color:#e2e8f0">Security incidents:</strong> Procedures for handling suspected security threats, lost children, aggressive visitors and criminal activity.</li>
+          <li><strong style="color:#e2e8f0">Extreme weather:</strong> Plans for managing visitor safety during severe weather events, particularly for outdoor and festival attractions.</li>
+          <li><strong style="color:#e2e8f0">Business continuity:</strong> Plans to maintain critical operations and communicate with visitors and stakeholders during and after significant incidents.</li>
+        </ul>
+
+        <h3>Crowd Safety Management</h3>
+        <p>
+          Large visitor attractions, events and festivals carry specific crowd safety risks that require specialist 
+          management attention:
+        </p>
+        <ul>
+          <li>Crowd density monitoring and maximum occupancy management</li>
+          <li>Entry and exit design to prevent dangerous crushing and bottlenecks</li>
+          <li>Clear sight lines for security and safety staff</li>
+          <li>Communication systems capable of reaching all visitors in an emergency</li>
+          <li>Cooperation with police and emergency services in planning and during operations</li>
+        </ul>
+
+        <div class="definition-box">
+          <p>"Safety is not a competitive advantage — it is a licence to operate. An attraction that cannot 
+          demonstrate rigorous safety management will lose public trust, face legal consequences, and ultimately 
+          cease to exist."</p>
+        </div>
+
+        <div class="key-point">
+          <p>💡 A positive safety culture — where all staff take personal responsibility for safety, report 
+          near-misses without fear of blame, and feel empowered to stop unsafe activities — is more effective 
+          than any set of written procedures alone.</p>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div style="background:#111827;border:1px solid rgba(251,146,60,.2);border-radius:1rem;padding:1.5rem;margin-bottom:2rem">
+        <h2 class="fp-poppins text-base font-bold text-white mb-3 flex items-center gap-2">
+          <i data-lucide="check-circle" class="w-5 h-5" style="color:#fb923c"></i> Lesson Summary
+        </h2>
+        <ul style="color:#94a3b8;padding-left:1.2rem;line-height:1.8;font-size:0.9rem">
+          <li>Staffing is the most operationally complex and costly element of attraction management, requiring strategies for recruitment, training, scheduling and retention across a seasonally variable, visitor-facing workforce.</li>
+          <li>A proactive, planned approach to facilities and equipment maintenance protects assets, ensures visitor safety and avoids the higher costs of reactive repairs.</li>
+          <li>Visitor management strategies — timed entry, spatial distribution, capacity controls and behaviour management — balance visitor experience quality with resource protection.</li>
+          <li>Safety and risk management is a legal and ethical imperative, requiring systematic hazard identification, risk assessment, control measures, emergency planning and a positive safety culture.</li>
+        </ul>
+      </div>
+
+      <!-- AI QUIZ -->
+      <div class="quiz-section" id="quiz">
+        <div class="flex items-center gap-3 mb-2">
+          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:rgba(251,146,60,.15)">
+            <i data-lucide="brain" class="w-5 h-5" style="color:#fb923c"></i>
+          </div>
+          <div>
+            <h2 class="fp-poppins text-xl font-bold text-white">AI-Powered Quiz</h2>
+            <p class="text-xs fp-muted">Powered by Google Gemini</p>
+          </div>
+        </div>
+        <p class="text-sm fp-muted mb-6 leading-relaxed">
+          Test your understanding of operations and facility management — staffing, maintenance, visitor 
+          management and safety procedures.
+        </p>
+
+        <div id="quizControls">
+          <div class="flex flex-wrap gap-3 mb-6">
+            <button id="generateBtn" onclick="generateQuiz()" class="btn-quiz">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Generate Quiz Questions
+            </button>
+            <button id="resetBtn" onclick="resetQuiz()" class="btn-secondary-quiz hidden">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i> New Quiz
+            </button>
+          </div>
+          <div id="questionsContainer" class="hidden">
+            <div id="questionsList"></div>
+            <button id="submitBtn" onclick="submitAnswers()" class="btn-quiz mt-2">
+              <i data-lucide="send" class="w-4 h-4"></i> Submit &amp; Get Marks
+            </button>
+          </div>
+          <div id="resultsContainer" class="hidden">
+            <div id="scoreDisplay" class="flex items-center gap-4 mb-6 p-4 rounded-xl" style="background:#1e293b"></div>
+            <h3 class="fp-poppins text-base font-bold text-white mb-3">Question-by-Question Feedback</h3>
+            <div id="feedbackList"></div>
+          </div>
+          <div id="quizStatus" class="hidden text-sm fp-muted flex items-center gap-2 py-2">
+            <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>
+            <span id="quizStatusText">Loading…</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mt-10">
+        <a href="lesson-4.html" class="text-sm text-[#94a3b8] hover:text-white flex items-center gap-1 transition-colors">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Lesson 4
+        </a>
+        <a href="lesson-6.html" class="btn-quiz">
+          Lesson 6 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </main>
+
+    <aside class="hidden lg:block">
+      <div class="sticky top-24">
+        <div style="background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:1.25rem">
+          <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Contents</p>
+          <a href="#staffing-hr" class="toc-link">5.1 Staffing &amp; HR</a>
+          <a href="#maintenance" class="toc-link">5.2 Maintenance</a>
+          <a href="#visitor-management" class="toc-link">5.3 Visitor Management</a>
+          <a href="#safety-risk" class="toc-link">5.4 Safety &amp; Risk Management</a>
+          <a href="#quiz" class="toc-link" style="color:#fdba74">🎯 AI Quiz</a>
+        </div>
+        <div style="background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:1rem;padding:1.25rem;margin-top:1rem">
+          <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Course Lessons</p>
+          <a href="lesson-1.html" class="toc-link">Lesson 1</a>
+          <a href="lesson-2.html" class="toc-link">Lesson 2</a>
+          <a href="lesson-3.html" class="toc-link">Lesson 3</a>
+          <a href="lesson-4.html" class="toc-link">Lesson 4</a>
+          <a href="lesson-5.html" class="toc-link" style="color:#fdba74;font-weight:600">Lesson 5 (current)</a>
+          <a href="lesson-6.html" class="toc-link">Lesson 6</a>
+          <a href="lesson-7.html" class="toc-link">Lesson 7</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:2rem 0">
+  <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs fp-muted">TMG 405 · Lesson 5 · Operations and Facility Management</p>
+    <a href="index.html" class="text-xs text-[#fb923c] hover:text-white transition-colors flex items-center gap-1">
+      <i data-lucide="arrow-left" class="w-3 h-3"></i> Back to course
+    </a>
+  </div>
+</footer>
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+  import { getVertexAI, getGenerativeModel } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-vertexai.js';
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI',
+    authDomain: 'francis-pwavwe.firebaseapp.com',
+    projectId: 'francis-pwavwe',
+    storageBucket: 'francis-pwavwe.firebasestorage.app',
+    messagingSenderId: '658069378543',
+    appId: '1:658069378543:web:87b1dcb0dd27d3255bd21a'
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const vertexAI = getVertexAI(app);
+  const model = getGenerativeModel(vertexAI, { model: 'gemini-2.0-flash' });
+
+  lucide.createIcons();
+
+  const LESSON_CONTEXT = `
+Lesson: Operations and Facility Management (TMG 405 — Lesson 5)
+
+Key topics:
+1. Staffing and HR Demands
+   - Seasonality and flexible workforce strategies
+   - Recruitment, selection and onboarding for visitor-facing roles
+   - Training: interpretation skills, health and safety, customer service, specialist knowledge
+   - Workforce scheduling and labour cost management
+   - Staff motivation, retention and career development
+   - Volunteer management: roles, induction, recognition
+
+2. Maintenance of Facilities and Equipment
+   - Types of maintenance: preventive, corrective, predictive, conservation
+   - Key facility management areas: buildings, visitor-facing spaces, rides, grounds, technology
+   - Asset management planning: inventory, condition assessment, capital renewal
+   - Sustainable facilities management: energy, water, waste, green procurement
+
+3. Visitor Management
+   - Carrying capacity: physical, perceptual, ecological, economic
+   - Managing visitor flow: timed entry, spatial distribution, temporal distribution, queuing management, real-time monitoring
+   - Visitor behaviour management: communication, physical barriers, interpretive messaging, staff presence
+   - Accessibility and inclusive visitor management
+
+4. Safety Procedures and Risk Management
+   - Legal framework: occupiers' liability, health and safety legislation, fire safety, ride safety, food safety
+   - Risk management process: hazard identification, risk assessment, control measures (hierarchy of controls), documentation, monitoring
+   - Emergency planning: evacuation, medical response, security incidents, extreme weather, business continuity
+   - Crowd safety management
+   - Positive safety culture
+`;
+
+  let generatedQuestions = [];
+
+  function esc(str) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function showStatus(text, show = true) {
+    const el = document.getElementById('quizStatus');
+    document.getElementById('quizStatusText').textContent = text;
+    el.classList.toggle('hidden', !show); lucide.createIcons();
+  }
+
+  async function callGemini(prompt) {
+    try {
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      return response.text();
+    } catch (error) {
+      console.error('Vertex AI Error:', error);
+      throw new Error('Could not connect to AI. Please check your internet connection and try again.');
+    }
+  }
+
+  async function generateQuiz() {
+    const btn = document.getElementById('generateBtn'); btn.disabled = true;
+    showStatus('Generating quiz questions…');
+    try {
+      const prompt = `You are a Tourism Management lecturer. Based on the lesson content below, generate exactly 5 short-answer quiz questions that test understanding, application and critical thinking across the four sub-topics.
+
+${LESSON_CONTEXT}
+
+Return ONLY a valid JSON array (no markdown, no extra text):
+[{"id":1,"question":"..."},{"id":2,"question":"..."},{"id":3,"question":"..."},{"id":4,"question":"..."},{"id":5,"question":"..."}]`;
+      const raw = await callGemini(prompt);
+      const jsonMatch = raw.match(/\[[\s\S]*\]/);
+      if (!jsonMatch) throw new Error('Could not parse questions.');
+      generatedQuestions = JSON.parse(jsonMatch[0]);
+      document.getElementById('questionsList').innerHTML = generatedQuestions.map(q => `
+        <div class="question-card"><div class="q-num">Question ${esc(q.id)}</div><div class="q-text">${esc(q.question)}</div>
+        <textarea class="quiz-input" id="answer_${esc(q.id)}" rows="3" placeholder="Type your answer here…"></textarea></div>`).join('');
+      document.getElementById('questionsContainer').classList.remove('hidden');
+      document.getElementById('resetBtn').classList.remove('hidden');
+      btn.textContent = 'Questions Generated ✓'; showStatus('', false);
+    } catch (e) { showStatus('', false); alert('Error: ' + e.message); btn.disabled = false; }
+  }
+
+  async function submitAnswers() {
+    const btn = document.getElementById('submitBtn'); btn.disabled = true;
+    showStatus('Analysing answers and calculating marks…');
+    const answers = generatedQuestions.map(q => ({ id: q.id, question: q.question, answer: (document.getElementById(`answer_${q.id}`)?.value || '').trim() }));
+    const unanswered = answers.filter(a => !a.answer).length;
+    if (unanswered > 0 && !confirm(`${unanswered} unanswered question(s). Submit anyway?`)) { showStatus('', false); btn.disabled = false; return; }
+    try {
+      const prompt = `Tourism Management lecturer evaluating a lesson quiz.
+
+${LESSON_CONTEXT}
+
+Student answers:
+${answers.map(a => `Q${a.id}: ${a.question}\nStudent: ${a.answer || '(no answer)'}`).join('\n\n')}
+
+Award marks out of 10 per question. Return ONLY valid JSON (no markdown):
+{"totalScore":<n>,"totalPossible":${answers.length * 10},"percentage":<n>,"grade":"<A/B/C/D/F>","overallFeedback":"<2-3 sentences>","results":[{"id":1,"score":<0-10>,"feedback":"<specific>"},…]}`;
+      const raw = await callGemini(prompt);
+      const jsonMatch = raw.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('Could not parse evaluation.');
+      const ev = JSON.parse(jsonMatch[0]);
+      const cols = { A: '#34d399', B: '#60a5fa', C: '#fbbf24', D: '#fb923c', F: '#f87171' };
+      const col = cols[ev.grade] || '#94a3b8';
+      document.getElementById('scoreDisplay').innerHTML = `
+        <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(251,146,60,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${ev.totalScore}<span class="text-lg text-[#94a3b8]">/${ev.totalPossible}</span></div><div class="text-xs fp-muted mt-0.5">Total Score</div></div>
+        <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(251,146,60,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${Math.round(ev.percentage)}%</div><div class="text-xs fp-muted mt-0.5">Percentage</div></div>
+        <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(251,146,60,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${ev.grade}</div><div class="text-xs fp-muted mt-0.5">Grade</div></div>
+        <div class="flex-1 text-sm fp-muted leading-relaxed italic">"${esc(ev.overallFeedback)}"</div>`;
+      document.getElementById('feedbackList').innerHTML = ev.results.map(r => {
+        const q = answers.find(a => a.id === r.id);
+        const sc = r.score >= 8 ? '#34d399' : r.score >= 6 ? '#60a5fa' : r.score >= 4 ? '#fbbf24' : '#f87171';
+        return `<div class="feedback-card"><div class="flex items-start justify-between gap-4 mb-2"><div class="fb-q">Q${esc(r.id)}: ${esc(q?.question)}</div><span class="score-badge flex-shrink-0" style="background:rgba(251,146,60,.1);color:${sc};border:1px solid ${sc}33">${esc(r.score)}/10</span></div><div class="fb-answer"><span style="color:#64748b">Your answer:</span> ${q?.answer ? esc(q.answer) : '<em>No answer</em>'}</div><div class="fb-feedback">💬 ${esc(r.feedback)}</div></div>`;
+      }).join('');
+      document.getElementById('questionsContainer').classList.add('hidden');
+      document.getElementById('resultsContainer').classList.remove('hidden');
+      showStatus('', false);
+      document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (e) { showStatus('', false); alert('Error: ' + e.message); btn.disabled = false; }
+  }
+
+  function resetQuiz() {
+    generatedQuestions = [];
+    ['questionsContainer','resultsContainer'].forEach(id => document.getElementById(id).classList.add('hidden'));
+    ['questionsList','feedbackList','scoreDisplay'].forEach(id => { document.getElementById(id).innerHTML = ''; });
+    const gb = document.getElementById('generateBtn'); gb.disabled = false;
+    gb.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate Quiz Questions';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('resetBtn').classList.add('hidden');
+    showStatus('', false); lucide.createIcons();
+  }
+
+  window.generateQuiz = generateQuiz;
+  window.submitAnswers = submitAnswers;
+  window.resetQuiz = resetQuiz;
+</script>
+</body>
+</html>
