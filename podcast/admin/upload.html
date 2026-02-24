@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Episode — The AZ Podcast Admin</title>
+  <link rel="icon" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    *{box-sizing:border-box}
+    body{background:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .sidebar{width:240px;flex-shrink:0;background:#0d1117;border-right:1px solid rgba(255,255,255,.07);min-height:100vh;padding:1.5rem 0;position:fixed;top:0;left:0;z-index:40}
+    .sidebar-link{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 1.25rem;color:#94a3b8;font-size:0.875rem;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
+    .sidebar-link:hover{color:#f8fafc;background:rgba(255,255,255,.05)}
+    .sidebar-link.active{color:#fbbf24;background:rgba(251,191,36,.07);border-left-color:#fbbf24}
+    .main{margin-left:240px;min-height:100vh;padding:2rem}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem}
+    label{display:block;font-size:0.875rem;font-weight:500;color:#f8fafc;margin-bottom:0.4rem}
+    input,textarea,select{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:0.5rem;color:#f8fafc;padding:0.75rem 1rem;width:100%;font-family:'Inter',sans-serif;font-size:0.9rem;transition:border-color .2s;outline:none}
+    input:focus,textarea:focus,select:focus{border-color:#6366f1}
+    input::placeholder,textarea::placeholder{color:#475569}
+    .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.25rem;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;border:none;font-size:0.875rem;text-decoration:none}
+    .btn-primary{background:#1e40af;color:#fff}
+    .btn-primary:hover{background:#2563eb}
+    .btn-outline{background:transparent;color:#f8fafc;border:1px solid rgba(255,255,255,.2)}
+    .btn-outline:hover{border-color:#6366f1;color:#a5b4fc}
+    .drop-zone{border:2px dashed rgba(255,255,255,.15);border-radius:0.75rem;padding:2.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s}
+    .drop-zone:hover,.drop-zone.drag-over{border-color:#6366f1;background:rgba(99,102,241,.05)}
+    @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}}
+  </style>
+</head>
+<body>
+<script src="admin-auth.js"></script>
+<script>requireAdmin();</script>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="px-5 mb-6">
+    <p class="text-xs tracking-[0.2em] fp-gold font-semibold fp-poppins mb-0.5">THE AZ PODCAST</p>
+    <p class="text-white font-bold fp-poppins text-sm">Admin Panel</p>
+  </div>
+  <nav>
+    <a href="index.html" class="sidebar-link"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</a>
+    <a href="upload.html" class="sidebar-link active"><i data-lucide="upload-cloud" class="w-4 h-4"></i> Upload Episode</a>
+    <a href="manage.html" class="sidebar-link"><i data-lucide="list" class="w-4 h-4"></i> Manage Episodes</a>
+    <a href="analytics.html" class="sidebar-link"><i data-lucide="bar-chart-2" class="w-4 h-4"></i> Analytics</a>
+    <a href="settings.html" class="sidebar-link"><i data-lucide="settings" class="w-4 h-4"></i> Settings</a>
+    <div style="height:1px;background:rgba(255,255,255,.07);margin:1rem 1.25rem"></div>
+    <a href="../index.html" class="sidebar-link"><i data-lucide="radio" class="w-4 h-4"></i> View Podcast</a>
+    <a href="javascript:void(0)" onclick="adminLogout()" class="sidebar-link" style="color:#f87171"><i data-lucide="log-out" class="w-4 h-4"></i> Logout</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="mb-8">
+    <p class="text-xs tracking-[0.2em] fp-muted fp-poppins mb-1">ADMIN TOOLS</p>
+    <h1 class="fp-poppins text-2xl font-bold text-white">Upload Episode</h1>
+    <p class="fp-muted text-sm mt-1">Add a new episode to The AZ Podcast.</p>
+  </div>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <!-- FORM -->
+    <div class="lg:col-span-2">
+      <form id="uploadForm" class="space-y-6">
+
+        <!-- Audio File -->
+        <div class="card p-6">
+          <h2 class="fp-poppins font-bold text-white mb-4">Audio File</h2>
+          <div class="drop-zone" id="dropZone" onclick="document.getElementById('audioFile').click()">
+            <i data-lucide="upload-cloud" class="w-10 h-10 mx-auto mb-3 fp-muted"></i>
+            <p class="text-white font-medium mb-1">Drop audio file here or click to browse</p>
+            <p class="text-xs fp-muted">MP3, WAV, M4A · Max 500 MB</p>
+            <p id="selectedFile" class="text-xs text-[#6366f1] mt-2 hidden"></p>
+          </div>
+          <input type="file" id="audioFile" accept="audio/*" class="hidden">
+        </div>
+
+        <!-- Episode Details -->
+        <div class="card p-6">
+          <h2 class="fp-poppins font-bold text-white mb-4">Episode Details</h2>
+          <div class="grid sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="season">Season</label>
+              <select id="season">
+                <option value="1">Season 1</option>
+                <option value="2">Season 2</option>
+                <option value="3">Season 3</option>
+              </select>
+            </div>
+            <div>
+              <label for="episodeNum">Episode Number</label>
+              <input type="number" id="episodeNum" placeholder="e.g. 7" min="1" required>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label for="title">Episode Title <span class="text-red-400">*</span></label>
+            <input type="text" id="title" placeholder="Enter a compelling episode title" required>
+          </div>
+          <div class="mb-4">
+            <label for="description">Description <span class="text-red-400">*</span></label>
+            <textarea id="description" rows="4" placeholder="Write a description that hooks listeners…" required></textarea>
+          </div>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label for="guest">Guest Name (optional)</label>
+              <input type="text" id="guest" placeholder="Leave blank if solo episode">
+            </div>
+            <div>
+              <label for="publishDate">Publish Date</label>
+              <input type="date" id="publishDate">
+            </div>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="card p-6">
+          <h2 class="fp-poppins font-bold text-white mb-4">Tags &amp; Category</h2>
+          <div class="mb-4">
+            <label>Select Tags</label>
+            <div class="flex flex-wrap gap-2 mt-2" id="tagOptions">
+              <!-- populated by JS -->
+            </div>
+          </div>
+          <div>
+            <label for="customTag">Add Custom Tag</label>
+            <div class="flex gap-2">
+              <input type="text" id="customTag" placeholder="e.g. Finance">
+              <button type="button" onclick="addCustomTag()" class="btn btn-outline flex-shrink-0">Add</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Platform Links -->
+        <div class="card p-6">
+          <h2 class="fp-poppins font-bold text-white mb-4">Platform Links</h2>
+          <p class="text-sm fp-muted mb-4">Paste the episode URL from each platform once it's uploaded there.</p>
+          <div class="space-y-4">
+            <div>
+              <label for="spotifyUrl">Spotify URL</label>
+              <input type="url" id="spotifyUrl" placeholder="https://open.spotify.com/episode/...">
+            </div>
+            <div>
+              <label for="appleUrl">Apple Podcasts URL</label>
+              <input type="url" id="appleUrl" placeholder="https://podcasts.apple.com/...">
+            </div>
+            <div>
+              <label for="youtubeUrl">YouTube URL</label>
+              <input type="url" id="youtubeUrl" placeholder="https://youtube.com/watch?v=...">
+            </div>
+          </div>
+        </div>
+
+        <!-- Cover Image -->
+        <div class="card p-6">
+          <h2 class="fp-poppins font-bold text-white mb-4">Cover Image (optional)</h2>
+          <div class="drop-zone" id="coverDropZone" onclick="document.getElementById('coverFile').click()">
+            <i data-lucide="image" class="w-8 h-8 mx-auto mb-2 fp-muted"></i>
+            <p class="text-white font-medium mb-1">Upload cover art</p>
+            <p class="text-xs fp-muted">JPG, PNG · Recommended 1400×1400px</p>
+            <p id="selectedCover" class="text-xs text-[#6366f1] mt-2 hidden"></p>
+          </div>
+          <input type="file" id="coverFile" accept="image/*" class="hidden">
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-3">
+          <button type="submit" class="btn btn-primary"><i data-lucide="upload-cloud" class="w-4 h-4"></i> Publish Episode</button>
+          <button type="button" onclick="saveDraft()" class="btn btn-outline"><i data-lucide="save" class="w-4 h-4"></i> Save as Draft</button>
+        </div>
+        <div id="formMsg" class="hidden p-4 rounded-xl text-sm"></div>
+      </form>
+    </div>
+
+    <!-- SIDEBAR INFO -->
+    <div class="space-y-4">
+      <div class="card p-5">
+        <h3 class="fp-poppins font-bold text-white mb-3 text-sm">Upload Tips</h3>
+        <ul class="space-y-2 text-sm fp-muted">
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 flex-shrink-0 text-green-400 mt-0.5"></i> Use MP3 at 128kbps or higher for best quality</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 flex-shrink-0 text-green-400 mt-0.5"></i> Edit out long silences before uploading</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 flex-shrink-0 text-green-400 mt-0.5"></i> Write a description between 100–300 words</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 flex-shrink-0 text-green-400 mt-0.5"></i> Add 2–4 relevant tags per episode</li>
+          <li class="flex gap-2"><i data-lucide="check" class="w-4 h-4 flex-shrink-0 text-green-400 mt-0.5"></i> Square cover art (1400×1400px) is required for Spotify</li>
+        </ul>
+      </div>
+      <div class="card p-5">
+        <h3 class="fp-poppins font-bold text-white mb-3 text-sm">Next Episode</h3>
+        <p class="text-sm fp-muted">You're on Season 1. Next episode in sequence:</p>
+        <p class="fp-poppins text-xl font-bold text-white mt-1">S1 · E7</p>
+        <p class="text-xs fp-muted mt-1">6 episodes published so far</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  lucide.createIcons();
+
+  const PRESET_TAGS = ['Motivation','Growth','Gen Z','Identity','Mindset','Wellness','Work','Productivity','Finance','Africa','Mental Health','Leadership','Creativity','Relationships'];
+  let selectedTags = [];
+
+  function renderTags() {
+    const container = document.getElementById('tagOptions');
+    container.innerHTML = PRESET_TAGS.concat(
+      selectedTags.filter(t => !PRESET_TAGS.includes(t))
+    ).map(tag => {
+      const active = selectedTags.includes(tag);
+      return `<button type="button" onclick="toggleTag('${tag}')" style="${active ? 'background:#6366f1;border-color:#6366f1;color:#fff' : 'background:transparent;border:1px solid rgba(255,255,255,.15);color:#94a3b8'};padding:0.3rem 0.8rem;border-radius:9999px;font-size:0.78rem;font-weight:500;cursor:pointer;transition:all .2s">${tag}</button>`;
+    }).join('');
+  }
+
+  function toggleTag(tag) {
+    if (selectedTags.includes(tag)) {
+      selectedTags = selectedTags.filter(t => t !== tag);
+    } else {
+      selectedTags.push(tag);
+    }
+    renderTags();
+  }
+
+  function addCustomTag() {
+    const input = document.getElementById('customTag');
+    const tag = input.value.trim();
+    if (tag && !selectedTags.includes(tag)) {
+      selectedTags.push(tag);
+      renderTags();
+    }
+    input.value = '';
+  }
+
+  renderTags();
+
+  // File drop zone
+  const dropZone = document.getElementById('dropZone');
+  const audioInput = document.getElementById('audioFile');
+  audioInput.addEventListener('change', () => {
+    if (audioInput.files[0]) {
+      const fileLabel = document.getElementById('selectedFile');
+      fileLabel.textContent = '✓ ' + audioInput.files[0].name;
+      fileLabel.classList.remove('hidden');
+    }
+  });
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('audio/')) {
+      const dt = new DataTransfer(); dt.items.add(file); audioInput.files = dt.files;
+      document.getElementById('selectedFile').textContent = '✓ ' + file.name;
+      document.getElementById('selectedFile').classList.remove('hidden');
+    }
+  });
+
+  // Cover drop zone
+  const coverInput = document.getElementById('coverFile');
+  coverInput.addEventListener('change', () => {
+    if (coverInput.files[0]) {
+      document.getElementById('selectedCover').textContent = '✓ ' + coverInput.files[0].name;
+      document.getElementById('selectedCover').classList.remove('hidden');
+    }
+  });
+
+  function showMsg(msg, isError) {
+    const el = document.getElementById('formMsg');
+    el.className = `p-4 rounded-xl text-sm ${isError ? 'bg-red-900/30 text-red-300 border border-red-500/20' : 'bg-green-900/30 text-green-300 border border-green-500/20'}`;
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // In production: upload audio to Firebase Storage, save metadata to Firestore
+    showMsg('✓ Episode published successfully! It will appear in the listener feed shortly.', false);
+  });
+
+  function saveDraft() {
+    showMsg('Draft saved. You can come back and publish it later.', false);
+  }
+</script>
+</body>
+</html>

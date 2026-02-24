@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Now Playing — The AZ Podcast</title>
+  <meta name="description" content="Now Playing — The AZ Podcast">
+  <link rel="icon" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-gold:#fbbf24;--fp-accent:#6366f1;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .nav-link{display:inline-flex;align-items:center;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.875rem;color:#94a3b8;transition:color .2s,background .2s;font-family:'Inter',sans-serif;font-weight:400;text-decoration:none}
+    .nav-link:hover,.nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .nav-link.active{color:#fbbf24}
+    .mobile-nav-link{display:block;padding:0.6rem 1rem;border-radius:0.375rem;font-size:0.9rem;color:#94a3b8;text-decoration:none;transition:color .2s,background .2s}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .mobile-nav-link.active{color:#fbbf24}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem}
+    .cover-art{width:100%;max-width:320px;aspect-ratio:1;border-radius:1.5rem;display:flex;align-items:center;justify-content:center;font-size:7rem;margin:0 auto;box-shadow:0 20px 60px rgba(0,0,0,.6);transition:transform .3s}
+    .cover-art.playing{animation:breathe 3s ease-in-out infinite}
+    @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+    .progress-track{height:4px;background:rgba(255,255,255,.12);border-radius:9999px;cursor:pointer;position:relative}
+    .progress-fill{height:100%;background:linear-gradient(90deg,#6366f1,#a5b4fc);border-radius:9999px;pointer-events:none;transition:width .1s linear}
+    .ctrl-btn{display:flex;align-items:center;justify-content:center;width:3rem;height:3rem;border-radius:50%;border:none;cursor:pointer;transition:all .2s;background:transparent;color:#94a3b8}
+    .ctrl-btn:hover{color:#fff;background:rgba(255,255,255,.08)}
+    .ctrl-btn.primary{width:4rem;height:4rem;background:#6366f1;color:#fff}
+    .ctrl-btn.primary:hover{background:#4f46e5;transform:scale(1.05)}
+    .action-btn{display:inline-flex;align-items:center;gap:0.35rem;padding:0.4rem 0.9rem;border-radius:0.375rem;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;text-decoration:none}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="../../fp-index.html" class="flex flex-col leading-none gap-0.5">
+        <span class="text-white text-sm tracking-wide fp-poppins" style="font-weight:800">FRANCIS PWAVWE</span>
+        <span class="text-xs tracking-[0.25em] fp-poppins fp-gold" style="font-weight:500">PRODUCTIONS</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="../../fp-index.html" class="nav-link">Home</a>
+        <a href="../index.html" class="nav-link active">The AZ Podcast</a>
+        <a href="episodes.html" class="nav-link">Episodes</a>
+        <a href="now-playing.html" class="nav-link" style="color:#fbbf24">Now Playing</a>
+        <a href="queue.html" class="nav-link">Queue</a>
+      </div>
+      <button id="menuBtn" class="md:hidden text-[#f8fafc] p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="../../fp-index.html" class="mobile-nav-link">Home</a>
+        <a href="../index.html" class="mobile-nav-link active">The AZ Podcast</a>
+        <a href="episodes.html" class="mobile-nav-link">Episodes</a>
+        <a href="now-playing.html" class="mobile-nav-link active">Now Playing</a>
+        <a href="queue.html" class="mobile-nav-link">Queue</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN PLAYER -->
+<main class="pt-24 pb-16 px-4">
+  <div class="max-w-xl mx-auto">
+
+    <!-- Breadcrumb -->
+    <div class="flex items-center gap-2 mb-8 text-xs">
+      <a href="../index.html" class="fp-muted hover:text-white transition-colors">The AZ Podcast</a>
+      <span class="fp-muted">/</span>
+      <span class="text-white">Now Playing</span>
+    </div>
+
+    <!-- No Episode State -->
+    <div id="noEpisodeState" class="hidden text-center py-16">
+      <div class="text-6xl mb-4">🎧</div>
+      <h2 class="fp-poppins text-xl font-bold text-white mb-3">Nothing playing yet</h2>
+      <p class="fp-muted text-sm mb-6">Head to the episodes page and hit Play on any episode to get started.</p>
+      <a href="episodes.html" class="action-btn" style="background:#1e40af;color:#fff;padding:0.65rem 1.5rem;border-radius:0.5rem;font-size:0.9rem;font-weight:600;display:inline-flex">
+        <i data-lucide="headphones" class="w-4 h-4 mr-2"></i> Browse Episodes
+      </a>
+    </div>
+
+    <!-- Player State -->
+    <div id="playerState">
+      <!-- Cover Art -->
+      <div class="cover-art playing" id="coverArt" style="background:linear-gradient(135deg,#1e293b,#0f172a)">🎙️</div>
+
+      <!-- Episode Info -->
+      <div class="text-center mt-8 mb-6">
+        <div class="flex flex-wrap justify-center gap-2 mb-3" id="episodeBadges"></div>
+        <h1 class="fp-poppins text-xl sm:text-2xl font-bold text-white mb-1 px-4" id="episodeTitle">Loading…</h1>
+        <p class="text-sm fp-muted" id="episodeGuest"></p>
+        <p class="text-sm fp-muted mt-1" id="episodeDate"></p>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="mb-6">
+        <div class="progress-track" id="progressTrack" onclick="scrub(event)">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <div class="flex justify-between text-xs fp-muted mt-1.5">
+          <span id="timeElapsed">0:00</span>
+          <span id="timeDuration">0:00</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center justify-center gap-4 mb-8">
+        <button class="ctrl-btn" onclick="prevEpisode()" title="Previous episode"><i data-lucide="skip-back" class="w-5 h-5"></i></button>
+        <button class="ctrl-btn" onclick="rewind()" title="Rewind 15s"><i data-lucide="rotate-ccw" class="w-4 h-4"></i><span class="text-[10px] ml-0.5">15</span></button>
+        <button class="ctrl-btn primary" id="playPauseBtn" onclick="togglePlay()" title="Play/Pause"><i data-lucide="play" class="w-6 h-6" id="playIcon"></i></button>
+        <button class="ctrl-btn" onclick="forward()" title="Forward 30s"><i data-lucide="rotate-cw" class="w-4 h-4"></i><span class="text-[10px] ml-0.5">30</span></button>
+        <button class="ctrl-btn" onclick="nextEpisode()" title="Next episode"><i data-lucide="skip-forward" class="w-5 h-5"></i></button>
+      </div>
+
+      <!-- Speed & Volume -->
+      <div class="flex items-center justify-between mb-8 px-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xs fp-muted">Speed</span>
+          <div class="flex gap-1" id="speedBtns">
+            <button onclick="setSpeed(0.75)" data-speed="0.75" class="text-xs px-2 py-1 rounded fp-muted hover:text-white transition-colors" style="border:1px solid rgba(255,255,255,.12)">0.75×</button>
+            <button onclick="setSpeed(1)" data-speed="1" class="text-xs px-2 py-1 rounded transition-colors" style="border:1px solid #6366f1;color:#a5b4fc;background:rgba(99,102,241,.15)">1×</button>
+            <button onclick="setSpeed(1.25)" data-speed="1.25" class="text-xs px-2 py-1 rounded fp-muted hover:text-white transition-colors" style="border:1px solid rgba(255,255,255,.12)">1.25×</button>
+            <button onclick="setSpeed(1.5)" data-speed="1.5" class="text-xs px-2 py-1 rounded fp-muted hover:text-white transition-colors" style="border:1px solid rgba(255,255,255,.12)">1.5×</button>
+            <button onclick="setSpeed(2)" data-speed="2" class="text-xs px-2 py-1 rounded fp-muted hover:text-white transition-colors" style="border:1px solid rgba(255,255,255,.12)">2×</button>
+          </div>
+        </div>
+        <button onclick="toggleQueue_btn()" class="action-btn" id="queueToggleBtn" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.25)">
+          <i data-lucide="list-ordered" class="w-3.5 h-3.5"></i> Queue
+        </button>
+      </div>
+
+      <!-- Episode Description -->
+      <div class="card p-5 mb-6" id="descCard">
+        <h3 class="fp-poppins font-bold text-white text-sm mb-2">About this episode</h3>
+        <p class="text-sm fp-muted leading-relaxed" id="episodeDesc"></p>
+      </div>
+
+      <!-- Platform Links -->
+      <div class="flex flex-wrap gap-2 justify-center mb-6" id="platformLinks"></div>
+
+      <!-- Queue mini preview -->
+      <div id="queuePreview" class="card p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="fp-poppins font-bold text-white text-sm">Up Next</h3>
+          <a href="queue.html" class="text-xs text-[#6366f1] hover:text-[#a5b4fc] transition-colors">Manage queue →</a>
+        </div>
+        <div id="upNextList" class="space-y-2"></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:2.5rem 0">
+  <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions · <a href="../index.html" class="hover:text-white transition-colors">The AZ Podcast</a></p>
+    <div class="flex gap-4 text-xs">
+      <a href="episodes.html" class="fp-muted hover:text-white transition-colors">Episodes</a>
+      <a href="queue.html" class="fp-muted hover:text-white transition-colors">Queue</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../az-episodes.js"></script>
+<script>
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
+  lucide.createIcons();
+
+  // Determine which episode to play
+  const urlParams = new URLSearchParams(window.location.search);
+  let epId = parseInt(urlParams.get('ep'), 10) || getNowPlaying();
+
+  // If nothing selected, try first in queue, else first episode
+  if (!epId) {
+    const q = getQueue();
+    epId = q.length ? q[0] : AZ_EPISODES[0].id;
+  }
+
+  let currentEp = getEpisodeById(epId);
+  let isPlaying = false;
+  let elapsed = 0;
+  let playInterval = null;
+  let playbackSpeed = 1;
+
+  function loadEpisode(ep) {
+    if (!ep) return;
+    currentEp = ep;
+    setNowPlaying(ep.id);
+
+    // Cover
+    document.getElementById('coverArt').textContent = ep.coverEmoji;
+    document.getElementById('coverArt').classList.add('playing');
+
+    // Badges
+    document.getElementById('episodeBadges').innerHTML = `
+      <span class="badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">S${ep.season} · E${ep.episode}</span>
+      ${ep.tags.map(t=>`<span class="badge" style="background:rgba(99,102,241,.12);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)">${t}</span>`).join('')}
+      ${ep.isMock ? `<span class="badge" style="background:rgba(251,191,36,.08);color:#fbbf24;border:1px solid rgba(251,191,36,.15);font-size:0.65rem">PREVIEW</span>` : ''}
+    `;
+
+    document.getElementById('episodeTitle').textContent = ep.title;
+    document.getElementById('episodeGuest').textContent = ep.guest ? 'with ' + ep.guest : '';
+    document.getElementById('episodeDate').textContent = ep.date;
+    document.getElementById('episodeDesc').textContent = ep.description;
+    document.getElementById('timeDuration').textContent = ep.duration;
+
+    // Platform links
+    const links = [
+      ep.spotifyUrl && ep.spotifyUrl !== '#' ? `<a href="${ep.spotifyUrl}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(29,185,84,.12);color:#1db954;border:1px solid rgba(29,185,84,.2)"><i data-lucide="music" class="w-3.5 h-3.5"></i> Spotify</a>` : '',
+      ep.applePodcastsUrl && ep.applePodcastsUrl !== '#' ? `<a href="${ep.applePodcastsUrl}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(147,51,234,.12);color:#c084fc;border:1px solid rgba(147,51,234,.2)"><i data-lucide="headphones" class="w-3.5 h-3.5"></i> Apple</a>` : '',
+      ep.youtubeUrl && ep.youtubeUrl !== '#' ? `<a href="${ep.youtubeUrl}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2)"><i data-lucide="youtube" class="w-3.5 h-3.5"></i> YouTube</a>` : ''
+    ].filter(Boolean).join('');
+    document.getElementById('platformLinks').innerHTML = links || '<p class="text-xs fp-muted">Platform links coming soon.</p>';
+
+    elapsed = 0;
+    updateProgress();
+    renderUpNext();
+    lucide.createIcons();
+  }
+
+  function updateProgress() {
+    if (!currentEp) return;
+    const pct = currentEp.durationSecs > 0 ? Math.min((elapsed / currentEp.durationSecs) * 100, 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('timeElapsed').textContent = fmtSecs(elapsed);
+  }
+
+  function fmtSecs(s) {
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2,'0')}`;
+  }
+
+  function togglePlay() {
+    isPlaying = !isPlaying;
+    const icon = document.getElementById('playIcon');
+    icon.setAttribute('data-lucide', isPlaying ? 'pause' : 'play');
+    lucide.createIcons();
+    document.getElementById('coverArt').classList.toggle('playing', isPlaying);
+
+    if (isPlaying) {
+      playInterval = setInterval(() => {
+        elapsed += playbackSpeed;
+        if (currentEp && elapsed >= currentEp.durationSecs) {
+          elapsed = currentEp.durationSecs;
+          clearInterval(playInterval);
+          isPlaying = false;
+          icon.setAttribute('data-lucide', 'play');
+          lucide.createIcons();
+          document.getElementById('coverArt').classList.remove('playing');
+          // Auto-play next
+          setTimeout(nextEpisode, 1500);
+        }
+        updateProgress();
+      }, 1000);
+    } else {
+      clearInterval(playInterval);
+    }
+  }
+
+  function rewind() { elapsed = Math.max(0, elapsed - 15); updateProgress(); }
+  function forward() { elapsed = Math.min((currentEp ? currentEp.durationSecs : 0), elapsed + 30); updateProgress(); }
+
+  function scrub(e) {
+    if (!currentEp) return;
+    const track = document.getElementById('progressTrack');
+    const rect = track.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+    elapsed = pct * currentEp.durationSecs;
+    updateProgress();
+  }
+
+  function setSpeed(speed) {
+    playbackSpeed = speed;
+    document.querySelectorAll('#speedBtns button').forEach(btn => {
+      const active = parseFloat(btn.dataset.speed) === speed;
+      btn.style.cssText = active
+        ? 'border:1px solid #6366f1;color:#a5b4fc;background:rgba(99,102,241,.15)'
+        : 'border:1px solid rgba(255,255,255,.12);color:#94a3b8';
+    });
+  }
+
+  function prevEpisode() {
+    if (!currentEp) return;
+    const idx = AZ_EPISODES.findIndex(e => e.id === currentEp.id);
+    if (idx > 0) {
+      stopPlayer();
+      loadEpisode(AZ_EPISODES[idx - 1]);
+    }
+  }
+
+  function nextEpisode() {
+    const queue = getQueue();
+    if (queue.length && currentEp) {
+      const nextId = queue.find(id => id !== currentEp.id);
+      if (nextId) {
+        stopPlayer();
+        const next = getEpisodeById(nextId);
+        loadEpisode(next);
+        return;
+      }
+    }
+    if (!currentEp) return;
+    const idx = AZ_EPISODES.findIndex(e => e.id === currentEp.id);
+    if (idx < AZ_EPISODES.length - 1) {
+      stopPlayer();
+      loadEpisode(AZ_EPISODES[idx + 1]);
+    }
+  }
+
+  function stopPlayer() {
+    if (playInterval) clearInterval(playInterval);
+    isPlaying = false;
+    elapsed = 0;
+    document.getElementById('playIcon').setAttribute('data-lucide', 'play');
+    lucide.createIcons();
+  }
+
+  function toggleQueue_btn() {
+    window.location.href = 'queue.html';
+  }
+
+  function renderUpNext() {
+    const queue = getQueue();
+    const container = document.getElementById('upNextList');
+    const preview = document.getElementById('queuePreview');
+
+    const upNext = currentEp
+      ? AZ_EPISODES.filter(e => e.id !== currentEp.id).slice(0, 3)
+      : AZ_EPISODES.slice(0, 3);
+
+    if (!upNext.length) {
+      preview.classList.add('hidden');
+      return;
+    }
+    preview.classList.remove('hidden');
+    container.innerHTML = upNext.map(ep => `
+      <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer" onclick="stopPlayer();loadEpisode(getEpisodeById(${ep.id}))">
+        <div class="w-8 h-8 rounded-lg bg-[#1e293b] flex items-center justify-center text-sm flex-shrink-0">${ep.coverEmoji}</div>
+        <div class="flex-1 min-w-0">
+          <p class="text-white text-xs font-medium truncate">${ep.title}</p>
+          <p class="text-[10px] fp-muted">S${ep.season}E${ep.episode} · ${ep.duration}</p>
+        </div>
+        <i data-lucide="play" class="w-3.5 h-3.5 fp-muted flex-shrink-0"></i>
+      </div>
+    `).join('');
+    lucide.createIcons();
+  }
+
+  // Init
+  if (currentEp) {
+    document.getElementById('noEpisodeState').classList.add('hidden');
+    document.getElementById('playerState').classList.remove('hidden');
+    loadEpisode(currentEp);
+  } else {
+    document.getElementById('noEpisodeState').classList.remove('hidden');
+    document.getElementById('playerState').classList.add('hidden');
+  }
+</script>
+</body>
+</html>

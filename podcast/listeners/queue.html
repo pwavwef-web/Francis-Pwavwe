@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue — The AZ Podcast</title>
+  <meta name="description" content="Your listening queue — The AZ Podcast">
+  <link rel="icon" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-gold:#fbbf24;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .nav-link{display:inline-flex;align-items:center;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.875rem;color:#94a3b8;transition:color .2s,background .2s;font-family:'Inter',sans-serif;font-weight:400;text-decoration:none}
+    .nav-link:hover,.nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .nav-link.active{color:#fbbf24}
+    .mobile-nav-link{display:block;padding:0.6rem 1rem;border-radius:0.375rem;font-size:0.9rem;color:#94a3b8;text-decoration:none;transition:color .2s,background .2s}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .mobile-nav-link.active{color:#fbbf24}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;transition:border-color .2s}
+    .action-btn{display:inline-flex;align-items:center;gap:0.35rem;padding:0.4rem 0.9rem;border-radius:0.375rem;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .2s;border:none;text-decoration:none}
+    .queue-item{background:#111827;border:1px solid rgba(255,255,255,.07);border-radius:0.75rem;padding:0.75rem 1rem;display:flex;align-items:center;gap:0.75rem;transition:border-color .2s,background .2s}
+    .queue-item:hover{border-color:rgba(99,102,241,.3);background:#141c2c}
+    .queue-item.dragging{opacity:0.5;border-color:#6366f1}
+    .drag-handle{cursor:grab;color:#4b5563;padding:0.25rem;border-radius:0.25rem;transition:color .2s}
+    .drag-handle:hover{color:#9ca3af}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="../../fp-index.html" class="flex flex-col leading-none gap-0.5">
+        <span class="text-white text-sm tracking-wide fp-poppins" style="font-weight:800">FRANCIS PWAVWE</span>
+        <span class="text-xs tracking-[0.25em] fp-poppins fp-gold" style="font-weight:500">PRODUCTIONS</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="../../fp-index.html" class="nav-link">Home</a>
+        <a href="../index.html" class="nav-link active">The AZ Podcast</a>
+        <a href="episodes.html" class="nav-link">Episodes</a>
+        <a href="now-playing.html" class="nav-link">Now Playing</a>
+        <a href="queue.html" class="nav-link" style="color:#fbbf24">Queue</a>
+      </div>
+      <button id="menuBtn" class="md:hidden text-[#f8fafc] p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="../../fp-index.html" class="mobile-nav-link">Home</a>
+        <a href="../index.html" class="mobile-nav-link active">The AZ Podcast</a>
+        <a href="episodes.html" class="mobile-nav-link">Episodes</a>
+        <a href="now-playing.html" class="mobile-nav-link">Now Playing</a>
+        <a href="queue.html" class="mobile-nav-link active">Queue</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="pt-28 pb-10 px-4" style="background:linear-gradient(180deg,#0d1117 0%,#0a0a0f 100%)">
+  <div class="max-w-2xl mx-auto">
+    <div class="inline-flex items-center gap-2 mb-4">
+      <a href="../index.html" class="text-xs fp-muted hover:text-white transition-colors">The AZ Podcast</a>
+      <span class="fp-muted text-xs">/</span>
+      <span class="text-xs text-white">Queue</span>
+    </div>
+    <div class="flex items-start justify-between gap-4">
+      <div>
+        <h1 class="fp-poppins text-4xl sm:text-5xl font-black text-white mb-2">Your Queue</h1>
+        <p class="fp-muted" id="queueSummary">Loading…</p>
+      </div>
+      <div class="flex gap-2 mt-2 flex-shrink-0">
+        <button onclick="playQueue()" class="action-btn" style="background:#1e40af;color:#fff;padding:0.55rem 1.1rem;border-radius:0.5rem;font-size:0.875rem">
+          <i data-lucide="play" class="w-4 h-4"></i> Play All
+        </button>
+        <button onclick="clearQueue()" class="action-btn" style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2);padding:0.55rem 0.9rem;border-radius:0.5rem">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURRENTLY PLAYING BANNER -->
+<div id="nowPlayingBanner" class="hidden max-w-2xl mx-auto px-4 mb-4">
+  <div class="flex items-center gap-3 p-3 rounded-xl" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25)">
+    <span class="w-2 h-2 rounded-full bg-[#6366f1] animate-pulse flex-shrink-0"></span>
+    <div class="flex-1 min-w-0">
+      <p class="text-xs fp-muted">Now Playing</p>
+      <p class="text-white text-sm font-medium truncate" id="nowPlayingTitle"></p>
+    </div>
+    <a href="now-playing.html" class="action-btn flex-shrink-0" style="background:rgba(99,102,241,.2);color:#a5b4fc;border:1px solid rgba(99,102,241,.3);font-size:0.75rem">
+      <i data-lucide="maximize-2" class="w-3.5 h-3.5"></i> Open
+    </a>
+  </div>
+</div>
+
+<!-- QUEUE LIST -->
+<section style="padding:0.5rem 0 5rem">
+  <div class="max-w-2xl mx-auto px-4">
+
+    <!-- Empty State -->
+    <div id="emptyQueue" class="hidden text-center py-16">
+      <div class="text-6xl mb-4">📭</div>
+      <h2 class="fp-poppins text-xl font-bold text-white mb-3">Your queue is empty</h2>
+      <p class="fp-muted text-sm mb-6">Browse episodes and hit the Queue button to add them here.</p>
+      <a href="episodes.html" class="action-btn" style="background:#1e40af;color:#fff;padding:0.65rem 1.5rem;border-radius:0.5rem;font-size:0.9rem;font-weight:600;display:inline-flex">
+        <i data-lucide="library" class="w-4 h-4 mr-2"></i> Browse Episodes
+      </a>
+    </div>
+
+    <!-- Queue items -->
+    <div id="queueList" class="space-y-2"></div>
+
+    <!-- Suggested section -->
+    <div id="suggestedSection" class="mt-8">
+      <div class="flex items-center gap-2 mb-4">
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.07)"></div>
+        <span class="text-xs fp-muted px-2">Suggested to add</span>
+        <div style="flex:1;height:1px;background:rgba(255,255,255,.07)"></div>
+      </div>
+      <div id="suggestedList" class="space-y-2"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:2.5rem 0">
+  <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+    <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions · <a href="../index.html" class="hover:text-white transition-colors">The AZ Podcast</a></p>
+    <div class="flex gap-4 text-xs">
+      <a href="episodes.html" class="fp-muted hover:text-white transition-colors">Episodes</a>
+      <a href="now-playing.html" class="fp-muted hover:text-white transition-colors">Now Playing</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../az-episodes.js"></script>
+<script>
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
+  lucide.createIcons();
+
+  // Check URL param to add episode on page load
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('add')) {
+    addToQueue(parseInt(urlParams.get('add'), 10));
+  }
+
+  function renderQueue() {
+    const queueIds = getQueue();
+    const nowId = getNowPlaying();
+    const emptyEl = document.getElementById('emptyQueue');
+    const listEl = document.getElementById('queueList');
+    const summaryEl = document.getElementById('queueSummary');
+    const suggestedSection = document.getElementById('suggestedSection');
+
+    // Now playing banner
+    const banner = document.getElementById('nowPlayingBanner');
+    if (nowId) {
+      const nowEp = getEpisodeById(nowId);
+      if (nowEp) {
+        banner.classList.remove('hidden');
+        document.getElementById('nowPlayingTitle').textContent = nowEp.title;
+      }
+    }
+
+    if (!queueIds.length) {
+      emptyEl.classList.remove('hidden');
+      listEl.innerHTML = '';
+      summaryEl.textContent = '0 episodes';
+      suggestedSection.classList.remove('hidden');
+    } else {
+      emptyEl.classList.add('hidden');
+      const totalSecs = queueIds.reduce((sum, id) => {
+        const ep = getEpisodeById(id);
+        return sum + (ep ? ep.durationSecs : 0);
+      }, 0);
+      const totalMins = Math.round(totalSecs / 60);
+      summaryEl.textContent = `${queueIds.length} episode${queueIds.length !== 1 ? 's' : ''} · ${totalMins} min total`;
+
+      listEl.innerHTML = queueIds.map((id, i) => {
+        const ep = getEpisodeById(id);
+        if (!ep) return '';
+        return `
+          <div class="queue-item" data-id="${ep.id}" draggable="true">
+            <div class="drag-handle flex-shrink-0"><i data-lucide="grip-vertical" class="w-4 h-4"></i></div>
+            <span class="text-sm fp-muted font-medium w-5 flex-shrink-0 text-center">${i + 1}</span>
+            <div class="w-10 h-10 rounded-lg bg-[#1e293b] flex items-center justify-center text-lg flex-shrink-0 select-none">${ep.coverEmoji}</div>
+            <div class="flex-1 min-w-0">
+              <p class="text-white text-sm font-medium truncate">${ep.title}</p>
+              <p class="text-xs fp-muted">S${ep.season} · E${ep.episode} · ${ep.duration}</p>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button onclick="playFromQueue(${ep.id})" class="action-btn" style="background:#1e40af;color:#fff;padding:0.3rem 0.6rem;font-size:0.72rem">
+                <i data-lucide="play" class="w-3 h-3"></i>
+              </button>
+              <button onclick="removeAndRefresh(${ep.id})" class="action-btn" style="background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);padding:0.3rem 0.6rem;font-size:0.72rem">
+                <i data-lucide="x" class="w-3 h-3"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      suggestedSection.classList.remove('hidden');
+    }
+
+    // Suggested (episodes not in queue)
+    const notInQueue = AZ_EPISODES.filter(ep => !queueIds.includes(ep.id) && ep.id !== nowId);
+    const suggestedList = document.getElementById('suggestedList');
+    if (!notInQueue.length) {
+      document.getElementById('suggestedSection').classList.add('hidden');
+    } else {
+      suggestedList.innerHTML = notInQueue.slice(0, 4).map(ep => `
+        <div class="queue-item">
+          <div class="w-10 h-10 rounded-lg bg-[#1e293b] flex items-center justify-center text-lg flex-shrink-0 select-none">${ep.coverEmoji}</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-white text-sm font-medium truncate">${ep.title}</p>
+            <p class="text-xs fp-muted">S${ep.season} · E${ep.episode} · ${ep.duration}</p>
+          </div>
+          <button onclick="addAndRefresh(${ep.id})" class="action-btn flex-shrink-0" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.25);padding:0.35rem 0.7rem;font-size:0.75rem">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add
+          </button>
+        </div>
+      `).join('');
+    }
+
+    lucide.createIcons();
+    initDragDrop();
+  }
+
+  function removeAndRefresh(id) {
+    removeFromQueue(id);
+    renderQueue();
+  }
+
+  function addAndRefresh(id) {
+    addToQueue(id);
+    renderQueue();
+  }
+
+  function playFromQueue(id) {
+    setNowPlaying(id);
+    window.location.href = `now-playing.html?ep=${id}`;
+  }
+
+  function playQueue() {
+    const q = getQueue();
+    if (!q.length) {
+      window.location.href = 'episodes.html';
+      return;
+    }
+    setNowPlaying(q[0]);
+    window.location.href = `now-playing.html?ep=${q[0]}`;
+  }
+
+  function clearQueue() {
+    if (confirm('Clear your entire queue?')) {
+      saveQueue([]);
+      renderQueue();
+    }
+  }
+
+  // Drag-and-drop reordering
+  function initDragDrop() {
+    const items = document.querySelectorAll('.queue-item[draggable]');
+    let dragSrc = null;
+
+    items.forEach(item => {
+      item.addEventListener('dragstart', () => { dragSrc = item; item.classList.add('dragging'); });
+      item.addEventListener('dragend', () => { item.classList.remove('dragging'); dragSrc = null; });
+      item.addEventListener('dragover', e => { e.preventDefault(); });
+      item.addEventListener('drop', e => {
+        e.preventDefault();
+        if (!dragSrc || dragSrc === item) return;
+        const q = getQueue();
+        const srcId = parseInt(dragSrc.dataset.id, 10);
+        const dstId = parseInt(item.dataset.id, 10);
+        const srcIdx = q.indexOf(srcId);
+        const dstIdx = q.indexOf(dstId);
+        if (srcIdx === -1 || dstIdx === -1) return;
+        q.splice(srcIdx, 1);
+        q.splice(dstIdx, 0, srcId);
+        saveQueue(q);
+        renderQueue();
+      });
+    });
+  }
+
+  renderQueue();
+</script>
+</body>
+</html>

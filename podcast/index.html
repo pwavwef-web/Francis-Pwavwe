@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The AZ Podcast — Francis Pwavwe Productions</title>
+  <meta name="description" content="The AZ Podcast — raw, real conversations about life, growth, and everything in between.">
+  <link rel="icon" href="../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-gold:#fbbf24;--fp-accent:#6366f1;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .nav-link{display:inline-flex;align-items:center;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.875rem;color:#94a3b8;transition:color .2s,background .2s;font-family:'Inter',sans-serif;font-weight:400;text-decoration:none}
+    .nav-link:hover,.nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .nav-link.active{color:#fbbf24}
+    .mobile-nav-link{display:block;padding:0.6rem 1rem;border-radius:0.375rem;font-size:0.9rem;color:#94a3b8;text-decoration:none;transition:color .2s,background .2s}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .mobile-nav-link.active{color:#fbbf24}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;transition:border-color .2s,transform .2s}
+    .card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-2px)}
+    .btn-primary{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:#1e40af;color:#f8fafc;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:background .2s,transform .15s;border:none;cursor:pointer;font-size:0.95rem}
+    .btn-primary:hover{background:#2563eb;transform:translateY(-1px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:transparent;color:#f8fafc;border:1px solid rgba(255,255,255,.3);border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:border-color .2s,transform .15s;cursor:pointer;font-size:0.95rem}
+    .btn-outline:hover{border-color:#6366f1;color:#a5b4fc;transform:translateY(-1px)}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .platform-btn{display:inline-flex;align-items:center;gap:0.35rem;padding:0.45rem 1rem;border-radius:0.375rem;font-size:0.8rem;font-weight:600;text-decoration:none;transition:opacity .2s;border:none;cursor:pointer}
+    .platform-btn:hover{opacity:0.8}
+    .stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .star{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:0;animation:twinkle var(--dur,3s) var(--del,0s) infinite}
+    @keyframes twinkle{0%,100%{opacity:0}50%{opacity:var(--op,.7)}}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="../fp-index.html" class="flex flex-col leading-none gap-0.5">
+        <span class="text-white text-sm tracking-wide fp-poppins" style="font-weight:800">FRANCIS PWAVWE</span>
+        <span class="text-xs tracking-[0.25em] fp-poppins fp-gold" style="font-weight:500">PRODUCTIONS</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="../fp-index.html" class="nav-link">Home</a>
+        <a href="../fp-about.html" class="nav-link">About</a>
+        <a href="index.html" class="nav-link active">The AZ Podcast</a>
+        <a href="../fp-blog.html" class="nav-link">Thoughts</a>
+        <a href="../fp-productions.html" class="nav-link">Productions</a>
+        <a href="../fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="../fp-contact.html" class="nav-link">Contact</a>
+      </div>
+      <button id="menuBtn" class="md:hidden text-[#f8fafc] p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="../fp-index.html" class="mobile-nav-link">Home</a>
+        <a href="../fp-about.html" class="mobile-nav-link">About</a>
+        <a href="index.html" class="mobile-nav-link active">The AZ Podcast</a>
+        <a href="../fp-blog.html" class="mobile-nav-link">Thoughts</a>
+        <a href="../fp-productions.html" class="mobile-nav-link">Productions</a>
+        <a href="../fp-collaborate.html" class="mobile-nav-link">Collaborate</a>
+        <a href="../fp-contact.html" class="mobile-nav-link">Contact</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-16" style="background:linear-gradient(135deg,#0a0a0f 0%,#0d1117 40%,#0f0a1e 100%)">
+  <div class="stars" id="stars"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a0f] pointer-events-none z-10"></div>
+  <div class="relative z-20 text-center max-w-4xl mx-auto px-4">
+    <div class="inline-flex items-center gap-2 mb-6">
+      <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
+      <span class="text-xs font-semibold tracking-[0.2em] fp-gold fp-poppins">THE AZ PODCAST</span>
+    </div>
+    <h1 class="fp-poppins text-5xl sm:text-6xl md:text-7xl font-black text-white mb-4 leading-tight">The AZ Podcast</h1>
+    <p class="text-xl sm:text-2xl fp-muted max-w-2xl mx-auto mb-4 font-light">Raw, real conversations about life, growth, and everything in between.</p>
+    <p class="text-sm fp-muted max-w-xl mx-auto mb-10">From A to Z — no topic is off the table. Join Francis and guests as they dig deep into what actually matters.</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+      <a href="listeners/episodes.html" class="btn-primary">
+        <i data-lucide="headphones" class="w-5 h-5"></i> Browse Episodes
+      </a>
+      <a href="listeners/now-playing.html" class="btn-outline">
+        <i data-lucide="play-circle" class="w-5 h-5"></i> Now Playing
+      </a>
+    </div>
+    <div class="flex flex-wrap justify-center gap-3">
+      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#1db954;color:#fff"><i data-lucide="music" class="w-3.5 h-3.5"></i> Spotify</a>
+      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#9333ea;color:#fff"><i data-lucide="headphones" class="w-3.5 h-3.5"></i> Apple Podcasts</a>
+      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#ef4444;color:#fff"><i data-lucide="youtube" class="w-3.5 h-3.5"></i> YouTube</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT THE SHOW -->
+<section style="padding:5rem 0">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-4 fp-poppins">ABOUT THE SHOW</p>
+        <h2 class="fp-poppins text-3xl sm:text-4xl font-bold text-white mb-6">A to Z, nothing held back.</h2>
+        <p class="fp-muted leading-relaxed mb-4">The AZ Podcast is where Francis Pwavwe brings you unfiltered conversations with thinkers, builders, creatives, and everyday people doing extraordinary things.</p>
+        <p class="fp-muted leading-relaxed mb-8">Every episode covers the full spectrum — from identity and ambition to failure and reinvention. Whatever it is, we talk about it here.</p>
+        <a href="listeners/episodes.html" class="btn-outline" style="width:fit-content">
+          See all episodes <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="card p-5 text-center">
+          <i data-lucide="mic" class="w-8 h-8 mb-3 mx-auto" style="color:#fbbf24"></i>
+          <h3 class="font-semibold text-white mb-1">Episodes</h3>
+          <p class="text-sm fp-muted">New drops every week</p>
+        </div>
+        <div class="card p-5 text-center">
+          <i data-lucide="users" class="w-8 h-8 mb-3 mx-auto" style="color:#6366f1"></i>
+          <h3 class="font-semibold text-white mb-1">Guests</h3>
+          <p class="text-sm fp-muted">Builders & thinkers</p>
+        </div>
+        <div class="card p-5 text-center">
+          <i data-lucide="list-music" class="w-8 h-8 mb-3 mx-auto" style="color:#1e40af"></i>
+          <h3 class="font-semibold text-white mb-1">Queue</h3>
+          <p class="text-sm fp-muted">Build your playlist</p>
+        </div>
+        <div class="card p-5 text-center">
+          <i data-lucide="globe" class="w-8 h-8 mb-3 mx-auto" style="color:#10b981"></i>
+          <h3 class="font-semibold text-white mb-1">Everywhere</h3>
+          <p class="text-sm fp-muted">All major platforms</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LATEST EPISODES PREVIEW -->
+<section style="background:#0d1117;padding:5rem 0">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-2 fp-poppins">LATEST DROPS</p>
+        <h2 class="fp-poppins text-3xl font-bold text-white">Recent Episodes</h2>
+      </div>
+      <a href="listeners/episodes.html" class="text-sm text-[#6366f1] hover:text-[#a5b4fc] flex items-center gap-1 transition-colors">All episodes <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+    </div>
+    <div class="space-y-4" id="latestEpisodes">
+      <!-- populated by JS mock data -->
+    </div>
+  </div>
+</section>
+
+<!-- LISTENER LINKS -->
+<section style="padding:5rem 0">
+  <div class="max-w-4xl mx-auto px-4 text-center">
+    <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-3 fp-poppins">YOUR EXPERIENCE</p>
+    <h2 class="fp-poppins text-3xl font-bold text-white mb-3">Dive in, your way.</h2>
+    <p class="fp-muted mb-10 max-w-lg mx-auto">Browse episodes, save your queue, or jump straight into what's playing.</p>
+    <div class="grid sm:grid-cols-3 gap-6">
+      <a href="listeners/episodes.html" class="card p-6 text-center group no-underline">
+        <i data-lucide="library" class="w-10 h-10 mb-4 mx-auto" style="color:#fbbf24"></i>
+        <h3 class="fp-poppins font-bold text-white mb-2">Episodes</h3>
+        <p class="text-sm fp-muted">Browse the full archive with filters and search</p>
+      </a>
+      <a href="listeners/now-playing.html" class="card p-6 text-center group no-underline">
+        <i data-lucide="play-circle" class="w-10 h-10 mb-4 mx-auto" style="color:#6366f1"></i>
+        <h3 class="fp-poppins font-bold text-white mb-2">Now Playing</h3>
+        <p class="text-sm fp-muted">Full player view with episode details</p>
+      </a>
+      <a href="listeners/queue.html" class="card p-6 text-center group no-underline">
+        <i data-lucide="list-ordered" class="w-10 h-10 mb-4 mx-auto" style="color:#10b981"></i>
+        <h3 class="fp-poppins font-bold text-white mb-2">Queue</h3>
+        <p class="text-sm fp-muted">Build and manage your listening queue</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:3rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href="../fp-index.html" class="inline-flex flex-col leading-none gap-0.5 mb-3">
+          <span class="text-white fp-poppins text-sm" style="font-weight:800">FRANCIS PWAVWE</span>
+          <span class="text-xs tracking-[0.25em] fp-gold fp-poppins" style="font-weight:500">PRODUCTIONS</span>
+        </a>
+        <p class="text-xs fp-muted leading-relaxed">Clarity. Purpose. Production.<br>Cape Coast, Ghana.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">The AZ Podcast</p>
+        <div class="flex flex-col gap-2">
+          <a href="listeners/episodes.html" class="text-sm fp-muted hover:text-white transition-colors">Episodes</a>
+          <a href="listeners/now-playing.html" class="text-sm fp-muted hover:text-white transition-colors">Now Playing</a>
+          <a href="listeners/queue.html" class="text-sm fp-muted hover:text-white transition-colors">Queue</a>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">More</p>
+        <div class="flex flex-col gap-2">
+          <a href="../fp-about.html" class="text-sm fp-muted hover:text-white transition-colors">About</a>
+          <a href="../fp-blog.html" class="text-sm fp-muted hover:text-white transition-colors">Thoughts</a>
+          <a href="../fp-contact.html" class="text-sm fp-muted hover:text-white transition-colors">Contact</a>
+          <a href="../fp-collaborate.html" class="text-sm fp-muted hover:text-white transition-colors">Collaborate</a>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+      <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" class="fp-muted hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="fp-muted hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="fp-muted hover:text-white transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter/X" class="fp-muted hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="az-episodes.js"></script>
+<script>
+  // Mobile menu
+  document.getElementById('menuBtn').addEventListener('click', () => {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+  });
+
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 100; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--del:${Math.random()*5}s;--op:${0.4+Math.random()*0.6}`;
+    starsEl.appendChild(s);
+  }
+
+  const container = document.getElementById('latestEpisodes');
+  container.innerHTML = AZ_EPISODES.slice(0,3).map(ep => `
+    <article class="card p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-start">
+      <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl bg-gradient-to-br from-[#1e293b] to-[#0f172a] flex items-center justify-center text-3xl">${ep.coverEmoji}</div>
+      <div class="flex-1 min-w-0">
+        <div class="flex flex-wrap gap-2 mb-2">
+          <span class="badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">S${ep.season} · E${ep.episode}</span>
+          ${ep.tags.map(t=>`<span class="badge" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)">${t}</span>`).join('')}
+        </div>
+        <h3 class="fp-poppins font-bold text-white text-base sm:text-lg mb-1">${ep.title}</h3>
+        <p class="text-sm fp-muted leading-relaxed mb-3 line-clamp-2">${ep.description}</p>
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="listeners/now-playing.html?ep=${ep.id}" class="platform-btn" style="background:#1e40af;color:#fff;font-size:0.75rem">
+            <i data-lucide="play" class="w-3 h-3"></i> Play
+          </a>
+          <a href="listeners/queue.html?add=${ep.id}" class="platform-btn" style="background:rgba(99,102,241,.2);color:#a5b4fc;font-size:0.75rem;border:1px solid rgba(99,102,241,.3)">
+            <i data-lucide="plus" class="w-3 h-3"></i> Queue
+          </a>
+          <span class="text-xs fp-muted ml-auto">${ep.duration} · ${ep.date}</span>
+        </div>
+      </div>
+    </article>
+  `).join('');
+
+  lucide.createIcons();
+</script>
+</body>
+</html>
