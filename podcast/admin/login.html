@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — The AZ Podcast</title>
+  <link rel="icon" href="../../favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    body{background:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem}
+    input{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:0.5rem;color:#f8fafc;padding:0.75rem 1rem;width:100%;font-family:'Inter',sans-serif;font-size:0.9rem;transition:border-color .2s;outline:none}
+    input:focus{border-color:#6366f1}
+    input::placeholder{color:#475569}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.75rem 1.5rem;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;border:none;width:100%}
+    .btn-primary{background:#1e40af;color:#fff}
+    .btn-primary:hover{background:#2563eb}
+  </style>
+</head>
+<body>
+  <div class="w-full max-w-sm mx-auto px-4">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2)">
+        <i data-lucide="shield" class="w-8 h-8" style="color:#fbbf24"></i>
+      </div>
+      <h1 class="fp-poppins text-2xl font-bold text-white mb-1">Admin Access</h1>
+      <p class="fp-muted text-sm">The AZ Podcast · Admin Panel</p>
+    </div>
+    <div class="card p-6">
+      <form id="loginForm">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-white mb-2" for="password">Admin Password</label>
+          <input type="password" id="password" placeholder="Enter admin password" autocomplete="current-password" required>
+        </div>
+        <div id="errorMsg" class="hidden mb-4 text-sm text-red-400 flex items-center gap-2">
+          <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
+          <span>Incorrect password. Please try again.</span>
+        </div>
+        <button type="submit" class="btn btn-primary" id="loginBtn">
+          <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
+        </button>
+      </form>
+    </div>
+    <p class="text-center text-xs fp-muted mt-6">
+      <a href="../index.html" class="text-[#6366f1] hover:text-[#a5b4fc] transition-colors">← Back to The AZ Podcast</a>
+    </p>
+  </div>
+
+  <script src="admin-auth.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // If already logged in, redirect to dashboard
+    if (isAdminLoggedIn()) {
+      window.location.href = 'index.html';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const pw = document.getElementById('password').value;
+      const err = document.getElementById('errorMsg');
+      err.classList.add('hidden');
+
+      if (adminLogin(pw)) {
+        const next = new URLSearchParams(window.location.search).get('next') || 'index.html';
+        window.location.href = next;
+      } else {
+        err.classList.remove('hidden');
+        lucide.createIcons();
+        document.getElementById('password').value = '';
+        document.getElementById('password').focus();
+      }
+    });
+  </script>
+</body>
+</html>
