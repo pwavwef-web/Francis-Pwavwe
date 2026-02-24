@@ -53,9 +53,6 @@
     .feedback-card .fb-q{color:#fde68a;font-size:0.875rem;font-weight:600;margin-bottom:0.4rem}
     .feedback-card .fb-answer{color:#94a3b8;font-size:0.8125rem;margin-bottom:0.5rem}
     .feedback-card .fb-feedback{color:#a5f3fc;font-size:0.8125rem;line-height:1.6}
-    .api-key-area{background:#1e293b;border:1px solid rgba(255,255,255,.1);border-radius:0.75rem;padding:1.25rem;margin-bottom:1.5rem}
-    .api-key-input{background:#0f172a;border:1px solid rgba(255,255,255,.1);border-radius:0.5rem;color:#f8fafc;padding:0.625rem 0.875rem;font-family:'Inter',sans-serif;font-size:0.875rem;width:100%;transition:border-color .2s}
-    .api-key-input:focus{outline:none;border-color:#fbbf24}
     .nav-link-lesson{color:#94a3b8;text-decoration:none;font-size:0.875rem;transition:color .2s;display:flex;align-items:center;gap:0.25rem}
     .nav-link-lesson:hover{color:#f8fafc}
     .toc-link{display:block;color:#94a3b8;text-decoration:none;font-size:0.875rem;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,.05);transition:color .2s}
@@ -353,26 +350,6 @@
           Test your knowledge on classifications of visitor attractions and the visitor attraction product.
         </p>
 
-        <div class="api-key-area" id="apiKeyArea">
-          <div class="flex items-start gap-3">
-            <i data-lucide="key" class="w-5 h-5 mt-0.5" style="color:#fbbf24;flex-shrink:0"></i>
-            <div class="flex-1">
-              <p class="text-sm font-semibold text-white mb-1">Google Gemini API Key</p>
-              <p class="text-xs fp-muted mb-3">
-                Enter your free Gemini API key to enable AI quizzes. 
-                Get one at <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener" 
-                class="text-[#fbbf24] hover:underline">aistudio.google.com</a>. 
-                Stored locally in your browser only.
-              </p>
-              <div class="flex gap-2">
-                <input type="password" id="apiKeyInput" class="api-key-input" placeholder="AIzaSy...">
-                <button onclick="saveApiKey()" class="btn-quiz" style="white-space:nowrap;padding:0.625rem 1rem">Save Key</button>
-              </div>
-              <p id="apiKeyMsg" class="text-xs mt-2 hidden"></p>
-            </div>
-          </div>
-        </div>
-
         <div id="quizControls">
           <div class="flex flex-wrap gap-3 mb-6">
             <button id="generateBtn" onclick="generateQuiz()" class="btn-quiz">
@@ -442,7 +419,22 @@
   </div>
 </footer>
 
-<script>
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+  import { getVertexAI, getGenerativeModel } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-vertexai.js';
+
+  const firebaseConfig = {
+    apiKey: 'AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI',
+    authDomain: 'francis-pwavwe.firebaseapp.com',
+    projectId: 'francis-pwavwe',
+    storageBucket: 'francis-pwavwe.firebasestorage.app',
+    messagingSenderId: '658069378543',
+    appId: '1:658069378543:web:87b1dcb0dd27d3255bd21a'
+  };
+  const app = initializeApp(firebaseConfig);
+  const vertexAI = getVertexAI(app);
+  const model = getGenerativeModel(vertexAI, { model: 'gemini-2.0-flash' });
+
   lucide.createIcons();
 
   const LESSON_CONTEXT = `
@@ -465,23 +457,10 @@ Key topics:
    - Attraction fatigue
 `;
 
-  const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
   let generatedQuestions = [];
 
   function esc(str) {
     return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-  }
-
-  function getApiKey() { return localStorage.getItem('tmg405_gemini_key') || ''; }
-
-  function saveApiKey() {
-    const key = document.getElementById('apiKeyInput').value.trim();
-    const msg = document.getElementById('apiKeyMsg');
-    if (!key) { msg.textContent = 'Please enter a valid API key.'; msg.className = 'text-xs mt-2 text-red-400'; msg.classList.remove('hidden'); return; }
-    localStorage.setItem('tmg405_gemini_key', key);
-    msg.textContent = '✓ API key saved. You can now generate quizzes.';
-    msg.className = 'text-xs mt-2 text-green-400'; msg.classList.remove('hidden');
-    document.getElementById('apiKeyInput').value = '';
   }
 
   function showStatus(text, show = true) {
@@ -491,15 +470,9 @@ Key topics:
   }
 
   async function callGemini(prompt) {
-    const key = getApiKey();
-    if (!key) throw new Error('No API key found. Please save your Gemini API key above.');
-    const res = await fetch(`${GEMINI_API_URL}?key=${encodeURIComponent(key)}`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 2048 } })
-    });
-    if (!res.ok) { const err = await res.json().catch(() => ({})); throw new Error(err?.error?.message || `API error: ${res.status}`); }
-    const data = await res.json();
-    return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
   }
 
   async function generateQuiz() {
@@ -586,10 +559,9 @@ Award marks out of 10 per question. Return ONLY a valid JSON object (no markdown
     showStatus('', false); lucide.createIcons();
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    const saved = getApiKey();
-    if (saved) { const m = document.getElementById('apiKeyMsg'); m.textContent = '✓ API key is saved and ready.'; m.className = 'text-xs mt-2 text-green-400'; m.classList.remove('hidden'); }
-  });
+  window.generateQuiz = generateQuiz;
+  window.submitAnswers = submitAnswers;
+  window.resetQuiz = resetQuiz;
 </script>
 </body>
 </html>
