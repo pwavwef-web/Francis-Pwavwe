@@ -513,6 +513,10 @@ Key topics:
   const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
   let generatedQuestions = [];
 
+  function esc(str) {
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
   function getApiKey() { return localStorage.getItem('tmg405_gemini_key') || ''; }
 
   function saveApiKey() {
@@ -557,8 +561,8 @@ Return ONLY a valid JSON array (no markdown, no extra text):
       if (!jsonMatch) throw new Error('Could not parse questions.');
       generatedQuestions = JSON.parse(jsonMatch[0]);
       document.getElementById('questionsList').innerHTML = generatedQuestions.map(q => `
-        <div class="question-card"><div class="q-num">Question ${q.id}</div><div class="q-text">${q.question}</div>
-        <textarea class="quiz-input" id="answer_${q.id}" rows="3" placeholder="Type your answer here…"></textarea></div>`).join('');
+        <div class="question-card"><div class="q-num">Question ${esc(q.id)}</div><div class="q-text">${esc(q.question)}</div>
+        <textarea class="quiz-input" id="answer_${esc(q.id)}" rows="3" placeholder="Type your answer here…"></textarea></div>`).join('');
       document.getElementById('questionsContainer').classList.remove('hidden');
       document.getElementById('resetBtn').classList.remove('hidden');
       btn.textContent = 'Questions Generated ✓'; showStatus('', false);
@@ -591,11 +595,11 @@ Award marks out of 10 per question. Return ONLY valid JSON (no markdown):
         <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(239,68,68,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${ev.totalScore}<span class="text-lg text-[#94a3b8]">/${ev.totalPossible}</span></div><div class="text-xs fp-muted mt-0.5">Total Score</div></div>
         <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(239,68,68,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${Math.round(ev.percentage)}%</div><div class="text-xs fp-muted mt-0.5">Percentage</div></div>
         <div class="text-center px-6 py-2 rounded-xl" style="background:rgba(239,68,68,.1)"><div class="fp-poppins text-3xl font-black" style="color:${col}">${ev.grade}</div><div class="text-xs fp-muted mt-0.5">Grade</div></div>
-        <div class="flex-1 text-sm fp-muted leading-relaxed italic">"${ev.overallFeedback}"</div>`;
+        <div class="flex-1 text-sm fp-muted leading-relaxed italic">"${esc(ev.overallFeedback)}"</div>`;
       document.getElementById('feedbackList').innerHTML = ev.results.map(r => {
         const q = answers.find(a => a.id === r.id);
         const sc = r.score >= 8 ? '#34d399' : r.score >= 6 ? '#60a5fa' : r.score >= 4 ? '#fbbf24' : '#f87171';
-        return `<div class="feedback-card"><div class="flex items-start justify-between gap-4 mb-2"><div class="fb-q">Q${r.id}: ${q?.question||''}</div><span class="score-badge flex-shrink-0" style="background:rgba(239,68,68,.1);color:${sc};border:1px solid ${sc}33">${r.score}/10</span></div><div class="fb-answer"><span style="color:#64748b">Your answer:</span> ${q?.answer||'<em>No answer</em>'}</div><div class="fb-feedback">💬 ${r.feedback}</div></div>`;
+        return `<div class="feedback-card"><div class="flex items-start justify-between gap-4 mb-2"><div class="fb-q">Q${esc(r.id)}: ${esc(q?.question)}</div><span class="score-badge flex-shrink-0" style="background:rgba(239,68,68,.1);color:${sc};border:1px solid ${sc}33">${esc(r.score)}/10</span></div><div class="fb-answer"><span style="color:#64748b">Your answer:</span> ${q?.answer ? esc(q.answer) : '<em>No answer</em>'}</div><div class="fb-feedback">💬 ${esc(r.feedback)}</div></div>`;
       }).join('');
       document.getElementById('questionsContainer').classList.add('hidden');
       document.getElementById('resultsContainer').classList.remove('hidden');
