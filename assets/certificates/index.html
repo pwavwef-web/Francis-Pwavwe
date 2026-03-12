@@ -1,1 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificates & Credentials | Francis Pwavwe</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <meta name="description" content="Professional certificates and credentials earned by Francis Pwavwe.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+        :root {
+            --primary-blue: #0A2463;
+            --royal-blue: #1E3A8A;
+            --light-blue: #3B82F6;
+            --accent-gold: #D4AF37;
+            --white: #FFFFFF;
+            --off-white: #F8FAFC;
+            --light-gray: #E2E8F0;
+            --medium-gray: #64748B;
+            --dark-gray: #1E293B;
+            --text-dark: #0F172A;
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--off-white);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .site-header {
+            background: var(--primary-blue);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .site-header .brand {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .back-link {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover { opacity: 0.75; }
+
+        /* Hero */
+        .page-hero {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--royal-blue) 100%);
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+        }
+
+        .page-hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            color: var(--white);
+            margin-bottom: 0.75rem;
+        }
+
+        .hero-line {
+            width: 60px;
+            height: 4px;
+            background: var(--accent-gold);
+            margin: 0 auto 1rem;
+            border-radius: 2px;
+        }
+
+        .page-hero p {
+            font-size: 1.05rem;
+            color: rgba(255,255,255,0.8);
+            max-width: 560px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Main content */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        main {
+            padding: 4rem 0 5rem;
+        }
+
+        /* Grid */
+        .certs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Card */
+        .cert-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 14px 40px rgba(0,0,0,0.13);
+        }
+
+        .cert-thumb {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background: var(--light-gray);
+            cursor: pointer;
+        }
+
+        .cert-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .cert-card:hover .cert-thumb img {
+            transform: scale(1.05);
+        }
+
+        .cert-body {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cert-issuer {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.4rem;
+        }
+
+        .cert-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .cert-date {
+            font-size: 0.85rem;
+            color: var(--medium-gray);
+            margin-bottom: 1rem;
+        }
+
+        .cert-bullets {
+            list-style: none;
+            margin-bottom: 1.25rem;
+            flex: 1;
+        }
+
+        .cert-bullets li {
+            font-size: 0.875rem;
+            color: var(--dark-gray);
+            line-height: 1.6;
+            padding-left: 1.2rem;
+            position: relative;
+            margin-bottom: 0.4rem;
+        }
+
+        .cert-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--royal-blue);
+            font-weight: 700;
+        }
+
+        .cert-view-btn {
+            display: inline-block;
+            text-align: center;
+            padding: 0.55rem 1.25rem;
+            background: var(--royal-blue);
+            color: var(--white);
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.2s ease, transform 0.2s ease;
+            align-self: flex-start;
+        }
+
+        .cert-view-btn:hover {
+            background: var(--light-blue);
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .site-footer {
+            background: var(--primary-blue);
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            padding: 1.75rem 2rem;
+            font-size: 0.9rem;
+        }
+
+        .site-footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+        }
+
+        .site-footer a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .certs-grid { grid-template-columns: 1fr; }
+            .page-hero { padding: 3rem 1.5rem 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <a href="../../index.html" class="brand">FRANCIS PWAVWE</a>
+        <a href="../../index.html#certificates" class="back-link">← Back to Portfolio</a>
+    </header>
+
+    <section class="page-hero">
+        <h1>Certificates &amp; Credentials</h1>
+        <div class="hero-line"></div>
+        <p>Professional certifications and program completions demonstrating a commitment to continuous learning and excellence.</p>
+    </section>
+
+    <main>
+        <div class="container">
+            <div class="certs-grid">
+
+                <!-- Vista Equity Partners -->
+                <div class="cert-card">
+                    <div class="cert-thumb">
+                        <a href="AI-action-job-simulation-certificate.png" target="_blank" rel="noopener">
+                            <img src="AI-action-job-simulation-certificate.png"
+                                 alt="Vista Equity Partners AI in Action Job Simulation Certificate"
+                                 loading="lazy">
+                        </a>
+                    </div>
+                    <div class="cert-body">
+                        <p class="cert-issuer">Vista Equity Partners · Forage</p>
+                        <h2 class="cert-title">AI in Action Job Simulation</h2>
+                        <p class="cert-date">March 12, 2026</p>
+                        <ul class="cert-bullets">
+                            <li>Completed a job simulation involving prompt engineering and GenAI workflow automation for Vista's Portfolio Operations team.</li>
+                            <li>Applied Vista's four-part prompt framework (Ask, Context, Examples, Desired Output) to synthesize customer NPS survey feedback into executive-ready insights, improving clarity and relevance of outputs by &gt; 50% through iteration.</li>
+                            <li>Designed and tested repeatable GenAI workflows (news aggregation, data reconciliation, and qualitative insight summarization) using tools such as ChatGPT and Copilot, ensuring accuracy, professional tone, and scalability.</li>
+                            <li>Evaluated AI-generated outputs for accuracy, tone, and usefulness; implemented guardrails and refinement techniques that reduced error rates and increased stakeholder usability of results.</li>
+                        </ul>
+                        <a href="AI-action-job-simulation-certificate.png" target="_blank" rel="noopener" class="cert-view-btn">View Certificate</a>
+                    </div>
+                </div>
+
+                <!-- BCG GenAI -->
+                <div class="cert-card">
+                    <div class="cert-thumb">
+                        <a href="cbg-x-job-simulation-certificate.png" target="_blank" rel="noopener">
+                            <img src="cbg-x-job-simulation-certificate.png"
+                                 alt="BCG GenAI Job Simulation Certificate"
+                                 loading="lazy">
+                        </a>
+                    </div>
+                    <div class="cert-body">
+                        <p class="cert-issuer">Boston Consulting Group (BCG) · Forage</p>
+                        <h2 class="cert-title">GenAI Job Simulation</h2>
+                        <p class="cert-date">March 12, 2026</p>
+                        <ul class="cert-bullets">
+                            <li>Completed a job simulation involving AI-powered financial chatbot development for BCG's GenAI Consulting team.</li>
+                            <li>Gained experience in Python programming, including the use of libraries such as pandas for data manipulation.</li>
+                            <li>Integrated and interpreted complex financial data from 10-K and 10-Q reports, employing rule-based logic to create a chatbot that provides user-friendly financial insights and analysis.</li>
+                        </ul>
+                        <a href="cbg-x-job-simulation-certificate.png" target="_blank" rel="noopener" class="cert-view-btn">View Certificate</a>
+                    </div>
+                </div>
+
+                <!-- Kempinski -->
+                <div class="cert-card">
+                    <div class="cert-thumb">
+                        <a href="kempinski-internship-certificate.png" target="_blank" rel="noopener">
+                            <img src="kempinski-internship-certificate.png"
+                                 alt="Kempinski Hotel Gold Coast City Internship Certificate"
+                                 loading="lazy">
+                        </a>
+                    </div>
+                    <div class="cert-body">
+                        <p class="cert-issuer">Kempinski Hotel Gold Coast City</p>
+                        <h2 class="cert-title">Internship Certificate</h2>
+                        <p class="cert-date">August – October 2025</p>
+                        <ul class="cert-bullets">
+                            <li>Gained hands-on experience in luxury hospitality operations, working across Housekeeping and Food and Beverage departments.</li>
+                            <li>Developed practical skills in guest service excellence, operational efficiency, and maintaining high-quality standards in a five-star hotel environment.</li>
+                        </ul>
+                        <a href="kempinski-internship-certificate.png" target="_blank" rel="noopener" class="cert-view-btn">View Certificate</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Francis Pwavwe &nbsp;|&nbsp; <a href="../../index.html">Portfolio</a> &nbsp;|&nbsp; <a href="../../fp-index.html">Productions</a></p>
+    </footer>
+
+</body>
+</html>
