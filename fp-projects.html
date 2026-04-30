@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Francis Pwavwe Productions</title>
+  <meta name="description" content="Community and research projects by Francis Pwavwe — including Project Kasena, building the first trusted digital Kasem language dataset.">
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--fp-dark:#0a0a0f;--fp-gold:#fbbf24;--fp-accent:#6366f1;--fp-light:#f8fafc;--fp-muted:#94a3b8}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background-color:#0a0a0f;color:#f8fafc;font-family:'Inter',sans-serif;min-height:100vh}
+    .fp-poppins{font-family:'Poppins',sans-serif}
+    .fp-gold{color:#fbbf24}
+    .fp-muted{color:#94a3b8}
+    .nav-link{display:inline-flex;align-items:center;padding:0.4rem 0.75rem;border-radius:0.375rem;font-size:0.875rem;color:#94a3b8;transition:color .2s,background .2s;font-family:'Inter',sans-serif;font-weight:400;text-decoration:none}
+    .nav-link:hover,.nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .nav-link.active{color:#fbbf24}
+    .mobile-nav-link{display:block;padding:0.6rem 1rem;border-radius:0.375rem;font-size:0.9rem;color:#94a3b8;text-decoration:none;transition:color .2s,background .2s}
+    .mobile-nav-link:hover,.mobile-nav-link.active{color:#f8fafc;background:rgba(99,102,241,.15)}
+    .mobile-nav-link.active{color:#fbbf24}
+    .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem;transition:border-color .2s,transform .2s}
+    .card:hover{border-color:rgba(99,102,241,.4);transform:translateY(-3px)}
+    .badge{display:inline-flex;align-items:center;padding:0.2rem 0.6rem;border-radius:9999px;font-size:0.75rem;font-weight:600;letter-spacing:.04em}
+    .btn-primary{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:#1e40af;color:#f8fafc;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:background .2s,transform .15s;border:none;cursor:pointer;font-size:0.95rem}
+    .btn-primary:hover{background:#2563eb;transform:translateY(-1px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.75rem;background:transparent;color:#f8fafc;border:1px solid rgba(255,255,255,.3);border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;text-decoration:none;transition:border-color .2s,transform .15s;cursor:pointer;font-size:0.95rem}
+    .btn-outline:hover{border-color:#6366f1;color:#a5b4fc;transform:translateY(-1px)}
+    /* Kasena brand palette overlay on dark bg */
+    .kasena-pill{display:inline-flex;align-items:center;padding:0.25rem 0.75rem;border-radius:9999px;font-size:0.78rem;font-weight:700;letter-spacing:.05em;border:1px solid rgba(217,163,35,.3);background:rgba(217,163,35,.1);color:#f0cf72}
+    .step-num{width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;background:rgba(217,163,35,.15);color:#f0cf72;font-weight:800;font-size:0.9rem;flex-shrink:0}
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <a href="fp-index.html" class="flex flex-col leading-none gap-0.5">
+        <span class="text-white text-sm tracking-wide fp-poppins" style="font-weight:800">FRANCIS PWAVWE</span>
+        <span class="text-xs tracking-[0.25em] fp-poppins fp-gold" style="font-weight:500">PRODUCTIONS</span>
+      </a>
+      <div class="hidden md:flex items-center gap-1">
+        <a href="fp-index.html" class="nav-link">Home</a>
+        <a href="fp-about.html" class="nav-link">About</a>
+        <a href="fp-podcast.html" class="nav-link">Podcast</a>
+        <a href="fp-blog.html" class="nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="nav-link">Productions</a>
+        <a href="fp-projects.html" class="nav-link active">Projects</a>
+        <a href="fp-collaborate.html" class="nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="nav-link">Contact</a>
+      </div>
+      <button id="menuBtn" class="md:hidden text-[#f8fafc] p-2 rounded-lg hover:bg-white/10 transition-colors">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
+      <div class="flex flex-col gap-1">
+        <a href="fp-index.html" class="mobile-nav-link">Home</a>
+        <a href="fp-about.html" class="mobile-nav-link">About</a>
+        <a href="fp-podcast.html" class="mobile-nav-link">Podcast</a>
+        <a href="fp-blog.html" class="mobile-nav-link">Thoughts</a>
+        <a href="fp-productions.html" class="mobile-nav-link">Productions</a>
+        <a href="fp-projects.html" class="mobile-nav-link active">Projects</a>
+        <a href="fp-collaborate.html" class="mobile-nav-link">Collaborate</a>
+        <a href="fp-contact.html" class="mobile-nav-link">Contact</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="pt-32 pb-20 px-4" style="background:linear-gradient(180deg,#0d1117 0%,#0a0a0f 100%)">
+  <div class="max-w-4xl mx-auto text-center">
+    <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-4 fp-poppins">BEYOND PRODUCTIONS</p>
+    <h1 class="fp-poppins text-5xl sm:text-6xl font-black text-white mb-4">Projects</h1>
+    <p class="text-xl fp-muted max-w-xl mx-auto">Community initiatives, language infrastructure, and research work that goes beyond the screen.</p>
+  </div>
+</section>
+
+<!-- PROJECT KASSENA FEATURE -->
+<section style="padding:3rem 0 5rem">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- Project card header -->
+    <div class="card overflow-hidden mb-10">
+      <!-- Banner image -->
+      <div class="relative w-full overflow-hidden" style="max-height:420px">
+        <img
+          src="https://raw.githubusercontent.com/pwavwef-web/project-kassena/main/assets/project-kasena-banner.png"
+          alt="Project Kasena banner — culture, community, and technology"
+          class="w-full object-cover"
+          style="max-height:420px"
+        >
+        <div class="absolute inset-0" style="background:linear-gradient(to top,#111827 0%,transparent 55%)"></div>
+        <div class="absolute bottom-0 left-0 p-6 sm:p-8">
+          <span class="kasena-pill mb-3 inline-flex">Language Infrastructure · Active</span>
+          <div class="flex items-center gap-4">
+            <img
+              src="https://raw.githubusercontent.com/pwavwef-web/project-kassena/main/assets/project-kasena-logo.png"
+              alt="Project Kasena logo"
+              class="w-14 h-14 rounded-xl object-cover flex-shrink-0"
+              style="border:2px solid rgba(240,207,114,.3)"
+            >
+            <div>
+              <h2 class="fp-poppins text-2xl sm:text-3xl font-black text-white leading-tight">Project Kasena</h2>
+              <p class="fp-muted text-sm mt-0.5">Digitizing our heritage</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="p-6 sm:p-8">
+        <p class="text-[#cbd5e1] leading-relaxed mb-6 text-base max-w-3xl">
+          Project Kasena is building the first trusted digital Kasem dictionary, phrase corpus, and AI-ready language dataset — created by the community and validated by elders and teachers. A community-owned effort to preserve and future-proof the Kasem language for education, culture, and the next generation of AI tools.
+        </p>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4 mb-8 max-w-2xl">
+          <div class="rounded-xl p-4 text-center" style="background:rgba(217,163,35,.08);border:1px solid rgba(217,163,35,.2)">
+            <p class="fp-poppins font-black text-xl" style="color:#f0cf72">20,000+</p>
+            <p class="text-xs fp-muted mt-1">target validated entries</p>
+          </div>
+          <div class="rounded-xl p-4 text-center" style="background:rgba(217,163,35,.08);border:1px solid rgba(217,163,35,.2)">
+            <p class="fp-poppins font-black text-xl" style="color:#f0cf72">3 phases</p>
+            <p class="text-xs fp-muted mt-1">dictionary to voice AI</p>
+          </div>
+          <div class="rounded-xl p-4 text-center" style="background:rgba(217,163,35,.08);border:1px solid rgba(217,163,35,.2)">
+            <p class="fp-poppins font-black text-xl" style="color:#f0cf72">Community</p>
+            <p class="text-xs fp-muted mt-1">owned &amp; validated</p>
+          </div>
+        </div>
+
+        <!-- Mission cards -->
+        <div class="grid sm:grid-cols-3 gap-4 mb-8">
+          <div class="rounded-xl p-5" style="background:#0d1117;border:1px solid rgba(255,255,255,.08)">
+            <div class="text-2xl mb-3">📚</div>
+            <h3 class="fp-poppins font-bold text-white text-sm mb-2">Digital dictionary</h3>
+            <p class="text-xs fp-muted leading-relaxed">A mobile-first English ↔ Kasem dictionary and phrase tool for students, teachers, families, researchers, and the diaspora.</p>
+          </div>
+          <div class="rounded-xl p-5" style="background:#0d1117;border:1px solid rgba(255,255,255,.08)">
+            <div class="text-2xl mb-3">🤝</div>
+            <h3 class="fp-poppins font-bold text-white text-sm mb-2">Community validation</h3>
+            <p class="text-xs fp-muted leading-relaxed">Youth contributors submit words and phrases while elders and teachers validate accuracy, usage, and cultural meaning.</p>
+          </div>
+          <div class="rounded-xl p-5" style="background:#0d1117;border:1px solid rgba(255,255,255,.08)">
+            <div class="text-2xl mb-3">🧠</div>
+            <h3 class="fp-poppins font-bold text-white text-sm mb-2">AI-ready corpus</h3>
+            <p class="text-xs fp-muted leading-relaxed">Clean sentence pairs, dialect tags, domain terms, and cultural expressions become the foundation for future Kasem AI systems.</p>
+          </div>
+        </div>
+
+        <!-- Roadmap -->
+        <h3 class="fp-poppins font-bold text-white mb-4">Roadmap</h3>
+        <div class="flex flex-col gap-3 mb-8">
+          <div class="flex gap-4 items-start rounded-xl p-4" style="background:#0d1117;border:1px solid rgba(255,255,255,.08)">
+            <div class="step-num">01</div>
+            <div>
+              <p class="font-semibold text-white text-sm">Phase 1: Dictionary and corpus</p>
+              <p class="text-xs fp-muted mt-1 leading-relaxed">Build the MVP platform, collect words and sentence pairs, tag dialects, validate submissions, and publish a trusted Kasem language foundation.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start rounded-xl p-4" style="background:#0d1117;border:1px solid rgba(255,255,255,.08)">
+            <div class="step-num">02</div>
+            <div>
+              <p class="font-semibold text-white text-sm">Phase 2: Education and text AI</p>
+              <p class="text-xs fp-muted mt-1 leading-relaxed">Use the verified corpus to support learning tools, domain-specific vocabulary, grammar support, and early translation experiments.</p>
+            </div>
+          </div>
+          <div class="flex gap-4 items-start rounded-xl p-4" style="background:#0d1117;border:1px solid rgba(255,255,255,.08)">
+            <div class="step-num">03</div>
+            <div>
+              <p class="font-semibold text-white text-sm">Phase 3: Voice and oral heritage</p>
+              <p class="text-xs fp-muted mt-1 leading-relaxed">Collect consented audio, transcribe radio and community recordings, and prepare the foundation for future speech recognition and text-to-speech.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-2 mb-8">
+          <span class="kasena-pill">Cultural preservation</span>
+          <span class="kasena-pill">Mother-tongue education</span>
+          <span class="kasena-pill">Youth opportunity</span>
+          <span class="kasena-pill">Digital inclusion</span>
+        </div>
+
+        <!-- CTA -->
+        <div class="flex flex-wrap gap-3">
+          <a href="https://kassena.azlearner.me" target="_blank" rel="noopener" class="btn-primary">
+            <i data-lucide="external-link" class="w-4 h-4"></i> Visit Project Kasena
+          </a>
+          <a href="mailto:francis@azlearner.me?subject=Project%20Kasena%20Partnership" class="btn-outline">
+            <i data-lucide="mail" class="w-4 h-4"></i> Partner with us
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- More projects placeholder -->
+    <div class="card p-8 text-center">
+      <i data-lucide="folders" class="w-10 h-10 mx-auto mb-4 fp-muted"></i>
+      <h3 class="fp-poppins text-lg font-bold text-white mb-2">More projects in the pipeline</h3>
+      <p class="fp-muted text-sm max-w-xs mx-auto">New initiatives are in progress. Stay tuned.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:3rem 0">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid sm:grid-cols-3 gap-8 mb-8">
+      <div>
+        <a href="fp-index.html" class="inline-flex flex-col leading-none gap-0.5 mb-3">
+          <span class="text-white fp-poppins text-sm" style="font-weight:800">FRANCIS PWAVWE</span>
+          <span class="text-xs tracking-[0.25em] fp-gold fp-poppins" style="font-weight:500">PRODUCTIONS</span>
+        </a>
+        <p class="text-xs fp-muted leading-relaxed">Clarity. Purpose. Production.<br>Cape Coast, Ghana.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Pages</p>
+        <div class="flex flex-col gap-2">
+          <a href="fp-about.html" class="text-sm fp-muted hover:text-white transition-colors">About</a>
+          <a href="fp-podcast.html" class="text-sm fp-muted hover:text-white transition-colors">Podcast</a>
+          <a href="fp-blog.html" class="text-sm fp-muted hover:text-white transition-colors">Thoughts</a>
+          <a href="fp-productions.html" class="text-sm fp-muted hover:text-white transition-colors">Productions</a>
+          <a href="fp-projects.html" class="text-sm text-white transition-colors">Projects</a>
+        </div>
+      </div>
+      <div>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Connect</p>
+        <div class="flex flex-col gap-2">
+          <a href="francis.html" class="text-sm fp-muted hover:text-white transition-colors">Personal Portfolio</a>
+          <a href="https://azlearner.me" target="_blank" rel="noopener" class="text-sm fp-muted hover:text-white transition-colors">AZ Learner</a>
+          <a href="https://kassena.azlearner.me" target="_blank" rel="noopener" class="text-sm fp-muted hover:text-white transition-colors">Project Kasena</a>
+          <a href="fp-contact.html" class="text-sm fp-muted hover:text-white transition-colors">Contact</a>
+          <a href="fp-collaborate.html" class="text-sm fp-muted hover:text-white transition-colors">Collaborate</a>
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
+      <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" class="fp-muted hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="fp-muted hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="fp-muted hover:text-white transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter/X" class="fp-muted hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const menuBtn = document.getElementById('menuBtn');
+  const mobileMenu = document.getElementById('mobileMenu');
+  menuBtn.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+  lucide.createIcons();
+</script>
+</body>
+</html>
