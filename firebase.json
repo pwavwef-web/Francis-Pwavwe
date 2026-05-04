@@ -10,12 +10,9 @@
       "francis_old.html",
       "francis.html.backup"
     ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "404": "404.html"
   },
   "firestore": {
     "rules": "firestore.rules"
