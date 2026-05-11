@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal SWOT Analysis Quiz | Francis Pwavwe</title>
+  <meta name="description" content="Take a 100-question personal SWOT analysis quiz and receive an AI-generated strengths, weaknesses, opportunities, and threats report.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0a2463;
+      --royal: #1e3a8a;
+      --light: #3b82f6;
+      --gold: #d4af37;
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #dbe4f0;
+      --success: #0f766e;
+      --warning: #b45309;
+      --danger: #b91c1c;
+      --shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(212, 175, 55, 0.08), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.1), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    a { color: inherit; }
+
+    .shell {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      padding: 88px 0 36px;
+      background: linear-gradient(135deg, rgba(10, 36, 99, 0.98), rgba(30, 58, 138, 0.96));
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(212, 175, 55, 0.16), transparent 24%),
+        radial-gradient(circle at 82% 15%, rgba(255, 255, 255, 0.08), transparent 18%);
+      pointer-events: none;
+    }
+
+    .hero .shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.16em;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.88);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #dbeafe;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4.3rem);
+      line-height: 1.02;
+      margin: 18px 0 18px;
+      color: #fff;
+    }
+
+    .hero-copy {
+      font-size: 1.08rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.84);
+      max-width: 760px;
+      margin-bottom: 24px;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .meta-pill {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .hero-card,
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card {
+      padding: 24px;
+      color: var(--text);
+    }
+
+    .hero-card h2,
+    .card h2,
+    .card h3,
+    .card h4 {
+      font-family: 'Montserrat', sans-serif;
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    .hero-card p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .hero-list {
+      list-style: none;
+      padding: 0;
+      margin: 18px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .hero-list li {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .hero-list strong { color: var(--text); }
+
+    main {
+      padding: 32px 0 72px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(290px, 0.95fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .card {
+      padding: 28px;
+    }
+
+    .section-label {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--light);
+    }
+
+    .intro-copy {
+      color: var(--muted);
+      line-height: 1.75;
+      margin-bottom: 24px;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--primary);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--light);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+    }
+
+    .progress-shell {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      background: #f8fbff;
+      margin-bottom: 22px;
+    }
+
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .progress-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.08rem;
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .progress-subtitle,
+    .muted {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: #dbeafe;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--light), var(--gold));
+      transition: width 0.3s ease;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .question-card {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .question-number {
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--light);
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .scale {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .scale-option {
+      position: relative;
+    }
+
+    .scale-option input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scale-option label {
+      display: grid;
+      gap: 6px;
+      min-height: 100%;
+      text-align: center;
+      justify-items: center;
+      padding: 13px 10px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #f8fafc;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .scale-option label span:first-child {
+      font-size: 1rem;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .scale-option input:checked + label {
+      border-color: var(--light);
+      background: rgba(59, 130, 246, 0.08);
+      transform: translateY(-1px);
+      color: var(--primary);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 26px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 16px;
+      padding: 14px 22px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.1);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--royal), var(--light));
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--primary);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      padding-inline: 0;
+    }
+
+    .sidebar-stack {
+      display: grid;
+      gap: 18px;
+      position: sticky;
+      top: 24px;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .mini-stat {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      background: #f8fbff;
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 1.3rem;
+      color: var(--primary);
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 4px;
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .section-pill-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .section-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .section-pill.active {
+      border-color: rgba(59, 130, 246, 0.35);
+      background: rgba(59, 130, 246, 0.08);
+      color: var(--primary);
+    }
+
+    .section-pill.done {
+      border-color: rgba(15, 118, 110, 0.25);
+      background: rgba(15, 118, 110, 0.08);
+    }
+
+    .section-pill .step-index {
+      font-weight: 800;
+      color: var(--primary);
+      min-width: 32px;
+    }
+
+    .status {
+      padding: 14px 16px;
+      border-radius: 16px;
+      font-weight: 600;
+      margin-top: 18px;
+      display: none;
+    }
+
+    .status.show { display: block; }
+    .status.error { background: rgba(185, 28, 28, 0.08); color: var(--danger); }
+    .status.success { background: rgba(15, 118, 110, 0.08); color: var(--success); }
+    .status.info { background: rgba(59, 130, 246, 0.08); color: var(--royal); }
+
+    .result-shell {
+      display: none;
+      margin-top: 28px;
+    }
+
+    .result-shell.show { display: block; }
+
+    .loading-card {
+      display: none;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      border-radius: 18px;
+      background: rgba(59, 130, 246, 0.08);
+      color: var(--royal);
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    .loading-card.show { display: flex; }
+
+    .spinner {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 3px solid rgba(59, 130, 246, 0.18);
+      border-top-color: var(--light);
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .result-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .swot-card {
+      border-radius: 22px;
+      padding: 22px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .swot-card.strengths { background: rgba(15, 118, 110, 0.06); }
+    .swot-card.weaknesses { background: rgba(185, 28, 28, 0.05); }
+    .swot-card.opportunities { background: rgba(59, 130, 246, 0.06); }
+    .swot-card.threats { background: rgba(180, 83, 9, 0.06); }
+
+    .swot-card ul,
+    .recommendations-list {
+      margin: 14px 0 0;
+      padding-left: 20px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .summary-box {
+      border-radius: 20px;
+      padding: 20px;
+      background: #f8fbff;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid,
+      .result-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-stack {
+        position: static;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .shell {
+        width: min(100% - 20px, 1160px);
+      }
+
+      .hero {
+        padding-top: 72px;
+      }
+
+      .card,
+      .hero-card {
+        padding: 22px;
+        border-radius: 20px;
+      }
+
+      .profile-grid,
+      .mini-grid,
+      .scale {
+        grid-template-columns: 1fr;
+      }
+
+      .scale-option label {
+        justify-items: start;
+        text-align: left;
+      }
+
+      .actions {
+        flex-direction: column-reverse;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="shell">
+      <div class="topbar">
+        <a class="brand" href="index.html">FRANCIS PWAVWE</a>
+        <a class="back-link" href="index.html">← Back to portfolio</a>
+      </div>
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">AI-powered personal reflection</span>
+          <h1>100 questions.<br>Your personal SWOT analysis.</h1>
+          <p class="hero-copy">
+            Answer a deep set of personal, professional, relational, and future-focused questions.
+            Vertex AI will interpret your response patterns and return a structured SWOT report with
+            strengths, weaknesses, opportunities, threats, and practical next steps.
+          </p>
+          <div class="hero-meta">
+            <span class="meta-pill">100 statements</span>
+            <span class="meta-pill">10 focused sections</span>
+            <span class="meta-pill">~10–15 minutes</span>
+          </div>
+        </div>
+        <aside class="hero-card">
+          <h2>What this quiz gives you</h2>
+          <p>Use it for personal growth, career clarity, leadership development, or planning your next season with more self-awareness.</p>
+          <ul class="hero-list">
+            <li><strong>Strengths</strong> — where your habits and abilities already give you leverage.</li>
+            <li><strong>Weaknesses</strong> — internal patterns that may be slowing progress.</li>
+            <li><strong>Opportunities</strong> — external openings you are positioned to use.</li>
+            <li><strong>Threats</strong> — risks, pressures, and blind spots to manage intentionally.</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell grid">
+      <section class="card">
+        <span class="section-label">Quiz workspace</span>
+        <h2>Personal SWOT Analysis Assessment</h2>
+        <p class="intro-copy">
+          Be honest with yourself. There are no right or wrong answers here. Choose the option that best reflects your present reality, not who you wish to be on your best day.
+        </p>
+
+        <div class="profile-grid">
+          <div class="field">
+            <label for="participantName">Your name</label>
+            <input id="participantName" type="text" placeholder="e.g. Francis Pwavwe">
+          </div>
+          <div class="field">
+            <label for="focusArea">Current focus area</label>
+            <select id="focusArea">
+              <option value="Career growth">Career growth</option>
+              <option value="Leadership development">Leadership development</option>
+              <option value="Academic performance">Academic performance</option>
+              <option value="Business building">Business building</option>
+              <option value="Personal growth">Personal growth</option>
+              <option value="Life transition">Life transition</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label for="contextNote">Optional context for the AI</label>
+            <textarea id="contextNote" rows="3" placeholder="Share any context you want the SWOT analysis to consider, such as a current challenge, role, goal, or decision."></textarea>
+          </div>
+        </div>
+
+        <div class="progress-shell">
+          <div class="progress-head">
+            <div>
+              <p class="progress-title" id="sectionTitle">Section 1</p>
+              <p class="progress-subtitle" id="sectionDescription">Loading questions…</p>
+            </div>
+            <strong id="progressCount">0 / 100 answered</strong>
+          </div>
+          <div class="progress-bar" aria-hidden="true">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="muted" id="progressHint">Work through each group of 10 questions to unlock your final report.</div>
+        </div>
+
+        <div class="question-list" id="questionList"></div>
+
+        <div class="actions">
+          <button class="btn-secondary" id="prevBtn" type="button">Previous section</button>
+          <button class="btn-primary" id="nextBtn" type="button">Next section</button>
+        </div>
+
+        <div class="status" id="statusMessage"></div>
+
+        <div class="loading-card" id="loadingCard">
+          <div class="spinner" aria-hidden="true"></div>
+          <div>Vertex AI is reviewing your 100 responses and assembling your SWOT analysis…</div>
+        </div>
+
+        <div class="result-shell" id="resultShell">
+          <div class="result-header">
+            <div>
+              <span class="section-label">Your report</span>
+              <h3 id="resultHeading">Your SWOT analysis is ready</h3>
+            </div>
+            <button class="btn-secondary" id="restartBtn" type="button">Retake quiz</button>
+          </div>
+
+          <div class="summary-box" id="overviewBox"></div>
+
+          <div class="result-grid">
+            <article class="swot-card strengths">
+              <h4>Strengths</h4>
+              <ul id="strengthsList"></ul>
+            </article>
+            <article class="swot-card weaknesses">
+              <h4>Weaknesses</h4>
+              <ul id="weaknessesList"></ul>
+            </article>
+            <article class="swot-card opportunities">
+              <h4>Opportunities</h4>
+              <ul id="opportunitiesList"></ul>
+            </article>
+            <article class="swot-card threats">
+              <h4>Threats</h4>
+              <ul id="threatsList"></ul>
+            </article>
+          </div>
+
+          <div class="card" style="padding:22px;margin-top:20px;box-shadow:none;">
+            <h4 style="margin-bottom:10px;">Recommended next moves</h4>
+            <ul class="recommendations-list" id="recommendationsList"></ul>
+            <p class="footer-note" id="confidenceNote"></p>
+          </div>
+        </div>
+      </section>
+
+      <aside class="sidebar-stack">
+        <div class="card">
+          <span class="section-label">At a glance</span>
+          <h3>How the quiz works</h3>
+          <p class="muted">Each answer uses a 1–5 scale. The app combines your section scores, answer trends, and personal context, then asks Vertex AI to generate a practical SWOT narrative.</p>
+          <div class="mini-grid">
+            <div class="mini-stat">
+              <strong>10</strong>
+              <span>sections</span>
+            </div>
+            <div class="mini-stat">
+              <strong>100</strong>
+              <span>questions</span>
+            </div>
+            <div class="mini-stat">
+              <strong>4</strong>
+              <span>SWOT pillars</span>
+            </div>
+            <div class="mini-stat">
+              <strong>AI</strong>
+              <span>Vertex analysis</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <span class="section-label">Section tracker</span>
+          <h3>Your progress map</h3>
+          <div class="section-pill-list" id="sectionPills"></div>
+        </div>
+
+        <div class="card">
+          <span class="section-label">Response scale</span>
+          <h3>Choose what feels true now</h3>
+          <div class="section-pill-list">
+            <div class="section-pill"><span class="step-index">1</span><span>Strongly disagree</span></div>
+            <div class="section-pill"><span class="step-index">2</span><span>Disagree</span></div>
+            <div class="section-pill"><span class="step-index">3</span><span>Neutral</span></div>
+            <div class="section-pill"><span class="step-index">4</span><span>Agree</span></div>
+            <div class="section-pill"><span class="step-index">5</span><span>Strongly agree</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import { getVertexAI, getGenerativeModel } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-vertexai.js';
+
+    const firebaseConfig = {
+      apiKey: 'AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI',
+      authDomain: 'francis-pwavwe.firebaseapp.com',
+      projectId: 'francis-pwavwe',
+      storageBucket: 'francis-pwavwe.firebasestorage.app',
+      messagingSenderId: '658069378543',
+      appId: '1:658069378543:web:87b1dcb0dd27d3255bd21a'
+    };
+
+    const scaleLabels = {
+      1: 'Strongly disagree',
+      2: 'Disagree',
+      3: 'Neutral',
+      4: 'Agree',
+      5: 'Strongly agree'
+    };
+
+    const sections = [
+      {
+        id: 'identity-confidence',
+        title: 'Identity & Confidence',
+        description: 'These questions explore self-belief, clarity, and how you show up when responsibility finds you.',
+        swot: 'strengths',
+        polarity: 'positive',
+        questions: [
+          'I have a clear understanding of what I do best.',
+          'I can describe my personal values without struggling.',
+          'I usually trust my judgment when making important decisions.',
+          'I remain confident even when I am compared with more accomplished people.',
+          'I know what kind of impact I want my life and work to create.',
+          'People can count on me to stay grounded under pressure.',
+          'I can speak about my abilities without feeling fake or arrogant.',
+          'I recover quickly when my ideas are questioned or challenged.',
+          'I believe I have something meaningful to contribute in most rooms I enter.',
+          'I know how to position myself around opportunities that align with my goals.'
+        ]
+      },
+      {
+        id: 'discipline-execution',
+        title: 'Discipline & Execution',
+        description: 'This section checks how consistently you convert ideas into reliable action and follow-through.',
+        swot: 'strengths',
+        polarity: 'positive',
+        questions: [
+          'I usually finish what I start.',
+          'I can stay focused on long-term goals even when progress feels slow.',
+          'I create systems or routines that help me stay productive.',
+          'I handle deadlines with structure instead of panic.',
+          'I can keep working even when motivation drops.',
+          'I track my progress instead of relying on memory or feelings alone.',
+          'I make thoughtful trade-offs when too many priorities compete for my time.',
+          'When I commit to a role or project, people see consistency from me.',
+          'I am able to break big goals into manageable next steps.',
+          'I rarely need external pressure before I take action.'
+        ]
+      },
+      {
+        id: 'communication-relationships',
+        title: 'Communication & Relationships',
+        description: 'These statements look at trust-building, collaboration, listening, and your ability to influence others well.',
+        swot: 'strengths',
+        polarity: 'positive',
+        questions: [
+          'I communicate my ideas clearly in conversations, writing, or presentations.',
+          'I listen carefully before reacting to people.',
+          'I can give feedback without unnecessarily damaging relationships.',
+          'I can receive correction without becoming defensive.',
+          'People often open up to me because they feel understood.',
+          'I build relationships intentionally rather than only when I need something.',
+          'I know how to handle disagreement respectfully.',
+          'I contribute positively to team environments.',
+          'I can adapt my communication style to different personalities or settings.',
+          'I follow through on promises, which helps people trust me.'
+        ]
+      },
+      {
+        id: 'learning-adaptability',
+        title: 'Learning & Adaptability',
+        description: 'This set measures curiosity, coachability, and your readiness to evolve with changing demands.',
+        swot: 'opportunities',
+        polarity: 'positive',
+        questions: [
+          'I actively look for feedback that can help me improve.',
+          'I learn new tools or concepts without waiting to be forced.',
+          'I adapt quickly when plans change unexpectedly.',
+          'I can admit when I do not know something and still stay composed.',
+          'I enjoy stretching beyond what already feels comfortable.',
+          'I regularly reflect on lessons from both wins and mistakes.',
+          'I am willing to unlearn habits that no longer serve my growth.',
+          'I can spot new trends or shifts that may affect my future.',
+          'I build new skills with the future in mind, not only current demands.',
+          'I usually respond to change with curiosity more than fear.'
+        ]
+      },
+      {
+        id: 'wellbeing-resilience',
+        title: 'Wellbeing & Resilience',
+        description: 'These questions examine emotional stamina, recovery, boundaries, and sustainable performance.',
+        swot: 'strengths',
+        polarity: 'positive',
+        questions: [
+          'I know the warning signs that tell me I am approaching burnout.',
+          'I give myself enough rest to keep performing well over time.',
+          'I can stay calm enough to think clearly during stressful periods.',
+          'I usually bounce back after disappointment or setbacks.',
+          'I protect my energy by setting healthy boundaries when necessary.',
+          'I have habits that help me reset when life feels overwhelming.',
+          'I do not let one bad day define my whole identity or future.',
+          'I can ask for support when I genuinely need it.',
+          'I handle pressure without constantly taking it out on other people.',
+          'I am building a life rhythm that feels sustainable, not just impressive.'
+        ]
+      },
+      {
+        id: 'time-energy-leaks',
+        title: 'Time & Energy Leaks',
+        description: 'Here you rate internal habits that often drain momentum, consistency, and strategic focus.',
+        swot: 'weaknesses',
+        polarity: 'negative',
+        questions: [
+          'I procrastinate on important work until pressure becomes uncomfortable.',
+          'I often say yes to things that distract me from what matters most.',
+          'I struggle to maintain consistent routines for more than a short period.',
+          'I start many ideas but lose momentum before they become real results.',
+          'I waste a significant amount of time on low-value digital distractions.',
+          'I avoid difficult tasks when I feel uncertain about how well I will perform.',
+          'I frequently feel busy without feeling truly effective.',
+          'I leave planning too late and then end up reacting to the day.',
+          'I allow fatigue or mood to completely control my output.',
+          'I know some of my habits are holding me back, but I have not dealt with them properly.'
+        ]
+      },
+      {
+        id: 'self-sabotage-patterns',
+        title: 'Self-Sabotage Patterns',
+        description: 'This section surfaces internal fears, emotional triggers, and beliefs that may undermine your progress.',
+        swot: 'weaknesses',
+        polarity: 'negative',
+        questions: [
+          'I compare my journey to other people so often that it affects my confidence.',
+          'I can become overly harsh on myself after mistakes.',
+          'I hold back from applying for opportunities because I assume I am not ready.',
+          'I find it difficult to celebrate progress because I am focused on what is missing.',
+          'I sometimes wait for perfect conditions before I move.',
+          'I avoid honest conversations because I fear conflict or rejection.',
+          'I carry unresolved disappointment that still influences how I show up today.',
+          'I can become defensive when feedback touches a sensitive insecurity.',
+          'I sometimes overthink decisions until opportunities pass by.',
+          'I know I have hidden fears that quietly shape my behaviour.'
+        ]
+      },
+      {
+        id: 'network-visibility',
+        title: 'Network & Visibility',
+        description: 'These statements measure how effectively you are exposing yourself to people, rooms, and pathways that can expand your future.',
+        swot: 'opportunities',
+        polarity: 'positive',
+        questions: [
+          'I am building relationships with people who stretch my thinking.',
+          'I put myself in spaces where new opportunities can find me.',
+          'I am visible enough for people to understand what I do well.',
+          'I know how to tell my story in a way that attracts aligned opportunities.',
+          'I maintain connections instead of only reaching out when I need help.',
+          'I seek mentors, collaborators, or peers who can sharpen my growth.',
+          'I am intentional about improving my personal brand or reputation.',
+          'I can recognize when an introduction or collaboration could change my trajectory.',
+          'I invest in communities that align with my goals and values.',
+          'I am open to partnerships that can multiply my impact.'
+        ]
+      },
+      {
+        id: 'market-readiness',
+        title: 'Market Readiness & Initiative',
+        description: 'This section looks at whether you are creating momentum around your goals, skills, and future positioning.',
+        swot: 'opportunities',
+        polarity: 'positive',
+        questions: [
+          'I am actively improving skills that will matter in the next few years.',
+          'I notice problems around me and think about solutions I could build.',
+          'I take initiative instead of waiting for permission all the time.',
+          'I am gathering evidence of my work, growth, or results.',
+          'I can connect my talents to real needs in the market or community.',
+          'I look for ways to turn ideas into projects, offers, or measurable value.',
+          'I believe I can create opportunities rather than only hoping to receive them.',
+          'I am preparing myself for bigger responsibilities than I currently hold.',
+          'I stay informed about trends that could open doors for me.',
+          'I am willing to experiment, iterate, and improve in public when necessary.'
+        ]
+      },
+      {
+        id: 'external-risks',
+        title: 'External Risks & Pressure Points',
+        description: 'These final questions explore outside pressures, constraints, and environmental threats that may affect your progress.',
+        swot: 'threats',
+        polarity: 'negative',
+        questions: [
+          'My current environment makes it hard to stay focused on long-term growth.',
+          'Financial pressure could force me to make short-term decisions that hurt bigger goals.',
+          'I do not have enough support around me for the level of growth I want.',
+          'There are people or systems around me that regularly drain my motivation.',
+          'A lack of access, exposure, or resources may slow my progress significantly.',
+          'I am vulnerable to burnout because of how much is currently on my plate.',
+          'My plans could be disrupted by responsibilities I cannot easily control.',
+          'If I do not adapt quickly, I could be left behind by changes in my field or environment.',
+          'I sometimes feel isolated from the right opportunities, networks, or information.',
+          'Without intentional action, my current circumstances could limit my future options.'
+        ]
+      }
+    ];
+
+    const app = initializeApp(firebaseConfig);
+    const vertexAI = getVertexAI(app);
+    const model = getGenerativeModel(vertexAI, { model: 'gemini-2.0-flash' });
+
+    const participantNameInput = document.getElementById('participantName');
+    const focusAreaSelect = document.getElementById('focusArea');
+    const contextNoteInput = document.getElementById('contextNote');
+    const questionList = document.getElementById('questionList');
+    const sectionTitle = document.getElementById('sectionTitle');
+    const sectionDescription = document.getElementById('sectionDescription');
+    const progressCount = document.getElementById('progressCount');
+    const progressFill = document.getElementById('progressFill');
+    const progressHint = document.getElementById('progressHint');
+    const sectionPills = document.getElementById('sectionPills');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const statusMessage = document.getElementById('statusMessage');
+    const loadingCard = document.getElementById('loadingCard');
+    const resultShell = document.getElementById('resultShell');
+    const resultHeading = document.getElementById('resultHeading');
+    const overviewBox = document.getElementById('overviewBox');
+    const strengthsList = document.getElementById('strengthsList');
+    const weaknessesList = document.getElementById('weaknessesList');
+    const opportunitiesList = document.getElementById('opportunitiesList');
+    const threatsList = document.getElementById('threatsList');
+    const recommendationsList = document.getElementById('recommendationsList');
+    const confidenceNote = document.getElementById('confidenceNote');
+    const restartBtn = document.getElementById('restartBtn');
+
+    let currentSectionIndex = 0;
+    let answers = {};
+
+    const totalQuestions = sections.reduce((sum, section) => sum + section.questions.length, 0);
+
+    function getQuestionId(sectionId, questionIndex) {
+      return `${sectionId}-${questionIndex + 1}`;
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function setStatus(message = '', tone = 'info') {
+      if (!message) {
+        statusMessage.className = 'status';
+        statusMessage.textContent = '';
+        return;
+      }
+      statusMessage.className = `status show ${tone}`;
+      statusMessage.textContent = message;
+    }
+
+    function renderSectionPills() {
+      const completedSections = new Set(
+        sections
+          .filter(section => section.questions.every((_, index) => answers[getQuestionId(section.id, index)]))
+          .map(section => section.id)
+      );
+
+      sectionPills.innerHTML = sections.map((section, index) => {
+        const classes = ['section-pill'];
+        if (index === currentSectionIndex) classes.push('active');
+        if (completedSections.has(section.id)) classes.push('done');
+        return `
+          <div class="${classes.join(' ')}">
+            <span class="step-index">${index + 1}</span>
+            <span>${escapeHtml(section.title)}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderQuestions() {
+      const section = sections[currentSectionIndex];
+      const answeredCount = Object.keys(answers).length;
+      const questionOffset = sections.slice(0, currentSectionIndex).reduce((sum, item) => sum + item.questions.length, 0);
+      sectionTitle.textContent = `Section ${currentSectionIndex + 1}: ${section.title}`;
+      sectionDescription.textContent = section.description;
+      progressCount.textContent = `${answeredCount} / ${totalQuestions} answered`;
+      progressFill.style.width = `${(answeredCount / totalQuestions) * 100}%`;
+      progressHint.textContent = currentSectionIndex === sections.length - 1
+        ? 'Complete this final section and submit your answers for AI analysis.'
+        : `You are working through section ${currentSectionIndex + 1} of ${sections.length}.`;
+
+      questionList.innerHTML = section.questions.map((question, index) => {
+        const questionNumber = questionOffset + index + 1;
+        const answerKey = getQuestionId(section.id, index);
+        const currentValue = answers[answerKey];
+
+        const scaleOptions = [1, 2, 3, 4, 5].map(value => `
+          <div class="scale-option">
+            <input type="radio" name="${answerKey}" id="${answerKey}-${value}" value="${value}" ${currentValue === value ? 'checked' : ''}>
+            <label for="${answerKey}-${value}">
+              <span>${value}</span>
+              <span>${scaleLabels[value]}</span>
+            </label>
+          </div>
+        `).join('');
+
+        return `
+          <article class="question-card">
+            <div class="question-number">Question ${questionNumber} of ${totalQuestions}</div>
+            <div class="question-text">${escapeHtml(question)}</div>
+            <div class="scale">${scaleOptions}</div>
+          </article>
+        `;
+      }).join('');
+
+      prevBtn.disabled = currentSectionIndex === 0;
+      nextBtn.textContent = currentSectionIndex === sections.length - 1 ? 'Generate my SWOT analysis' : 'Next section';
+      renderSectionPills();
+    }
+
+    function attachQuestionListeners() {
+      questionList.addEventListener('change', event => {
+        const input = event.target;
+        if (input instanceof HTMLInputElement && input.type === 'radio') {
+          answers[input.name] = Number(input.value);
+          renderQuestions();
+          setStatus('');
+        }
+      });
+    }
+
+    function validateCurrentSection() {
+      const section = sections[currentSectionIndex];
+      const unanswered = section.questions.filter((_, index) => !answers[getQuestionId(section.id, index)]).length;
+      if (unanswered > 0) {
+        setStatus(`Please answer all ${section.questions.length} questions in this section before continuing.`, 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function buildMetrics() {
+      const sectionScores = sections.map(section => {
+        const detailedAnswers = section.questions.map((question, index) => {
+          const score = answers[getQuestionId(section.id, index)] || 0;
+          return { question, score, label: scaleLabels[score] || 'Not answered' };
+        });
+        const average = detailedAnswers.reduce((sum, item) => sum + item.score, 0) / detailedAnswers.length;
+        return {
+          id: section.id,
+          title: section.title,
+          swot: section.swot,
+          polarity: section.polarity,
+          average: Number(average.toFixed(2)),
+          score100: Number((((average - 1) / 4) * 100).toFixed(1)),
+          highSignals: detailedAnswers.filter(item => item.score >= 4).map(item => item.question),
+          lowSignals: detailedAnswers.filter(item => item.score <= 2).map(item => item.question),
+          answers: detailedAnswers
+        };
+      });
+
+      const strongestSections = [...sectionScores]
+        .filter(section => section.polarity === 'positive')
+        .sort((a, b) => b.average - a.average)
+        .slice(0, 3)
+        .map(section => `${section.title} (${section.average}/5)`);
+
+      const highestRiskSections = [...sectionScores]
+        .filter(section => section.polarity === 'negative')
+        .sort((a, b) => b.average - a.average)
+        .slice(0, 3)
+        .map(section => `${section.title} (${section.average}/5)`);
+
+      return {
+        completionRate: Math.round((Object.keys(answers).length / totalQuestions) * 100),
+        sectionScores,
+        strongestSections,
+        highestRiskSections,
+        participantName: participantNameInput.value.trim() || 'This participant',
+        focusArea: focusAreaSelect.value,
+        contextNote: contextNoteInput.value.trim()
+      };
+    }
+
+    function buildPrompt(metrics) {
+      return `You are a strategic personal development coach. Analyze this 100-question personal SWOT assessment and return ONLY valid JSON.
+
+Expected JSON schema:
+{
+  "overview": "2-4 sentence summary",
+  "strengths": ["3 to 5 bullet points"],
+  "weaknesses": ["3 to 5 bullet points"],
+  "opportunities": ["3 to 5 bullet points"],
+  "threats": ["3 to 5 bullet points"],
+  "recommendations": ["4 to 6 practical next steps"],
+  "confidenceNote": "1 sentence explaining how to use the report wisely"
+}
+
+Rules:
+- Keep the analysis practical, specific, and grounded in the response trends.
+- Strengths and weaknesses must focus on internal patterns.
+- Opportunities and threats must focus on external positioning, environment, and likely future conditions.
+- Mention the participant focus area where relevant.
+- Do not include markdown fences.
+- Do not include any text outside the JSON object.
+
+Participant profile:
+- Name: ${metrics.participantName}
+- Current focus area: ${metrics.focusArea}
+- Additional context: ${metrics.contextNote || 'None provided'}
+- Completion rate: ${metrics.completionRate}%
+- Strongest positive sections: ${metrics.strongestSections.join('; ') || 'None'}
+- Highest risk sections: ${metrics.highestRiskSections.join('; ') || 'None'}
+
+Section breakdown:
+${JSON.stringify(metrics.sectionScores, null, 2)}`;
+    }
+
+    function extractJson(text) {
+      const trimmed = text.trim();
+      try {
+        return JSON.parse(trimmed);
+      } catch (error) {
+        const fencedMatch = trimmed.match(/```json\s*([\s\S]*?)```/i) || trimmed.match(/```\s*([\s\S]*?)```/i);
+        if (fencedMatch) {
+          return JSON.parse(fencedMatch[1].trim());
+        }
+        const firstBrace = trimmed.indexOf('{');
+        const lastBrace = trimmed.lastIndexOf('}');
+        if (firstBrace !== -1 && lastBrace !== -1) {
+          return JSON.parse(trimmed.slice(firstBrace, lastBrace + 1));
+        }
+        throw error;
+      }
+    }
+
+    function buildFallbackAnalysis(metrics, reason) {
+      const strengths = metrics.sectionScores
+        .filter(section => section.polarity === 'positive')
+        .sort((a, b) => b.average - a.average)
+        .slice(0, 4)
+        .map(section => `${section.title} is a relative asset right now, suggesting dependable capacity in this area.`);
+
+      const weaknesses = metrics.sectionScores
+        .filter(section => section.swot === 'weaknesses')
+        .sort((a, b) => b.average - a.average)
+        .slice(0, 4)
+        .map(section => `${section.title} is showing friction and may be creating internal drag on progress.`);
+
+      const opportunities = metrics.sectionScores
+        .filter(section => section.swot === 'opportunities')
+        .sort((a, b) => b.average - a.average)
+        .slice(0, 4)
+        .map(section => `${section.title} points to growth pathways you can intentionally lean into.`);
+
+      const threats = metrics.sectionScores
+        .filter(section => section.swot === 'threats' || section.polarity === 'negative')
+        .sort((a, b) => b.average - a.average)
+        .slice(0, 4)
+        .map(section => `${section.title} highlights pressure points that need active risk management.`);
+
+      return {
+        overview: `${metrics.participantName} completed the personal SWOT quiz with a focus on ${metrics.focusArea}. The strongest signals suggest meaningful potential, but a few internal and external pressure points deserve intentional attention. Use this report as a reflection tool and revisit it after a season of focused action.`,
+        strengths,
+        weaknesses,
+        opportunities,
+        threats,
+        recommendations: [
+          `Choose one strength from ${metrics.strongestSections[0] || 'your top section'} and use it as the anchor for the next 30 days.`,
+          `Create one weekly habit that directly reduces the pressure coming from ${metrics.highestRiskSections[0] || 'your highest risk area'}.`,
+          'Ask a trusted friend, mentor, or colleague to confirm or challenge the patterns in this report.',
+          'Translate the top opportunity into one concrete application, conversation, or project this month.',
+          'Review this SWOT again after 6 to 8 weeks to measure what changed.'
+        ],
+        confidenceNote: reason || 'Vertex AI was unavailable, so this version uses the quiz scoring patterns as a backup summary.'
+      };
+    }
+
+    function normalizeList(items, fallbackText) {
+      if (!Array.isArray(items) || items.length === 0) {
+        return [fallbackText];
+      }
+      return items.slice(0, 6).map(item => String(item));
+    }
+
+    function renderList(target, items, fallbackText) {
+      target.innerHTML = normalizeList(items, fallbackText)
+        .map(item => `<li>${escapeHtml(item)}</li>`)
+        .join('');
+    }
+
+    function renderResult(result, metrics) {
+      resultHeading.textContent = `${metrics.participantName}'s SWOT analysis`;
+      overviewBox.innerHTML = `<strong style="display:block;margin-bottom:10px;color:var(--primary);font-family:'Montserrat',sans-serif;">Overview</strong>${escapeHtml(result.overview || 'Your analysis is ready.')}`;
+      renderList(strengthsList, result.strengths, 'No clear strengths were extracted. Review your highest scoring positive sections.');
+      renderList(weaknessesList, result.weaknesses, 'No clear weaknesses were extracted. Review your highest scoring negative sections.');
+      renderList(opportunitiesList, result.opportunities, 'No clear opportunities were extracted. Review your opportunity-oriented sections.');
+      renderList(threatsList, result.threats, 'No clear threats were extracted. Review your risk-oriented sections.');
+      renderList(recommendationsList, result.recommendations, 'Revisit the highest and lowest scoring sections and choose one action for each.');
+      confidenceNote.textContent = result.confidenceNote || 'Treat this analysis as a strategic reflection tool, not a fixed verdict.';
+      resultShell.classList.add('show');
+      resultShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    async function generateAnalysis() {
+      const metrics = buildMetrics();
+      loadingCard.classList.add('show');
+      resultShell.classList.remove('show');
+      setStatus('');
+
+      try {
+        const result = await model.generateContent(buildPrompt(metrics));
+        const response = await result.response;
+        const parsed = extractJson(response.text());
+        renderResult(parsed, metrics);
+        setStatus('Vertex AI completed your SWOT analysis successfully.', 'success');
+      } catch (error) {
+        console.error('Vertex AI SWOT analysis failed:', error);
+        const fallback = buildFallbackAnalysis(metrics, 'Vertex AI could not complete the request, so this report uses response trends from your quiz answers as a backup.');
+        renderResult(fallback, metrics);
+        setStatus('Vertex AI could not complete the request, so a score-based backup SWOT report was generated instead.', 'info');
+      } finally {
+        loadingCard.classList.remove('show');
+      }
+    }
+
+    function resetQuiz() {
+      currentSectionIndex = 0;
+      answers = {};
+      participantNameInput.value = '';
+      focusAreaSelect.value = 'Career growth';
+      contextNoteInput.value = '';
+      resultShell.classList.remove('show');
+      loadingCard.classList.remove('show');
+      setStatus('');
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    prevBtn.addEventListener('click', () => {
+      if (currentSectionIndex > 0) {
+        currentSectionIndex -= 1;
+        setStatus('');
+        renderQuestions();
+        window.scrollTo({ top: document.querySelector('main').offsetTop - 16, behavior: 'smooth' });
+      }
+    });
+
+    nextBtn.addEventListener('click', async () => {
+      if (!validateCurrentSection()) return;
+
+      if (currentSectionIndex < sections.length - 1) {
+        currentSectionIndex += 1;
+        renderQuestions();
+        window.scrollTo({ top: document.querySelector('main').offsetTop - 16, behavior: 'smooth' });
+        return;
+      }
+
+      if (!participantNameInput.value.trim()) {
+        setStatus('Please add your name so the SWOT report can be personalized.', 'error');
+        participantNameInput.focus();
+        return;
+      }
+
+      await generateAnalysis();
+    });
+
+    restartBtn.addEventListener('click', resetQuiz);
+
+    attachQuestionListeners();
+    renderQuestions();
+  </script>
+</body>
+</html>
