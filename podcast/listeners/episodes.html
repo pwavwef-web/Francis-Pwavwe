@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Episodes — The AZ Podcast</title>
-  <meta name="description" content="Browse all episodes of The AZ Podcast. Raw, real conversations from A to Z.">
+  <title>Episodes - Blue Mind Radio</title>
+  <meta name="description" content="Browse all published Blue Mind Radio episodes.">
   <link rel="icon" href="../../favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -37,7 +37,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
@@ -47,7 +46,7 @@
       </a>
       <div class="hidden md:flex items-center gap-1">
         <a href="../../fp-index.html" class="nav-link">Home</a>
-        <a href="../index.html" class="nav-link active">The AZ Podcast</a>
+        <a href="../index.html" class="nav-link active">Podcast</a>
         <a href="episodes.html" class="nav-link" style="color:#fbbf24">Episodes</a>
         <a href="now-playing.html" class="nav-link">Now Playing</a>
         <a href="queue.html" class="nav-link">Queue</a>
@@ -59,7 +58,7 @@
     <div id="mobileMenu" class="hidden md:hidden pb-4 border-t border-white/10 mt-0 pt-3">
       <div class="flex flex-col gap-1">
         <a href="../../fp-index.html" class="mobile-nav-link">Home</a>
-        <a href="../index.html" class="mobile-nav-link active">The AZ Podcast</a>
+        <a href="../index.html" class="mobile-nav-link active">Podcast</a>
         <a href="episodes.html" class="mobile-nav-link active">Episodes</a>
         <a href="now-playing.html" class="mobile-nav-link">Now Playing</a>
         <a href="queue.html" class="mobile-nav-link">Queue</a>
@@ -68,32 +67,27 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="pt-28 pb-10 px-4" style="background:linear-gradient(180deg,#0d1117 0%,#0a0a0f 100%)">
   <div class="max-w-4xl mx-auto">
     <div class="inline-flex items-center gap-2 mb-4">
-      <a href="../index.html" class="text-xs fp-muted hover:text-white transition-colors">The AZ Podcast</a>
+      <a href="../index.html" class="text-xs fp-muted hover:text-white transition-colors">Blue Mind Radio</a>
       <span class="fp-muted text-xs">/</span>
       <span class="text-xs text-white">Episodes</span>
     </div>
     <h1 class="fp-poppins text-4xl sm:text-5xl font-black text-white mb-3">All Episodes</h1>
-    <p class="fp-muted text-lg max-w-xl">Every conversation, from day one. Browse, play, and queue.</p>
+    <p class="fp-muted text-lg max-w-xl">Every published conversation from the shared Firestore feed.</p>
   </div>
 </section>
 
-<!-- FILTER + SEARCH -->
 <section style="padding:1.5rem 0 0">
   <div class="max-w-4xl mx-auto px-4">
-    <!-- Search -->
     <div class="relative mb-4">
       <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 fp-muted pointer-events-none"></i>
-      <input type="search" id="searchInput" placeholder="Search episodes, guests, topics…" oninput="applyFilters()">
+      <input type="search" id="searchInput" placeholder="Search episodes, guests, topics..." oninput="applyFilters()">
     </div>
-    <!-- Tag filters -->
     <div id="tagFilters" class="flex flex-wrap gap-2 mb-6">
       <button class="filter-btn active" data-tag="all" onclick="setTag('all')">All</button>
     </div>
-    <!-- Sort -->
     <div class="flex items-center gap-3 mb-6">
       <span class="text-xs fp-muted">Sort:</span>
       <button class="filter-btn active" id="sortNew" onclick="setSort('new')">Newest</button>
@@ -103,22 +97,22 @@
   </div>
 </section>
 
-<!-- EPISODES LIST -->
 <section style="padding:0 0 5rem">
   <div class="max-w-4xl mx-auto px-4">
-    <div id="episodeList" class="space-y-4"></div>
+    <div id="episodeList" class="space-y-4">
+      <div class="card p-6 text-center fp-muted">Loading episodes...</div>
+    </div>
     <div id="noResults" class="hidden text-center py-16">
-      <div class="text-5xl mb-4">🔍</div>
+      <div class="text-5xl mb-4"><i data-lucide="search-x" class="w-12 h-12 mx-auto fp-muted"></i></div>
       <h3 class="fp-poppins text-lg font-bold text-white mb-2">No episodes found</h3>
       <p class="fp-muted text-sm">Try a different search or filter.</p>
     </div>
   </div>
 </section>
 
-<!-- MINI PLAYER BAR -->
 <div id="miniPlayer" class="hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/10" style="background:#0d1117/95;backdrop-filter:blur(12px)">
   <div class="max-w-4xl mx-auto px-4 py-3 flex items-center gap-4">
-    <div class="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0" id="miniCover" style="background:#1e293b">🎙️</div>
+    <div class="w-10 h-10 rounded-lg flex items-center justify-center text-xl flex-shrink-0 overflow-hidden" id="miniCover" style="background:#1e293b"><i data-lucide="mic" class="w-5 h-5 fp-muted"></i></div>
     <div class="flex-1 min-w-0">
       <p class="text-white text-sm font-medium truncate" id="miniTitle">Nothing playing</p>
       <p class="text-xs fp-muted" id="miniEpNum"></p>
@@ -130,10 +124,9 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:2.5rem 0">
   <div class="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-    <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions · <a href="../index.html" class="hover:text-white transition-colors">The AZ Podcast</a></p>
+    <p class="text-xs fp-muted">2026 Francis Pwavwe Productions</p>
     <div class="flex gap-4 text-xs">
       <a href="now-playing.html" class="fp-muted hover:text-white transition-colors">Now Playing</a>
       <a href="queue.html" class="fp-muted hover:text-white transition-colors">Queue</a>
@@ -142,7 +135,7 @@
   </div>
 </footer>
 
-<script src="../az-episodes.js"></script>
+<script src="../podcast-data.js"></script>
 <script>
   document.getElementById('menuBtn').addEventListener('click', () => {
     document.getElementById('mobileMenu').classList.toggle('hidden');
@@ -151,19 +144,22 @@
 
   let activeTag = 'all';
   let sortOrder = 'new';
+  let allEpisodes = [];
 
-  // Build tag filters
-  const tagSet = new Set();
-  AZ_EPISODES.forEach(ep => ep.tags.forEach(t => tagSet.add(t)));
-  const tagContainer = document.getElementById('tagFilters');
-  tagSet.forEach(tag => {
-    const btn = document.createElement('button');
-    btn.className = 'filter-btn';
-    btn.dataset.tag = tag;
-    btn.textContent = tag;
-    btn.onclick = () => setTag(tag);
-    tagContainer.appendChild(btn);
-  });
+  function buildTagFilters() {
+    const tagSet = new Set();
+    allEpisodes.forEach(ep => (ep.tags || []).forEach(t => tagSet.add(t)));
+    const tagContainer = document.getElementById('tagFilters');
+    tagContainer.innerHTML = '<button class="filter-btn active" data-tag="all" onclick="setTag(\'all\')">All</button>';
+    [...tagSet].sort().forEach(tag => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.dataset.tag = tag;
+      btn.textContent = tag;
+      btn.onclick = () => setTag(tag);
+      tagContainer.appendChild(btn);
+    });
+  }
 
   function setTag(tag) {
     activeTag = tag;
@@ -182,13 +178,22 @@
 
   function applyFilters() {
     const q = document.getElementById('searchInput').value.toLowerCase();
-    let filtered = AZ_EPISODES.filter(ep => {
-      const matchTag = activeTag === 'all' || ep.tags.includes(activeTag);
-      const matchQ = !q || ep.title.toLowerCase().includes(q) || ep.description.toLowerCase().includes(q) || (ep.guest||'').toLowerCase().includes(q) || ep.tags.join(' ').toLowerCase().includes(q);
+    let filtered = allEpisodes.filter(ep => {
+      const matchTag = activeTag === 'all' || (ep.tags || []).includes(activeTag);
+      const haystack = `${ep.title} ${ep.description} ${ep.guest || ''} ${(ep.tags || []).join(' ')}`.toLowerCase();
+      const matchQ = !q || haystack.includes(q);
       return matchTag && matchQ;
     });
     if (sortOrder === 'old') filtered = filtered.slice().reverse();
     renderEpisodes(filtered);
+  }
+
+  function episodePlatformLinks(ep) {
+    return [
+      ep.spotifyUrl ? `<a href="${PodcastData.escapeAttr(ep.spotifyUrl)}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(29,185,84,.12);color:#1db954;border:1px solid rgba(29,185,84,.2)"><i data-lucide="music" class="w-3 h-3"></i></a>` : '',
+      ep.applePodcastsUrl ? `<a href="${PodcastData.escapeAttr(ep.applePodcastsUrl)}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(147,51,234,.12);color:#c084fc;border:1px solid rgba(147,51,234,.2)"><i data-lucide="headphones" class="w-3 h-3"></i></a>` : '',
+      ep.youtubeUrl ? `<a href="${PodcastData.escapeAttr(ep.youtubeUrl)}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2)"><i data-lucide="youtube" class="w-3 h-3"></i></a>` : ''
+    ].filter(Boolean).join('');
   }
 
   function renderEpisodes(list) {
@@ -199,38 +204,34 @@
     if (!list.length) {
       container.innerHTML = '';
       noRes.classList.remove('hidden');
+      updateMiniPlayer();
       return;
     }
     noRes.classList.add('hidden');
 
     container.innerHTML = list.map(ep => {
-      const inQueue = getQueue().includes(ep.id);
-      const isPlaying = getNowPlaying() === ep.id;
+      const inQueue = PodcastData.getQueue().includes(String(ep.id));
+      const isPlaying = PodcastData.getNowPlaying() === String(ep.id);
       return `
-      <article class="card p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-start" id="ep-card-${ep.id}">
-        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl bg-gradient-to-br from-[#1e293b] to-[#0f172a] flex items-center justify-center text-3xl select-none">${ep.coverEmoji}</div>
+      <article class="card p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-start" id="ep-card-${PodcastData.escapeAttr(ep.id)}">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl bg-[#1e293b] overflow-hidden flex items-center justify-center text-3xl select-none">${PodcastData.coverHtml(ep, 'w-full h-full object-cover')}</div>
         <div class="flex-1 min-w-0">
           <div class="flex flex-wrap gap-2 mb-2">
-            <span class="badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">S${ep.season} · E${ep.episode}</span>
-            ${ep.tags.map(t=>`<span class="badge" style="background:rgba(99,102,241,.12);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)">${t}</span>`).join('')}
-            ${ep.isMock ? `<span class="badge" style="background:rgba(251,191,36,.08);color:#fbbf24;border:1px solid rgba(251,191,36,.15);font-size:0.65rem">PREVIEW</span>` : ''}
+            <span class="badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">S${ep.season} E${ep.episode}</span>
+            ${(ep.tags || []).map(t => `<span class="badge" style="background:rgba(99,102,241,.12);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)">${PodcastData.escapeHtml(t)}</span>`).join('')}
           </div>
-          <h3 class="fp-poppins font-bold text-white text-base sm:text-lg mb-1">${ep.title}</h3>
-          ${ep.guest ? `<p class="text-xs fp-muted mb-1.5">w/ <span class="text-white">${ep.guest}</span></p>` : ''}
-          <p class="text-sm fp-muted leading-relaxed mb-3 line-clamp-2">${ep.description}</p>
+          <h3 class="fp-poppins font-bold text-white text-base sm:text-lg mb-1">${PodcastData.escapeHtml(ep.title)}</h3>
+          ${ep.guest ? `<p class="text-xs fp-muted mb-1.5">w/ <span class="text-white">${PodcastData.escapeHtml(ep.guest)}</span></p>` : ''}
+          <p class="text-sm fp-muted leading-relaxed mb-3 line-clamp-2">${PodcastData.escapeHtml(ep.description)}</p>
           <div class="flex flex-wrap items-center gap-2">
-            <button onclick="playEpisode(${ep.id})" class="action-btn ${isPlaying ? '' : ''}" style="${isPlaying ? 'background:#1e40af;color:#fff' : 'background:#1e40af;color:#fff'}">
+            <button onclick="playEpisode('${PodcastData.escapeAttr(ep.id)}')" class="action-btn" style="background:#1e40af;color:#fff">
               <i data-lucide="${isPlaying ? 'pause' : 'play'}" class="w-3.5 h-3.5"></i> ${isPlaying ? 'Playing' : 'Play'}
             </button>
-            <button onclick="toggleQueue(${ep.id}, this)" class="action-btn" style="${inQueue ? 'background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.25)' : 'background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.25)'}">
+            <button onclick="toggleQueue('${PodcastData.escapeAttr(ep.id)}', this)" class="action-btn" style="${inQueue ? 'background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.25)' : 'background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.25)'}">
               <i data-lucide="${inQueue ? 'check' : 'plus'}" class="w-3.5 h-3.5"></i> ${inQueue ? 'In Queue' : 'Queue'}
             </button>
-            <div class="flex gap-2 ml-1">
-              ${ep.spotifyUrl !== '#' ? `<a href="${ep.spotifyUrl}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(29,185,84,.12);color:#1db954;border:1px solid rgba(29,185,84,.2)"><i data-lucide="music" class="w-3 h-3"></i></a>` : ''}
-              ${ep.applePodcastsUrl !== '#' ? `<a href="${ep.applePodcastsUrl}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(147,51,234,.12);color:#c084fc;border:1px solid rgba(147,51,234,.2)"><i data-lucide="headphones" class="w-3 h-3"></i></a>` : ''}
-              ${ep.youtubeUrl !== '#' ? `<a href="${ep.youtubeUrl}" target="_blank" rel="noopener" class="action-btn" style="background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2)"><i data-lucide="youtube" class="w-3 h-3"></i></a>` : ''}
-            </div>
-            <span class="text-xs fp-muted ml-auto">${ep.duration} · ${ep.date}</span>
+            <div class="flex gap-2 ml-1">${episodePlatformLinks(ep)}</div>
+            <span class="text-xs fp-muted ml-auto">${PodcastData.escapeHtml(ep.duration)} ${ep.date ? '&middot; ' + PodcastData.escapeHtml(ep.date) : ''}</span>
           </div>
         </div>
       </article>`;
@@ -240,19 +241,19 @@
   }
 
   function playEpisode(id) {
-    setNowPlaying(id);
+    PodcastData.setNowPlaying(id);
     updateMiniPlayer();
-    window.location.href = `now-playing.html?ep=${id}`;
+    window.location.href = `now-playing.html?ep=${encodeURIComponent(id)}`;
   }
 
   function toggleQueue(id, btn) {
-    const q = getQueue();
-    if (q.includes(id)) {
-      removeFromQueue(id);
+    const queue = PodcastData.getQueue();
+    if (queue.includes(String(id))) {
+      PodcastData.removeFromQueue(id);
       btn.style.cssText = 'background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.25)';
       btn.innerHTML = '<i data-lucide="plus" class="w-3.5 h-3.5"></i> Queue';
     } else {
-      addToQueue(id);
+      PodcastData.addToQueue(id);
       btn.style.cssText = 'background:rgba(16,185,129,.15);color:#6ee7b7;border:1px solid rgba(16,185,129,.25)';
       btn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> In Queue';
     }
@@ -260,27 +261,36 @@
   }
 
   function updateMiniPlayer() {
-    const id = getNowPlaying();
+    const id = PodcastData.getNowPlaying();
     const player = document.getElementById('miniPlayer');
     if (!id) { player.classList.add('hidden'); return; }
-    const ep = getEpisodeById(id);
+    const ep = PodcastData.getEpisodeById(id);
     if (!ep) { player.classList.add('hidden'); return; }
     player.classList.remove('hidden');
     document.getElementById('miniTitle').textContent = ep.title;
-    document.getElementById('miniEpNum').textContent = `S${ep.season} · E${ep.episode} · ${ep.duration}`;
-    document.getElementById('miniCover').textContent = ep.coverEmoji;
-    // Add padding to body so content isn't hidden behind mini player
+    document.getElementById('miniEpNum').textContent = `S${ep.season} E${ep.episode} ${ep.duration ? '- ' + ep.duration : ''}`;
+    document.getElementById('miniCover').innerHTML = PodcastData.coverHtml(ep, 'w-full h-full object-cover', '<i data-lucide="mic" class="w-5 h-5 fp-muted"></i>');
     document.body.style.paddingBottom = '72px';
+    lucide.createIcons();
   }
 
-  // Check URL params
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('add')) {
-    addToQueue(parseInt(urlParams.get('add'), 10));
+  async function init() {
+    try {
+      allEpisodes = await PodcastData.loadEpisodes({ publishedOnly: true });
+      buildTagFilters();
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('add')) {
+        PodcastData.addToQueue(urlParams.get('add'));
+      }
+      applyFilters();
+      updateMiniPlayer();
+    } catch (error) {
+      console.error(error);
+      document.getElementById('episodeList').innerHTML = '<div class="card p-6 text-center fp-muted">Could not load episodes.</div>';
+    }
   }
 
-  applyFilters();
-  updateMiniPlayer();
+  init();
 </script>
 </body>
 </html>

@@ -1,35 +1,53 @@
-// The AZ Podcast — Admin Auth Guard
-// Checks if the current session has admin access.
-//
-// ⚠️  SECURITY NOTICE: This is a front-end-only demo guard.
-// The password below is visible in source code and is NOT secure for production.
-// Before going live, replace this entirely with Firebase Authentication
-// (Firebase Auth with email/password + custom claims for the admin role).
-// See: https://firebase.google.com/docs/auth
+// Podcast Admin Auth Guard.
+// Firebase Auth does the real authentication; sessionStorage only preserves the
+// existing redirect flow between admin pages.
 
 const ADMIN_SESSION_KEY = 'az_admin_auth';
-// TODO: Replace with Firebase Auth — do NOT rely on this in production.
-const ADMIN_PASSWORD = 'azadmin2026';
 
 function isAdminLoggedIn() {
   return sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true';
 }
 
+function currentAdminPage() {
+  return `${window.location.pathname.split('/').pop() || 'index.html'}${window.location.search || ''}`;
+}
+
 function requireAdmin() {
   if (!isAdminLoggedIn()) {
-    window.location.href = 'login.html';
+    window.location.href = `login.html?next=${encodeURIComponent(currentAdminPage())}`;
   }
 }
 
-function adminLogin(password) {
-  if (password === ADMIN_PASSWORD) {
-    sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
-    return true;
+async function adminLogin(password) {
+  if (!window.PodcastData) {
+    throw new Error('Podcast data layer is not loaded.');
   }
-  return false;
+  await window.PodcastData.signInAdmin(password);
+  sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
+  return true;
 }
 
-function adminLogout() {
+async function requireFirebaseAdmin() {
+  if (!window.PodcastData) {
+    throw new Error('Podcast data layer is not loaded.');
+  }
+  try {
+    return await window.PodcastData.requireAdminUser();
+  } catch (error) {
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    window.location.href = `login.html?next=${encodeURIComponent(currentAdminPage())}`;
+    throw error;
+  }
+}
+
+async function adminLogout() {
+  if (window.PodcastData) {
+    try {
+      await window.PodcastData.signOutAdmin();
+    } catch (error) {
+      console.warn('Firebase sign out failed:', error);
+    }
+  }
   sessionStorage.removeItem(ADMIN_SESSION_KEY);
   window.location.href = 'login.html';
 }

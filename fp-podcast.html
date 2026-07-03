@@ -82,11 +82,7 @@
     </div>
     <h1 class="fp-poppins text-5xl sm:text-6xl font-black text-white mb-4">Blue Mind Radio</h1>
     <p class="text-xl fp-muted max-w-xl mx-auto mb-8">Exploring Gen Z culture, philosophy, and personal growth — one honest conversation at a time.</p>
-    <div class="flex flex-wrap justify-center gap-3">
-      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#1db954;color:#fff"><i data-lucide="music" class="w-3.5 h-3.5"></i> Spotify</a>
-      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#9333ea;color:#fff"><i data-lucide="headphones" class="w-3.5 h-3.5"></i> Apple Podcasts</a>
-      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#ef4444;color:#fff"><i data-lucide="youtube" class="w-3.5 h-3.5"></i> YouTube</a>
-    </div>
+    <div class="flex flex-wrap justify-center gap-3" id="showPlatformLinks"></div>
   </div>
 </section>
 
@@ -186,6 +182,7 @@
   lucide.createIcons();
 </script>
 
+<script src="podcast/podcast-data.js"></script>
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
   import { getFirestore, collection, query, where, orderBy, getDocs } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
@@ -204,6 +201,24 @@
 
   let allEpisodes = [];
   let activeTag = 'all';
+
+  function renderShowPlatformLinks(settings) {
+    const links = [
+      settings.spotifyShow ? `<a href="${PodcastData.escapeAttr(settings.spotifyShow)}" target="_blank" rel="noopener" class="platform-btn" style="background:#1db954;color:#fff"><i data-lucide="music" class="w-3.5 h-3.5"></i> Spotify</a>` : '',
+      settings.appleShow ? `<a href="${PodcastData.escapeAttr(settings.appleShow)}" target="_blank" rel="noopener" class="platform-btn" style="background:#9333ea;color:#fff"><i data-lucide="headphones" class="w-3.5 h-3.5"></i> Apple Podcasts</a>` : '',
+      settings.youtubeChannel ? `<a href="${PodcastData.escapeAttr(settings.youtubeChannel)}" target="_blank" rel="noopener" class="platform-btn" style="background:#ef4444;color:#fff"><i data-lucide="youtube" class="w-3.5 h-3.5"></i> YouTube</a>` : ''
+    ].filter(Boolean).join('');
+    document.getElementById('showPlatformLinks').innerHTML = links;
+    lucide.createIcons();
+  }
+
+  async function loadPodcastSettings() {
+    try {
+      renderShowPlatformLinks(await PodcastData.loadSettings());
+    } catch(e) {
+      document.getElementById('showPlatformLinks').innerHTML = '';
+    }
+  }
 
   function fmtDate(ts) {
     if (!ts) return '';
@@ -285,6 +300,7 @@
     }
   }
 
+  loadPodcastSettings();
   loadEpisodes();
 </script>
 </body>

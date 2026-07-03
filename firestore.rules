@@ -1,6 +1,20 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+             && request.auth.token.email == 'pwavwef@gmail.com';
+    }
+
+    function hasPodcastEpisodeShape() {
+      return request.resource.data.keys().hasAll(['title', 'description', 'season', 'episode', 'isPublished'])
+             && request.resource.data.title is string
+             && request.resource.data.description is string
+             && request.resource.data.season is number
+             && request.resource.data.episode is number
+             && request.resource.data.isPublished is bool;
+    }
+
     // Messages collection
     match /messages/{messageId} {
       // Allow authenticated admin (pwavwef@gmail.com) to read and delete
@@ -89,6 +103,20 @@ service cloud.firestore {
                   && request.auth.token.email == 'pwavwef@gmail.com';
       // No updates or deletes from client
       allow update, delete: if false;
+    }
+
+    // Blue Mind Radio podcast episodes
+    match /podcast_episodes/{episodeId} {
+      // Public pages may read only published episodes. Admin may read all.
+      allow get, list: if isAdmin() || resource.data.isPublished == true;
+      allow create, update: if isAdmin() && hasPodcastEpisodeShape();
+      allow delete: if isAdmin();
+    }
+
+    // Public podcast/show metadata, including show-level platform links
+    match /podcast_settings/{settingId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
     }
   }
 }

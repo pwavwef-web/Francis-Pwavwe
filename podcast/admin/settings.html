@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Settings — The AZ Podcast Admin</title>
+  <title>Settings - Blue Mind Radio Admin</title>
   <link rel="icon" href="../../favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -21,15 +21,12 @@
     .main{margin-left:240px;min-height:100vh;padding:2rem}
     .card{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:1rem}
     label{display:block;font-size:0.875rem;font-weight:500;color:#f8fafc;margin-bottom:0.4rem}
-    .label-hint{font-size:0.75rem;color:#94a3b8;font-weight:400;margin-left:0.4rem}
     input,textarea,select{background:#1e293b;border:1px solid rgba(255,255,255,.12);border-radius:0.5rem;color:#f8fafc;padding:0.65rem 1rem;width:100%;font-family:'Inter',sans-serif;font-size:0.875rem;outline:none;transition:border-color .2s}
     input:focus,textarea:focus,select:focus{border-color:#6366f1}
     input::placeholder,textarea::placeholder{color:#475569}
     .btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.6rem 1.2rem;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;border:none;font-size:0.875rem;text-decoration:none}
     .btn-primary{background:#1e40af;color:#fff}
     .btn-primary:hover{background:#2563eb}
-    .btn-danger{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.2)}
-    .btn-danger:hover{background:rgba(239,68,68,.25)}
     .toggle{position:relative;width:42px;height:24px;background:rgba(255,255,255,.1);border-radius:9999px;cursor:pointer;transition:background .2s;flex-shrink:0}
     .toggle.on{background:#6366f1}
     .toggle-knob{position:absolute;top:3px;left:3px;width:18px;height:18px;background:#fff;border-radius:50%;transition:transform .2s}
@@ -38,13 +35,13 @@
   </style>
 </head>
 <body>
+<script src="../podcast-data.js"></script>
 <script src="admin-auth.js"></script>
 <script>requireAdmin();</script>
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="px-5 mb-6">
-    <p class="text-xs tracking-[0.2em] fp-gold font-semibold fp-poppins mb-0.5">THE AZ PODCAST</p>
+    <p class="text-xs tracking-[0.2em] fp-gold font-semibold fp-poppins mb-0.5">BLUE MIND RADIO</p>
     <p class="text-white font-bold fp-poppins text-sm">Admin Panel</p>
   </div>
   <nav>
@@ -59,41 +56,38 @@
   </nav>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
   <div class="mb-8">
     <p class="text-xs tracking-[0.2em] fp-muted fp-poppins mb-1">ADMIN TOOLS</p>
     <h1 class="fp-poppins text-2xl font-bold text-white">Settings</h1>
-    <p class="fp-muted text-sm mt-1">Configure The AZ Podcast.</p>
+    <p class="fp-muted text-sm mt-1">Configure the public podcast metadata and platform links.</p>
   </div>
 
   <div class="space-y-6 max-w-2xl">
-
-    <!-- PODCAST INFO -->
     <div class="card p-6">
       <h2 class="fp-poppins font-bold text-white mb-4">Podcast Information</h2>
       <div class="space-y-4">
         <div>
           <label for="podcastName">Podcast Name</label>
-          <input type="text" id="podcastName" value="The AZ Podcast">
+          <input type="text" id="podcastName">
         </div>
         <div>
           <label for="podcastTagline">Tagline</label>
-          <input type="text" id="podcastTagline" value="Raw, real conversations about life, growth, and everything in between.">
+          <input type="text" id="podcastTagline">
         </div>
         <div>
           <label for="podcastDesc">Description</label>
-          <textarea id="podcastDesc" rows="3">The AZ Podcast is where Francis Pwavwe brings you unfiltered conversations with thinkers, builders, creatives, and everyday people doing extraordinary things.</textarea>
+          <textarea id="podcastDesc" rows="3"></textarea>
         </div>
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
             <label for="podcastHost">Host</label>
-            <input type="text" id="podcastHost" value="Francis Pwavwe">
+            <input type="text" id="podcastHost">
           </div>
           <div>
             <label for="podcastLang">Language</label>
             <select id="podcastLang">
-              <option value="en" selected>English</option>
+              <option value="en">English</option>
               <option value="fr">French</option>
             </select>
           </div>
@@ -101,22 +95,18 @@
         <div>
           <label for="podcastCategory">Category</label>
           <select id="podcastCategory">
-            <option value="society-culture" selected>Society &amp; Culture</option>
+            <option value="society-culture">Society & Culture</option>
             <option value="education">Education</option>
             <option value="business">Business</option>
-            <option value="health-fitness">Health &amp; Fitness</option>
+            <option value="health-fitness">Health & Fitness</option>
           </select>
         </div>
       </div>
-      <div class="mt-5">
-        <button onclick="savePodcastInfo()" class="btn btn-primary"><i data-lucide="save" class="w-4 h-4"></i> Save Changes</button>
-      </div>
     </div>
 
-    <!-- PLATFORM LINKS -->
     <div class="card p-6">
       <h2 class="fp-poppins font-bold text-white mb-2">Platform Links</h2>
-      <p class="text-sm fp-muted mb-4">Global links shown in the podcast header and footer.</p>
+      <p class="text-sm fp-muted mb-4">These show-level links replace the placeholder buttons on listener pages.</p>
       <div class="space-y-3">
         <div>
           <label for="spotifyShow">Spotify Show URL</label>
@@ -131,28 +121,15 @@
           <input type="url" id="youtubeChannel" placeholder="https://youtube.com/@...">
         </div>
       </div>
-      <div class="mt-5">
-        <button onclick="savePlatformLinks()" class="btn btn-primary"><i data-lucide="save" class="w-4 h-4"></i> Save Links</button>
-      </div>
     </div>
 
-    <!-- PUBLISHING SETTINGS -->
     <div class="card p-6">
       <h2 class="fp-poppins font-bold text-white mb-4">Publishing</h2>
       <div class="space-y-4">
         <div class="flex items-center justify-between gap-4">
           <div>
-            <p class="text-sm font-medium text-white">Show mock/test episodes to listeners</p>
-            <p class="text-xs fp-muted">When off, mock episodes are hidden from public pages</p>
-          </div>
-          <div class="toggle on" id="showMockToggle" onclick="this.classList.toggle('on')">
-            <div class="toggle-knob"></div>
-          </div>
-        </div>
-        <div class="flex items-center justify-between gap-4" style="border-top:1px solid rgba(255,255,255,.06);padding-top:1rem">
-          <div>
             <p class="text-sm font-medium text-white">Auto-publish on release date</p>
-            <p class="text-xs fp-muted">Episodes with a future publish date go live automatically</p>
+            <p class="text-xs fp-muted">Keep enabled when using publish dates as the source of truth.</p>
           </div>
           <div class="toggle on" id="autoPublishToggle" onclick="this.classList.toggle('on')">
             <div class="toggle-knob"></div>
@@ -161,74 +138,28 @@
         <div class="flex items-center justify-between gap-4" style="border-top:1px solid rgba(255,255,255,.06);padding-top:1rem">
           <div>
             <p class="text-sm font-medium text-white">Notify subscribers on new episode</p>
-            <p class="text-xs fp-muted">Send email to subscriber list when a new episode is published</p>
+            <p class="text-xs fp-muted">Reserved for a future email workflow.</p>
           </div>
           <div class="toggle" id="notifyToggle" onclick="this.classList.toggle('on')">
             <div class="toggle-knob"></div>
           </div>
         </div>
       </div>
-      <div class="mt-5">
-        <button onclick="savePublishSettings()" class="btn btn-primary"><i data-lucide="save" class="w-4 h-4"></i> Save Settings</button>
-      </div>
     </div>
 
-    <!-- ANALYTICS INTEGRATIONS -->
     <div class="card p-6">
       <h2 class="fp-poppins font-bold text-white mb-2">Analytics Integration</h2>
-      <p class="text-sm fp-muted mb-4">Connect your analytics provider to see real listener data in the Analytics tab.</p>
-      <div class="space-y-3">
-        <div>
-          <label for="chartableKey">Chartable API Key <span class="label-hint">(optional)</span></label>
-          <input type="text" id="chartableKey" placeholder="Enter your Chartable API key">
-        </div>
-        <div>
-          <label for="podtracId">Podtrac Publisher ID <span class="label-hint">(optional)</span></label>
-          <input type="text" id="podtracId" placeholder="Enter your Podtrac publisher ID">
-        </div>
-      </div>
-      <div class="mt-5">
-        <button onclick="saveAnalytics()" class="btn btn-primary"><i data-lucide="save" class="w-4 h-4"></i> Save</button>
-      </div>
+      <p class="text-sm fp-muted">Analytics provider credentials should not be stored from this static client. Add those through a backend or Firebase Functions when ready.</p>
     </div>
 
-    <!-- ADMIN ACCESS -->
-    <div class="card p-6">
-      <h2 class="fp-poppins font-bold text-white mb-2">Admin Access</h2>
-      <p class="text-sm fp-muted mb-4">Change the admin panel password. For stronger security, integrate Firebase Authentication.</p>
-      <div class="space-y-3">
-        <div>
-          <label for="currentPw">Current Password</label>
-          <input type="password" id="currentPw" placeholder="Enter current password">
-        </div>
-        <div>
-          <label for="newPw">New Password</label>
-          <input type="password" id="newPw" placeholder="Enter new password (min 8 chars)">
-        </div>
-        <div>
-          <label for="confirmPw">Confirm New Password</label>
-          <input type="password" id="confirmPw" placeholder="Repeat new password">
-        </div>
-      </div>
-      <div id="pwMsg" class="hidden mt-3 text-sm"></div>
-      <div class="mt-5">
-        <button onclick="changePassword()" class="btn btn-primary"><i data-lucide="lock" class="w-4 h-4"></i> Change Password</button>
-      </div>
-    </div>
-
-    <!-- DANGER ZONE -->
-    <div class="card p-6" style="border-color:rgba(239,68,68,.2)">
-      <h2 class="fp-poppins font-bold text-red-400 mb-2">Danger Zone</h2>
-      <p class="text-sm fp-muted mb-4">Irreversible actions. Proceed with caution.</p>
-      <button onclick="confirmClearMock()" class="btn btn-danger"><i data-lucide="trash-2" class="w-4 h-4"></i> Remove All Mock Episodes</button>
-    </div>
-
+    <button onclick="saveAllSettings()" class="btn btn-primary"><i data-lucide="save" class="w-4 h-4"></i> Save Settings</button>
     <div id="settingsMsg" class="hidden p-4 rounded-xl text-sm"></div>
   </div>
 </main>
 
 <script>
   lucide.createIcons();
+  let currentSettings = { ...PodcastData.DEFAULT_SETTINGS };
 
   function showMsg(msg, isError) {
     const el = document.getElementById('settingsMsg');
@@ -238,33 +169,60 @@
     el.scrollIntoView({ behavior:'smooth', block:'nearest' });
   }
 
-  function savePodcastInfo() { showMsg('✓ Podcast information saved.', false); }
-  function savePlatformLinks() { showMsg('✓ Platform links saved.', false); }
-  function savePublishSettings() { showMsg('✓ Publishing settings saved.', false); }
-  function saveAnalytics() { showMsg('✓ Analytics settings saved.', false); }
-
-  function changePassword() {
-    const cur = document.getElementById('currentPw').value;
-    const nw = document.getElementById('newPw').value;
-    const conf = document.getElementById('confirmPw').value;
-    const msgEl = document.getElementById('pwMsg');
-    msgEl.classList.remove('hidden');
-    if (!cur || !nw || !conf) { msgEl.className = 'text-sm text-red-400'; msgEl.textContent = 'Please fill in all password fields.'; return; }
-    if (nw.length < 8) { msgEl.className = 'text-sm text-red-400'; msgEl.textContent = 'New password must be at least 8 characters.'; return; }
-    if (nw !== conf) { msgEl.className = 'text-sm text-red-400'; msgEl.textContent = 'Passwords do not match.'; return; }
-    // In production: update password in Firebase Auth or backend
-    msgEl.className = 'text-sm text-green-400';
-    msgEl.textContent = '✓ Password changed. You will use the new password next time you log in.';
-    document.getElementById('currentPw').value = '';
-    document.getElementById('newPw').value = '';
-    document.getElementById('confirmPw').value = '';
+  function fillSettings(settings) {
+    currentSettings = { ...PodcastData.DEFAULT_SETTINGS, ...settings };
+    document.getElementById('podcastName').value = currentSettings.podcastName || '';
+    document.getElementById('podcastTagline').value = currentSettings.podcastTagline || '';
+    document.getElementById('podcastDesc').value = currentSettings.podcastDesc || '';
+    document.getElementById('podcastHost').value = currentSettings.podcastHost || '';
+    document.getElementById('podcastLang').value = currentSettings.podcastLang || 'en';
+    document.getElementById('podcastCategory').value = currentSettings.podcastCategory || 'society-culture';
+    document.getElementById('spotifyShow').value = currentSettings.spotifyShow || '';
+    document.getElementById('appleShow').value = currentSettings.appleShow || '';
+    document.getElementById('youtubeChannel').value = currentSettings.youtubeChannel || '';
+    document.getElementById('autoPublishToggle').classList.toggle('on', currentSettings.autoPublish !== false);
+    document.getElementById('notifyToggle').classList.toggle('on', currentSettings.notifySubscribers === true);
   }
 
-  function confirmClearMock() {
-    if (confirm('Remove all mock/test episodes? This is irreversible.')) {
-      showMsg('✓ Mock episodes removed. Real episodes will take their place once uploaded.', false);
+  function readSettings() {
+    return {
+      podcastName: document.getElementById('podcastName').value.trim(),
+      podcastTagline: document.getElementById('podcastTagline').value.trim(),
+      podcastDesc: document.getElementById('podcastDesc').value.trim(),
+      podcastHost: document.getElementById('podcastHost').value.trim(),
+      podcastLang: document.getElementById('podcastLang').value,
+      podcastCategory: document.getElementById('podcastCategory').value,
+      spotifyShow: document.getElementById('spotifyShow').value.trim(),
+      appleShow: document.getElementById('appleShow').value.trim(),
+      youtubeChannel: document.getElementById('youtubeChannel').value.trim(),
+      autoPublish: document.getElementById('autoPublishToggle').classList.contains('on'),
+      notifySubscribers: document.getElementById('notifyToggle').classList.contains('on')
+    };
+  }
+
+  async function saveAllSettings() {
+    try {
+      await requireFirebaseAdmin();
+      await PodcastData.saveSettings(readSettings());
+      showMsg('Settings saved to Firestore.', false);
+    } catch (error) {
+      console.error(error);
+      showMsg(error.message || 'Could not save settings.', true);
     }
   }
+
+  async function init() {
+    try {
+      await requireFirebaseAdmin();
+      const settings = await PodcastData.loadSettings();
+      fillSettings(settings);
+    } catch (error) {
+      console.error(error);
+      showMsg('Could not load settings.', true);
+    }
+  }
+
+  init();
 </script>
 </body>
 </html>
