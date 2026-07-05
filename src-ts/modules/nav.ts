@@ -1,4 +1,4 @@
-import { qs, qsa } from '../util/dom.ts';
+import { prefersReducedMotion, qs, qsa } from '../util/dom.ts';
 
 // ============================================================================
 //  Navigation — sticky navbar that condenses on scroll, smooth in-page links,
@@ -23,7 +23,7 @@ export function initNav(): void {
       if (target) {
         e.preventDefault();
         const top = (target as HTMLElement).getBoundingClientRect().top + window.scrollY - 72;
-        window.scrollTo({ top, behavior: 'smooth' });
+        window.scrollTo({ top, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
       }
       closeMenu();
     });

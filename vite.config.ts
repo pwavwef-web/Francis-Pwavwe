@@ -17,6 +17,10 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     target: 'es2022',
+    // Emit hashed JS/CSS/image bundles into their own folder so a root-merge
+    // deploy never collides with the hand-authored `assets/` (icons, certs).
+    // NB: not `build/` — that name is git-ignored (Flutter leftover).
+    assetsDir: 'bundle',
     rollupOptions: {
       input: 'app.html',
     },

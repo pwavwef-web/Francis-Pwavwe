@@ -46,18 +46,35 @@
 </head>
 
 <body class="is-loading">
-  <!-- Preloader -->
-  <div id="preloader" class="preloader">
-    <div class="preloader__brand">FRANCIS&nbsp;PWAVWE</div>
-    <div class="preloader__bar"><span></span></div>
-    <div class="preloader__count"><span id="preloader-count">00</span><i>%</i></div>
+  <!-- Cinematic boot sequence -->
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <div class="preloader__ring">
+      <svg viewBox="0 0 120 120" aria-hidden="true">
+        <circle class="preloader__track" cx="60" cy="60" r="54" />
+        <circle class="preloader__arc" cx="60" cy="60" r="54" />
+      </svg>
+      <div class="preloader__count"><span id="preloader-count">00</span><i>%</i></div>
+    </div>
+    <div class="preloader__brand" data-preloader-brand>FRANCIS PWAVWE</div>
+    <div class="preloader__status" id="preloader-status">INITIALISING INTERFACE</div>
   </div>
 
-  <!-- Ambient background -->
+  <!-- Ambient background: WebGL nebula + drifting grid -->
   <canvas id="bg-canvas" class="bg-canvas" aria-hidden="true"></canvas>
-  <div class="bg-aurora" aria-hidden="true"></div>
   <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-grain" aria-hidden="true"></div>
+  <div class="bg-vignette" aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- Heads-up display frame -->
+  <div class="hud" aria-hidden="true">
+    <span class="hud__corner hud__corner--tl"></span>
+    <span class="hud__corner hud__corner--tr"></span>
+    <span class="hud__corner hud__corner--bl"></span>
+    <span class="hud__corner hud__corner--br"></span>
+    <div class="hud__readout hud__readout--tl"><span class="hud__dot"></span>SYSTEM ONLINE</div>
+    <div class="hud__readout hud__readout--bl">05.11°N · 01.28°W — CAPE COAST</div>
+    <div class="hud__readout hud__readout--br"><span data-hud-clock>--:--:--</span> GMT</div>
+  </div>
 
   <!-- Scroll progress rail -->
   <div class="scroll-progress"><div class="scroll-progress-bar"></div></div>
@@ -85,7 +102,7 @@
             <i class="pulse-dot"></i> Tourism Management · University of Cape Coast · Ghana
           </span>
           <h1 class="hero__title" data-hero>
-            <span class="hero__name">Francis Pwavwe</span>
+            <span class="hero__name glitch" data-text="Francis Pwavwe">Francis Pwavwe</span>
             <span class="hero__role-wrap">
               <span id="hero-role" class="hero__role"></span><span class="caret">|</span>
             </span>
@@ -101,8 +118,9 @@
           </div>
           <div class="hero__stats" data-stats data-stagger></div>
         </div>
-        <div class="hero__visual" data-hero aria-hidden="true">
-          <div class="orbit">
+        <div class="hero__visual" data-parallax-scene aria-hidden="true">
+          <div class="orbit" data-parallax-layer="0.06">
+            <div class="orbit__halo"></div>
             <div class="orbit__core"><img src="profile.jpg" alt="Francis Pwavwe" /></div>
             <div class="orbit__ring orbit__ring--1"></div>
             <div class="orbit__ring orbit__ring--2"></div>
@@ -115,6 +133,16 @@
       </div>
       <a href="#about" class="hero__scroll" aria-label="Scroll down"><span></span></a>
     </section>
+
+    <!-- ===== DATA TICKER ===== -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__track" data-ticker>
+        <span>Tourism Strategy</span><i>◆</i><span>EdTech Innovation</span><i>◆</i>
+        <span>AZ Learner</span><i>◆</i><span>Systems Thinking</span><i>◆</i>
+        <span>Digital Transformation</span><i>◆</i><span>Leadership</span><i>◆</i>
+        <span>Research &amp; Analysis</span><i>◆</i><span>Africa Rising</span><i>◆</i>
+      </div>
+    </div>
 
     <!-- ===== ABOUT ===== -->
     <section id="about" class="section about">
@@ -296,7 +324,7 @@
       <p class="footer__links">
         <a href="fp-index.html">Francis Pwavwe Productions</a> ·
         <a href="https://azlearner.me" target="_blank" rel="noopener">AZ Learner</a> ·
-        <a href="index.html">Classic site</a>
+        <a href="classic.html">Classic site</a>
       </p>
     </div>
   </footer>

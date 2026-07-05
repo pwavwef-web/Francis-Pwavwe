@@ -10,7 +10,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import type { BlogComment, BlogDoc, BlogInteraction } from '../types.ts';
-import { escapeHtml, qs } from '../util/dom.ts';
+import { escapeHtml, prefersReducedMotion, qs } from '../util/dom.ts';
 import { db } from './firebase.ts';
 import { notify } from './notify.ts';
 
@@ -188,8 +188,9 @@ function setupScrollButtons(): void {
   const container = qs('#blogsContainer');
   if (!left || !right || !container) return;
   const AMOUNT = 380;
-  left.addEventListener('click', () => container.scrollBy({ left: -AMOUNT, behavior: 'smooth' }));
-  right.addEventListener('click', () => container.scrollBy({ left: AMOUNT, behavior: 'smooth' }));
+  const behavior: ScrollBehavior = prefersReducedMotion() ? 'auto' : 'smooth';
+  left.addEventListener('click', () => container.scrollBy({ left: -AMOUNT, behavior }));
+  right.addEventListener('click', () => container.scrollBy({ left: AMOUNT, behavior }));
 }
 
 async function like(id: string): Promise<void> {

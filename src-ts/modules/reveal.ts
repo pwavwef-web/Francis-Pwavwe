@@ -1,6 +1,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { prefersReducedMotion, qsa } from '../util/dom.ts';
+import { splitWords } from '../util/split.ts';
 import { scramble } from './text-effects.ts';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -23,14 +24,44 @@ export function initReveals(): void {
   // --- Hero entrance timeline ---
   const heroBits = qsa('[data-hero]');
   if (heroBits.length) {
-    gsap.timeline({ defaults: { ease: 'power3.out' } }).from(heroBits, {
-      y: 40,
-      opacity: 0,
-      duration: 0.9,
-      stagger: 0.12,
-      delay: 0.15,
-    });
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.from(heroBits, { y: 44, opacity: 0, duration: 0.9, stagger: 0.12, delay: 0.15 });
+
+    const name = qs('.hero__name') as HTMLElement | null;
+    if (name) {
+      tl.fromTo(
+        name,
+        { clipPath: 'inset(0 100% 0 0)' },
+        { clipPath: 'inset(0 0% 0 0)', duration: 1.0, ease: 'power4.out' },
+        0.3,
+      );
+    }
+    const visual = qs('.hero__visual') as HTMLElement | null;
+    if (visual) {
+      tl.from(
+        visual,
+        { scale: 0.84, opacity: 0, rotate: -5, duration: 1.3, ease: 'power3.out' },
+        0.1,
+      );
+    }
   }
+
+  // --- Word-split rises for plain-text lines ---
+  qsa<HTMLElement>('[data-split], .section__subtitle').forEach((el) => {
+    const words = splitWords(el);
+    if (!words.length) return;
+    gsap.from(words, {
+      opacity: 0,
+      y: 26,
+      rotateX: -50,
+      transformPerspective: 600,
+      transformOrigin: '50% 100%',
+      duration: 0.7,
+      ease: 'power3.out',
+      stagger: 0.035,
+      scrollTrigger: { trigger: el, start: 'top 86%', once: true },
+    });
+  });
 
   // --- Generic reveals (fade/slide) with stagger by group ---
   qsa<HTMLElement>('[data-reveal]').forEach((el) => {

@@ -12,6 +12,7 @@ import { initRoleRotator } from './modules/text-effects.ts';
 import { initContact } from './modules/contact.ts';
 import { initCvDownload } from './modules/cv.ts';
 import { initBlogs } from './modules/blogs.ts';
+import { initHud } from './modules/hud.ts';
 
 // ============================================================================
 //  Application entry — orchestrates boot order:
@@ -36,6 +37,7 @@ function boot(): void {
   initContact();
   initCvDownload();
   initBlogs();
+  initHud();
 
   // Rotating hero role.
   const roleEl = qs('#hero-role');
