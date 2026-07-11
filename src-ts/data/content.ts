@@ -13,7 +13,7 @@ import type {
 // ============================================================================
 export const PROFILE = {
   name: 'Francis Pwavwe',
-  handle: 'francis.azlearner.me',
+  handle: 'pwavwe.com',
   credential: 'Tourism Management · University of Cape Coast · Ghana',
   roles: [
     'Strategic Thinker',
@@ -53,7 +53,7 @@ export const SOCIALS: readonly SocialLink[] = [
 //  STATS  (animated counters)
 // ============================================================================
 export const STATS: readonly Stat[] = [
-  { value: 8, suffix: '+', label: 'Featured Projects' },
+  { value: 11, suffix: '+', label: 'Featured Projects' },
   { value: 11, suffix: '', label: 'Certifications' },
   { value: 3, suffix: '+', label: 'Years Building AZ Learner' },
   { value: 5, suffix: '', label: 'Global Programs' },
@@ -87,7 +87,10 @@ export const PROJECTS: readonly Project[] = [
     icon: 'assets/icon%20(2).png',
     iconIsImage: true,
     description:
-      'The official Student Representative Council app for the University of Cape Coast — giving students seamless access to SRC services, announcements, events, and governance, bridging student leadership and the UCC community.',
+      'The official Student Representative Council app for the University of Cape Coast, designed to give students seamless access to services, announcements, events, and governance touchpoints.',
+    impact: 'Connects student leadership with daily campus life through a clearer digital service channel.',
+    status: 'Recent build',
+    year: '2026',
     featured: true,
   },
   {
@@ -96,7 +99,10 @@ export const PROJECTS: readonly Project[] = [
     tags: ['Education', 'Technology'],
     icon: '🎓',
     description:
-      'An academic support platform improving student retention and performance through personalised learning paths, analytics-driven insights, and collaborative study tools — supporting students across disciplines at UCC.',
+      'An academic support platform improving student retention and performance through purposeful learning paths, resource access, analytics-informed support, and collaborative study tools.',
+    impact: 'Built as a long-term academic support system for learners across UCC and beyond.',
+    status: 'Founder-led',
+    year: '2023-Present',
     link: { label: 'Visit azlearner.me', href: 'https://azlearner.me' },
     featured: true,
   },
@@ -106,7 +112,10 @@ export const PROJECTS: readonly Project[] = [
     tags: ['Technology', 'Education'],
     icon: '🧭',
     description:
-      'A 100-question self-assessment that uses Vertex AI to turn personal response patterns into a practical SWOT analysis — strengths, weaknesses, opportunities, threats, and next-step recommendations.',
+      'A 100-question self-assessment that turns personal response patterns into a practical SWOT analysis covering strengths, weaknesses, opportunities, threats, and next-step recommendations.',
+    impact: 'Makes reflective strategy more accessible for students, founders, and emerging leaders.',
+    status: 'Live tool',
+    year: '2026',
     link: { label: 'Take the quiz', href: 'swot-quiz.html' },
     featured: true,
   },
@@ -116,10 +125,52 @@ export const PROJECTS: readonly Project[] = [
     tags: ['Community', 'Technology', 'Research'],
     icon: '🗣️',
     description:
-      'Building the first trusted digital Kasem dictionary, phrase corpus, and AI-ready language dataset — created by the community and validated by elders and teachers, to future-proof the Kasem language for education and culture.',
+      'Building a trusted digital Kasem dictionary, phrase corpus, and AI-ready language dataset, created with community input and designed for education, culture, and long-term preservation.',
+    impact: 'Protects language heritage while preparing community knowledge for digital learning systems.',
+    status: 'Research build',
+    year: '2025-Present',
     meta: 'Started: April 20, 2025',
     link: { label: 'Visit Project Kassena', href: 'https://kassena.azlearner.me' },
     featured: true,
+  },
+  {
+    title: 'Advanced Tourism Concepts Ebook',
+    category: 'Tourism Education',
+    tags: ['Tourism', 'Education', 'Research'],
+    icon: '📘',
+    description:
+      'A student-created learning resource that translates advanced tourism concepts into clearer notes, examples, and practical explanations for emerging tourism professionals.',
+    impact: 'Turns academic knowledge into an accessible study companion for tourism learners.',
+    status: 'Published',
+    year: '2026',
+    link: {
+      label: 'Read the ebook',
+      href: 'docs/archive/Advanced_Tourism_Concepts_UCC_Student_Creator_Ebook.pdf',
+    },
+    featured: true,
+  },
+  {
+    title: 'Francis Pwavwe Productions',
+    category: 'Digital Media & Personal Brand',
+    tags: ['Technology', 'Leadership'],
+    icon: '🎙️',
+    description:
+      'A digital media and production identity for publishing voice, video, writing, and student-centered stories with a polished, credible portfolio presence.',
+    impact: 'Creates a structured channel for thought leadership, creative work, and professional storytelling.',
+    status: 'Brand system',
+    year: '2026',
+    link: { label: 'Explore productions', href: 'fp-index.html' },
+  },
+  {
+    title: 'Campus Sustainability Operations',
+    category: 'Student Welfare & Service',
+    tags: ['Leadership', 'Community'],
+    icon: '💧',
+    description:
+      'Committee work supporting water, sanitation, and campus welfare priorities through service coordination, problem tracking, and student-centered improvements.',
+    impact: 'Contributes to a healthier campus experience through practical service leadership.',
+    status: 'Active service',
+    year: '2026-Present',
   },
   {
     title: 'Luban Workshop Restaurant',
@@ -128,6 +179,9 @@ export const PROJECTS: readonly Project[] = [
     icon: '🍜',
     description:
       "Improving the visibility of my department's Chinese restaurant through website design, search engine optimisation, and social media engagement.",
+    impact: 'Connects hospitality operations with discoverable digital storytelling.',
+    status: 'Strategy project',
+    year: '2025',
     link: { label: 'Visit project site', href: 'https://azlearner.me/luban-workshop' },
   },
   {
@@ -136,7 +190,10 @@ export const PROJECTS: readonly Project[] = [
     tags: ['Tourism', 'Technology'],
     icon: '📱',
     description:
-      'A comprehensive social media strategy for Torchlight Tours — audience engagement, brand positioning, and conversion optimisation in a competitive tourism market.',
+      'A comprehensive social media strategy for Torchlight Tours, covering audience engagement, brand positioning, and conversion optimisation in a competitive tourism market.',
+    impact: 'Sharpens the path from travel inspiration to inquiry for a tourism brand.',
+    status: 'Consulting',
+    year: '2024',
   },
   {
     title: 'Journey to the East',
@@ -144,7 +201,10 @@ export const PROJECTS: readonly Project[] = [
     tags: ['Leadership'],
     icon: '🚗',
     description:
-      'Head of Security and Transport Committee for a major event — coordinating logistics, ensuring participant safety, and managing a team responsible for seamless transport and security operations.',
+      'Head of Security and Transport Committee for a major event, coordinating logistics, participant safety, and the team responsible for seamless transport and security operations.',
+    impact: 'Delivered structure and calm execution for a complex event environment.',
+    status: 'Event leadership',
+    year: '2024',
   },
   {
     title: 'Tourism Research & Analysis',
@@ -153,6 +213,9 @@ export const PROJECTS: readonly Project[] = [
     icon: '📊',
     description:
       'Research on sustainable tourism development, visitor experience optimisation, and the impact of digital transformation on tourism operations in West Africa.',
+    impact: 'Frames tourism growth through evidence, visitor experience, and digital transformation.',
+    status: 'Ongoing research',
+    year: '2024-Present',
   },
 ];
 

@@ -18,6 +18,9 @@ export interface Project {
   readonly icon: string; // emoji or image path
   readonly iconIsImage?: boolean;
   readonly description: string;
+  readonly impact?: string;
+  readonly status?: string;
+  readonly year?: string;
   readonly link?: { readonly label: string; readonly href: string };
   readonly meta?: string;
   readonly featured?: boolean;

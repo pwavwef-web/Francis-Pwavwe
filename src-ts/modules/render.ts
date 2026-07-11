@@ -91,18 +91,26 @@ function projectCard(p: Project): string {
   const link = p.link
     ? `<a href="${p.link.href}" class="project__link" ${
         p.link.href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''
-      }>${escapeHtml(p.link.label)} <span aria-hidden="true">→</span></a>`
+      }>${escapeHtml(p.link.label)} <span aria-hidden="true">-></span></a>`
     : '';
   const meta = p.meta ? `<p class="project__meta">${escapeHtml(p.meta)}</p>` : '';
+  const status = p.status ? `<span class="project__status">${escapeHtml(p.status)}</span>` : '';
+  const year = p.year ? `<span class="project__year">${escapeHtml(p.year)}</span>` : '';
+  const impact = p.impact
+    ? `<div class="project__impact"><span>Impact</span><p>${escapeHtml(p.impact)}</p></div>`
+    : '';
   return `
     <article class="project tilt ${p.featured ? 'is-featured' : ''}" data-tags="${p.tags.join(
       ',',
     )}">
-      <div class="project__glow"></div>
-      <div class="project__icon">${iconHtml}</div>
+      <div class="project__top">
+        <div class="project__icon">${iconHtml}</div>
+        <div class="project__labels">${status}${year}</div>
+      </div>
       <h3 class="project__title">${escapeHtml(p.title)}</h3>
       <p class="project__category">${escapeHtml(p.category)}</p>
       <p class="project__desc">${escapeHtml(p.description)}</p>
+      ${impact}
       <div class="project__tags">${p.tags
         .map((t) => `<span class="pill">${escapeHtml(t)}</span>`)
         .join('')}</div>

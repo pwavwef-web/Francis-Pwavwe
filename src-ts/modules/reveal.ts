@@ -2,7 +2,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { prefersReducedMotion, qsa } from '../util/dom.ts';
 import { splitWords } from '../util/split.ts';
-import { scramble } from './text-effects.ts';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -90,17 +89,6 @@ export function initReveals(): void {
       ease: 'power3.out',
       stagger: 0.08,
       scrollTrigger: { trigger: group, start: 'top 80%', once: true },
-    });
-  });
-
-  // --- Section-title scramble on entry ---
-  qsa<HTMLElement>('[data-scramble]').forEach((el) => {
-    el.dataset.text = el.textContent ?? '';
-    ScrollTrigger.create({
-      trigger: el,
-      start: 'top 88%',
-      once: true,
-      onEnter: () => scramble(el),
     });
   });
 
