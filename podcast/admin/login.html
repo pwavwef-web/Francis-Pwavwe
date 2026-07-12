@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Login — The AZ Podcast</title>
+  <title>Admin Login - Blue Mind Radio</title>
   <link rel="icon" href="../../favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -20,6 +20,7 @@
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.75rem 1.5rem;border-radius:0.5rem;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;border:none;width:100%}
     .btn-primary{background:#1e40af;color:#fff}
     .btn-primary:hover{background:#2563eb}
+    .btn-primary:disabled{opacity:.65;cursor:not-allowed}
   </style>
 </head>
 <body>
@@ -29,17 +30,17 @@
         <i data-lucide="shield" class="w-8 h-8" style="color:#fbbf24"></i>
       </div>
       <h1 class="fp-poppins text-2xl font-bold text-white mb-1">Admin Access</h1>
-      <p class="fp-muted text-sm">The AZ Podcast · Admin Panel</p>
+      <p class="fp-muted text-sm">Blue Mind Radio Admin Panel</p>
     </div>
     <div class="card p-6">
       <form id="loginForm">
         <div class="mb-4">
-          <label class="block text-sm font-medium text-white mb-2" for="password">Admin Password</label>
-          <input type="password" id="password" placeholder="Enter admin password" autocomplete="current-password" required>
+          <label class="block text-sm font-medium text-white mb-2" for="password">Firebase Password</label>
+          <input type="password" id="password" placeholder="Password for pwavwef@gmail.com" autocomplete="current-password" required>
         </div>
         <div id="errorMsg" class="hidden mb-4 text-sm text-red-400 flex items-center gap-2">
           <i data-lucide="alert-circle" class="w-4 h-4 flex-shrink-0"></i>
-          <span>Incorrect password. Please try again.</span>
+          <span>Could not sign in. Please check the Firebase password.</span>
         </div>
         <button type="submit" class="btn btn-primary" id="loginBtn">
           <i data-lucide="log-in" class="w-4 h-4"></i> Sign In
@@ -47,33 +48,42 @@
       </form>
     </div>
     <p class="text-center text-xs fp-muted mt-6">
-      <a href="../index.html" class="text-[#6366f1] hover:text-[#a5b4fc] transition-colors">← Back to The AZ Podcast</a>
+      <a href="../index.html" class="text-[#6366f1] hover:text-[#a5b4fc] transition-colors">Back to podcast</a>
     </p>
   </div>
 
+  <script src="../podcast-data.js"></script>
   <script src="admin-auth.js"></script>
   <script>
     lucide.createIcons();
 
-    // If already logged in, redirect to dashboard
     if (isAdminLoggedIn()) {
       window.location.href = 'index.html';
     }
 
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const pw = document.getElementById('password').value;
       const err = document.getElementById('errorMsg');
+      const btn = document.getElementById('loginBtn');
       err.classList.add('hidden');
 
-      if (adminLogin(pw)) {
+      btn.disabled = true;
+      btn.innerHTML = '<i data-lucide="loader" class="w-4 h-4 animate-spin"></i> Signing in';
+      lucide.createIcons();
+
+      try {
+        await adminLogin(pw);
         const next = new URLSearchParams(window.location.search).get('next') || 'index.html';
         window.location.href = next;
-      } else {
+      } catch (error) {
         err.classList.remove('hidden');
-        lucide.createIcons();
         document.getElementById('password').value = '';
         document.getElementById('password').focus();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="log-in" class="w-4 h-4"></i> Sign In';
+        lucide.createIcons();
       }
     });
   </script>

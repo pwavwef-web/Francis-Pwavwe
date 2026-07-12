@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The AZ Podcast — Francis Pwavwe Productions</title>
-  <meta name="description" content="The AZ Podcast — raw, real conversations about life, growth, and everything in between.">
+  <title>Blue Mind Radio - Francis Pwavwe Productions</title>
+  <meta name="description" content="Blue Mind Radio - real conversations about Gen Z culture, philosophy, and personal growth.">
   <link rel="icon" href="../favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -39,7 +39,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0f]/95 backdrop-blur-md border-b border-white/10">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between h-16">
@@ -50,7 +49,7 @@
       <div class="hidden md:flex items-center gap-1">
         <a href="../fp-index.html" class="nav-link">Home</a>
         <a href="../fp-about.html" class="nav-link">About</a>
-        <a href="index.html" class="nav-link active">The AZ Podcast</a>
+        <a href="index.html" class="nav-link active">Podcast</a>
         <a href="../fp-blog.html" class="nav-link">Thoughts</a>
         <a href="../fp-productions.html" class="nav-link">Productions</a>
         <a href="../fp-collaborate.html" class="nav-link">Collaborate</a>
@@ -64,7 +63,7 @@
       <div class="flex flex-col gap-1">
         <a href="../fp-index.html" class="mobile-nav-link">Home</a>
         <a href="../fp-about.html" class="mobile-nav-link">About</a>
-        <a href="index.html" class="mobile-nav-link active">The AZ Podcast</a>
+        <a href="index.html" class="mobile-nav-link active">Podcast</a>
         <a href="../fp-blog.html" class="mobile-nav-link">Thoughts</a>
         <a href="../fp-productions.html" class="mobile-nav-link">Productions</a>
         <a href="../fp-collaborate.html" class="mobile-nav-link">Collaborate</a>
@@ -74,18 +73,17 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-16" style="background:linear-gradient(135deg,#0a0a0f 0%,#0d1117 40%,#0f0a1e 100%)">
   <div class="stars" id="stars"></div>
   <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0a0a0f] pointer-events-none z-10"></div>
   <div class="relative z-20 text-center max-w-4xl mx-auto px-4">
     <div class="inline-flex items-center gap-2 mb-6">
       <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
-      <span class="text-xs font-semibold tracking-[0.2em] fp-gold fp-poppins">THE AZ PODCAST</span>
+      <span class="text-xs font-semibold tracking-[0.2em] fp-gold fp-poppins" id="showEyebrow">BLUE MIND RADIO</span>
     </div>
-    <h1 class="fp-poppins text-5xl sm:text-6xl md:text-7xl font-black text-white mb-4 leading-tight">The AZ Podcast</h1>
-    <p class="text-xl sm:text-2xl fp-muted max-w-2xl mx-auto mb-4 font-light">Raw, real conversations about life, growth, and everything in between.</p>
-    <p class="text-sm fp-muted max-w-xl mx-auto mb-10">From A to Z — no topic is off the table. Join Francis and guests as they dig deep into what actually matters.</p>
+    <h1 class="fp-poppins text-5xl sm:text-6xl md:text-7xl font-black text-white mb-4 leading-tight" id="showName">Blue Mind Radio</h1>
+    <p class="text-xl sm:text-2xl fp-muted max-w-2xl mx-auto mb-4 font-light" id="showTagline">Exploring Gen Z culture, philosophy, and personal growth.</p>
+    <p class="text-sm fp-muted max-w-xl mx-auto mb-10" id="showDescription">Honest conversations about the ideas shaping how we live.</p>
     <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
       <a href="listeners/episodes.html" class="btn-primary">
         <i data-lucide="headphones" class="w-5 h-5"></i> Browse Episodes
@@ -94,23 +92,18 @@
         <i data-lucide="play-circle" class="w-5 h-5"></i> Now Playing
       </a>
     </div>
-    <div class="flex flex-wrap justify-center gap-3">
-      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#1db954;color:#fff"><i data-lucide="music" class="w-3.5 h-3.5"></i> Spotify</a>
-      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#9333ea;color:#fff"><i data-lucide="headphones" class="w-3.5 h-3.5"></i> Apple Podcasts</a>
-      <a href="#" target="_blank" rel="noopener" class="platform-btn" style="background:#ef4444;color:#fff"><i data-lucide="youtube" class="w-3.5 h-3.5"></i> YouTube</a>
-    </div>
+    <div class="flex flex-wrap justify-center gap-3" id="showPlatformLinks"></div>
   </div>
 </section>
 
-<!-- ABOUT THE SHOW -->
 <section style="padding:5rem 0">
   <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid md:grid-cols-2 gap-12 items-center">
       <div>
         <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-4 fp-poppins">ABOUT THE SHOW</p>
-        <h2 class="fp-poppins text-3xl sm:text-4xl font-bold text-white mb-6">A to Z, nothing held back.</h2>
-        <p class="fp-muted leading-relaxed mb-4">The AZ Podcast is where Francis Pwavwe brings you unfiltered conversations with thinkers, builders, creatives, and everyday people doing extraordinary things.</p>
-        <p class="fp-muted leading-relaxed mb-8">Every episode covers the full spectrum — from identity and ambition to failure and reinvention. Whatever it is, we talk about it here.</p>
+        <h2 class="fp-poppins text-3xl sm:text-4xl font-bold text-white mb-6">Slow down, think clearly, listen deeply.</h2>
+        <p class="fp-muted leading-relaxed mb-4">Blue Mind Radio brings Francis Pwavwe into conversations with thinkers, builders, creatives, and everyday people making meaning from modern life.</p>
+        <p class="fp-muted leading-relaxed mb-8">Every published episode below is loaded from the same Firestore collection that powers the production site.</p>
         <a href="listeners/episodes.html" class="btn-outline" style="width:fit-content">
           See all episodes <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
         </a>
@@ -118,13 +111,13 @@
       <div class="grid grid-cols-2 gap-4">
         <div class="card p-5 text-center">
           <i data-lucide="mic" class="w-8 h-8 mb-3 mx-auto" style="color:#fbbf24"></i>
-          <h3 class="font-semibold text-white mb-1">Episodes</h3>
-          <p class="text-sm fp-muted">New drops every week</p>
+          <h3 class="font-semibold text-white mb-1" id="episodeCount">Episodes</h3>
+          <p class="text-sm fp-muted">Published archive</p>
         </div>
         <div class="card p-5 text-center">
           <i data-lucide="users" class="w-8 h-8 mb-3 mx-auto" style="color:#6366f1"></i>
           <h3 class="font-semibold text-white mb-1">Guests</h3>
-          <p class="text-sm fp-muted">Builders & thinkers</p>
+          <p class="text-sm fp-muted">Stories and ideas</p>
         </div>
         <div class="card p-5 text-center">
           <i data-lucide="list-music" class="w-8 h-8 mb-3 mx-auto" style="color:#1e40af"></i>
@@ -134,39 +127,13 @@
         <div class="card p-5 text-center">
           <i data-lucide="globe" class="w-8 h-8 mb-3 mx-auto" style="color:#10b981"></i>
           <h3 class="font-semibold text-white mb-1">Everywhere</h3>
-          <p class="text-sm fp-muted">All major platforms</p>
+          <p class="text-sm fp-muted">Web and platforms</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- VOICE OVERVIEW -->
-<section id="voice-overview" style="padding:5rem 0">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between mb-8">
-      <div>
-        <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-2 fp-poppins">VOICE OVERVIEW</p>
-        <h2 class="fp-poppins text-3xl font-bold text-white">Listen directly</h2>
-      </div>
-    </div>
-    <div class="card p-5 sm:p-6">
-      <div class="relative w-full overflow-hidden rounded-xl" style="padding-top:56.25%;background:#0d1117;border:1px solid rgba(255,255,255,.08)">
-        <iframe
-          src="https://drive.google.com/file/d/179FRNVt-wG2wZdPcCwGZN3ifQ1Fqgu1s/preview"
-          title="Voice Overview Player"
-          class="absolute inset-0 w-full h-full"
-          allow="autoplay"
-          allowfullscreen
-          loading="lazy"
-        ></iframe>
-      </div>
-      <p class="text-xs fp-muted mt-4">If the player does not load, <a href="https://drive.google.com/file/d/179FRNVt-wG2wZdPcCwGZN3ifQ1Fqgu1s/view?usp=sharing" target="_blank" rel="noopener" class="text-[#6366f1] hover:underline">open the voice overview in Google Drive</a>.</p>
-    </div>
-  </div>
-</section>
-
-<!-- LATEST EPISODES PREVIEW -->
 <section style="background:#0d1117;padding:5rem 0">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between mb-10">
@@ -177,12 +144,11 @@
       <a href="listeners/episodes.html" class="text-sm text-[#6366f1] hover:text-[#a5b4fc] flex items-center gap-1 transition-colors">All episodes <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
     </div>
     <div class="space-y-4" id="latestEpisodes">
-      <!-- populated by JS mock data -->
+      <div class="card p-6 text-center fp-muted">Loading episodes...</div>
     </div>
   </div>
 </section>
 
-<!-- LISTENER LINKS -->
 <section style="padding:5rem 0">
   <div class="max-w-4xl mx-auto px-4 text-center">
     <p class="text-xs font-semibold tracking-[0.2em] fp-gold mb-3 fp-poppins">YOUR EXPERIENCE</p>
@@ -208,7 +174,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer style="background:#060608;border-top:1px solid rgba(255,255,255,.08);padding:3rem 0">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid sm:grid-cols-3 gap-8 mb-8">
@@ -220,7 +185,7 @@
         <p class="text-xs fp-muted leading-relaxed">Clarity. Purpose. Production.<br>Cape Coast, Ghana.</p>
       </div>
       <div>
-        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">The AZ Podcast</p>
+        <p class="text-xs font-semibold tracking-widest fp-muted mb-3 uppercase">Podcast</p>
         <div class="flex flex-col gap-2">
           <a href="listeners/episodes.html" class="text-sm fp-muted hover:text-white transition-colors">Episodes</a>
           <a href="listeners/now-playing.html" class="text-sm fp-muted hover:text-white transition-colors">Now Playing</a>
@@ -238,25 +203,17 @@
       </div>
     </div>
     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-white/10">
-      <p class="text-xs fp-muted">© 2026 Francis Pwavwe Productions. All rights reserved.</p>
-      <div class="flex items-center gap-4">
-        <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" class="fp-muted hover:text-white transition-colors"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
-        <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram" class="fp-muted hover:text-white transition-colors"><i data-lucide="instagram" class="w-4 h-4"></i></a>
-        <a href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube" class="fp-muted hover:text-white transition-colors"><i data-lucide="youtube" class="w-4 h-4"></i></a>
-        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter/X" class="fp-muted hover:text-white transition-colors"><i data-lucide="twitter" class="w-4 h-4"></i></a>
-      </div>
+      <p class="text-xs fp-muted">2026 Francis Pwavwe Productions. All rights reserved.</p>
     </div>
   </div>
 </footer>
 
-<script src="az-episodes.js"></script>
+<script src="podcast-data.js"></script>
 <script>
-  // Mobile menu
   document.getElementById('menuBtn').addEventListener('click', () => {
     document.getElementById('mobileMenu').classList.toggle('hidden');
   });
 
-  // Stars
   const starsEl = document.getElementById('stars');
   for (let i = 0; i < 100; i++) {
     const s = document.createElement('div');
@@ -265,30 +222,77 @@
     starsEl.appendChild(s);
   }
 
-  const container = document.getElementById('latestEpisodes');
-  container.innerHTML = AZ_EPISODES.slice(0,3).map(ep => `
-    <article class="card p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-start">
-      <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl bg-gradient-to-br from-[#1e293b] to-[#0f172a] flex items-center justify-center text-3xl">${ep.coverEmoji}</div>
-      <div class="flex-1 min-w-0">
-        <div class="flex flex-wrap gap-2 mb-2">
-          <span class="badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">S${ep.season} · E${ep.episode}</span>
-          ${ep.tags.map(t=>`<span class="badge" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)">${t}</span>`).join('')}
-        </div>
-        <h3 class="fp-poppins font-bold text-white text-base sm:text-lg mb-1">${ep.title}</h3>
-        <p class="text-sm fp-muted leading-relaxed mb-3 line-clamp-2">${ep.description}</p>
-        <div class="flex flex-wrap items-center gap-3">
-          <a href="listeners/now-playing.html?ep=${ep.id}" class="platform-btn" style="background:#1e40af;color:#fff;font-size:0.75rem">
-            <i data-lucide="play" class="w-3 h-3"></i> Play
-          </a>
-          <a href="listeners/queue.html?add=${ep.id}" class="platform-btn" style="background:rgba(99,102,241,.2);color:#a5b4fc;font-size:0.75rem;border:1px solid rgba(99,102,241,.3)">
-            <i data-lucide="plus" class="w-3 h-3"></i> Queue
-          </a>
-          <span class="text-xs fp-muted ml-auto">${ep.duration} · ${ep.date}</span>
-        </div>
-      </div>
-    </article>
-  `).join('');
+  function platformLinks(settings) {
+    const links = [
+      settings.spotifyShow ? `<a href="${PodcastData.escapeAttr(settings.spotifyShow)}" target="_blank" rel="noopener" class="platform-btn" style="background:#1db954;color:#fff"><i data-lucide="music" class="w-3.5 h-3.5"></i> Spotify</a>` : '',
+      settings.appleShow ? `<a href="${PodcastData.escapeAttr(settings.appleShow)}" target="_blank" rel="noopener" class="platform-btn" style="background:#9333ea;color:#fff"><i data-lucide="headphones" class="w-3.5 h-3.5"></i> Apple Podcasts</a>` : '',
+      settings.youtubeChannel ? `<a href="${PodcastData.escapeAttr(settings.youtubeChannel)}" target="_blank" rel="noopener" class="platform-btn" style="background:#ef4444;color:#fff"><i data-lucide="youtube" class="w-3.5 h-3.5"></i> YouTube</a>` : ''
+    ].filter(Boolean);
+    document.getElementById('showPlatformLinks').innerHTML = links.join('');
+  }
 
+  function playEpisode(id) {
+    PodcastData.setNowPlaying(id);
+    window.location.href = `listeners/now-playing.html?ep=${encodeURIComponent(id)}`;
+  }
+
+  function queueEpisode(id) {
+    PodcastData.addToQueue(id);
+    window.location.href = `listeners/queue.html?add=${encodeURIComponent(id)}`;
+  }
+
+  function renderEpisodes(episodes) {
+    const container = document.getElementById('latestEpisodes');
+    document.getElementById('episodeCount').textContent = `${episodes.length} Episode${episodes.length === 1 ? '' : 's'}`;
+    if (!episodes.length) {
+      container.innerHTML = '<div class="card p-6 text-center fp-muted">No published episodes yet.</div>';
+      return;
+    }
+    container.innerHTML = episodes.slice(0, 3).map(ep => `
+      <article class="card p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-start">
+        <div class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-xl bg-[#1e293b] overflow-hidden flex items-center justify-center text-3xl">${PodcastData.coverHtml(ep, 'w-full h-full object-cover')}</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap gap-2 mb-2">
+            <span class="badge" style="background:rgba(251,191,36,.15);color:#fbbf24;border:1px solid rgba(251,191,36,.3)">S${ep.season} E${ep.episode}</span>
+            ${(ep.tags || []).map(t => `<span class="badge" style="background:rgba(99,102,241,.15);color:#a5b4fc;border:1px solid rgba(99,102,241,.2)">${PodcastData.escapeHtml(t)}</span>`).join('')}
+          </div>
+          <h3 class="fp-poppins font-bold text-white text-base sm:text-lg mb-1">${PodcastData.escapeHtml(ep.title)}</h3>
+          <p class="text-sm fp-muted leading-relaxed mb-3 line-clamp-2">${PodcastData.escapeHtml(ep.description)}</p>
+          <div class="flex flex-wrap items-center gap-3">
+            <button onclick="playEpisode('${PodcastData.escapeAttr(ep.id)}')" class="platform-btn" style="background:#1e40af;color:#fff;font-size:0.75rem">
+              <i data-lucide="play" class="w-3 h-3"></i> Play
+            </button>
+            <button onclick="queueEpisode('${PodcastData.escapeAttr(ep.id)}')" class="platform-btn" style="background:rgba(99,102,241,.2);color:#a5b4fc;font-size:0.75rem;border:1px solid rgba(99,102,241,.3)">
+              <i data-lucide="plus" class="w-3 h-3"></i> Queue
+            </button>
+            <span class="text-xs fp-muted ml-auto">${PodcastData.escapeHtml(ep.duration)} ${ep.date ? '&middot; ' + PodcastData.escapeHtml(ep.date) : ''}</span>
+          </div>
+        </div>
+      </article>
+    `).join('');
+    lucide.createIcons();
+  }
+
+  async function init() {
+    try {
+      const [settings, episodes] = await Promise.all([
+        PodcastData.loadSettings(),
+        PodcastData.loadEpisodes({ publishedOnly: true })
+      ]);
+      document.getElementById('showName').textContent = settings.podcastName || 'Blue Mind Radio';
+      document.getElementById('showEyebrow').textContent = (settings.podcastName || 'Blue Mind Radio').toUpperCase();
+      document.getElementById('showTagline').textContent = settings.podcastTagline || '';
+      document.getElementById('showDescription').textContent = settings.podcastDesc || '';
+      platformLinks(settings);
+      renderEpisodes(episodes);
+      lucide.createIcons();
+    } catch (error) {
+      console.error(error);
+      document.getElementById('latestEpisodes').innerHTML = '<div class="card p-6 text-center fp-muted">Could not load episodes.</div>';
+    }
+  }
+
+  init();
   lucide.createIcons();
 </script>
 </body>
