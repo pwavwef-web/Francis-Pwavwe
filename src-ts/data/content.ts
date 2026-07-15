@@ -53,7 +53,7 @@ export const SOCIALS: readonly SocialLink[] = [
 // ============================================================================
 export const STATS: readonly Stat[] = [
   { value: 13, suffix: '+', label: 'Featured Projects' },
-  { value: 11, suffix: '', label: 'Certifications' },
+  { value: 12, suffix: '', label: 'Certifications' },
   { value: 3, suffix: '+', label: 'Years Building AZ Learner' },
   { value: 5, suffix: '', label: 'Global Programs' },
 ];
@@ -303,6 +303,7 @@ export const EXPERIENCE: readonly ExperienceItem[] = [
 // ============================================================================
 const CERT = 'assets/certificates';
 export const CERTIFICATES: readonly Certificate[] = [
+  { title: 'AI Fundamentals', issuer: 'Google · Coursera', date: 'April 18, 2026', href: `${CERT}/google-ai-fundamentals-certificate.jpg`, image: `${CERT}/google-ai-fundamentals-certificate.jpg` },
   { title: 'Technology Risk Virtual Job Simulation', issuer: 'EY · Forage', date: 'February 2026', href: `${CERT}/ey-technology-risk-certificate.png`, image: `${CERT}/ey-technology-risk-certificate.png` },
   { title: 'Generative AI Mastermind', issuer: 'Outskill', date: '2026', href: `${CERT}/outskill-genreative-ai-mastermind-certificate.png`, image: `${CERT}/outskill-genreative-ai-mastermind-certificate.png` },
   { title: 'AI in Action Job Simulation', issuer: 'Vista Equity Partners · Forage', date: 'March 2026', href: `${CERT}/AI-action-job-simulation-certificate.png`, image: `${CERT}/AI-action-job-simulation-certificate.png` },
