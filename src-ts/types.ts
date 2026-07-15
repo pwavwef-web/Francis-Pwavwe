@@ -17,11 +17,13 @@ export interface Project {
   readonly tags: readonly ProjectCategory[];
   readonly icon: string; // emoji or image path
   readonly iconIsImage?: boolean;
+  readonly coverImage?: string;
   readonly description: string;
   readonly impact?: string;
   readonly status?: string;
   readonly year?: string;
   readonly link?: { readonly label: string; readonly href: string };
+  readonly liveBadges?: readonly { readonly label: string; readonly src: string }[];
   readonly meta?: string;
   readonly featured?: boolean;
 }
@@ -70,6 +72,7 @@ export interface BlogDoc {
   id: string;
   title?: string;
   content?: string;
+  url?: string;
   likes?: number;
   comments?: number;
   blogComments?: BlogComment[];

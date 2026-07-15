@@ -43,8 +43,8 @@
     "sameAs": ["https://linkedin.com/in/francis-pwavwe"]
   }
   </script>
-  <script type="module" crossorigin src="./bundle/app-DpWgTNo_.js"></script>
-  <link rel="stylesheet" crossorigin href="./bundle/app-DViG7GbR.css">
+  <script type="module" crossorigin src="./bundle/app-PFWqPPSp.js"></script>
+  <link rel="stylesheet" crossorigin href="./bundle/app-1gUgSabp.css">
 </head>
 
 <body>
@@ -178,10 +178,69 @@
         <header class="section__head">
           <span class="section__eyebrow">02 — Portfolio</span>
           <h2 class="section__title" data-scramble>Featured Work</h2>
-          <p class="section__subtitle">Selected projects across education, tourism, technology and community.</p>
+          <p class="section__subtitle">Switch between selected projects and professional certificates in one focused portfolio space.</p>
         </header>
-        <div class="chips" data-project-filters></div>
-        <div class="work__grid" data-projects></div>
+
+        <div class="portfolio-switcher" role="tablist" aria-label="Portfolio view">
+          <button
+            id="portfolio-projects-tab"
+            class="portfolio-switcher__button is-active"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="portfolio-projects"
+            data-work-tab="projects"
+          >
+            Projects
+          </button>
+          <button
+            id="portfolio-certificates-tab"
+            class="portfolio-switcher__button"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="portfolio-certificates"
+            data-work-tab="certificates"
+          >
+            Certificates
+          </button>
+        </div>
+
+        <div
+          id="portfolio-projects"
+          class="work__panel is-active"
+          role="tabpanel"
+          aria-labelledby="portfolio-projects-tab"
+          data-work-panel="projects"
+        >
+          <div class="work__tools">
+            <div class="chips" data-project-filters></div>
+            <div class="work__controls" aria-label="Project carousel controls">
+              <button class="work__control" type="button" data-project-prev aria-label="Previous projects">&lsaquo;</button>
+              <button class="work__control" type="button" data-project-next aria-label="Next projects">&rsaquo;</button>
+            </div>
+          </div>
+          <div class="work__grid" data-projects></div>
+        </div>
+
+        <div
+          id="portfolio-certificates"
+          class="work__panel"
+          role="tabpanel"
+          aria-labelledby="portfolio-certificates-tab"
+          data-work-panel="certificates"
+          hidden
+        >
+          <span id="credentials" class="work__anchor" aria-hidden="true"></span>
+          <div class="work__tools work__tools--certificates">
+            <p class="work__helper">Professional certifications and program completions. Tap an image to zoom, or open PDF certificates in a new tab.</p>
+            <div class="work__controls" aria-label="Certificate carousel controls">
+              <button class="work__control" type="button" data-cert-prev aria-label="Previous certificates">&lsaquo;</button>
+              <button class="work__control" type="button" data-cert-next aria-label="Next certificates">&rsaquo;</button>
+            </div>
+          </div>
+          <div class="cert__grid cert__grid--flow" data-certificates data-stagger></div>
+        </div>
       </div>
     </section>
 
@@ -207,23 +266,11 @@
       </div>
     </section>
 
-    <!-- ===== CREDENTIALS ===== -->
-    <section id="credentials" class="section credentials">
-      <div class="container">
-        <header class="section__head">
-          <span class="section__eyebrow">05 — Credentials</span>
-          <h2 class="section__title" data-scramble>Certificates</h2>
-          <p class="section__subtitle">Professional certifications and program completions. Tap an image to zoom.</p>
-        </header>
-        <div class="cert__grid" data-certificates data-stagger></div>
-      </div>
-    </section>
-
     <!-- ===== INSIGHTS (blogs) ===== -->
     <section id="insights" class="section insights">
       <div class="container">
         <header class="section__head">
-          <span class="section__eyebrow">06 — Writing</span>
+          <span class="section__eyebrow">05 — Writing</span>
           <h2 class="section__title" data-scramble>Latest Insights</h2>
           <p class="section__subtitle">Thoughts on tourism, leadership, innovation and digital transformation.</p>
         </header>
@@ -239,7 +286,7 @@
     <section id="media" class="section media">
       <div class="container">
         <header class="section__head">
-          <span class="section__eyebrow">07 — Media</span>
+          <span class="section__eyebrow">06 — Media</span>
           <h2 class="section__title" data-scramble>Voice Overview</h2>
           <p class="section__subtitle">A quick audio introduction to my work.</p>
         </header>
@@ -255,7 +302,7 @@
     <section id="vision" class="section vision">
       <div class="container">
         <div class="vision__inner" data-reveal="up">
-          <span class="section__eyebrow">08 — Vision</span>
+          <span class="section__eyebrow">07 — Vision</span>
           <h2 class="vision__title">The Vision</h2>
           <p class="vision__statement">
             To become a leading <strong>international tourism strategist</strong>, pioneering
@@ -275,15 +322,15 @@
     <section id="contact" class="section contact">
       <div class="container">
         <header class="section__head">
-          <span class="section__eyebrow">09 — Connect</span>
+          <span class="section__eyebrow">08 — Connect</span>
           <h2 class="section__title" data-scramble>Let's Connect</h2>
           <p class="section__subtitle">Open to collaboration bridging tourism, technology and education.</p>
         </header>
         <div class="contact__grid">
           <div class="contact__info" data-reveal="right">
-            <a class="contact__item tilt" href="mailto:pwavwef@gmail.com">
+            <a class="contact__item tilt" href="mailto:francis@pwavwe.com">
               <span class="contact__icon">✉</span>
-              <span><strong>Email</strong>pwavwef@gmail.com</span>
+              <span><strong>Email</strong>francis@pwavwe.com</span>
             </a>
             <a class="contact__item tilt" href="https://linkedin.com/in/francis-pwavwe" target="_blank" rel="noopener">
               <span class="contact__icon">in</span>
@@ -304,13 +351,12 @@
         </div>
       </div>
     </section>
-  </main>
 
     <!-- ===== SUPPORT ===== -->
     <section id="support" class="section support">
       <div class="container">
         <div class="support__card" data-reveal="up">
-          <span class="section__eyebrow">10 — Support</span>
+          <span class="section__eyebrow">09 — Support</span>
           <h2 class="support__title">Support AZ Learner</h2>
           <p class="support__intro">
             AZ Learner is an independent, student-led initiative. Your contribution directly funds
@@ -338,7 +384,6 @@
       </p>
     </div>
   </footer>
-
-
+
 </body>
 </html>

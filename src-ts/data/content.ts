@@ -23,7 +23,7 @@ export const PROFILE = {
   ],
   tagline:
     'Advancing digital innovation in education and tourism — building purposeful systems that elevate academic performance and redefine strategic possibilities across Africa.',
-  email: 'pwavwef@gmail.com',
+  email: 'francis@pwavwe.com',
   location: 'Cape Coast, Ghana',
   linkedin: 'https://linkedin.com/in/francis-pwavwe',
 } as const;
@@ -37,14 +37,13 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { id: 'work', label: 'Work' },
   { id: 'skills', label: 'Capabilities' },
   { id: 'journey', label: 'Journey' },
-  { id: 'credentials', label: 'Credentials' },
   { id: 'insights', label: 'Insights' },
   { id: 'vision', label: 'Vision' },
   { id: 'contact', label: 'Contact' },
 ];
 
 export const SOCIALS: readonly SocialLink[] = [
-  { label: 'Email', href: 'mailto:pwavwef@gmail.com', icon: '✉' },
+  { label: 'Email', href: 'mailto:francis@pwavwe.com', icon: '✉' },
   { label: 'LinkedIn', href: 'https://linkedin.com/in/francis-pwavwe', icon: 'in' },
   { label: 'AZ Learner', href: 'https://azlearner.me', icon: '↗' },
 ];
@@ -53,7 +52,7 @@ export const SOCIALS: readonly SocialLink[] = [
 //  STATS  (animated counters)
 // ============================================================================
 export const STATS: readonly Stat[] = [
-  { value: 11, suffix: '+', label: 'Featured Projects' },
+  { value: 13, suffix: '+', label: 'Featured Projects' },
   { value: 11, suffix: '', label: 'Certifications' },
   { value: 3, suffix: '+', label: 'Years Building AZ Learner' },
   { value: 5, suffix: '', label: 'Global Programs' },
@@ -91,6 +90,67 @@ export const PROJECTS: readonly Project[] = [
     impact: 'Connects student leadership with daily campus life through a clearer digital service channel.',
     status: 'Recent build',
     year: '2026',
+    link: {
+      label: 'Download on Google Play',
+      href: 'https://play.google.com/store/apps/details?id=com.uccsrc.uccsrcapp&hl=en-US',
+    },
+    liveBadges: [
+      {
+        label: 'Live Google Play downloads',
+        src: 'https://img.shields.io/endpoint?url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.uccsrc.uccsrcapp%26hl%3Den%26gl%3DUS%26l%3DDownloads%26m%3D%24installs&style=flat-square&labelColor=10213f&color=1d5ed8',
+      },
+      {
+        label: 'Live Google Play update date',
+        src: 'https://img.shields.io/endpoint?url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.uccsrc.uccsrcapp%26hl%3Den%26gl%3DUS%26l%3DUpdated%26m%3D%24updated&style=flat-square&labelColor=10213f&color=0f766e',
+      },
+      {
+        label: 'Live Google Play content rating',
+        src: 'https://img.shields.io/endpoint?url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dcom.uccsrc.uccsrcapp%26hl%3Den%26gl%3DUS%26l%3DRated%26m%3D%24friendly&style=flat-square&labelColor=10213f&color=b88a1d',
+      },
+    ],
+    featured: true,
+  },
+  {
+    title: 'Luban Workshop Restaurant',
+    category: 'Digital Marketing & Web',
+    tags: ['Tourism', 'Technology'],
+    icon: 'assets/project-covers/luban-logo.png',
+    iconIsImage: true,
+    coverImage: 'assets/project-covers/luban-logo.png',
+    description:
+      "Improving the visibility of my department's Chinese restaurant through website design, search engine optimisation, and social media engagement.",
+    impact: 'Connects hospitality operations with discoverable digital storytelling.',
+    status: 'Strategy project',
+    year: '2025',
+    link: { label: 'Visit restaurant site', href: 'https://lubanrestaurant.com' },
+    featured: true,
+  },
+  {
+    title: 'VitaForge AI',
+    category: 'AI Career Platform',
+    tags: ['Education', 'Technology'],
+    icon: 'VF',
+    coverImage: 'assets/project-covers/vitaforge.png',
+    description:
+      'A student-first AI career platform for building polished CVs, tailored cover letters, ATS-ready applications, and guided career materials.',
+    impact: 'Helps students turn experience into stronger job applications with practical AI support.',
+    status: 'Live platform',
+    year: '2026',
+    link: { label: 'Visit VitaForge', href: 'https://vitaforge.pwavwe.com' },
+    featured: true,
+  },
+  {
+    title: 'Department Election Portal',
+    category: 'Election Technology',
+    tags: ['Technology', 'Leadership', 'Community'],
+    icon: 'EP',
+    coverImage: 'assets/project-covers/election-portal-logo.png',
+    description:
+      'A secure web voting portal used to organise elections for three departments across June and July 2026, supporting smoother student governance workflows.',
+    impact: 'Brought digital structure, transparency, and easier participation to departmental elections.',
+    status: 'Used in elections',
+    year: 'Jun-Jul 2026',
+    link: { label: 'Visit election portal', href: 'https://absag-ucc1.web.app' },
     featured: true,
   },
   {
@@ -171,18 +231,6 @@ export const PROJECTS: readonly Project[] = [
     impact: 'Contributes to a healthier campus experience through practical service leadership.',
     status: 'Active service',
     year: '2026-Present',
-  },
-  {
-    title: 'Luban Workshop Restaurant',
-    category: 'Digital Marketing & Web',
-    tags: ['Tourism', 'Technology'],
-    icon: '🍜',
-    description:
-      "Improving the visibility of my department's Chinese restaurant through website design, search engine optimisation, and social media engagement.",
-    impact: 'Connects hospitality operations with discoverable digital storytelling.',
-    status: 'Strategy project',
-    year: '2025',
-    link: { label: 'Visit project site', href: 'https://azlearner.me/luban-workshop' },
   },
   {
     title: 'Torchlight Tours Social Strategy',
