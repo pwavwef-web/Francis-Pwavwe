@@ -1,0 +1,8 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">HallKey</title>
+  <desc id="desc">Cyan rounded-square HallKey mark with a room key symbol.</desc>
+  <rect width="256" height="256" rx="64" fill="#45D9FF"/>
+  <path d="M117 102.5a43.5 43.5 0 1 1 31.3 41.7l-47 47H73v-28.3l47-47a43.6 43.6 0 0 1-3-13.4Z" stroke="#06131A" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="160.5" cy="102.5" r="13.5" fill="#06131A"/>
+  <path d="M93 176h27M105 164v27" stroke="#06131A" stroke-width="15" stroke-linecap="round"/>
+</svg>

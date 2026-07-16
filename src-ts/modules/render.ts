@@ -95,6 +95,10 @@ function projectVisualId(title: string): string {
 
 const PROJECT_COVERS: Readonly<Record<string, string>> = {
   'ucc-src-app': 'assets/project-covers/ucc-src-app.webp',
+  'smg-transport-agency': 'assets/project-covers/smg-transport-agency.webp',
+  'vitaforge-ai': 'assets/project-covers/vitaforge-ai.webp',
+  'pollaris-election-platform': 'assets/project-covers/pollaris.webp',
+  'hallkey': 'assets/project-covers/hallkey.webp',
   'az-learner': 'assets/project-covers/az-learner.webp',
   'personal-swot-analysis-quiz': 'assets/project-covers/swot-quiz.webp',
   'project-kassena': 'assets/project-covers/project-kassena.webp',
@@ -313,10 +317,11 @@ function renderCertificates(): void {
     const preview = c.image
       ? `<img src="${c.image}" alt="${escapeHtml(c.title)}" class="cert__img" loading="lazy">`
       : `<span class="cert__pdf">PDF</span>`;
+    const variantClass = c.variant ? ` cert--${c.variant}` : '';
     return `
-      <article class="cert tilt" data-cert="${i}" tabindex="0" role="button" aria-label="Open ${escapeHtml(
+      <article class="cert tilt${variantClass}" data-cert="${i}" tabindex="0" role="button" aria-label="Open ${escapeHtml(
         c.title,
-      )} certificate">
+      )} credential">
         <div class="cert__preview">${preview}</div>
         <div class="cert__info">
           <h3 class="cert__title">${escapeHtml(c.title)}</h3>

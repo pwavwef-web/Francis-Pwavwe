@@ -52,7 +52,7 @@ export const SOCIALS: readonly SocialLink[] = [
 //  STATS  (animated counters)
 // ============================================================================
 export const STATS: readonly Stat[] = [
-  { value: 13, suffix: '+', label: 'Featured Projects' },
+  { value: 15, suffix: '+', label: 'Featured Projects' },
   { value: 12, suffix: '', label: 'Certifications' },
   { value: 3, suffix: '+', label: 'Years Building AZ Learner' },
   { value: 5, suffix: '', label: 'Global Programs' },
@@ -111,12 +111,25 @@ export const PROJECTS: readonly Project[] = [
     featured: true,
   },
   {
+    title: 'SMG Transport Agency',
+    category: 'Transport Booking Platform',
+    tags: ['Tourism', 'Technology'],
+    icon: 'assets/project-covers/smg-logo-mark.png',
+    iconIsImage: true,
+    description:
+      'A Ghanaian intercity travel booking platform where passengers search active routes, choose seats, pay online, and receive QR e-tickets with staff operations managed behind the scenes.',
+    impact: 'Turns route discovery, seat reservations, payments, and ticket verification into a smoother digital workflow for travellers and the SMG team.',
+    status: 'Live platform',
+    year: '2026',
+    link: { label: 'Visit SMG Agency', href: 'https://smgagencygh.com' },
+    featured: true,
+  },
+  {
     title: 'Luban Workshop Restaurant',
     category: 'Digital Marketing & Web',
     tags: ['Tourism', 'Technology'],
     icon: 'assets/project-covers/luban-logo.png',
     iconIsImage: true,
-    coverImage: 'assets/project-covers/luban-logo.png',
     description:
       "Improving the visibility of my department's Chinese restaurant through website design, search engine optimisation, and social media engagement.",
     impact: 'Connects hospitality operations with discoverable digital storytelling.',
@@ -129,8 +142,9 @@ export const PROJECTS: readonly Project[] = [
     title: 'VitaForge AI',
     category: 'AI Career Platform',
     tags: ['Education', 'Technology'],
-    icon: 'VF',
-    coverImage: 'assets/project-covers/vitaforge.png',
+    icon: 'assets/project-covers/vitaforge-mark.png',
+    iconIsImage: true,
+    coverImage: 'assets/project-covers/vitaforge-ai.webp',
     description:
       'A student-first AI career platform for building polished CVs, tailored cover letters, ATS-ready applications, and guided career materials.',
     impact: 'Helps students turn experience into stronger job applications with practical AI support.',
@@ -140,17 +154,33 @@ export const PROJECTS: readonly Project[] = [
     featured: true,
   },
   {
-    title: 'Department Election Portal',
+    title: 'Pollaris Election Platform',
     category: 'Election Technology',
     tags: ['Technology', 'Leadership', 'Community'],
-    icon: 'EP',
-    coverImage: 'assets/project-covers/election-portal-logo.png',
+    icon: 'assets/project-covers/pollaris-mark.png',
+    iconIsImage: true,
+    coverImage: 'assets/project-covers/pollaris.webp',
     description:
-      'A secure web voting portal used to organise elections for three departments across June and July 2026, supporting smoother student governance workflows.',
-    impact: 'Brought digital structure, transparency, and easier participation to departmental elections.',
-    status: 'Used in elections',
-    year: 'Jun-Jul 2026',
-    link: { label: 'Visit election portal', href: 'https://absag-ucc1.web.app' },
+      'A configurable multi-election voting platform for managed campus elections, covering voter-code access, ballot setup, staff dashboards, audit trails, certified results, and election-scoped exports.',
+    impact: 'Brought digital structure, transparency, and auditable participation to departmental elections.',
+    status: 'Election platform',
+    year: '2026',
+    link: { label: 'Visit Pollaris', href: 'https://absag-ucc1.web.app' },
+    featured: true,
+  },
+  {
+    title: 'HallKey',
+    category: 'Campus Access Technology',
+    tags: ['Technology', 'Community'],
+    icon: 'assets/project-covers/hallkey-mark.svg',
+    iconIsImage: true,
+    coverImage: 'assets/project-covers/hallkey.webp',
+    description:
+      'A smart university hall key-access concept where students request a room key, verify by fingerprint, receive the mapped key, and give hall staff a live operational record.',
+    impact: 'Reduces key-collection queues while improving access accountability for students, porters, and hall administrators.',
+    status: 'Live prototype',
+    year: '2026',
+    link: { label: 'Visit HallKey', href: 'https://hallkey.web.app' },
     featured: true,
   },
   {
@@ -303,6 +333,7 @@ export const EXPERIENCE: readonly ExperienceItem[] = [
 // ============================================================================
 const CERT = 'assets/certificates';
 export const CERTIFICATES: readonly Certificate[] = [
+  { title: 'Oguaa Hall Army Cadet Citation', issuer: 'Oguaa Hall Army Cadet, University of Cape Coast', date: 'Class of 2026', href: `${CERT}/ohac-citation-qm.png`, image: `${CERT}/ohac-citation-qm.png`, variant: 'portrait' },
   { title: 'AI Fundamentals', issuer: 'Google · Coursera', date: 'April 18, 2026', href: `${CERT}/google-ai-fundamentals-certificate.jpg`, image: `${CERT}/google-ai-fundamentals-certificate.jpg` },
   { title: 'Technology Risk Virtual Job Simulation', issuer: 'EY · Forage', date: 'February 2026', href: `${CERT}/ey-technology-risk-certificate.png`, image: `${CERT}/ey-technology-risk-certificate.png` },
   { title: 'Generative AI Mastermind', issuer: 'Outskill', date: '2026', href: `${CERT}/outskill-genreative-ai-mastermind-certificate.png`, image: `${CERT}/outskill-genreative-ai-mastermind-certificate.png` },

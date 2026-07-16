@@ -48,6 +48,7 @@ export interface Certificate {
   readonly date: string;
   readonly href: string;
   readonly image?: string;
+  readonly variant?: 'portrait';
 }
 
 export interface Stat {

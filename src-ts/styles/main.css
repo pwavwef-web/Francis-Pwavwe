@@ -1104,6 +1104,14 @@ a {
   object-fit: cover;
   transition: transform 0.5s var(--ease);
 }
+.cert--portrait .cert__preview {
+  aspect-ratio: 4 / 5;
+}
+.cert--portrait .cert__img {
+  object-fit: contain;
+  padding: 0.65rem;
+  background: #f8fafc;
+}
 .cert:hover .cert__img {
   transform: scale(1.06);
 }
@@ -3117,14 +3125,12 @@ body {
   transition: transform 0.6s var(--ease), filter 0.6s var(--ease);
 }
 
-.project[data-visual='luban-workshop-restaurant'] .project__cover,
 .project[data-visual='department-election-portal'] .project__cover {
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 247, 237, 0.72)),
     linear-gradient(135deg, var(--project-a), var(--project-b));
 }
 
-.project[data-visual='luban-workshop-restaurant'] .project__cover-img,
 .project[data-visual='department-election-portal'] .project__cover-img {
   object-fit: contain;
   padding: clamp(2rem, 5vw, 4rem);
