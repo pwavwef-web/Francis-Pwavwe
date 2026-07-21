@@ -121,6 +121,67 @@ function safeUrl(url?: string | null): string | null {
   return /^(https?:\/\/|data:image\/)/i.test(url) ? url : null;
 }
 
+function splitTrailingUrlPunctuation(value: string): { url: string; trailing: string } {
+  let url = value;
+  let trailing = '';
+  while (/[.,!?;:)\]}]+$/.test(url)) {
+    trailing = url.slice(-1) + trailing;
+    url = url.slice(0, -1);
+  }
+  return { url, trailing };
+}
+
+function linkifyPlainUrls(root: HTMLElement): void {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes: Text[] = [];
+  let node = walker.nextNode();
+
+  while (node) {
+    const textNode = node as Text;
+    const parent = textNode.parentElement;
+    const value = textNode.nodeValue ?? '';
+    if (
+      parent &&
+      !parent.closest('a, script, style, textarea, code, pre') &&
+      /(https?:\/\/|www\.)/i.test(value)
+    ) {
+      nodes.push(textNode);
+    }
+    node = walker.nextNode();
+  }
+
+  const urlPattern = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
+  nodes.forEach((textNode) => {
+    const value = textNode.nodeValue ?? '';
+    const fragment = document.createDocumentFragment();
+    let lastIndex = 0;
+
+    for (const match of value.matchAll(urlPattern)) {
+      const start = match.index ?? 0;
+      const raw = match[0];
+      const { url, trailing } = splitTrailingUrlPunctuation(raw);
+      const href = safeUrl(url.startsWith('www.') ? `https://${url}` : url);
+
+      fragment.append(document.createTextNode(value.slice(lastIndex, start)));
+      if (href && url) {
+        const anchor = document.createElement('a');
+        anchor.href = href;
+        anchor.target = '_blank';
+        anchor.rel = 'noopener noreferrer';
+        anchor.textContent = url;
+        fragment.append(anchor);
+      } else {
+        fragment.append(document.createTextNode(url));
+      }
+      if (trailing) fragment.append(document.createTextNode(trailing));
+      lastIndex = start + raw.length;
+    }
+
+    fragment.append(document.createTextNode(value.slice(lastIndex)));
+    textNode.replaceWith(fragment);
+  });
+}
+
 function firstImage(html: string): string | null {
   const div = document.createElement('div');
   div.innerHTML = html;
@@ -145,6 +206,7 @@ function sanitizeHtml(html: string): string {
     const src = el.getAttribute('src');
     if (src && !safeUrl(src)) el.removeAttribute('src');
   });
+  linkifyPlainUrls(div);
   return div.innerHTML;
 }
 

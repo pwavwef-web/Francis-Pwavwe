@@ -29,6 +29,36 @@ service cloud.firestore {
                     && request.resource.data.message is string;
     }
 
+    // Newsletter subscribers (from the website subscribe form).
+    // The document ID is a random unsubscribe token, so a newsletter link of the
+    // form /unsubscribe?t=<docId> can opt the reader out without granting anyone
+    // read access to the subscriber list.
+    match /subscribers/{subscriberId} {
+      // Anyone may subscribe; shape is pinned so the collection stays clean.
+      allow create: if request.resource.data.keys().hasOnly(['email', 'source', 'status', 'timestamp'])
+                    && request.resource.data.keys().hasAll(['email', 'timestamp'])
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() < 320
+                    && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+      // Holding the token allows exactly one thing: opting out. No other field
+      // may change, and the record can never be flipped back to subscribed.
+      allow update: if request.resource.data.diff(resource.data)
+                         .affectedKeys().hasOnly(['status', 'unsubscribedAt'])
+                    && request.resource.data.status == 'unsubscribed';
+      // Only admin can read or clear the list.
+      allow read, delete: if isAdmin();
+    }
+
+    // Unsubscribe-by-email requests (fallback when the token link is missing)
+    match /unsubscribeRequests/{requestId} {
+      allow create: if request.resource.data.keys().hasOnly(['email', 'timestamp'])
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() < 320
+                    && request.resource.data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+      allow read, delete: if isAdmin();
+      allow update: if false;
+    }
+
     // Transactions collection (for finances)
     match /transactions/{transactionId} {
       allow read: if request.auth != null 

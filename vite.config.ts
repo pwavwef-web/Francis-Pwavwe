@@ -35,6 +35,7 @@ export default defineConfig({
         { src: 'profile.jpg', dest: '.' },
         { src: 'favicon.png', dest: '.' },
         { src: 'CNAME', dest: '.' },
+        { src: 'ads.txt', dest: '.' },
       ],
     }),
   ],

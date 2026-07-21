@@ -35,10 +35,10 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
   { id: 'work', label: 'Work' },
-  { id: 'skills', label: 'Capabilities' },
+  { id: 'skills', label: 'Services' },
   { id: 'journey', label: 'Journey' },
   { id: 'insights', label: 'Insights' },
-  { id: 'vision', label: 'Vision' },
+  { id: 'newsletter', label: 'Newsletter' },
   { id: 'contact', label: 'Contact' },
 ];
 
@@ -53,7 +53,7 @@ export const SOCIALS: readonly SocialLink[] = [
 // ============================================================================
 export const STATS: readonly Stat[] = [
   { value: 15, suffix: '+', label: 'Featured Projects' },
-  { value: 12, suffix: '', label: 'Certifications' },
+  { value: 14, suffix: '', label: 'Certifications' },
   { value: 3, suffix: '+', label: 'Years Building AZ Learner' },
   { value: 5, suffix: '', label: 'Global Programs' },
 ];
@@ -298,17 +298,17 @@ export const PROJECTS: readonly Project[] = [
 ];
 
 // ============================================================================
-//  SKILLS
+//  SERVICES
 // ============================================================================
 export const SKILLS: readonly Skill[] = [
-  { icon: '🗺️', name: 'Tourism Planning', description: 'Strategic development and management of tourism experiences.' },
-  { icon: '📈', name: 'Research & Data Analysis', description: 'Evidence-based decision making and insight generation.' },
-  { icon: '✈️', name: 'Travel & Tour Operations', description: 'End-to-end management of travel services and experiences.' },
-  { icon: '🎯', name: 'Event Coordination', description: 'Seamless planning and execution of complex events.' },
-  { icon: '👥', name: 'Leadership & Team Management', description: 'Building and guiding high-performing teams.' },
-  { icon: '💡', name: 'Digital Strategy', description: 'Leveraging technology for competitive advantage.' },
-  { icon: '🔄', name: 'Systems Thinking', description: 'Holistic approach to complex problem-solving.' },
-  { icon: '🎤', name: 'Public Speaking', description: 'Clear and compelling communication to diverse audiences.' },
+  { icon: '🗺️', name: 'Tourism Strategy & Planning', description: 'Designing visitor experiences, destination plans, and practical tourism growth roadmaps.' },
+  { icon: '📈', name: 'Research & Insight Reports', description: 'Turning surveys, fieldwork, and market data into clear recommendations for action.' },
+  { icon: '✈️', name: 'Travel & Tour Operations', description: 'Planning itineraries, coordinating logistics, and managing seamless travel experiences.' },
+  { icon: '🎯', name: 'Event & Logistics Coordination', description: 'Structuring event operations, transport plans, security flow, and on-site execution.' },
+  { icon: '👥', name: 'Leadership & Team Support', description: 'Helping student, community, and project teams organise people, roles, and delivery.' },
+  { icon: '💡', name: 'Digital Strategy Consulting', description: 'Improving visibility, workflows, and service delivery through practical digital systems.' },
+  { icon: '🔄', name: 'Education Technology Support', description: 'Building learning tools, academic support systems, and student-focused digital resources.' },
+  { icon: '🎤', name: 'Speaking & Workshop Facilitation', description: 'Delivering talks and sessions on tourism, leadership, innovation, and student success.' },
 ];
 
 // ============================================================================
@@ -334,6 +334,7 @@ export const EXPERIENCE: readonly ExperienceItem[] = [
 const CERT = 'assets/certificates';
 export const CERTIFICATES: readonly Certificate[] = [
   { title: 'Oguaa Hall Army Cadet Citation', issuer: 'Oguaa Hall Army Cadet, University of Cape Coast', date: 'Class of 2026', href: `${CERT}/ohac-citation-qm.png`, image: `${CERT}/ohac-citation-qm.png`, variant: 'portrait' },
+  { title: '2025 Aspire Leaders Program', issuer: 'Aspire Institute', date: 'December 2025', href: `${CERT}/aspire-leaders-program-certificate.pdf` },
   { title: 'AI Fundamentals', issuer: 'Google · Coursera', date: 'April 18, 2026', href: `${CERT}/google-ai-fundamentals-certificate.jpg`, image: `${CERT}/google-ai-fundamentals-certificate.jpg` },
   { title: 'Technology Risk Virtual Job Simulation', issuer: 'EY · Forage', date: 'February 2026', href: `${CERT}/ey-technology-risk-certificate.png`, image: `${CERT}/ey-technology-risk-certificate.png` },
   { title: 'Generative AI Mastermind', issuer: 'Outskill', date: '2026', href: `${CERT}/outskill-genreative-ai-mastermind-certificate.png`, image: `${CERT}/outskill-genreative-ai-mastermind-certificate.png` },
@@ -347,18 +348,6 @@ export const CERTIFICATES: readonly Certificate[] = [
   { title: "Sustainability and SDG's", issuer: 'NELS SS26', date: '2026', href: `${CERT}/NELS SS26_Certificate Sustainability and SDG's.pdf` },
   { title: 'Dealing with Resistance in the Student Movement', issuer: 'NELS SS26', date: '2026', href: `${CERT}/NELS SS26_Certificate Dealing with Resistance in the Student Movement.pdf` },
 ];
-
-// ============================================================================
-//  VISION
-// ============================================================================
-export const VISION = {
-  statement:
-    'To become a leading international tourism strategist, pioneering innovative systems that transform the African tourism landscape while revolutionising student experiences across the continent.',
-  paragraphs: [
-    "I envision a future where strategic thinking meets digital innovation — where African students have access to world-class educational support systems, and where tourism operations leverage technology to create sustainable, impactful experiences. Through AZ Learner and my work in tourism management, I'm building the foundation for this transformation, one system at a time.",
-    "My goal is to bridge the gap between traditional tourism management and digital innovation — creating frameworks that drive both economic growth and educational excellence. I'm committed to developing solutions that don't just solve problems; they redefine possibilities.",
-  ],
-} as const;
 
 // ============================================================================
 //  SUPPORT
@@ -377,7 +366,13 @@ export const SUPPORT = {
 export const EBOOK_HREF =
   'docs/archive/Advanced_Tourism_Concepts_UCC_Student_Creator_Ebook.pdf';
 
-export const VOICE_OVERVIEW_EMBED =
-  'https://drive.google.com/file/d/179FRNVt-wG2wZdPcCwGZN3ifQ1Fqgu1s/preview';
-export const VOICE_OVERVIEW_LINK =
-  'https://drive.google.com/file/d/179FRNVt-wG2wZdPcCwGZN3ifQ1Fqgu1s/view?usp=sharing';
+// ============================================================================
+//  NEWSLETTER
+// ============================================================================
+export const NEWSLETTER = {
+  title: 'Subscribe to Receive Daily Newsletters',
+  desc:
+    "A short daily note on tourism strategy, education technology and student leadership — insights, opportunities and what I'm building, delivered straight to your inbox.",
+  note: 'One email a day · No spam · Unsubscribe any time',
+  unsubscribeHref: 'unsubscribe.html',
+} as const;

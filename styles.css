@@ -1150,6 +1150,13 @@ a {
     font-size: 1.05rem;
 }
 
+.blog-modal-content-text a {
+    color: var(--royal-blue);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+}
+
 .blog-modal-content-text h1,
 .blog-modal-content-text h2,
 .blog-modal-content-text h3 {

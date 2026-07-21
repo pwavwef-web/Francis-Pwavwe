@@ -7,6 +7,7 @@ import { initReveals, refreshScrollTriggers } from './modules/reveal.ts';
 import { initMagnetic } from './modules/magnetic.ts';
 import { initRoleRotator } from './modules/text-effects.ts';
 import { initContact } from './modules/contact.ts';
+import { initNewsletter } from './modules/newsletter.ts';
 import { initCvDownload } from './modules/cv.ts';
 import { initBlogs } from './modules/blogs.ts';
 
@@ -26,6 +27,7 @@ function boot(): void {
   initNav();
   initMagnetic();
   initContact();
+  initNewsletter();
   initCvDownload();
   initBlogs();
 

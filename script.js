@@ -420,15 +420,15 @@ Oguaa Hall Army Cadet Corps & UCC Armed Forces Cadet Corps
 2022 - Present
 Active member developing leadership skills, discipline, and strategic thinking through military training and cadet corps activities. Contributing to campus security initiatives and leadership development programs.
 
-CORE COMPETENCIES
-• Tourism Planning - Strategic development and management of tourism experiences
-• Research & Data Analysis - Evidence-based decision making and insights generation
-• Travel & Tour Operations - End-to-end management of travel services and experiences
-• Event Coordination - Seamless planning and execution of complex events
-• Leadership & Team Management - Building and guiding high-performing teams
-• Digital Strategy - Leveraging technology for competitive advantage
-• Systems Thinking - Holistic approach to complex problem-solving
-• Public Speaking - Clear and compelling communication to diverse audiences
+SERVICES
+• Tourism Strategy & Planning - Designing visitor experiences, destination plans, and practical tourism growth roadmaps
+• Research & Insight Reports - Turning surveys, fieldwork, and market data into clear recommendations for action
+• Travel & Tour Operations - Planning itineraries, coordinating logistics, and managing seamless travel experiences
+• Event & Logistics Coordination - Structuring event operations, transport plans, security flow, and on-site execution
+• Leadership & Team Support - Helping student, community, and project teams organise people, roles, and delivery
+• Digital Strategy Consulting - Improving visibility, workflows, and service delivery through practical digital systems
+• Education Technology Support - Building learning tools, academic support systems, and student-focused digital resources
+• Speaking & Workshop Facilitation - Delivering talks and sessions on tourism, leadership, innovation, and student success
 
 FEATURED PROJECTS
 AZ Learner
@@ -565,6 +565,66 @@ function sanitizeUrl(url) {
     return urlPattern.test(url) ? url : null;
 }
 
+function splitTrailingUrlPunctuation(value) {
+    let url = value;
+    let trailing = '';
+    while (/[.,!?;:)\]}]+$/.test(url)) {
+        trailing = url.slice(-1) + trailing;
+        url = url.slice(0, -1);
+    }
+    return { url, trailing };
+}
+
+function linkifyPlainUrls(root) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let node = walker.nextNode();
+
+    while (node) {
+        const parent = node.parentElement;
+        const value = node.nodeValue || '';
+        if (
+            parent &&
+            !parent.closest('a, script, style, textarea, code, pre') &&
+            /(https?:\/\/|www\.)/i.test(value)
+        ) {
+            nodes.push(node);
+        }
+        node = walker.nextNode();
+    }
+
+    const urlPattern = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
+    nodes.forEach(textNode => {
+        const value = textNode.nodeValue || '';
+        const fragment = document.createDocumentFragment();
+        let lastIndex = 0;
+
+        for (const match of value.matchAll(urlPattern)) {
+            const start = match.index || 0;
+            const raw = match[0];
+            const { url, trailing } = splitTrailingUrlPunctuation(raw);
+            const href = sanitizeUrl(url.startsWith('www.') ? `https://${url}` : url);
+
+            fragment.append(document.createTextNode(value.slice(lastIndex, start)));
+            if (href && url) {
+                const anchor = document.createElement('a');
+                anchor.href = href;
+                anchor.target = '_blank';
+                anchor.rel = 'noopener noreferrer';
+                anchor.textContent = url;
+                fragment.append(anchor);
+            } else {
+                fragment.append(document.createTextNode(url));
+            }
+            if (trailing) fragment.append(document.createTextNode(trailing));
+            lastIndex = start + raw.length;
+        }
+
+        fragment.append(document.createTextNode(value.slice(lastIndex)));
+        textNode.replaceWith(fragment);
+    });
+}
+
 // Sanitize HTML content to prevent XSS while preserving basic formatting
 function sanitizeHtml(html) {
     const div = document.createElement('div');
@@ -599,6 +659,7 @@ function sanitizeHtml(html) {
         }
     });
     
+    linkifyPlainUrls(div);
     return div.innerHTML;
 }
 

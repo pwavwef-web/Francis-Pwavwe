@@ -49,7 +49,14 @@ export interface Certificate {
   readonly href: string;
   readonly image?: string;
   readonly variant?: 'portrait';
+  readonly tags?: readonly CertificateCategory[];
 }
+
+export type CertificateCategory =
+  | 'AI'
+  | 'Leadership'
+  | 'Hospitality'
+  | 'Programs';
 
 export interface Stat {
   readonly value: number;

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Unsubscribe — Francis Pwavwe</title>
+  <meta name="description" content="Unsubscribe from the Francis Pwavwe daily newsletter.">
+  <link rel="icon" href="favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #08245b;
+      --blue: #1d5ed8;
+      --ink: #10213f;
+      --muted: #526079;
+      --line: rgba(14, 37, 77, 0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #08245b 0%, #1646a3 100%);
+    }
+    .card {
+      width: min(100%, 540px);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 24px 62px rgba(4, 18, 45, 0.28);
+      padding: clamp(1.75rem, 5vw, 2.75rem);
+      text-align: center;
+    }
+    .eyebrow {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+    h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.4rem, 4vw, 1.9rem);
+      margin: 0.6rem 0 0.9rem;
+      color: var(--navy);
+    }
+    p { color: var(--muted); line-height: 1.6; margin: 0 0 1rem; }
+    form { display: flex; flex-wrap: wrap; gap: 0.65rem; justify-content: center; margin-top: 1.4rem; }
+    input {
+      flex: 1 1 260px;
+      min-width: 0;
+      min-height: 48px;
+      padding: 0.8rem 1rem;
+      font: inherit;
+      color: var(--ink);
+      background: #f7faff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(29, 94, 216, 0.16); }
+    button {
+      flex: 0 0 auto;
+      min-height: 48px;
+      padding: 0.8rem 1.6rem;
+      font: inherit;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #08245b 0%, #1d5ed8 100%);
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    button:hover:not(:disabled) { box-shadow: 0 18px 38px rgba(29, 94, 216, 0.25); transform: translateY(-1px); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .status { margin-top: 1.2rem; font-weight: 500; min-height: 1.4em; }
+    .status.ok { color: #0f766e; }
+    .status.err { color: #b42318; }
+    .back { display: inline-block; margin-top: 1.6rem; font-size: 0.85rem; color: var(--blue); text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    [hidden] { display: none !important; }
+    @media (max-width: 480px) { input, button { flex: 1 1 100%; } }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <span class="eyebrow">Daily Newsletter</span>
+    <h1 id="heading">Unsubscribe</h1>
+    <p id="lede">Processing your request…</p>
+
+    <!-- Shown when there is no valid token in the link, or the token failed. -->
+    <div id="manual" hidden>
+      <form id="unsubForm" novalidate>
+        <label class="sr-only" for="email" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Email address</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        <button type="submit" id="submitBtn">Unsubscribe</button>
+      </form>
+    </div>
+
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+    <a class="back" href="/">← Back to pwavwe.com</a>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+    import { getFirestore, doc, updateDoc, addDoc, collection, serverTimestamp }
+      from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: 'AIzaSyB6lxgjNY4CRNHAe3pAgR5SYv1ohL8brOI',
+      authDomain: 'francis-pwavwe.firebaseapp.com',
+      projectId: 'francis-pwavwe',
+      storageBucket: 'francis-pwavwe.firebasestorage.app',
+      messagingSenderId: '658069378543',
+      appId: '1:658069378543:web:87b1dcb0dd27d3255bd21a',
+    };
+    const db = getFirestore(initializeApp(firebaseConfig));
+
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const heading = document.getElementById('heading');
+    const lede = document.getElementById('lede');
+    const manual = document.getElementById('manual');
+    const statusEl = document.getElementById('status');
+
+    const setStatus = (msg, kind = '') => { statusEl.textContent = msg; statusEl.className = `status ${kind}`; };
+
+    function done(message) {
+      heading.textContent = "You're unsubscribed";
+      lede.textContent = message;
+      manual.hidden = true;
+      setStatus('', '');
+    }
+
+    function showManual(lede_text, status = '', kind = '') {
+      lede.textContent = lede_text;
+      manual.hidden = false;
+      setStatus(status, kind);
+    }
+
+    // ---- Token path: one-click unsubscribe straight from a newsletter link ----
+    const token = (new URLSearchParams(location.search).get('t') || '').trim();
+
+    async function unsubscribeByToken(t) {
+      await updateDoc(doc(db, 'subscribers', t), {
+        status: 'unsubscribed',
+        unsubscribedAt: serverTimestamp(),
+      });
+    }
+
+    // ---- Manual path: request removal by email (admin processes the queue) ----
+    document.getElementById('unsubForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const field = document.getElementById('email');
+      const email = field.value.trim().toLowerCase();
+      if (!EMAIL_RE.test(email)) { setStatus('Please enter a valid email address.', 'err'); field.focus(); return; }
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      setStatus('Working…');
+      try {
+        await addDoc(collection(db, 'unsubscribeRequests'), { email, timestamp: serverTimestamp() });
+        done('Your request has been received. You will not receive any further daily newsletters at that address.');
+      } catch (err) {
+        console.error('Unsubscribe request failed:', err);
+        setStatus('Something went wrong. Please email francis@pwavwe.com and you will be removed manually.', 'err');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    if (/^[a-f0-9]{16,64}$/i.test(token)) {
+      unsubscribeByToken(token)
+        .then(() => done('You have been removed from the daily newsletter. Sorry to see you go — you can resubscribe any time at pwavwe.com.'))
+        .catch((err) => {
+          console.error('Token unsubscribe failed:', err);
+          showManual(
+            'That unsubscribe link is no longer valid.',
+            'No problem — confirm your email below and you will be removed.',
+            'err',
+          );
+        });
+    } else {
+      showManual('Enter your email address below to stop receiving the daily newsletter.');
+    }
+  </script>
+</body>
+</html>

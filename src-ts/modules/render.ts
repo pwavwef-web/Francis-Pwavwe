@@ -9,7 +9,7 @@ import {
   SOCIALS,
   STATS,
 } from '../data/content.ts';
-import type { Project } from '../types.ts';
+import type { Certificate, ExperienceItem, Project } from '../types.ts';
 import { escapeHtml, qs, qsa } from '../util/dom.ts';
 import { bindTilt } from './magnetic.ts';
 import { openLightbox } from './lightbox.ts';
@@ -140,7 +140,7 @@ function projectCard(p: Project): string {
     ? `<img src="${coverImage}" alt="" class="project__cover-img" loading="lazy" decoding="async">`
     : '';
   return `
-    <article class="project tilt ${p.featured ? 'is-featured' : ''}" data-tags="${p.tags.join(
+    <article class="project ${p.featured ? 'is-featured' : ''}" data-tags="${p.tags.join(
       ',',
     )}" data-visual="${visualId}">
       <div class="project__cover">
@@ -166,6 +166,136 @@ function projectCard(p: Project): string {
     </article>`;
 }
 
+function visibleFlowItems(rail: HTMLElement, selector: string): HTMLElement[] {
+  return qsa<HTMLElement>(selector, rail).filter((item) => !item.classList.contains('is-hidden'));
+}
+
+interface FlowState {
+  selector: string;
+  activeItem: HTMLElement | null;
+  pointerStart: number | null;
+  wheelLocked: boolean;
+}
+
+const FLOW_STATES = new WeakMap<HTMLElement, FlowState>();
+
+function paintFlowRail(rail: HTMLElement, selector: string): number {
+  const items = visibleFlowItems(rail, selector);
+  const state = FLOW_STATES.get(rail);
+  let active = state?.activeItem ? items.indexOf(state.activeItem) : -1;
+  if (active < 0) active = Math.min(1, Math.max(items.length - 1, 0));
+
+  if (state) state.activeItem = items[active] ?? null;
+
+  items.forEach((item, index) => {
+    let delta = index - active;
+    if (items.length > 2) {
+      if (delta > items.length / 2) delta -= items.length;
+      if (delta < -items.length / 2) delta += items.length;
+    }
+
+    const position =
+      delta === 0
+        ? 'center'
+        : delta === -1
+          ? 'left'
+          : delta === 1
+            ? 'right'
+            : delta === -2
+              ? 'far-left'
+              : delta === 2
+                ? 'far-right'
+                : 'hidden';
+    item.dataset.flowPosition = position;
+    item.setAttribute('aria-hidden', String(position === 'hidden'));
+    item.inert = position === 'hidden';
+    if (position === 'center') item.setAttribute('aria-current', 'true');
+    else item.removeAttribute('aria-current');
+  });
+
+  return active;
+}
+
+function centerFlowItem(rail: HTMLElement, selector: string, index: number): void {
+  const items = visibleFlowItems(rail, selector);
+  if (!items.length) return;
+  const state = FLOW_STATES.get(rail);
+  if (state) state.activeItem = items[(index + items.length) % items.length];
+  paintFlowRail(rail, selector);
+}
+
+function resetFlowRail(rail: HTMLElement, selector: string): void {
+  const items = visibleFlowItems(rail, selector);
+  centerFlowItem(rail, selector, items.length > 2 ? 1 : 0);
+}
+
+function initFlowRail(rail: HTMLElement, selector: string): void {
+  const state: FlowState = {
+    selector,
+    activeItem: null,
+    pointerStart: null,
+    wheelLocked: false,
+  };
+  FLOW_STATES.set(rail, state);
+  rail.tabIndex = 0;
+  rail.setAttribute('role', 'region');
+  rail.setAttribute('aria-roledescription', 'carousel');
+
+  rail.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    moveFlowRail(rail, selector, event.key === 'ArrowRight' ? 1 : -1);
+  });
+
+  rail.addEventListener(
+    'wheel',
+    (event) => {
+      const horizontalIntent = Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.shiftKey;
+      if (!horizontalIntent || state.wheelLocked) return;
+      event.preventDefault();
+      state.wheelLocked = true;
+      moveFlowRail(rail, selector, (event.deltaX || event.deltaY) > 0 ? 1 : -1);
+      window.setTimeout(() => {
+        state.wheelLocked = false;
+      }, 360);
+    },
+    { passive: false },
+  );
+
+  rail.addEventListener('pointerdown', (event) => {
+    state.pointerStart = event.clientX;
+    rail.setPointerCapture?.(event.pointerId);
+  });
+
+  rail.addEventListener('pointerup', (event) => {
+    if (state.pointerStart === null) return;
+    const distance = event.clientX - state.pointerStart;
+    state.pointerStart = null;
+    if (Math.abs(distance) >= 44) moveFlowRail(rail, selector, distance < 0 ? 1 : -1);
+  });
+
+  rail.addEventListener('pointercancel', () => {
+    state.pointerStart = null;
+  });
+
+  rail.addEventListener('click', (event) => {
+    if ((event.target as HTMLElement).closest('a, button')) return;
+    const item = (event.target as HTMLElement).closest<HTMLElement>(selector);
+    if (!item || item.dataset.flowPosition === 'center') return;
+    const items = visibleFlowItems(rail, selector);
+    centerFlowItem(rail, selector, items.indexOf(item));
+  });
+
+  window.requestAnimationFrame(() => resetFlowRail(rail, selector));
+}
+
+function moveFlowRail(rail: HTMLElement, selector: string, direction: 1 | -1): void {
+  const items = visibleFlowItems(rail, selector);
+  if (!items.length) return;
+  const active = paintFlowRail(rail, selector);
+  centerFlowItem(rail, selector, active + direction);
+}
+
 function renderProjects(): void {
   const grid = qs('[data-projects]');
   const filters = qs('[data-project-filters]');
@@ -178,7 +308,9 @@ function renderProjects(): void {
     filters.innerHTML = categories
       .map(
         (c, i) =>
-          `<button class="chip ${i === 0 ? 'is-active' : ''}" data-filter="${escapeHtml(
+          `<button class="chip ${i === 0 ? 'is-active' : ''}" type="button" aria-pressed="${
+            i === 0
+          }" data-filter="${escapeHtml(
             c,
           )}">${escapeHtml(c)}</button>`,
       )
@@ -186,12 +318,10 @@ function renderProjects(): void {
   }
 
   grid.innerHTML = PROJECTS.map(projectCard).join('');
-  bindTilt(grid);
+  initFlowRail(grid, '.project');
 
   const scrollProjects = (direction: 1 | -1): void => {
-    const card = grid.querySelector<HTMLElement>('.project:not(.is-hidden)');
-    const distance = card ? card.offsetWidth + 24 : Math.round(grid.clientWidth * 0.9);
-    grid.scrollBy({ left: distance * direction, behavior: 'smooth' });
+    moveFlowRail(grid, '.project', direction);
   };
 
   prev?.addEventListener('click', () => scrollProjects(-1));
@@ -201,13 +331,17 @@ function renderProjects(): void {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
     if (!btn) return;
     const filter = btn.dataset.filter ?? 'All';
-    qsa('.chip', filters).forEach((c) => c.classList.toggle('is-active', c === btn));
+    qsa<HTMLButtonElement>('.chip', filters).forEach((c) => {
+      const isActive = c === btn;
+      c.classList.toggle('is-active', isActive);
+      c.setAttribute('aria-pressed', String(isActive));
+    });
     qsa<HTMLElement>('.project', grid).forEach((card) => {
       const tags = (card.dataset.tags ?? '').split(',');
       const show = filter === 'All' || tags.includes(filter);
       card.classList.toggle('is-hidden', !show);
     });
-    grid.scrollTo({ left: 0, behavior: 'smooth' });
+    resetFlowRail(grid, '.project');
   });
 }
 
@@ -231,7 +365,9 @@ function setPortfolioView(view: PortfolioView): void {
 
     if (isActive) {
       const rail = qs<HTMLElement>('[data-projects], [data-certificates]', panel);
-      rail?.scrollTo({ left: 0, behavior: 'smooth' });
+      if (rail) {
+        resetFlowRail(rail, rail.matches('[data-certificates]') ? '.cert' : '.project');
+      }
     }
   });
 }
@@ -267,6 +403,7 @@ function initPortfolioTabs(): void {
 
   window.addEventListener('hashchange', () => {
     if (window.location.hash === '#credentials') setPortfolioView('certificates');
+    if (window.location.hash === '#work') setPortfolioView('projects');
   });
 }
 
@@ -286,56 +423,184 @@ function renderSkills(): void {
   bindTilt(grid);
 }
 
-// --- Timeline ---
+// --- Journey chapter viewer ---
+type JourneyFilter = 'All' | ExperienceItem['kind'];
+
+const JOURNEY_FILTERS: readonly { value: JourneyFilter; label: string }[] = [
+  { value: 'All', label: 'All' },
+  { value: 'leadership', label: 'Leadership' },
+  { value: 'work', label: 'Work' },
+  { value: 'education', label: 'Learning' },
+  { value: 'simulation', label: 'Simulations' },
+];
+
 function renderTimeline(): void {
   const timeline = qs('[data-timeline]');
   if (!timeline) return;
-  timeline.innerHTML =
-    '<div class="timeline__line"><div class="timeline__progress"></div></div>' +
-    EXPERIENCE.map(
-      (item, i) => `
-      <div class="timeline__item" data-reveal="${i % 2 === 0 ? 'right' : 'left'}">
-        <div class="timeline__marker" data-kind="${item.kind}"></div>
-        <div class="timeline__card tilt">
-          <span class="timeline__badge">${escapeHtml(item.kind)}</span>
-          <h3 class="timeline__title">${escapeHtml(item.title)}</h3>
-          <p class="timeline__company">${escapeHtml(item.company)}</p>
-          <p class="timeline__date">${escapeHtml(item.date)}</p>
-          <p class="timeline__desc">${escapeHtml(item.description)}</p>
-        </div>
-      </div>`,
-    ).join('');
+  timeline.innerHTML = `
+    <div class="journey__filters" role="tablist" aria-label="Journey categories">
+      ${JOURNEY_FILTERS.map(
+        ({ value, label }, index) =>
+          `<button class="journey__filter${index === 0 ? ' is-active' : ''}" type="button" role="tab" aria-selected="${index === 0}" data-journey-filter="${value}">${label}</button>`,
+      ).join('')}
+    </div>
+    <div class="journey__viewer" aria-live="polite">
+      <div class="journey__index" data-journey-index></div>
+      <article class="journey__card" data-journey-card></article>
+      <div class="journey__controls">
+        <button class="journey__control" type="button" data-journey-prev aria-label="Previous journey chapter">&lsaquo;</button>
+        <span class="journey__count" data-journey-count></span>
+        <button class="journey__control" type="button" data-journey-next aria-label="Next journey chapter">&rsaquo;</button>
+      </div>
+    </div>`;
+
+  const card = qs<HTMLElement>('[data-journey-card]', timeline);
+  const index = qs<HTMLElement>('[data-journey-index]', timeline);
+  const count = qs<HTMLElement>('[data-journey-count]', timeline);
+  const previous = qs<HTMLButtonElement>('[data-journey-prev]', timeline);
+  const next = qs<HTMLButtonElement>('[data-journey-next]', timeline);
+  if (!card || !index || !count) return;
+
+  let filter: JourneyFilter = 'All';
+  let active = 0;
+
+  const filteredItems = (): readonly ExperienceItem[] =>
+    filter === 'All' ? EXPERIENCE : EXPERIENCE.filter((item) => item.kind === filter);
+
+  const paintJourney = (): void => {
+    const items = filteredItems();
+    active = (active + items.length) % items.length;
+    const item = items[active];
+
+    index.innerHTML = items
+      .map(
+        (chapter, chapterIndex) => `
+          <button class="journey__chapter${chapterIndex === active ? ' is-active' : ''}" type="button" data-journey-chapter="${chapterIndex}" aria-label="Open ${escapeHtml(chapter.title)}">
+            <span>${escapeHtml(chapter.date)}</span>
+            <strong>${escapeHtml(chapter.title)}</strong>
+          </button>`,
+      )
+      .join('');
+
+    card.innerHTML = `
+      <div class="journey__card-topline">
+        <span class="timeline__badge">${escapeHtml(item.kind)}</span>
+        <span class="journey__number">${String(active + 1).padStart(2, '0')}</span>
+      </div>
+      <p class="timeline__date">${escapeHtml(item.date)}</p>
+      <h3 class="timeline__title">${escapeHtml(item.title)}</h3>
+      <p class="timeline__company">${escapeHtml(item.company)}</p>
+      <p class="timeline__desc">${escapeHtml(item.description)}</p>`;
+    card.dataset.kind = item.kind;
+    count.textContent = `${active + 1} / ${items.length}`;
+  };
+
+  const move = (direction: 1 | -1): void => {
+    active += direction;
+    paintJourney();
+  };
+
+  previous?.addEventListener('click', () => move(-1));
+  next?.addEventListener('click', () => move(1));
+
+  timeline.addEventListener('click', (event) => {
+    const filterButton = (event.target as HTMLElement).closest<HTMLButtonElement>(
+      '[data-journey-filter]',
+    );
+    if (filterButton) {
+      filter = (filterButton.dataset.journeyFilter ?? 'All') as JourneyFilter;
+      active = 0;
+      qsa<HTMLButtonElement>('[data-journey-filter]', timeline).forEach((button) => {
+        const isActive = button === filterButton;
+        button.classList.toggle('is-active', isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+      paintJourney();
+      return;
+    }
+
+    const chapter = (event.target as HTMLElement).closest<HTMLButtonElement>(
+      '[data-journey-chapter]',
+    );
+    if (!chapter) return;
+    active = Number(chapter.dataset.journeyChapter ?? 0);
+    paintJourney();
+  });
+
+  timeline.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    move(event.key === 'ArrowRight' ? 1 : -1);
+  });
+
+  paintJourney();
 }
 
 // --- Certificates (grid + lightbox) ---
+function certificateTags(c: Certificate): readonly string[] {
+  const haystack = `${c.title} ${c.issuer}`.toLowerCase();
+  const tags: string[] = [];
+  if (/(^|[^a-z])(ai|genai)([^a-z]|$)/.test(haystack)) tags.push('AI');
+  if (haystack.includes('aspire') || haystack.includes('cadet') || haystack.includes('nels')) {
+    tags.push('Leadership');
+  }
+  if (haystack.includes('kempinski') || haystack.includes('hotel')) tags.push('Hospitality');
+  if (
+    haystack.includes('aspire') ||
+    haystack.includes('coursera') ||
+    haystack.includes('forage') ||
+    haystack.includes('nels') ||
+    haystack.includes('outskill')
+  ) {
+    tags.push('Programs');
+  }
+  if (!tags.length) tags.push('Programs');
+  return tags;
+}
+
+function certificateCard(c: Certificate, i: number): string {
+  const preview = c.image
+    ? `<img src="${c.image}" alt="${escapeHtml(c.title)}" class="cert__img" loading="lazy">`
+    : `<span class="cert__pdf">PDF</span>`;
+  const variantClass = c.variant ? ` cert--${c.variant}` : '';
+  const tags = certificateTags(c).join(',');
+  return `
+    <article class="cert${variantClass}" data-cert="${i}" data-tags="${escapeHtml(
+      tags,
+    )}" tabindex="0" role="button" aria-label="Open ${escapeHtml(c.title)} credential">
+      <div class="cert__preview">${preview}</div>
+      <div class="cert__info">
+        <h3 class="cert__title">${escapeHtml(c.title)}</h3>
+        <p class="cert__issuer">${escapeHtml(c.issuer)}</p>
+        <p class="cert__date">${escapeHtml(c.date)}</p>
+      </div>
+    </article>`;
+}
+
 function renderCertificates(): void {
   const grid = qs('[data-certificates]');
+  const filters = qs('[data-cert-filters]');
   const prev = qs<HTMLButtonElement>('[data-cert-prev]');
   const next = qs<HTMLButtonElement>('[data-cert-next]');
   if (!grid) return;
-  grid.innerHTML = CERTIFICATES.map((c, i) => {
-    const preview = c.image
-      ? `<img src="${c.image}" alt="${escapeHtml(c.title)}" class="cert__img" loading="lazy">`
-      : `<span class="cert__pdf">PDF</span>`;
-    const variantClass = c.variant ? ` cert--${c.variant}` : '';
-    return `
-      <article class="cert tilt${variantClass}" data-cert="${i}" tabindex="0" role="button" aria-label="Open ${escapeHtml(
-        c.title,
-      )} credential">
-        <div class="cert__preview">${preview}</div>
-        <div class="cert__info">
-          <h3 class="cert__title">${escapeHtml(c.title)}</h3>
-          <p class="cert__issuer">${escapeHtml(c.issuer)}</p>
-          <p class="cert__date">${escapeHtml(c.date)}</p>
-        </div>
-      </article>`;
-  }).join('');
-  bindTilt(grid);
+
+  const categories = ['All', ...new Set(CERTIFICATES.flatMap(certificateTags))];
+  if (filters) {
+    filters.innerHTML = categories
+      .map(
+        (c, i) =>
+          `<button class="chip ${i === 0 ? 'is-active' : ''}" type="button" aria-pressed="${
+            i === 0
+          }" data-filter="${escapeHtml(c)}">${escapeHtml(c)}</button>`,
+      )
+      .join('');
+  }
+
+  grid.innerHTML = CERTIFICATES.map(certificateCard).join('');
+  initFlowRail(grid, '.cert');
 
   const scrollCertificates = (direction: 1 | -1): void => {
-    const card = grid.querySelector<HTMLElement>('.cert');
-    const distance = card ? card.offsetWidth + 24 : Math.round(grid.clientWidth * 0.9);
-    grid.scrollBy({ left: distance * direction, behavior: 'smooth' });
+    moveFlowRail(grid, '.cert', direction);
   };
 
   const openCertificate = (card: HTMLElement): void => {
@@ -347,6 +612,23 @@ function renderCertificates(): void {
 
   prev?.addEventListener('click', () => scrollCertificates(-1));
   next?.addEventListener('click', () => scrollCertificates(1));
+
+  filters?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+    if (!btn) return;
+    const filter = btn.dataset.filter ?? 'All';
+    qsa<HTMLButtonElement>('.chip', filters).forEach((c) => {
+      const isActive = c === btn;
+      c.classList.toggle('is-active', isActive);
+      c.setAttribute('aria-pressed', String(isActive));
+    });
+    qsa<HTMLElement>('.cert', grid).forEach((card) => {
+      const tags = (card.dataset.tags ?? '').split(',');
+      const show = filter === 'All' || tags.includes(filter);
+      card.classList.toggle('is-hidden', !show);
+    });
+    resetFlowRail(grid, '.cert');
+  });
 
   grid.addEventListener('click', (e) => {
     const card = (e.target as HTMLElement).closest<HTMLElement>('[data-cert]');

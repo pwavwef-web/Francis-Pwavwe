@@ -32,9 +32,10 @@ EXPERIENCE
 - Digital Strategy Consultant — Torchlight Tours (2023-2024)
 - Cadet Member — Oguaa Hall & UCC Armed Forces Cadet Corps (2022-Present)
 
-CORE COMPETENCIES
-Tourism Planning · Research & Data Analysis · Travel & Tour Operations · Event Coordination ·
-Leadership & Team Management · Digital Strategy · Systems Thinking · Public Speaking
+SERVICES
+Tourism Strategy & Planning · Research & Insight Reports · Travel & Tour Operations ·
+Event & Logistics Coordination · Digital Strategy Consulting · Education Technology Support ·
+Speaking & Workshop Facilitation
 
 VISION
 To become a leading international tourism strategist, pioneering innovative systems that
