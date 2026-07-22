@@ -1,232 +1,40 @@
 import type { BlogDoc } from '../types.ts';
-import { escapeHtml, prefersReducedMotion, qs } from '../util/dom.ts';
-import { notify } from './notify.ts';
+import { prefersReducedMotion, qs } from '../util/dom.ts';
+import {
+  bindGlobalModalKeys,
+  blogCard,
+  closeBlogModal,
+  fetchBlogs,
+  hashBlogId,
+  openBlogExternal,
+  openBlogModal,
+  shareBlog,
+} from './blog-core.ts';
 
 // ============================================================================
-//  Blog engine - reads public posts from Blogger and renders them in the
-//  existing insights rail with modal reading and deep-link support.
+//  Landing insights rail — shows the most recent posts in a horizontal rail and
+//  caps it with a "See all blogs" card that links to the full /blogs page. All
+//  feed loading, sanitising and the reading modal live in ./blog-core.ts.
 // ============================================================================
 
-const BLOG_FEED_URL = 'https://blogs.pwavwe.com/feeds/posts/default?alt=json-in-script&max-results=8';
-const locale = navigator.language || 'en-US';
-
-interface BloggerText {
-  $t?: string;
-}
-
-interface BloggerLink {
-  rel?: string;
-  href?: string;
-}
-
-interface BloggerEntry {
-  id?: BloggerText;
-  title?: BloggerText;
-  content?: BloggerText;
-  summary?: BloggerText;
-  published?: BloggerText;
-  updated?: BloggerText;
-  link?: BloggerLink[];
-  thr$total?: BloggerText;
-}
-
-interface BloggerFeed {
-  feed?: {
-    entry?: BloggerEntry[];
-  };
-}
-
+const RAIL_LIMIT = 7;
 let blogs: BlogDoc[] = [];
 let loaded = false;
-let current: BlogDoc | null = null;
 
-// ---------- feed loading ----------
-function loadJsonp<T>(url: string, timeoutMs = 12000): Promise<T> {
-  return new Promise((resolve, reject) => {
-    const callback = `__pwavweBlogFeed_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const script = document.createElement('script');
-    const timer = window.setTimeout(() => {
-      cleanup();
-      reject(new Error('Blogger feed request timed out.'));
-    }, timeoutMs);
+const byId = (id: string): BlogDoc | undefined => blogs.find((b) => b.id === id);
 
-    const cleanup = () => {
-      window.clearTimeout(timer);
-      script.remove();
-      delete (window as unknown as Record<string, unknown>)[callback];
-    };
-
-    (window as unknown as Record<string, (data: T) => void>)[callback] = (data) => {
-      cleanup();
-      resolve(data);
-    };
-
-    script.src = `${url}&callback=${encodeURIComponent(callback)}`;
-    script.async = true;
-    script.onerror = () => {
-      cleanup();
-      reject(new Error('Unable to load Blogger feed.'));
-    };
-    document.head.appendChild(script);
-  });
+function seeAllCard(): string {
+  return `
+    <a class="blog-card blog-card--all tilt" href="blogs.html" aria-label="See all blog posts">
+      <div class="blog-card--all__inner">
+        <span class="blog-card--all__glyph" aria-hidden="true">→</span>
+        <h3 class="blog-card--all__title">See all blogs</h3>
+        <p class="blog-card--all__text">Browse the full archive of The Pwavwe Papers.</p>
+        <span class="blog-card--all__cta">Open the archive</span>
+      </div>
+    </a>`;
 }
 
-function timestampFrom(value?: string): { toDate(): Date } | null {
-  if (!value) return null;
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : { toDate: () => date };
-}
-
-function postLink(entry: BloggerEntry): string | undefined {
-  return entry.link?.find((link) => link.rel === 'alternate')?.href;
-}
-
-function postId(entry: BloggerEntry): string {
-  const rawId = entry.id?.$t ?? postLink(entry) ?? `${Date.now()}-${Math.random()}`;
-  const bloggerPostId = rawId.match(/post-(\d+)/)?.[1];
-  return bloggerPostId ?? rawId.replace(/[^a-zA-Z0-9_-]/g, '').slice(-48);
-}
-
-function mapEntry(entry: BloggerEntry): BlogDoc {
-  const url = postLink(entry);
-  const content = entry.content?.$t ?? entry.summary?.$t ?? '';
-  const comments = Number(entry.thr$total?.$t ?? 0);
-
-  return {
-    id: postId(entry),
-    title: entry.title?.$t ?? 'Untitled',
-    content,
-    comments: Number.isFinite(comments) ? comments : 0,
-    timestamp: timestampFrom(entry.published?.$t ?? entry.updated?.$t),
-    url,
-  };
-}
-
-async function fetchBlogs(): Promise<void> {
-  const data = await loadJsonp<BloggerFeed>(BLOG_FEED_URL);
-  blogs = (data.feed?.entry ?? []).map(mapEntry);
-  loaded = true;
-}
-
-// ---------- sanitisation helpers ----------
-function extractText(html: string): string {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  return div.textContent ?? '';
-}
-
-function safeUrl(url?: string | null): string | null {
-  if (!url) return null;
-  if (url.startsWith('//')) return `https:${url}`;
-  return /^(https?:\/\/|data:image\/)/i.test(url) ? url : null;
-}
-
-function splitTrailingUrlPunctuation(value: string): { url: string; trailing: string } {
-  let url = value;
-  let trailing = '';
-  while (/[.,!?;:)\]}]+$/.test(url)) {
-    trailing = url.slice(-1) + trailing;
-    url = url.slice(0, -1);
-  }
-  return { url, trailing };
-}
-
-function linkifyPlainUrls(root: HTMLElement): void {
-  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-  const nodes: Text[] = [];
-  let node = walker.nextNode();
-
-  while (node) {
-    const textNode = node as Text;
-    const parent = textNode.parentElement;
-    const value = textNode.nodeValue ?? '';
-    if (
-      parent &&
-      !parent.closest('a, script, style, textarea, code, pre') &&
-      /(https?:\/\/|www\.)/i.test(value)
-    ) {
-      nodes.push(textNode);
-    }
-    node = walker.nextNode();
-  }
-
-  const urlPattern = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
-  nodes.forEach((textNode) => {
-    const value = textNode.nodeValue ?? '';
-    const fragment = document.createDocumentFragment();
-    let lastIndex = 0;
-
-    for (const match of value.matchAll(urlPattern)) {
-      const start = match.index ?? 0;
-      const raw = match[0];
-      const { url, trailing } = splitTrailingUrlPunctuation(raw);
-      const href = safeUrl(url.startsWith('www.') ? `https://${url}` : url);
-
-      fragment.append(document.createTextNode(value.slice(lastIndex, start)));
-      if (href && url) {
-        const anchor = document.createElement('a');
-        anchor.href = href;
-        anchor.target = '_blank';
-        anchor.rel = 'noopener noreferrer';
-        anchor.textContent = url;
-        fragment.append(anchor);
-      } else {
-        fragment.append(document.createTextNode(url));
-      }
-      if (trailing) fragment.append(document.createTextNode(trailing));
-      lastIndex = start + raw.length;
-    }
-
-    fragment.append(document.createTextNode(value.slice(lastIndex)));
-    textNode.replaceWith(fragment);
-  });
-}
-
-function firstImage(html: string): string | null {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  const img = div.querySelector('img');
-  return img ? safeUrl(img.getAttribute('src')) : null;
-}
-
-function sanitizeHtml(html: string): string {
-  const div = document.createElement('div');
-  div.innerHTML = html;
-  div.querySelectorAll('script, iframe, object, embed').forEach((el) => el.remove());
-  div.querySelectorAll('*').forEach((el) => {
-    Array.from(el.attributes).forEach((attr) => {
-      if (attr.name.startsWith('on')) el.removeAttribute(attr.name);
-    });
-
-    const href = el.getAttribute('href');
-    if (href && !safeUrl(href) && !href.startsWith('#') && !href.startsWith('mailto:')) {
-      el.removeAttribute('href');
-    }
-
-    const src = el.getAttribute('src');
-    if (src && !safeUrl(src)) el.removeAttribute('src');
-  });
-  linkifyPlainUrls(div);
-  return div.innerHTML;
-}
-
-function safeId(id: string): string | null {
-  const clean = id.replace(/[^a-zA-Z0-9_-]/g, '');
-  return clean.length ? clean : null;
-}
-
-function fmtDate(ts: BlogDoc['timestamp'], withTime = false): string {
-  const date = ts?.toDate?.();
-  if (!date) return 'Recently';
-  return new Intl.DateTimeFormat(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    ...(withTime ? { hour: '2-digit', minute: '2-digit' } : {}),
-  }).format(date);
-}
-
-// ---------- rendering ----------
 function renderCards(): void {
   const container = qs('#blogsContainer');
   if (!container) return;
@@ -236,67 +44,46 @@ function renderCards(): void {
     return;
   }
 
-  container.innerHTML = blogs
-    .map((blog) => {
-      const text = extractText(blog.content ?? '');
-      const preview = text.split('\n').filter(Boolean).slice(0, 5).join(' ').slice(0, 220);
-      const img = firstImage(blog.content ?? '');
-      return `
-      <article class="blog-card tilt" data-blog="${blog.id}">
-        <div class="blog-card__media">${
-          img ? `<img src="${escapeHtml(img)}" alt="" loading="lazy">` : '<span>Post</span>'
-        }</div>
-        <div class="blog-card__body">
-          <h3 class="blog-card__title">${escapeHtml(blog.title ?? 'Untitled')}</h3>
-          <p class="blog-card__meta">${fmtDate(blog.timestamp)}</p>
-          <p class="blog-card__preview">${escapeHtml(preview)}${text.length > 220 ? '...' : ''}</p>
-          <div class="blog-card__actions">
-            <button class="blog-act" data-act="open" data-id="${blog.id}">Read</button>
-            ${
-              blog.url
-                ? `<button class="blog-act" data-act="external" data-id="${blog.id}">Blogger</button>`
-                : ''
-            }
-            <button class="blog-act" data-act="share" data-id="${blog.id}">Share</button>
-          </div>
-        </div>
-      </article>`;
-    })
-    .join('');
+  container.innerHTML = blogs.map((blog) => blogCard(blog)).join('') + seeAllCard();
 }
 
 export function initBlogs(): void {
+  bindGlobalModalKeys();
   const container = qs('#blogsContainer');
   if (container) {
-    container.innerHTML = `<div class="blog-empty">Loading insights...</div>`;
-    void fetchBlogs()
-      .then(() => {
+    container.innerHTML = `<div class="blog-empty">Loading insights…</div>`;
+    void fetchBlogs(RAIL_LIMIT)
+      .then((posts) => {
+        blogs = posts;
+        loaded = true;
         renderCards();
         openFromHash();
       })
       .catch((err) => {
         console.error('blogger feed error', err);
-        container.innerHTML = `<div class="blog-empty">Unable to load blogs from Blogger right now.</div>`;
+        container.innerHTML = `<div class="blog-empty">Unable to load blogs from Blogger right now.</div>${seeAllCard()}`;
       });
 
     container.addEventListener('click', (e) => {
       const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-act]');
       if (btn) {
         const id = btn.dataset.id!;
-        if (btn.dataset.act === 'open') openBlog(id);
-        if (btn.dataset.act === 'external') openExternal(id);
-        if (btn.dataset.act === 'share') share(id);
+        if (btn.dataset.act === 'open') openBlogModal(byId(id));
+        if (btn.dataset.act === 'external') openBlogExternal(byId(id));
+        if (btn.dataset.act === 'share') shareBlog(byId(id));
         return;
       }
+      // Let the "See all" anchor navigate normally.
+      if ((e.target as HTMLElement).closest('.blog-card--all')) return;
       const card = (e.target as HTMLElement).closest<HTMLElement>('[data-blog]');
-      if (card) openBlog(card.dataset.blog!);
+      if (card) openBlogModal(byId(card.dataset.blog!));
     });
   }
 
   setupScrollButtons();
   window.addEventListener('hashchange', () => {
     if (location.hash.startsWith('#blog-')) openFromHash();
-    else if (current) closeBlog(true);
+    else closeBlogModal(true);
   });
 }
 
@@ -311,91 +98,7 @@ function setupScrollButtons(): void {
   right.addEventListener('click', () => container.scrollBy({ left: amount, behavior }));
 }
 
-function openExternal(id: string): void {
-  const blog = blogs.find((b) => b.id === id);
-  if (!blog?.url) return;
-  window.open(blog.url, '_blank', 'noopener,noreferrer');
-}
-
-function share(id: string): void {
-  const blog = blogs.find((b) => b.id === id);
-  const clean = safeId(id);
-  if (!blog || !clean) return;
-  const url = `${location.href.split('#')[0]}#blog-${clean}`;
-  const text = `Read this post from The Pwavwe Papers: ${blog.title ?? 'Untitled'}`;
-  if (navigator.share) {
-    navigator.share({ title: blog.title ?? 'Blog Post', text, url }).catch(() => {});
-  } else {
-    navigator.clipboard
-      .writeText(`${text}\n${url}`)
-      .then(() => notify('Blog link copied to clipboard!', 'success'))
-      .catch(() => notify('Unable to share right now.', 'error'));
-  }
-}
-
-function modalEl(): HTMLElement {
-  let modal = document.getElementById('blogModal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'blogModal';
-    modal.className = 'blog-modal';
-    document.body.appendChild(modal);
-  }
-  return modal;
-}
-
-function openBlog(id: string): void {
-  const blog = blogs.find((b) => b.id === id);
-  const clean = safeId(id);
-  if (!blog || !clean) return;
-  current = blog;
-
-  const img = firstImage(blog.content ?? '');
-  const modal = modalEl();
-
-  modal.innerHTML = `
-    <div class="blog-modal__inner">
-      <button class="blog-modal__close" data-close aria-label="Close">x</button>
-      ${img ? `<img class="blog-modal__hero" src="${escapeHtml(img)}" alt="">` : ''}
-      <div class="blog-modal__body">
-        <h2 class="blog-modal__title">${escapeHtml(blog.title ?? 'Untitled')}</h2>
-        <p class="blog-modal__meta">Published ${fmtDate(blog.timestamp, true)} on The Pwavwe Papers</p>
-        <div class="blog-modal__content">${sanitizeHtml(blog.content ?? '')}</div>
-        <div class="blog-modal__actions">
-          ${blog.url ? `<button class="blog-act" data-act="external" data-id="${blog.id}">Open on Blogger</button>` : ''}
-          <button class="blog-act" data-act="share" data-id="${blog.id}">Share</button>
-        </div>
-      </div>
-    </div>`;
-
-  modal.classList.add('is-open');
-  document.body.classList.add('modal-open');
-  history.replaceState(null, '', `${location.pathname}${location.search}#blog-${clean}`);
-
-  modal.onclick = (e) => {
-    if (e.target === modal) closeBlog();
-    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-act], [data-close]');
-    if (!btn) return;
-    if (btn.hasAttribute('data-close')) closeBlog();
-    if (btn.dataset.act === 'external') openExternal(btn.dataset.id!);
-    if (btn.dataset.act === 'share') share(btn.dataset.id!);
-  };
-}
-
-function closeBlog(skipHash = false): void {
-  const modal = document.getElementById('blogModal');
-  if (!modal) return;
-  modal.classList.remove('is-open');
-  document.body.classList.remove('modal-open');
-  current = null;
-  if (!skipHash && location.hash.startsWith('#blog-')) {
-    history.replaceState(null, '', `${location.pathname}${location.search}#insights`);
-  }
-}
-
 function openFromHash(): void {
-  const hash = location.hash;
-  if (!hash.startsWith('#blog-')) return;
-  const id = safeId(hash.slice(6));
-  if (id && loaded && blogs.find((b) => b.id === id)) openBlog(id);
+  const id = hashBlogId();
+  if (id && loaded) openBlogModal(byId(id));
 }

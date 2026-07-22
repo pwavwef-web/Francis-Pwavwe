@@ -22,7 +22,10 @@ export default defineConfig({
     // NB: not `build/` — that name is git-ignored (Flutter leftover).
     assetsDir: 'bundle',
     rollupOptions: {
-      input: 'app.html',
+      // Two MPA source entries: the landing app and the /blogs archive. Each is
+      // copied to its deployable name after build (app.html→index.html,
+      // blogs-app.html→blogs.html) so the source entries are never overwritten.
+      input: ['app.html', 'blogs-app.html'],
     },
   },
   plugins: [
