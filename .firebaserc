@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "default": "francis-pwavwe"
+  },
+  "targets": {
+    "francis-pwavwe": {
+      "hosting": {
+        "personal": ["francis-pwavwe"],
+        "build": ["buildwithfrancis"]
+      }
+    }
+  }
+}

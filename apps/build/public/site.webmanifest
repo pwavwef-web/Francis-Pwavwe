@@ -1,0 +1,9 @@
+{
+  "name": "Pwavwe Studio",
+  "short_name": "Pwavwe Studio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "icons": [{ "src": "/favicon.png", "sizes": "512x512", "type": "image/png" }]
+}

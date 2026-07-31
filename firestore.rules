@@ -6,6 +6,39 @@ service cloud.firestore {
              && request.auth.token.email == 'pwavwef@gmail.com';
     }
 
+    // Pwavwe Studio data is submitted and administered through trusted
+    // callable Functions. The optional claim supports trusted direct tooling;
+    // ordinary authentication is intentionally insufficient.
+    function isBuildStudioAdmin() {
+      return request.auth != null
+             && request.auth.token.buildStudioAdmin == true;
+    }
+
+    match /buildRequests/{requestId} {
+      allow read, create, update, delete: if isBuildStudioAdmin();
+    }
+
+    match /marketingConsents/{consentId} {
+      allow read, create, update, delete: if isBuildStudioAdmin();
+    }
+
+    match /buildRequestActivity/{activityId} {
+      allow read: if isBuildStudioAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /_buildRateLimits/{documentId} {
+      allow read, write: if false;
+    }
+
+    match /_buildDuplicateKeys/{documentId} {
+      allow read, write: if false;
+    }
+
+    match /_buildReferences/{documentId} {
+      allow read, write: if false;
+    }
+
     function hasPodcastEpisodeShape() {
       return request.resource.data.keys().hasAll(['title', 'description', 'season', 'episode', 'isPublished'])
              && request.resource.data.title is string

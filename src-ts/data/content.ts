@@ -53,7 +53,7 @@ export const SOCIALS: readonly SocialLink[] = [
 // ============================================================================
 export const STATS: readonly Stat[] = [
   { value: 15, suffix: '+', label: 'Featured Projects' },
-  { value: 14, suffix: '', label: 'Certifications' },
+  { value: 15, suffix: '', label: 'Certifications' },
   { value: 3, suffix: '+', label: 'Years Building AZ Learner' },
   { value: 5, suffix: '', label: 'Global Programs' },
 ];
@@ -64,7 +64,7 @@ export const STATS: readonly Stat[] = [
 export const ABOUT_PARAGRAPHS: readonly string[] = [
   'I am Francis Pwavwe — a Tourism Management student at the University of Cape Coast and Founder of AZ Learner, an academic support platform dedicated to improving student retention and performance through purposeful digital innovation.',
   'As an active member of both the Oguaa Hall Army Cadet Corps and the UCC Armed Forces Cadet Corps, I have cultivated the discipline, structure, and strategic focus that inform every undertaking I pursue.',
-  'I currently serve on the SRC Water and Sanitation Committee at the University of Cape Coast, contributing to campus welfare and sustainability initiatives since February 2026.',
+  'From February to July 2026, I served on the SRC Water and Sanitation Committee at the University of Cape Coast, contributing to campus welfare and sustainability initiatives.',
   'My work sits at the intersection of leadership, digital systems, and innovation — always focused on building systems that transform experiences and generate sustainable growth across the African educational and tourism landscape.',
 ];
 
@@ -257,10 +257,10 @@ export const PROJECTS: readonly Project[] = [
     tags: ['Leadership', 'Community'],
     icon: '💧',
     description:
-      'Committee work supporting water, sanitation, and campus welfare priorities through service coordination, problem tracking, and student-centered improvements.',
-    impact: 'Contributes to a healthier campus experience through practical service leadership.',
-    status: 'Active service',
-    year: '2026-Present',
+      'Committee work that supported water, sanitation, and campus welfare priorities through service coordination, problem tracking, and student-centered improvements.',
+    impact: 'Contributed to a healthier campus experience through practical service leadership.',
+    status: 'Completed service',
+    year: 'Feb-Jul 2026',
   },
   {
     title: 'Torchlight Tours Social Strategy',
@@ -318,7 +318,7 @@ export const EXPERIENCE: readonly ExperienceItem[] = [
   { kind: 'simulation', title: 'Vista Equity Partners — AI in Action (Forage)', company: 'Vista Equity Partners', date: 'March 2026', description: 'Prompt engineering and GenAI workflow automation for Portfolio Operations — synthesising NPS feedback into executive-ready insights and improving output relevance by >50% through iteration.' },
   { kind: 'simulation', title: 'BCG GenAI Job Simulation (Forage)', company: 'Boston Consulting Group', date: 'March 2026', description: 'AI-powered financial chatbot development — Python and pandas, interpreting 10-K/10-Q data with rule-based logic to deliver user-friendly financial insights.' },
   { kind: 'simulation', title: 'EY Technology Risk Simulation (Forage)', company: 'EY', date: 'February 2026', description: 'Understanding typical IT risks and processes for the Tech Risk team — relationship building, teaming, and productivity.' },
-  { kind: 'leadership', title: 'Committee Member — Water & Sanitation', company: 'SRC, University of Cape Coast', date: 'Feb 2026 – Present', description: "Serving on the Student Representative Council's Water and Sanitation Committee, contributing to campus welfare and sustainability initiatives." },
+  { kind: 'leadership', title: 'Committee Member — Water & Sanitation', company: 'SRC, University of Cape Coast', date: 'Feb – Jul 2026', description: "Served on the Student Representative Council's Water and Sanitation Committee, contributing to campus welfare and sustainability initiatives." },
   { kind: 'work', title: 'Intern — Housekeeping & Food and Beverage', company: 'Kempinski Hotel Gold Coast City', date: 'Aug – Oct 2025', description: 'Hands-on experience in luxury hospitality operations — guest service excellence, operational efficiency, and five-star quality standards.' },
   { kind: 'education', title: 'Harvard Aspire Leaders Program', company: 'Cohort 5', date: '2025', description: 'Completed the prestigious Harvard Aspire Leaders Program — leadership frameworks, strategic thinking, and global perspectives.' },
   { kind: 'leadership', title: 'Founder & CEO', company: 'AZ Learner', date: '2023 – Present', description: 'Founded and leading an education-tech platform improving student retention and academic performance through innovative digital solutions.' },
@@ -334,6 +334,7 @@ export const EXPERIENCE: readonly ExperienceItem[] = [
 const CERT = 'assets/certificates';
 export const CERTIFICATES: readonly Certificate[] = [
   { title: 'Oguaa Hall Army Cadet Citation', issuer: 'Oguaa Hall Army Cadet, University of Cape Coast', date: 'Class of 2026', href: `${CERT}/ohac-citation-qm.png`, image: `${CERT}/ohac-citation-qm.png`, variant: 'portrait' },
+  { title: 'SRC Water and Sanitation Committee Citation', issuer: "Students' Representative Council, University of Cape Coast", date: '2025/2026', href: `${CERT}/src-water-sanitation-committee-citation.jpg`, image: `${CERT}/src-water-sanitation-committee-citation.jpg`, variant: 'portrait', tags: ['Leadership'] },
   { title: '2025 Aspire Leaders Program', issuer: 'Aspire Institute', date: 'December 2025', href: `${CERT}/aspire-leaders-program-certificate.pdf` },
   { title: 'AI Fundamentals', issuer: 'Google · Coursera', date: 'April 18, 2026', href: `${CERT}/google-ai-fundamentals-certificate.jpg`, image: `${CERT}/google-ai-fundamentals-certificate.jpg` },
   { title: 'Technology Risk Virtual Job Simulation', issuer: 'EY · Forage', date: 'February 2026', href: `${CERT}/ey-technology-risk-certificate.png`, image: `${CERT}/ey-technology-risk-certificate.png` },

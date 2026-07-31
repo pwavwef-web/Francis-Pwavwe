@@ -785,7 +785,7 @@ a {
 /* ---------- About ---------- */
 .about__grid {
   display: grid;
-  grid-template-columns: 0.8fr 1.2fr;
+  grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: start;
 }
@@ -812,7 +812,6 @@ a {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
-  margin-top: 1.6rem;
 }
 .highlight {
   padding: 1.1rem 1.3rem;

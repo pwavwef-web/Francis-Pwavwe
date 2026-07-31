@@ -24,6 +24,35 @@ node_modules/
 dist/
 *.tsbuildinfo
 .firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+functions-build/lib/
+**/.env
+**/.env.local
+**/.env.*.local
+
+# The studio application intentionally lives in apps/build. The older Flutter
+# build/ ignore would otherwise hide it, so re-include source while keeping
+# generated and local-only files out of version control.
+!apps/build/
+!apps/build/package.json
+!apps/build/package-lock.json
+!apps/build/tsconfig.json
+!apps/build/tsconfig.app.json
+!apps/build/tsconfig.node.json
+!apps/build/vite.config.ts
+!apps/build/vite.rules.config.ts
+!apps/build/eslint.config.js
+!apps/build/index.html
+!apps/build/.env.example
+!apps/build/src/
+!apps/build/src/**
+!apps/build/public/
+!apps/build/public/**
+apps/build/node_modules/
+apps/build/dist/
+apps/build/*.tsbuildinfo
 
 # Backup files
 francis_old.html

@@ -538,6 +538,8 @@ function renderTimeline(): void {
 
 // --- Certificates (grid + lightbox) ---
 function certificateTags(c: Certificate): readonly string[] {
+  if (c.tags?.length) return c.tags;
+
   const haystack = `${c.title} ${c.issuer}`.toLowerCase();
   const tags: string[] = [];
   if (/(^|[^a-z])(ai|genai)([^a-z]|$)/.test(haystack)) tags.push('AI');
