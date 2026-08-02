@@ -35,12 +35,16 @@ export function renderContent(): void {
 function renderNav(): void {
   const menu = qs('.nav-menu');
   if (menu) {
-    menu.innerHTML = NAV_ITEMS.map(
-      (item, i) =>
-        `<li style="--i:${i}"><a href="#${item.id}" class="nav-link">${escapeHtml(
-          item.label,
-        )}</a></li>`,
-    ).join('');
+    menu.innerHTML = NAV_ITEMS.map((item, i) => {
+      const isExternal = !!item.href && item.href.startsWith('http');
+      const href = item.href ?? `#${item.id}`;
+      const classes = `nav-link${item.variant === 'cta' ? ' nav-link--cta' : ''}`;
+      const rel = isExternal ? ' target="_blank" rel="noopener"' : '';
+      const arrow = item.variant === 'cta' ? ' <span aria-hidden="true">↗</span>' : '';
+      return `<li style="--i:${i}"><a href="${href}" class="${classes}"${rel}>${escapeHtml(
+        item.label,
+      )}${arrow}</a></li>`;
+    }).join('');
   }
 
   qsa('[data-socials]').forEach((holder) => {
@@ -131,8 +135,16 @@ function projectCard(p: Project): string {
     : '';
   const status = p.status ? `<span class="project__status">${escapeHtml(p.status)}</span>` : '';
   const year = p.year ? `<span class="project__year">${escapeHtml(p.year)}</span>` : '';
+  const role = p.role
+    ? `<p class="project__role"><span>My role</span>${escapeHtml(p.role)}</p>`
+    : '';
+  const stack = p.stack?.length
+    ? `<ul class="project__stack" aria-label="Built with">${p.stack
+        .map((t) => `<li>${escapeHtml(t)}</li>`)
+        .join('')}</ul>`
+    : '';
   const impact = p.impact
-    ? `<div class="project__impact"><span>Impact</span><p>${escapeHtml(p.impact)}</p></div>`
+    ? `<div class="project__impact"><span>Outcome</span><p>${escapeHtml(p.impact)}</p></div>`
     : '';
   const visualId = projectVisualId(p.title);
   const coverImage = p.coverImage ?? PROJECT_COVERS[visualId];
@@ -156,6 +168,8 @@ function projectCard(p: Project): string {
         <p class="project__category">${escapeHtml(p.category)}</p>
         ${badges}
         <p class="project__desc">${escapeHtml(p.description)}</p>
+        ${role}
+        ${stack}
         ${impact}
         <div class="project__tags">${p.tags
           .map((t) => `<span class="pill">${escapeHtml(t)}</span>`)

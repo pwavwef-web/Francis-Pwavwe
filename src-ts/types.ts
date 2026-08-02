@@ -19,6 +19,8 @@ export interface Project {
   readonly iconIsImage?: boolean;
   readonly coverImage?: string;
   readonly description: string;
+  readonly role?: string; // what Francis did on the project (case-study "role")
+  readonly stack?: readonly string[]; // technology / capability chips
   readonly impact?: string;
   readonly status?: string;
   readonly year?: string;
@@ -73,6 +75,8 @@ export interface SocialLink {
 export interface NavItem {
   readonly id: string;
   readonly label: string;
+  readonly href?: string; // external URL; when set, overrides the in-page #id anchor
+  readonly variant?: 'cta'; // visually distinct nav item (e.g. "Build With Me")
 }
 
 // Firestore blog document shape (as stored by the admin tools).

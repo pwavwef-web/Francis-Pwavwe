@@ -4565,3 +4565,270 @@ body {
     transform: none;
   }
 }
+
+/* ==========================================================================
+   REPOSITION LAYER (2026 rework) — proof bar, case-study cards, real hero
+   portrait and a minimal footer. Appended last so it wins the light-theme
+   cascade above.
+   ========================================================================== */
+
+/* --- Proof bar directly under the hero --- */
+.proof-bar {
+  background: #0a2a6a;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(14, 37, 77, 0.1);
+}
+
+.proof-bar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem 1.6rem;
+  padding: 0.95rem 1.5rem;
+}
+
+.proof-bar__item {
+  position: relative;
+  color: #dbe6ff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding-left: 1.6rem;
+}
+
+.proof-bar__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  background: #5eead4;
+}
+
+.proof-bar__item strong {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .proof-bar__inner {
+    justify-content: flex-start;
+    gap: 0.55rem 1rem;
+  }
+  .proof-bar__item {
+    font-size: 0.82rem;
+  }
+}
+
+/* --- Case-study card additions: role + tech stack --- */
+.project__role {
+  margin: 0.15rem 0 0;
+  color: #334155;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.project__role span {
+  display: block;
+  color: #1d5ed8;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.15rem;
+}
+
+.project__stack {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.35rem 0 0;
+  padding: 0;
+}
+
+.project__stack li {
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  background: #eef5ff;
+  border: 1px solid rgba(29, 94, 216, 0.18);
+  color: #0a2a6a;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* --- Real hero portrait (replaces the AI-looking composite) --- */
+.hero-photo--portrait {
+  max-width: 460px;
+  margin-inline: auto;
+}
+
+.hero-photo--portrait img {
+  aspect-ratio: 4 / 5;
+  object-position: center 18%;
+}
+
+@media (max-width: 900px) {
+  .hero-photo--portrait {
+    max-width: 380px;
+  }
+}
+
+/* --- Minimal footer secondary line --- */
+.footer__links--muted {
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  opacity: 0.72;
+}
+
+/* --- "Build With Me" CTA nav item (hands visitors to Pwavwe Studio) --- */
+.nav-link--cta {
+  color: #ffffff !important;
+  background: #0a2a6a;
+  border-radius: 999px;
+  padding: 0.4rem 0.95rem !important;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(10, 42, 106, 0.22);
+  transition: background 0.25s var(--ease), transform 0.25s var(--ease);
+}
+
+.nav-link--cta:hover {
+  color: #ffffff !important;
+  background: #1d5ed8;
+  transform: translateY(-1px);
+}
+
+.nav-link--cta::after { display: none; } /* no underline sweep on the pill */
+
+/* --- Handshake band: pwavwe.com -> build.pwavwe.com --- */
+.handshake {
+  background:
+    radial-gradient(1200px 300px at 12% 0%, rgba(94, 234, 212, 0.14), transparent 60%),
+    linear-gradient(120deg, #0a2a6a 0%, #0f3a86 60%, #0f766e 140%);
+  color: #eaf1ff;
+}
+
+.handshake__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.6rem 2rem;
+  padding: clamp(2.2rem, 5vw, 3.2rem) 1.5rem;
+}
+
+.handshake__text { max-width: 640px; }
+
+.handshake__eyebrow {
+  display: inline-block;
+  color: #5eead4;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.handshake__title {
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  line-height: 1.15;
+  margin: 0 0 0.6rem;
+}
+
+.handshake__desc {
+  color: #c7d6f5;
+  font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.handshake__desc strong { color: #ffffff; }
+
+.handshake__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+/* White button so the primary CTA reads on the dark band */
+.handshake .btn--primary {
+  background: #ffffff;
+  color: #0a2a6a;
+  border: 0;
+}
+
+.handshake .btn--primary span { color: #0a2a6a; }
+
+.handshake .btn--primary:hover { background: #eaf1ff; }
+
+.handshake__link {
+  color: #bfe9df;
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(191, 233, 223, 0.4);
+  padding-bottom: 2px;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.handshake__link:hover {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+@media (max-width: 760px) {
+  .handshake__actions { align-items: stretch; width: 100%; }
+  .handshake__actions .btn { justify-content: center; }
+}
+
+/* --- No-JS fallback (only rendered when JavaScript is disabled) --- */
+.noscript-fallback {
+  padding: 2rem 1.5rem;
+  color: #10213f;
+}
+.noscript-fallback h2 {
+  color: #0a2a6a;
+  margin: 1.2rem 0 0.4rem;
+}
+.noscript-fallback a { color: #1d5ed8; }
+.noscript-fallback ul { padding-left: 1.1rem; line-height: 1.6; }
+
+/* --- Contact audience split: build -> studio, hiring -> form --- */
+.contact__routes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 1.4rem;
+  max-width: 760px;
+  margin: 0 auto clamp(1.4rem, 3vw, 2rem);
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(14, 37, 77, 0.1);
+  border-radius: 14px;
+  background: #f2f7ff;
+}
+
+.contact__routes .btn { flex: 0 0 auto; }
+
+.contact__routes-note {
+  margin: 0;
+  color: #526079;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.contact__routes-note strong { color: #10213f; }
+
+@media (max-width: 600px) {
+  .contact__routes { flex-direction: column; align-items: stretch; text-align: left; }
+  .contact__routes .btn { justify-content: center; }
+}

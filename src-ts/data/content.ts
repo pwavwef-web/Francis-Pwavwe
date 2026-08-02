@@ -10,37 +10,42 @@ import type {
 
 // ============================================================================
 //  PROFILE
+//  Positioning: ONE primary commercial identity — a digital product builder.
+//  Tourism & education are the industries served, not competing job titles.
 // ============================================================================
 export const PROFILE = {
   name: 'Francis Pwavwe',
   handle: 'pwavwe.com',
-  credential: 'Tourism Management · University of Cape Coast · Ghana',
+  // Shown in the hero as an availability / positioning chip.
+  credential: 'Open for projects & remote roles · Based in Ghana',
   roles: [
-    'Strategic Thinker',
+    'Digital Product Builder',
     'Tourism Professional',
-    'Digital Innovator',
+    'Web & Platform Developer',
     'Founder of AZ Learner',
   ],
   tagline:
-    'Advancing digital innovation in education and tourism — building purposeful systems that elevate academic performance and redefine strategic possibilities across Africa.',
+    'I build websites, platforms and AI-assisted tools for education, tourism and growing organisations. From campus applications to operational dashboards, I turn complicated workflows into digital products people can actually use.',
   email: 'francis@pwavwe.com',
   location: 'Cape Coast, Ghana',
   linkedin: 'https://linkedin.com/in/francis-pwavwe',
 } as const;
 
 // ============================================================================
-//  NAVIGATION  (reorganised information architecture)
+//  NAVIGATION  (trimmed to support a single conversion funnel)
 // ============================================================================
 export const NAV_ITEMS: readonly NavItem[] = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
   { id: 'work', label: 'Work' },
   { id: 'skills', label: 'Services' },
+  { id: 'about', label: 'About' },
   { id: 'journey', label: 'Journey' },
-  { id: 'insights', label: 'Insights' },
-  { id: 'newsletter', label: 'Newsletter' },
+  { id: 'insights', label: 'Writing' },
   { id: 'contact', label: 'Contact' },
+  { id: 'build', label: 'Build With Me', href: 'https://build.pwavwe.com', variant: 'cta' },
 ];
+
+// The commercial studio (build.pwavwe.com) — pwavwe.com hands enquiries here.
+export const STUDIO_URL = 'https://build.pwavwe.com';
 
 export const SOCIALS: readonly SocialLink[] = [
   { label: 'Email', href: 'mailto:francis@pwavwe.com', icon: '✉' },
@@ -49,46 +54,128 @@ export const SOCIALS: readonly SocialLink[] = [
 ];
 
 // ============================================================================
-//  STATS  (animated counters)
+//  STATS  (animated counters — reframed as builder proof)
 // ============================================================================
 export const STATS: readonly Stat[] = [
-  { value: 15, suffix: '+', label: 'Featured Projects' },
-  { value: 15, suffix: '', label: 'Certifications' },
+  { value: 15, suffix: '+', label: 'Digital Products Built' },
+  { value: 6, suffix: '', label: 'Live Platforms Deployed' },
   { value: 3, suffix: '+', label: 'Years Building AZ Learner' },
-  { value: 5, suffix: '', label: 'Global Programs' },
+  { value: 15, suffix: '', label: 'Certifications' },
+];
+
+// ============================================================================
+//  PROOF BAR  (compact strip shown directly under the hero)
+// ============================================================================
+export const PROOF_POINTS: readonly string[] = [
+  '15+ digital products built',
+  'React · TypeScript · Firebase · Flutter',
+  'Education, tourism & organisational systems',
+  'Based in Ghana · working remotely',
 ];
 
 // ============================================================================
 //  ABOUT  (highlights)
 // ============================================================================
 export const ABOUT_PARAGRAPHS: readonly string[] = [
-  'I am Francis Pwavwe — a Tourism Management student at the University of Cape Coast and Founder of AZ Learner, an academic support platform dedicated to improving student retention and performance through purposeful digital innovation.',
-  'As an active member of both the Oguaa Hall Army Cadet Corps and the UCC Armed Forces Cadet Corps, I have cultivated the discipline, structure, and strategic focus that inform every undertaking I pursue.',
-  'From February to July 2026, I served on the SRC Water and Sanitation Committee at the University of Cape Coast, contributing to campus welfare and sustainability initiatives.',
-  'My work sits at the intersection of leadership, digital systems, and innovation — always focused on building systems that transform experiences and generate sustainable growth across the African educational and tourism landscape.',
+  'I am Francis Pwavwe — a digital product builder who designs and ships websites, platforms and AI-assisted tools. I turn complicated, manual workflows into software that real people can pick up and use.',
+  'My edge is the industries I build for. As a Tourism Management graduate of the University of Cape Coast and founder of AZ Learner, I understand campus operations, tourism, and education from the inside — so the products I build fit how these organisations actually work.',
+  'I have shipped election systems, booking platforms, campus apps, access-control tools and AI career software — most of them live in production today. Alongside the code, cadet-corps and student-leadership roles gave me the discipline to plan, coordinate and deliver under real deadlines.',
+  'The through-line is simple: build purposeful digital systems that improve how organisations across Africa learn, operate and grow.',
 ];
 
 export const ABOUT_HIGHLIGHTS: readonly { label: string; value: string }[] = [
-  { label: 'Founder & CEO', value: 'AZ Learner' },
-  { label: 'Program', value: 'Harvard Aspire Leaders' },
-  { label: 'Focus', value: 'Tourism Strategy · EdTech' },
-  { label: 'Based in', value: 'Cape Coast, Ghana' },
+  { label: 'Primary work', value: 'Digital Product Builder' },
+  { label: 'Founder', value: 'AZ Learner' },
+  { label: 'Industries', value: 'Education · Tourism · Orgs' },
+  { label: 'Based in', value: 'Ghana · Remote' },
 ];
 
 // ============================================================================
 //  PROJECTS
+//  Ordered strongest-engineering-first. The top entries carry full case-study
+//  detail (role + stack + outcome). Forage job simulations live only in the
+//  Credentials tab — never competing with shipped products.
 // ============================================================================
 export const PROJECTS: readonly Project[] = [
   {
+    title: 'Pollaris Election Platform',
+    category: 'Election Technology',
+    tags: ['Technology', 'Leadership', 'Community'],
+    icon: 'assets/project-covers/pollaris-mark.png',
+    iconIsImage: true,
+    coverImage: 'assets/project-covers/pollaris.webp',
+    description:
+      'Departmental elections were run manually — hard to secure, slow to tally, and impossible to audit. Pollaris is a configurable multi-election platform with voter-code access, ballot setup, staff dashboards, audit trails, certified results and election-scoped exports.',
+    role: 'Product designer & full-stack developer',
+    stack: ['React', 'TypeScript', 'Firebase', 'Auth & audit trails'],
+    impact: 'Brought digital structure, transparency and auditable participation to real campus elections.',
+    status: 'Live platform',
+    year: '2026',
+    link: { label: 'Visit Pollaris', href: 'https://absag-ucc1.web.app' },
+    featured: true,
+  },
+  {
+    title: 'VitaForge AI',
+    category: 'AI Career Platform',
+    tags: ['Education', 'Technology'],
+    icon: 'assets/project-covers/vitaforge-mark.png',
+    iconIsImage: true,
+    coverImage: 'assets/project-covers/vitaforge-ai.webp',
+    description:
+      'Students struggle to turn scattered experience into strong applications. VitaForge is an AI career platform that builds polished CVs, tailored cover letters, ATS-ready applications and guided career materials — end to end.',
+    role: 'Founder & developer',
+    stack: ['React', 'TypeScript', 'AI / LLM', 'Firebase'],
+    impact: 'Helps students convert real experience into stronger, job-ready applications with practical AI support.',
+    status: 'Live platform',
+    year: '2026',
+    link: { label: 'Visit VitaForge', href: 'https://vitaforge.pwavwe.com' },
+    featured: true,
+  },
+  {
+    title: 'SMG Transport Agency',
+    category: 'Transport Booking Platform',
+    tags: ['Tourism', 'Technology'],
+    icon: 'assets/project-covers/smg-logo-mark.png',
+    iconIsImage: true,
+    description:
+      'A Ghanaian intercity travel operator needed to move ticketing online. SMG lets passengers search active routes, choose seats and pay online, then issues QR e-tickets — with staff operations and verification managed behind the scenes.',
+    role: 'Product designer & developer',
+    stack: ['React', 'Firebase', 'Online payments', 'QR e-tickets'],
+    impact: 'Turns route discovery, seat reservations, payments and ticket verification into one smooth digital workflow.',
+    status: 'Live platform',
+    year: '2026',
+    link: { label: 'Visit SMG Agency', href: 'https://smgagencygh.com' },
+    featured: true,
+  },
+  {
+    title: 'HallKey',
+    category: 'Campus Access Technology',
+    tags: ['Technology', 'Community'],
+    icon: 'assets/project-covers/hallkey-mark.svg',
+    iconIsImage: true,
+    coverImage: 'assets/project-covers/hallkey.webp',
+    description:
+      'Hall key collection meant long queues and no accountability. HallKey lets students request a room key, verify by fingerprint and receive the mapped key, while hall staff get a live operational record of every handover.',
+    role: 'Product designer & developer',
+    stack: ['Firebase', 'Fingerprint verification', 'Realtime records'],
+    impact: 'Reduces key-collection queues while improving access accountability for students, porters and administrators.',
+    status: 'Live prototype',
+    year: '2026',
+    link: { label: 'Visit HallKey', href: 'https://hallkey.web.app' },
+    featured: true,
+  },
+  {
     title: 'UCC SRC App',
-    category: 'Mobile App Development',
+    category: 'Mobile App · Google Play',
     tags: ['Technology', 'Leadership'],
     icon: 'assets/icon%20(2).png',
     iconIsImage: true,
     description:
-      'The official Student Representative Council app for the University of Cape Coast, designed to give students seamless access to services, announcements, events, and governance touchpoints.',
+      'The official Student Representative Council app for the University of Cape Coast — giving students one place for services, announcements, events and governance touchpoints, published live on Google Play.',
+    role: 'Mobile developer',
+    stack: ['Flutter', 'Android', 'Google Play'],
     impact: 'Connects student leadership with daily campus life through a clearer digital service channel.',
-    status: 'Recent build',
+    status: 'Live on Google Play',
     year: '2026',
     link: {
       label: 'Download on Google Play',
@@ -111,85 +198,14 @@ export const PROJECTS: readonly Project[] = [
     featured: true,
   },
   {
-    title: 'SMG Transport Agency',
-    category: 'Transport Booking Platform',
-    tags: ['Tourism', 'Technology'],
-    icon: 'assets/project-covers/smg-logo-mark.png',
-    iconIsImage: true,
-    description:
-      'A Ghanaian intercity travel booking platform where passengers search active routes, choose seats, pay online, and receive QR e-tickets with staff operations managed behind the scenes.',
-    impact: 'Turns route discovery, seat reservations, payments, and ticket verification into a smoother digital workflow for travellers and the SMG team.',
-    status: 'Live platform',
-    year: '2026',
-    link: { label: 'Visit SMG Agency', href: 'https://smgagencygh.com' },
-    featured: true,
-  },
-  {
-    title: 'Luban Workshop Restaurant',
-    category: 'Digital Marketing & Web',
-    tags: ['Tourism', 'Technology'],
-    icon: 'assets/project-covers/luban-logo.png',
-    iconIsImage: true,
-    description:
-      "Improving the visibility of my department's Chinese restaurant through website design, search engine optimisation, and social media engagement.",
-    impact: 'Connects hospitality operations with discoverable digital storytelling.',
-    status: 'Strategy project',
-    year: '2025',
-    link: { label: 'Visit restaurant site', href: 'https://lubanrestaurant.com' },
-    featured: true,
-  },
-  {
-    title: 'VitaForge AI',
-    category: 'AI Career Platform',
-    tags: ['Education', 'Technology'],
-    icon: 'assets/project-covers/vitaforge-mark.png',
-    iconIsImage: true,
-    coverImage: 'assets/project-covers/vitaforge-ai.webp',
-    description:
-      'A student-first AI career platform for building polished CVs, tailored cover letters, ATS-ready applications, and guided career materials.',
-    impact: 'Helps students turn experience into stronger job applications with practical AI support.',
-    status: 'Live platform',
-    year: '2026',
-    link: { label: 'Visit VitaForge', href: 'https://vitaforge.pwavwe.com' },
-    featured: true,
-  },
-  {
-    title: 'Pollaris Election Platform',
-    category: 'Election Technology',
-    tags: ['Technology', 'Leadership', 'Community'],
-    icon: 'assets/project-covers/pollaris-mark.png',
-    iconIsImage: true,
-    coverImage: 'assets/project-covers/pollaris.webp',
-    description:
-      'A configurable multi-election voting platform for managed campus elections, covering voter-code access, ballot setup, staff dashboards, audit trails, certified results, and election-scoped exports.',
-    impact: 'Brought digital structure, transparency, and auditable participation to departmental elections.',
-    status: 'Election platform',
-    year: '2026',
-    link: { label: 'Visit Pollaris', href: 'https://absag-ucc1.web.app' },
-    featured: true,
-  },
-  {
-    title: 'HallKey',
-    category: 'Campus Access Technology',
-    tags: ['Technology', 'Community'],
-    icon: 'assets/project-covers/hallkey-mark.svg',
-    iconIsImage: true,
-    coverImage: 'assets/project-covers/hallkey.webp',
-    description:
-      'A smart university hall key-access concept where students request a room key, verify by fingerprint, receive the mapped key, and give hall staff a live operational record.',
-    impact: 'Reduces key-collection queues while improving access accountability for students, porters, and hall administrators.',
-    status: 'Live prototype',
-    year: '2026',
-    link: { label: 'Visit HallKey', href: 'https://hallkey.web.app' },
-    featured: true,
-  },
-  {
     title: 'AZ Learner',
     category: 'Education Technology',
     tags: ['Education', 'Technology'],
     icon: '🎓',
     description:
-      'An academic support platform improving student retention and performance through purposeful learning paths, resource access, analytics-informed support, and collaborative study tools.',
+      'The platform I founded and lead: an academic support system improving student retention and performance through purposeful learning paths, resource access, analytics-informed support and collaborative study tools.',
+    role: 'Founder & CEO · product lead',
+    stack: ['Web platform', 'Firebase', 'Learning tools'],
     impact: 'Built as a long-term academic support system for learners across UCC and beyond.',
     status: 'Founder-led',
     year: '2023-Present',
@@ -203,11 +219,11 @@ export const PROJECTS: readonly Project[] = [
     icon: '🧭',
     description:
       'A 100-question self-assessment that turns personal response patterns into a practical SWOT analysis covering strengths, weaknesses, opportunities, threats, and next-step recommendations.',
+    stack: ['Web app', 'Adaptive scoring'],
     impact: 'Makes reflective strategy more accessible for students, founders, and emerging leaders.',
     status: 'Live tool',
     year: '2026',
     link: { label: 'Take the quiz', href: 'swot-quiz.html' },
-    featured: true,
   },
   {
     title: 'Project Kassena',
@@ -216,12 +232,26 @@ export const PROJECTS: readonly Project[] = [
     icon: '🗣️',
     description:
       'Building a trusted digital Kasem dictionary, phrase corpus, and AI-ready language dataset, created with community input and designed for education, culture, and long-term preservation.',
+    stack: ['Language dataset', 'Community tooling'],
     impact: 'Protects language heritage while preparing community knowledge for digital learning systems.',
     status: 'Research build',
     year: '2025-Present',
     meta: 'Started: April 20, 2025',
     link: { label: 'Visit Project Kassena', href: 'https://kassena.azlearner.me' },
-    featured: true,
+  },
+  {
+    title: 'Luban Workshop Restaurant',
+    category: 'Digital Marketing & Web',
+    tags: ['Tourism', 'Technology'],
+    icon: 'assets/project-covers/luban-logo.png',
+    iconIsImage: true,
+    description:
+      "Improving the visibility of my department's Chinese restaurant through website design, search engine optimisation, and social media engagement.",
+    stack: ['Website', 'SEO', 'Social'],
+    impact: 'Connects hospitality operations with discoverable digital storytelling.',
+    status: 'Strategy project',
+    year: '2025',
+    link: { label: 'Visit restaurant site', href: 'https://lubanrestaurant.com' },
   },
   {
     title: 'Advanced Tourism Concepts Ebook',
@@ -237,30 +267,6 @@ export const PROJECTS: readonly Project[] = [
       label: 'Read the ebook',
       href: 'docs/archive/Advanced_Tourism_Concepts_UCC_Student_Creator_Ebook.pdf',
     },
-    featured: true,
-  },
-  {
-    title: 'Francis Pwavwe Productions',
-    category: 'Digital Media & Personal Brand',
-    tags: ['Technology', 'Leadership'],
-    icon: '🎙️',
-    description:
-      'A digital media and production identity for publishing voice, video, writing, and student-centered stories with a polished, credible portfolio presence.',
-    impact: 'Creates a structured channel for thought leadership, creative work, and professional storytelling.',
-    status: 'Brand system',
-    year: '2026',
-    link: { label: 'Explore productions', href: 'fp-index.html' },
-  },
-  {
-    title: 'Campus Sustainability Operations',
-    category: 'Student Welfare & Service',
-    tags: ['Leadership', 'Community'],
-    icon: '💧',
-    description:
-      'Committee work that supported water, sanitation, and campus welfare priorities through service coordination, problem tracking, and student-centered improvements.',
-    impact: 'Contributed to a healthier campus experience through practical service leadership.',
-    status: 'Completed service',
-    year: 'Feb-Jul 2026',
   },
   {
     title: 'Torchlight Tours Social Strategy',
@@ -271,17 +277,6 @@ export const PROJECTS: readonly Project[] = [
       'A comprehensive social media strategy for Torchlight Tours, covering audience engagement, brand positioning, and conversion optimisation in a competitive tourism market.',
     impact: 'Sharpens the path from travel inspiration to inquiry for a tourism brand.',
     status: 'Consulting',
-    year: '2024',
-  },
-  {
-    title: 'Journey to the East',
-    category: 'Event Leadership & Coordination',
-    tags: ['Leadership'],
-    icon: '🚗',
-    description:
-      'Head of Security and Transport Committee for a major event, coordinating logistics, participant safety, and the team responsible for seamless transport and security operations.',
-    impact: 'Delivered structure and calm execution for a complex event environment.',
-    status: 'Event leadership',
     year: '2024',
   },
   {
@@ -298,34 +293,45 @@ export const PROJECTS: readonly Project[] = [
 ];
 
 // ============================================================================
-//  SERVICES
+//  SERVICES  (condensed to three build offerings — a single, clear ask)
 // ============================================================================
 export const SKILLS: readonly Skill[] = [
-  { icon: '🗺️', name: 'Tourism Strategy & Planning', description: 'Designing visitor experiences, destination plans, and practical tourism growth roadmaps.' },
-  { icon: '📈', name: 'Research & Insight Reports', description: 'Turning surveys, fieldwork, and market data into clear recommendations for action.' },
-  { icon: '✈️', name: 'Travel & Tour Operations', description: 'Planning itineraries, coordinating logistics, and managing seamless travel experiences.' },
-  { icon: '🎯', name: 'Event & Logistics Coordination', description: 'Structuring event operations, transport plans, security flow, and on-site execution.' },
-  { icon: '👥', name: 'Leadership & Team Support', description: 'Helping student, community, and project teams organise people, roles, and delivery.' },
-  { icon: '💡', name: 'Digital Strategy Consulting', description: 'Improving visibility, workflows, and service delivery through practical digital systems.' },
-  { icon: '🔄', name: 'Education Technology Support', description: 'Building learning tools, academic support systems, and student-focused digital resources.' },
-  { icon: '🎤', name: 'Speaking & Workshop Facilitation', description: 'Delivering talks and sessions on tourism, leadership, innovation, and student success.' },
+  {
+    icon: '🌐',
+    name: 'Business & Brand Websites',
+    description:
+      'Fast, modern, SEO-ready websites for organisations, tourism brands and personal brands — designed, built and deployed live.',
+  },
+  {
+    icon: '📊',
+    name: 'Portals & Operational Dashboards',
+    description:
+      'Custom portals, admin dashboards and internal tools that turn manual, paper-based workflows into clear, trackable digital operations.',
+  },
+  {
+    icon: '🤖',
+    name: 'Web Apps & AI-Assisted Tools (MVPs)',
+    description:
+      'End-to-end web applications and AI-assisted tools — authentication, payments, data and dashboards — built and shipped as working products.',
+  },
 ];
 
 // ============================================================================
 //  EXPERIENCE  (journey timeline)
 // ============================================================================
 export const EXPERIENCE: readonly ExperienceItem[] = [
-  { kind: 'simulation', title: 'Vista Equity Partners — AI in Action (Forage)', company: 'Vista Equity Partners', date: 'March 2026', description: 'Prompt engineering and GenAI workflow automation for Portfolio Operations — synthesising NPS feedback into executive-ready insights and improving output relevance by >50% through iteration.' },
+  { kind: 'leadership', title: 'Founder & CEO', company: 'AZ Learner', date: '2023 – Present', description: 'Founded and leading an education-tech platform improving student retention and academic performance through purposeful digital products — from strategy through to shipped software.' },
+  { kind: 'work', title: 'Digital Product Builder (Freelance)', company: 'Independent · Ghana / Remote', date: '2023 – Present', description: 'Designing and shipping websites, platforms and AI-assisted tools for education, tourism and growing organisations — including Pollaris, VitaForge, SMG Agency, HallKey and the UCC SRC app.' },
+  { kind: 'work', title: 'Intern — Housekeeping & Food and Beverage', company: 'Kempinski Hotel Gold Coast City', date: 'Aug – Oct 2025', description: 'Hands-on experience in luxury hospitality operations — guest service excellence, operational efficiency, and five-star quality standards.' },
+  { kind: 'education', title: 'Harvard Aspire Leaders Program', company: 'Cohort 5', date: '2025', description: 'Completed the Aspire Leaders Program — leadership frameworks, strategic thinking, and global perspectives.' },
+  { kind: 'leadership', title: 'Committee Member — Water & Sanitation', company: 'SRC, University of Cape Coast', date: 'Feb – Jul 2026', description: "Served on the Student Representative Council's Water and Sanitation Committee, contributing to campus welfare and sustainability initiatives." },
+  { kind: 'leadership', title: 'Head of Security & Transport Committee', company: 'Journey to the East Event', date: '2024', description: 'Led security and transportation operations for a major regional event — logistics, team coordination, and seamless safety protocols.' },
+  { kind: 'work', title: 'Digital Strategy Consultant', company: 'Torchlight Tours', date: '2023 – 2024', description: 'Social media strategy to enhance brand visibility, audience engagement, and conversion rates in a competitive tourism market.' },
+  { kind: 'leadership', title: 'Cadet Member', company: 'Oguaa Hall & UCC Armed Forces Cadet Corps', date: '2022 – Present', description: 'Developing leadership, discipline, and strategic thinking through military training and cadet corps activities.' },
+  { kind: 'education', title: 'BSc Tourism Management (Graduate)', company: 'University of Cape Coast', date: '2021 – 2026', description: 'Graduated in 2026 with a background in tourism management, strategic planning and hospitality operations, including research on sustainable tourism.' },
+  { kind: 'simulation', title: 'Vista Equity Partners — AI in Action (Forage)', company: 'Vista Equity Partners', date: 'March 2026', description: 'Prompt engineering and GenAI workflow automation for Portfolio Operations — synthesising NPS feedback into executive-ready insights and improving output relevance by iteration.' },
   { kind: 'simulation', title: 'BCG GenAI Job Simulation (Forage)', company: 'Boston Consulting Group', date: 'March 2026', description: 'AI-powered financial chatbot development — Python and pandas, interpreting 10-K/10-Q data with rule-based logic to deliver user-friendly financial insights.' },
   { kind: 'simulation', title: 'EY Technology Risk Simulation (Forage)', company: 'EY', date: 'February 2026', description: 'Understanding typical IT risks and processes for the Tech Risk team — relationship building, teaming, and productivity.' },
-  { kind: 'leadership', title: 'Committee Member — Water & Sanitation', company: 'SRC, University of Cape Coast', date: 'Feb – Jul 2026', description: "Served on the Student Representative Council's Water and Sanitation Committee, contributing to campus welfare and sustainability initiatives." },
-  { kind: 'work', title: 'Intern — Housekeeping & Food and Beverage', company: 'Kempinski Hotel Gold Coast City', date: 'Aug – Oct 2025', description: 'Hands-on experience in luxury hospitality operations — guest service excellence, operational efficiency, and five-star quality standards.' },
-  { kind: 'education', title: 'Harvard Aspire Leaders Program', company: 'Cohort 5', date: '2025', description: 'Completed the prestigious Harvard Aspire Leaders Program — leadership frameworks, strategic thinking, and global perspectives.' },
-  { kind: 'leadership', title: 'Founder & CEO', company: 'AZ Learner', date: '2023 – Present', description: 'Founded and leading an education-tech platform improving student retention and academic performance through innovative digital solutions.' },
-  { kind: 'leadership', title: 'Head of Security & Transport Committee', company: 'Journey to the East Event', date: '2024', description: 'Led security and transportation operations for a major regional event — logistics, team coordination, and seamless safety protocols.' },
-  { kind: 'leadership', title: 'Cadet Member', company: 'Oguaa Hall & UCC Armed Forces Cadet Corps', date: '2022 – Present', description: 'Developing leadership, discipline, and strategic thinking through military training and cadet corps activities.' },
-  { kind: 'work', title: 'Digital Strategy Consultant', company: 'Torchlight Tours', date: '2023 – 2024', description: 'Social media strategy to enhance brand visibility, audience engagement, and conversion rates in a competitive tourism market.' },
-  { kind: 'education', title: 'Tourism Management Student', company: 'University of Cape Coast', date: '2021 – Present', description: 'Comprehensive education in tourism management, strategic planning, and hospitality operations, with research on sustainable tourism.' },
 ];
 
 // ============================================================================
@@ -342,16 +348,14 @@ export const CERTIFICATES: readonly Certificate[] = [
   { title: 'AI in Action Job Simulation', issuer: 'Vista Equity Partners · Forage', date: 'March 2026', href: `${CERT}/AI-action-job-simulation-certificate.png`, image: `${CERT}/AI-action-job-simulation-certificate.png` },
   { title: 'GenAI Job Simulation', issuer: 'BCG · Forage', date: 'March 2026', href: `${CERT}/cbg-x-job-simulation-certificate.png`, image: `${CERT}/cbg-x-job-simulation-certificate.png` },
   { title: 'Internship Certificate', issuer: 'Kempinski Hotel Gold Coast City', date: 'Aug – Oct 2025', href: `${CERT}/kempinski-internship-certificate.png`, image: `${CERT}/kempinski-internship-certificate.png` },
-  { title: 'Welcome Session', issuer: 'NELS SS26', date: '2026', href: `${CERT}/NELS SS26_Certificate Welcome Session.pdf` },
+  // NELS SS26 — curated to the two strongest sessions (was six) to keep the
+  // credentials focused rather than a certificate museum.
   { title: 'Cross Cultural Communication with Stakeholders', issuer: 'NELS SS26', date: '2026', href: `${CERT}/NELS SS26_Certificate Cross Cultural Communication with Stakeholders.pdf` },
-  { title: 'New Ways of Student Organising II', issuer: 'NELS SS26', date: '2026', href: `${CERT}/NELS SS26_Certificate New Ways of Student Organising II.pdf` },
-  { title: 'Communication with Decision Makers', issuer: 'NELS SS26', date: '2026', href: `${CERT}/NELS SS26_Communication with Decision Makers.pdf` },
   { title: "Sustainability and SDG's", issuer: 'NELS SS26', date: '2026', href: `${CERT}/NELS SS26_Certificate Sustainability and SDG's.pdf` },
-  { title: 'Dealing with Resistance in the Student Movement', issuer: 'NELS SS26', date: '2026', href: `${CERT}/NELS SS26_Certificate Dealing with Resistance in the Student Movement.pdf` },
 ];
 
 // ============================================================================
-//  SUPPORT
+//  SUPPORT  (kept for the small footer link — no longer a homepage section)
 // ============================================================================
 export const SUPPORT = {
   intro:
@@ -371,9 +375,9 @@ export const EBOOK_HREF =
 //  NEWSLETTER
 // ============================================================================
 export const NEWSLETTER = {
-  title: 'Subscribe to Receive Daily Newsletters',
+  title: 'Join the Newsletter',
   desc:
-    "A short daily note on tourism strategy, education technology and student leadership — insights, opportunities and what I'm building, delivered straight to your inbox.",
-  note: 'One email a day · No spam · Unsubscribe any time',
+    "Occasional notes on building digital products, tourism, education technology and what I'm shipping — insights and opportunities, straight to your inbox. No fixed schedule, no spam.",
+  note: 'No spam · Unsubscribe any time',
   unsubscribeHref: 'unsubscribe.html',
 } as const;
