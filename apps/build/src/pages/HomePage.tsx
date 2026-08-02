@@ -1,5 +1,6 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Packages } from '../components/Packages';
 import { ProjectCard } from '../components/ProjectCard';
 import { Seo } from '../components/Seo';
 import { publishedProjects } from '../data/projects';
@@ -61,6 +62,8 @@ export function HomePage() {
         <div className="section-heading"><div><p className="eyebrow">WHAT I BUILD</p><h2 id="services-heading">The right shape for the problem.</h2></div><p>Not every idea needs an app. Not every workflow needs AI. The work starts by choosing what actually helps.</p></div>
         <div className="service-grid">{services.map(({ icon: Icon, title, problem, slug }) => <article className="service-card" key={title}><Icon /><h3>{title}</h3><p>{problem}</p><Link className="text-link" to={`/services#${slug}`} onClick={() => void track('service_cta_click', { service: slug })}>Explore service <ArrowUpRight size={16} /></Link></article>)}</div>
       </section>
+
+      <Packages />
 
       <section className="section-pad audiences" aria-labelledby="audience-heading">
         <p className="eyebrow">WHO I WORK WITH</p><h2 id="audience-heading">Different contexts. Same need for clarity.</h2>

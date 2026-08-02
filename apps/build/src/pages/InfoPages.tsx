@@ -1,14 +1,19 @@
-import { ArrowUpRight, Check, Mail, MessageCircle, Video } from 'lucide-react';
+import { ArrowUpRight, Check, Mail, MessageCircle, Phone, Video } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Packages } from '../components/Packages';
+import { PaymentTerms } from '../components/PaymentTerms';
 import { Seo } from '../components/Seo';
 import { processSteps, services } from '../data/services';
+import { hasWhatsApp, studio, whatsappLink } from '../data/studio';
 import { track } from '../lib/analytics';
 
 export function ServicesPage() {
   return <>
     <Seo title="Services — Pwavwe Studio" description="Websites, web and mobile applications, AI integrations, campus systems and focused MVP development by Francis Pwavwe." path="/services" />
     <section className="page-hero section-pad"><p className="eyebrow">SERVICES</p><h1>Build what the work<br /><em>actually needs.</em></h1><p>The service is a starting shape. The proposal is built around your problem, users and operating reality.</p></section>
+    <Packages heading="Start from a fixed package." intro="Pick the closest package as a starting point. It sets a clear scope and a from-price; the final quote is confirmed in your proposal." />
     <section className="section-pad service-list">{services.map(({ icon: Icon, title, problem, suitableFor, deliverables, slug }, index) => <article id={slug} key={title}><div className="service-number">0{index + 1}</div><div className="service-icon"><Icon /></div><div className="service-content"><h2>{title}</h2><h3>The problem it addresses</h3><p>{problem}</p><h3>Best suited to</h3><p>{suitableFor}</p><h3>Possible deliverables</h3><ul>{deliverables.map((item) => <li key={item}><Check size={17} /> {item}</li>)}</ul><Link className="text-link" to={`/request?type=${encodeURIComponent(title)}`} onClick={() => void track('service_cta_click', { service: slug })}>Request this kind of build <ArrowUpRight size={16} /></Link></div></article>)}</section>
+    <PaymentTerms contrast />
     <section className="request-band section-pad"><div><p className="eyebrow">NOT SURE WHICH FITS?</p><h2>Describe the situation.</h2><p>You are not expected to diagnose the technology before you ask for help.</p></div><Link className="button button-light" to="/request">Start a request <ArrowUpRight size={18} /></Link></section>
   </>;
 }
@@ -35,7 +40,7 @@ export function ContactPage() {
   return <>
     <Seo title="Contact — Pwavwe Studio" description="Contact Francis Pwavwe about a website, application, campus platform, AI integration or product idea." path="/contact" />
     <section className="page-hero section-pad"><p className="eyebrow">CONTACT</p><h1>Choose the next<br /><em>useful conversation.</em></h1><p>For a new project, the structured request gives me the context to respond well. For everything else, email works.</p></section>
-    <section className="contact-grid section-pad"><article><Mail /><p className="eyebrow">PROJECT REQUESTS</p><h2>Have a build in mind?</h2><p>Share the problem, users, timeline and budget range. You will receive a reference number immediately.</p><Link className="button" to="/request">Request a Build <ArrowUpRight size={18} /></Link></article><article><MessageCircle /><p className="eyebrow">PROJECT EMAIL</p><h2>projects@pwavwe.com</h2><p>Use this for project follow-ups, partnership enquiries and studio-related questions.</p><a className="text-link" href="mailto:projects@pwavwe.com" onClick={() => void track('contact_email_click', { location: 'contact' })}>Write an email <ArrowUpRight size={16} /></a></article><article><Video /><p className="eyebrow">PERSONAL REPLY</p><h2>francis@pwavwe.com</h2><p>Best for speaking invitations, personal correspondence and conversations outside a formal project request.</p><a className="text-link" href="mailto:francis@pwavwe.com">Contact Francis <ArrowUpRight size={16} /></a></article></section>
+    <section className="contact-grid section-pad"><article><Mail /><p className="eyebrow">PROJECT REQUESTS</p><h2>Have a build in mind?</h2><p>Share the problem, users, timeline and budget range. You will receive a reference number immediately.</p><Link className="button" to="/request">Request a Build <ArrowUpRight size={18} /></Link></article>{hasWhatsApp() && <article><Phone /><p className="eyebrow">WHATSAPP</p><h2>Chat on WhatsApp</h2><p>Best for quick questions, updates and voice notes — fast, informal back-and-forth about a build.</p><a className="button" href={whatsappLink('Hi Francis, I found Pwavwe Studio and would like to talk about a build.')} target="_blank" rel="noopener noreferrer" onClick={() => void track('contact_whatsapp_click', { location: 'contact' })}>Message on WhatsApp <ArrowUpRight size={16} /></a></article>}<article><MessageCircle /><p className="eyebrow">PROJECT EMAIL</p><h2>{studio.email}</h2><p>Use this for project follow-ups, partnership enquiries and studio-related questions.</p><a className="text-link" href={`mailto:${studio.email}`} onClick={() => void track('contact_email_click', { location: 'contact' })}>Write an email <ArrowUpRight size={16} /></a></article><article><Video /><p className="eyebrow">PERSONAL REPLY</p><h2>{studio.personalEmail}</h2><p>Best for speaking invitations, personal correspondence and conversations outside a formal project request.</p><a className="text-link" href={`mailto:${studio.personalEmail}`}>Contact Francis <ArrowUpRight size={16} /></a></article></section>
   </>;
 }
 

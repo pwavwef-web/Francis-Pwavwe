@@ -129,6 +129,19 @@ Preview channel example:
 firebase hosting:channel:deploy studio-preview --only build --expires 7d
 ```
 
+## Editing packages, contact and payment (no build knowledge needed)
+
+Two plain-text files drive the public pricing, contact and payment content. Edit them, then rebuild and deploy.
+
+- `apps/build/src/data/packages.ts` — the three fixed packages (name, `priceFrom`, tagline, `includes` list, `bestFor`). Prices are shown after the word "from".
+- `apps/build/src/data/studio.ts` — contact and payment details in one place:
+  - `whatsappNumber` — international format, digits only (e.g. Ghana `0557535673` → `233557535673`). Empty string hides WhatsApp everywhere.
+  - `paystackUrl` — the Paystack deposit link. While empty, the Paystack button stays hidden and Mobile Money is shown instead.
+  - `momo` — Mobile Money `number`, `name` and optional `network` label. Empty `number` hides the Mobile Money block.
+  - `deposit` — the deposit terms string shown across the site.
+
+Each contact/payment element only appears once its value is set, so partial configuration never produces a broken link or empty box.
+
 ## Data model
 
 - `buildRequests`: project requests and internal lead-management fields
