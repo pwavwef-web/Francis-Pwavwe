@@ -200,13 +200,20 @@ export const updateRequesterPreferences = onCall({ ...callableOptions, timeoutSe
   const snapshot = await documentRef.get();
   if (!snapshot.exists) throw new HttpsError('not-found', 'Request not found.');
   const data = snapshot.data()!;
-  const preferences = normalizeNotificationPreferences(input.preferences, Boolean(data.phone && data.smsConsent));
-  await documentRef.update({ notificationPreferences: preferences, updatedAt: FieldValue.serverTimestamp() });
+  const smsAvailable = Boolean(data.phone);
+  const preferences = normalizeNotificationPreferences(input.preferences, smsAvailable);
+  const smsEnabled = smsAvailable && hasEnabledNotificationPreference(preferences.sms);
+  await documentRef.update({
+    notificationPreferences: preferences,
+    smsConsent: smsEnabled,
+    smsStatus: smsAvailable ? nextSmsStatus(data.smsStatus, smsEnabled) : 'no_phone',
+    updatedAt: FieldValue.serverTimestamp(),
+  });
   await db.collection('buildRequestActivity').add({
     requestId: session.requestId, reference: session.reference, action: 'notification_preferences_updated',
     public: true, category: 'messages', actorEmail: session.email, createdAt: FieldValue.serverTimestamp(),
   });
-  return { ok: true, preferences };
+  return { ok: true, preferences, smsEnabled, smsAvailable };
 });
 
 export const submitRequesterMessage = onCall({ ...callableOptions, timeoutSeconds: 30, memory: '256MiB', secrets: [smtpUser, smtpPass], maxInstances: 10 }, async (request) => {
@@ -273,6 +280,7 @@ export const updateBuildRequest = onCall({ ...callableOptions, timeoutSeconds: 3
   const allowedKeys = [
     'status', 'priority', 'internalNotes', 'internalTags', 'proposalUrl', 'driveFolderUrl', 'followUpDate',
     'publicStatus', 'publicNote', 'nextUpdateAt', 'estimatedStartAt', 'estimatedDeliveryAt', 'sharedLinks', 'githubLinks',
+    'smsConsent', 'smsStatus',
     'projectHealth', 'deliveryConfidence', 'currentFocus', 'nextStep', 'acceptanceCriteria',
     'projectMilestones', 'projectTasks', 'projectDecisions', 'projectRisks', 'projectMeetings',
   ];
@@ -284,6 +292,8 @@ export const updateBuildRequest = onCall({ ...callableOptions, timeoutSeconds: 3
   if (typeof changes.nextStep === 'string' && changes.nextStep.length > 600) throw new HttpsError('invalid-argument', 'Next step is too long.');
   if (typeof changes.projectHealth === 'string' && !isOneOf(changes.projectHealth, projectHealthValues)) throw new HttpsError('invalid-argument', 'Project health is invalid.');
   if (typeof changes.deliveryConfidence === 'string' && !isOneOf(changes.deliveryConfidence, deliveryConfidenceValues)) throw new HttpsError('invalid-argument', 'Delivery confidence is invalid.');
+  if ('smsConsent' in changes && typeof changes.smsConsent !== 'boolean') throw new HttpsError('invalid-argument', 'SMS opt-in is invalid.');
+  if (typeof changes.smsStatus === 'string' && !isOneOf(changes.smsStatus, smsStatusValues)) throw new HttpsError('invalid-argument', 'SMS status is invalid.');
   for (const key of ['proposalUrl', 'driveFolderUrl'] as const) {
     if (typeof changes[key] === 'string' && changes[key] && !isUrl(changes[key])) throw new HttpsError('invalid-argument', 'A link is not valid.');
   }
@@ -308,6 +318,15 @@ export const updateBuildRequest = onCall({ ...callableOptions, timeoutSeconds: 3
     const snapshot = await transaction.get(documentRef);
     if (!snapshot.exists) throw new HttpsError('not-found', 'Request not found.');
     const previous = snapshot.data()!;
+    const phone = String(previous.phone || '');
+    const nextSmsEnabled = Boolean(phone && (changes.smsConsent ?? previous.smsConsent));
+    if (changes.smsConsent === true && !phone) throw new HttpsError('failed-precondition', 'A phone number is required before SMS opt-in can be enabled.');
+    if ('smsConsent' in changes && !('smsStatus' in changes)) {
+      changes.smsStatus = phone ? nextSmsStatus(previous.smsStatus, nextSmsEnabled) : 'no_phone';
+    }
+    if (changes.smsConsent === true && !('notificationPreferences' in changes)) {
+      changes.notificationPreferences = enableSmsNotificationDefaults(previous.notificationPreferences);
+    }
     const publicChangedKeys = publicRequestUpdateKeys(changes, previous);
     const changedCategories = categoriesForRequestChanges(changes, previous);
     if (changedCategories.length) {
@@ -736,6 +755,7 @@ const taskStatusValues = ['todo', 'doing', 'blocked', 'done'] as const;
 const decisionStatusValues = ['open', 'decided', 'revisit'] as const;
 const riskLevelValues = ['low', 'medium', 'high', 'critical'] as const;
 const riskStatusValues = ['open', 'mitigating', 'resolved'] as const;
+const smsStatusValues = ['pending', 'sent', 'delayed', 'not_configured', 'no_phone', 'not_requested'] as const;
 
 type ProjectVisibility = { visibleToRequester: boolean };
 type ProjectMilestone = ProjectVisibility & {
@@ -862,6 +882,24 @@ function isOneOf<T extends string>(value: unknown, values: readonly T[]): value 
   return typeof value === 'string' && (values as readonly string[]).includes(value);
 }
 
+function hasEnabledNotificationPreference(channel: Record<NotificationCategory, boolean>): boolean {
+  return notificationCategories.some((category) => channel[category]);
+}
+
+function nextSmsStatus(current: unknown, enabled: boolean): string {
+  if (!enabled) return 'not_requested';
+  if (isOneOf(current, smsStatusValues) && current !== 'not_requested' && current !== 'no_phone') return current;
+  return 'pending';
+}
+
+function enableSmsNotificationDefaults(value: unknown) {
+  const current = normalizeNotificationPreferences(value, true);
+  return {
+    ...current,
+    sms: Object.fromEntries(notificationCategories.map((category) => [category, true])),
+  };
+}
+
 async function enforceRequesterAccessLimit(clientKey: string): Promise<void> {
   const now = Timestamp.now();
   const rateRef = db.collection('_requesterAccessRateLimits').doc(clientKey);
@@ -905,7 +943,8 @@ async function buildRequesterPortalPayload(requestId: string, data: Record<strin
     db.collection('buildRequestActivity').where('requestId', '==', requestId).orderBy('createdAt', 'desc').limit(120).get(),
     db.collection('requestMessages').where('requestId', '==', requestId).orderBy('createdAt', 'asc').limit(120).get(),
   ]);
-  const smsEnabled = Boolean(data.phone && data.smsConsent);
+  const smsAvailable = Boolean(data.phone);
+  const smsEnabled = Boolean(smsAvailable && data.smsConsent);
   return {
     request: {
       id: requestId,
@@ -937,6 +976,7 @@ async function buildRequesterPortalPayload(requestId: string, data: Record<strin
       projectMeetings: onlyRequesterVisible(sanitizeProjectMeetings(data.projectMeetings)),
       notificationPreferences: normalizeNotificationPreferences(data.notificationPreferences, smsEnabled),
       smsEnabled,
+      smsAvailable,
       timeline: buildTimeline(data),
       createdAt: data.createdAt ?? null,
       updatedAt: data.updatedAt ?? null,

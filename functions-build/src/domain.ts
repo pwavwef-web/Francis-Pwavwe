@@ -194,10 +194,11 @@ export function buildEmailMessages(request: NormalizedBuildRequest, reference: s
 
 export function buildAdminEmail(to: string, subject: string, body: string, publicSiteUrl: string): EmailMessage {
   const url = publicSiteUrl.replace(/\/$/, '');
+  const signed = splitEmailSignature(body);
   return {
     to,
     subject,
-    text: `${body.trim()}\n\nFrancis\nPwavwe Studio\n${url}`,
+    text: `${signed.body}\n\nFrancis\nPwavwe Studio\n${url}`,
     html: renderThemedEmail({
       preview: subject,
       eyebrow: 'PWAVWE STUDIO',
@@ -241,13 +242,23 @@ export function buildRequesterUpdateSms(reference: string, update: string, publi
 
 export function renderThemedEmail(content: ThemedEmailContent): string {
   const safeUrl = escapeHtml(content.publicSiteUrl.replace(/\/$/, ''));
-  const body = content.body.trim().split(/\n{2,}/).map((paragraph) => `<p style="margin:0 0 18px;color:#273231;font-size:16px;line-height:1.65">${escapeHtml(paragraph).replace(/\n/g, '<br>')}</p>`).join('');
+  const signed = splitEmailSignature(content.body);
+  const body = signed.body ? signed.body.split(/\n{2,}/).map((paragraph) => `<p style="margin:0 0 18px;color:#273231;font-size:16px;line-height:1.65">${escapeHtml(paragraph).replace(/\n/g, '<br>')}</p>`).join('') : '';
   const cta = content.cta ? `<p style="margin:28px 0 4px"><a href="${escapeHtml(content.cta.href)}" style="display:inline-block;background:#113a36;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:13px 20px;border-radius:2px">${escapeHtml(content.cta.label)}</a></p>` : '';
-  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escapeHtml(content.title)}</title></head><body style="margin:0;background:#edf1ef;font-family:Arial,Helvetica,sans-serif;color:#17201f"><div style="display:none;max-height:0;overflow:hidden;opacity:0">${escapeHtml(content.preview)}</div><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#edf1ef;padding:28px 12px"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:620px;background:#ffffff;border:1px solid #d7dfdc"><tr><td style="background:#102522;padding:25px 32px;border-bottom:4px solid #52c7b2"><div style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:-.3px">Pwavwe Studio</div><div style="margin-top:5px;color:#9fd9ce;font-size:11px;letter-spacing:1.8px">DESIGN &amp; DEVELOPMENT</div></td></tr><tr><td style="padding:38px 32px 32px"><div style="margin-bottom:12px;color:#147767;font-size:11px;font-weight:700;letter-spacing:1.7px">${escapeHtml(content.eyebrow)}</div><h1 style="margin:0 0 22px;color:#17201f;font-size:30px;line-height:1.2;letter-spacing:-.8px">${escapeHtml(content.title)}</h1>${body}${cta}</td></tr><tr><td style="padding:20px 32px;background:#f6f8f7;border-top:1px solid #dfe5e2;color:#687370;font-size:12px;line-height:1.6">Sent personally by Francis Pwavwe<br><a href="${safeUrl}" style="color:#147767;text-decoration:none">${safeUrl}</a></td></tr></table></td></tr></table></body></html>`;
+  const signature = `<div style="margin:24px 0 4px;color:#17201f;font-family:'Pwavwe Hand','Segoe Print','Bradley Hand',cursive;font-size:36px;font-weight:400;line-height:1.05;letter-spacing:0">${escapeHtml(signed.signature)}</div>`;
+  const fontFace = `@font-face{font-family:'Pwavwe Hand';src:url('${safeUrl}/fonts/PwavweHand-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}`;
+  return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escapeHtml(content.title)}</title><style>${fontFace}</style></head><body style="margin:0;background:#edf1ef;font-family:Arial,Helvetica,sans-serif;color:#17201f"><div style="display:none;max-height:0;overflow:hidden;opacity:0">${escapeHtml(content.preview)}</div><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#edf1ef;padding:28px 12px"><tr><td align="center"><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:620px;background:#ffffff;border:1px solid #d7dfdc"><tr><td style="background:#102522;padding:25px 32px;border-bottom:4px solid #52c7b2"><div style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:-.3px">Pwavwe Studio</div><div style="margin-top:5px;color:#9fd9ce;font-size:11px;letter-spacing:1.8px">DESIGN &amp; DEVELOPMENT</div></td></tr><tr><td style="padding:38px 32px 32px"><div style="margin-bottom:12px;color:#147767;font-size:11px;font-weight:700;letter-spacing:1.7px">${escapeHtml(content.eyebrow)}</div><h1 style="margin:0 0 22px;color:#17201f;font-size:30px;line-height:1.2;letter-spacing:-.8px">${escapeHtml(content.title)}</h1>${body}${signature}${cta}</td></tr><tr><td style="padding:20px 32px;background:#f6f8f7;border-top:1px solid #dfe5e2;color:#687370;font-size:12px;line-height:1.6">Sent personally by Francis Pwavwe<br><a href="${safeUrl}" style="color:#147767;text-decoration:none">${safeUrl}</a></td></tr></table></td></tr></table></body></html>`;
 }
 
 export function escapeHtml(value: string): string {
   return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character]!);
+}
+
+function splitEmailSignature(value: string): { body: string; signature: string } {
+  const trimmed = value.trim();
+  const match = trimmed.match(/\n{2,}\s*(Francis(?:\s+Pwavwe)?)\s*$/i);
+  if (!match || match.index === undefined) return { body: trimmed, signature: 'Francis' };
+  return { body: trimmed.slice(0, match.index).trim(), signature: match[1] || 'Francis' };
 }
 
 // ── Testimonials / project feedback ──────────────────────────────────────────

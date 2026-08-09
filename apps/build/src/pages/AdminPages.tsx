@@ -113,6 +113,7 @@ function EmailComposer({ to, contextType, contextId, reference, initialSubject, 
       <label>To<input value={to} readOnly /></label>
       <label>Subject<input value={subject} onChange={(event) => setSubject(event.target.value)} maxLength={160} required /></label>
       <label>Message<textarea value={body} onChange={(event) => setBody(event.target.value)} rows={7} maxLength={5000} required /></label>
+      <div className="email-signature-preview" aria-hidden="true">Francis</div>
       {message && <p className="save-message" role="status">{message}</p>}
       {error && <p className="field-error" role="alert">{error}</p>}
       <button className="button" type="submit" disabled={sending || subject.trim().length < 2 || body.trim().length < 2}>{sending ? <LoaderCircle className="spin" size={17} /> : <Send size={17} />} {sending ? 'Sending…' : 'Send email'}</button>

@@ -14,6 +14,7 @@ import {
 
 const statuses = ['new', 'reviewing', 'needs_clarification', 'qualified', 'proposal_preparation', 'proposal_sent', 'accepted', 'in_development', 'delivered', 'declined', 'archived'];
 const priorities = ['normal', 'high', 'urgent'];
+const smsStatuses = ['pending', 'sent', 'delayed', 'not_configured', 'no_phone', 'not_requested'];
 const projectHealthOptions = ['on_track', 'watch', 'at_risk', 'paused'];
 const deliveryConfidenceOptions = ['high', 'medium', 'low'];
 const milestoneStatuses: ProjectMilestone['status'][] = ['planned', 'active', 'complete', 'blocked'];
@@ -65,6 +66,16 @@ function RequestDetail() {
   if (!request || error) return <StatePanel icon={<AlertTriangle />} title="Request unavailable" message={error || 'The request does not exist.'} action={<Link className="button" to="/admin"><ArrowLeft size={16} /> Back to requests</Link>} />;
 
   const set = (key: keyof AdminRequest, value: unknown) => setRequest((current) => current ? { ...current, [key]: value } : current);
+  const setSmsConsent = (checked: boolean) => {
+    setRequest((current) => {
+      if (!current) return current;
+      const smsConsent = Boolean(checked && current.phone);
+      const smsStatus = smsConsent
+        ? current.smsStatus && !['not_requested', 'no_phone'].includes(current.smsStatus) ? current.smsStatus : 'pending'
+        : current.phone ? 'not_requested' : 'no_phone';
+      return { ...current, smsConsent, smsStatus };
+    });
+  };
   const portalUrl = `${siteUrl}/request/status?reference=${encodeURIComponent(request.reference)}`;
   const whatsapp = request.phone ? `https://wa.me/${request.phone.replace(/\D/g, '')}` : '';
 
@@ -77,6 +88,8 @@ function RequestDetail() {
         publicStatus: request.publicStatus ?? request.status, publicNote: request.publicNote ?? '', nextUpdateAt: request.nextUpdateAt ?? '',
         estimatedStartAt: request.estimatedStartAt ?? '', estimatedDeliveryAt: request.estimatedDeliveryAt ?? '',
         sharedLinks: request.sharedLinks ?? [], githubLinks: request.githubLinks ?? [],
+        smsConsent: Boolean(request.phone && request.smsConsent),
+        smsStatus: request.phone ? request.smsStatus ?? (request.smsConsent ? 'pending' : 'not_requested') : 'no_phone',
         projectHealth: request.projectHealth ?? 'on_track', deliveryConfidence: request.deliveryConfidence ?? 'medium',
         currentFocus: request.currentFocus ?? '', nextStep: request.nextStep ?? '',
         acceptanceCriteria: request.acceptanceCriteria ?? [],
@@ -168,6 +181,8 @@ function RequestDetail() {
         <SelectInput label="Priority" value={request.priority} options={priorities} onChange={(value) => set('priority', value)} />
         <SelectInput label="Health" value={request.projectHealth ?? 'on_track'} options={projectHealthOptions} onChange={(value) => set('projectHealth', value)} />
         <SelectInput label="Delivery confidence" value={request.deliveryConfidence ?? 'medium'} options={deliveryConfidenceOptions} onChange={(value) => set('deliveryConfidence', value)} />
+        <label className="admin-check"><input type="checkbox" checked={Boolean(request.phone && request.smsConsent)} disabled={!request.phone} onChange={(event) => setSmsConsent(event.target.checked)} /><span>SMS opt-in confirmed</span></label>
+        <SelectInput label="SMS status" value={request.smsStatus ?? (request.phone ? (request.smsConsent ? 'pending' : 'not_requested') : 'no_phone')} options={smsStatuses} onChange={(value) => set('smsStatus', value)} disabled={!request.phone} />
         <label>Requester note<textarea rows={4} value={request.publicNote ?? ''} onChange={(event) => set('publicNote', event.target.value)} maxLength={1200} /></label>
         <label>Next public update<input type="date" value={request.nextUpdateAt ?? ''} onChange={(event) => set('nextUpdateAt', event.target.value)} /></label>
         <label>Estimated start<input type="date" value={request.estimatedStartAt ?? ''} onChange={(event) => set('estimatedStartAt', event.target.value)} /></label>
@@ -353,6 +368,7 @@ function EmailComposer({ request, onSent }: { request: AdminRequest; onSent: () 
       <label>To<input value={request.email} readOnly /></label>
       <label>Subject<input value={subject} onChange={(event) => setSubject(event.target.value)} maxLength={160} required /></label>
       <label>Message<textarea value={body} onChange={(event) => setBody(event.target.value)} rows={7} maxLength={5000} required /></label>
+      <div className="email-signature-preview" aria-hidden="true">Francis</div>
       {message && <p className="save-message" role="status">{message}</p>}
       {error && <p className="field-error" role="alert">{error}</p>}
       <button className="button" type="submit" disabled={sending || subject.trim().length < 2 || body.trim().length < 2}>{sending ? <LoaderCircle className="spin" size={17} /> : <Send size={17} />} Send email</button>
@@ -402,7 +418,7 @@ function ActivityTrail({ activity }: { activity: RequestActivity[] }) {
 
 function Section({ title, children }: { title: string; children: ReactNode }) { return <section><h2>{title}</h2>{children}</section>; }
 function Data({ label, value }: { label: string; value: string }) { return <div className="data-row"><dt>{label}</dt><dd>{value}</dd></div>; }
-function SelectInput({ label, value, options, onChange }: { label: string; value: string; options: string[]; onChange: (value: string) => void }) { return <label>{label}<select value={value} onChange={(event) => onChange(event.target.value)}>{options.map((option) => <option key={option} value={option}>{humanize(option)}</option>)}</select></label>; }
+function SelectInput({ label, value, options, onChange, disabled = false }: { label: string; value: string; options: string[]; onChange: (value: string) => void; disabled?: boolean }) { return <label>{label}<select value={value} onChange={(event) => onChange(event.target.value)} disabled={disabled}>{options.map((option) => <option key={option} value={option}>{humanize(option)}</option>)}</select></label>; }
 
 function withDefaultMilestones(items: ProjectMilestone[] | undefined): ProjectMilestone[] {
   if (items) return items;

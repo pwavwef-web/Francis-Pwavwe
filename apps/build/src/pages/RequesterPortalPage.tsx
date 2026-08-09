@@ -112,7 +112,15 @@ export function RequesterPortalPage() {
     setBusy(true); setError(''); setNotice('');
     try {
       const result = await updateRequesterPreferences({ ...session, preferences: portal.request.notificationPreferences });
-      setPortal((current) => current ? { ...current, request: { ...current.request, notificationPreferences: result.data.preferences } } : current);
+      setPortal((current) => current ? {
+        ...current,
+        request: {
+          ...current.request,
+          notificationPreferences: result.data.preferences,
+          smsEnabled: result.data.smsEnabled ?? current.request.smsEnabled,
+          smsAvailable: result.data.smsAvailable ?? current.request.smsAvailable,
+        },
+      } : current);
       setNotice('Notification preferences saved.');
     } catch {
       setError('Preferences could not be saved right now.');
@@ -188,7 +196,7 @@ export function RequesterPortalPage() {
         </div>}
 
         {tab === 'notifications' && <div className="portal-single">
-          <section className="portal-panel"><h2><Bell size={18} /> Notification preferences</h2><PreferenceEditor preferences={request.notificationPreferences} smsEnabled={request.smsEnabled} onChange={updatePreference} onDigest={(digest) => setPortal((current) => current ? { ...current, request: { ...current.request, notificationPreferences: { ...current.request.notificationPreferences, digest } } } : current)} /><button className="button button-small" type="button" onClick={() => void savePreferences()} disabled={busy}>Save preferences</button></section>
+          <section className="portal-panel"><h2><Bell size={18} /> Notification preferences</h2><PreferenceEditor preferences={request.notificationPreferences} smsEnabled={request.smsEnabled} smsAvailable={request.smsAvailable ?? request.smsEnabled} onChange={updatePreference} onDigest={(digest) => setPortal((current) => current ? { ...current, request: { ...current.request, notificationPreferences: { ...current.request.notificationPreferences, digest } } } : current)} /><button className="button button-small" type="button" onClick={() => void savePreferences()} disabled={busy}>Save preferences</button></section>
         </div>}
       </div>
     </main>
@@ -263,13 +271,14 @@ function SharedLinks({ portal }: { portal: RequesterPortal }) {
   return <section className="portal-panel"><h2><GitPullRequest size={18} /> Shared links</h2><div className="portal-links">{links.map(([label, href]) => <a key={`${label}-${href}`} href={href} target="_blank" rel="noreferrer">{label}</a>)}</div></section>;
 }
 
-function PreferenceEditor({ preferences, smsEnabled, onChange, onDigest }: {
+function PreferenceEditor({ preferences, smsEnabled, smsAvailable, onChange, onDigest }: {
   preferences: NotificationPreferences;
   smsEnabled: boolean;
+  smsAvailable: boolean;
   onChange: (channel: 'email' | 'sms', category: NotificationCategory, checked: boolean) => void;
   onDigest: (digest: NotificationPreferences['digest']) => void;
 }) {
-  return <div className="preference-editor"><div className="preference-header"><span><Mail size={15} /> Email</span><span><Smartphone size={15} /> SMS</span></div>{categories.map((category) => <div className="preference-row" key={category.key}><span>{category.label}</span><label><input type="checkbox" checked={preferences.email[category.key]} onChange={(event) => onChange('email', category.key, event.target.checked)} /><span className="sr-only">Email {category.label}</span></label><label><input type="checkbox" checked={preferences.sms[category.key]} onChange={(event) => onChange('sms', category.key, event.target.checked)} disabled={!smsEnabled} /><span className="sr-only">SMS {category.label}</span></label></div>)}<label className="digest-select">Email timing<select value={preferences.digest} onChange={(event) => onDigest(event.target.value as NotificationPreferences['digest'])}>{digests.map((digest) => <option key={digest} value={digest}>{digest}</option>)}</select></label>{!smsEnabled && <p className="portal-muted">SMS preferences need a phone number and SMS opt-in on the request.</p>}</div>;
+  return <div className="preference-editor"><div className="preference-header"><span><Mail size={15} /> Email</span><span><Smartphone size={15} /> SMS</span></div>{categories.map((category) => <div className="preference-row" key={category.key}><span>{category.label}</span><label><input type="checkbox" checked={preferences.email[category.key]} onChange={(event) => onChange('email', category.key, event.target.checked)} /><span className="sr-only">Email {category.label}</span></label><label><input type="checkbox" checked={preferences.sms[category.key]} onChange={(event) => onChange('sms', category.key, event.target.checked)} disabled={!smsAvailable} /><span className="sr-only">SMS {category.label}</span></label></div>)}<label className="digest-select">Email timing<select value={preferences.digest} onChange={(event) => onDigest(event.target.value as NotificationPreferences['digest'])}>{digests.map((digest) => <option key={digest} value={digest}>{digest}</option>)}</select></label>{!smsAvailable && <p className="portal-muted">SMS preferences need a phone number on the request.</p>}{smsAvailable && !smsEnabled && <p className="portal-muted">SMS opt-in is off until an SMS preference is saved.</p>}</div>;
 }
 
 function MessageList({ messages }: { messages: RequestMessage[] }) {

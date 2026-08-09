@@ -48,7 +48,7 @@ export const listRequestActivity = httpsCallable<{ requestId: string }, { activi
 export const listRequestMessages = httpsCallable<{ requestId: string }, { messages: RequestMessage[] }>(functions, 'listRequestMessages');
 export const verifyRequesterCode = httpsCallable<{ email: string; reference: string }, { session: RequesterSession; portal: RequesterPortal }>(functions, 'verifyRequesterCode');
 export const getRequesterRequest = httpsCallable<RequesterSession, { portal: RequesterPortal }>(functions, 'getRequesterRequest');
-export const updateRequesterPreferences = httpsCallable<RequesterSession & { preferences: NotificationPreferences }, { ok: boolean; preferences: NotificationPreferences }>(functions, 'updateRequesterPreferences');
+export const updateRequesterPreferences = httpsCallable<RequesterSession & { preferences: NotificationPreferences }, { ok: boolean; preferences: NotificationPreferences; smsEnabled?: boolean; smsAvailable?: boolean }>(functions, 'updateRequesterPreferences');
 export const submitRequesterMessage = httpsCallable<RequesterSession & { body: string }, { ok: boolean; emailDelayed: boolean }>(functions, 'submitRequesterMessage');
 
 export const submitTestimonial = httpsCallable<Record<string, unknown>, { reference: string; emailDelayed?: boolean }>(functions, 'submitTestimonial');
@@ -188,6 +188,7 @@ export type RequesterPortalRequest = {
   projectMeetings?: ProjectMeeting[];
   notificationPreferences: NotificationPreferences;
   smsEnabled: boolean;
+  smsAvailable: boolean;
   timeline: { key: string; label: string; state: 'complete' | 'current' | 'upcoming'; detail: string }[];
   createdAt?: { seconds: number } | string | null;
   updatedAt?: { seconds: number } | string | null;

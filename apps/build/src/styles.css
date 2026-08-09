@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
 
+@font-face {
+  font-family: 'Pwavwe Hand';
+  src: url('/fonts/PwavweHand-Regular.woff2') format('woff2'),
+       url('/fonts/PwavweHand-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --ink: #07111f;
   --ink-soft: #0d1b2b;
@@ -13,6 +22,7 @@
   --danger: #b83c3c;
   --mono: 'DM Mono', ui-monospace, monospace;
   --body: 'Manrope', system-ui, sans-serif;
+  --hand: 'Pwavwe Hand', 'Segoe Print', cursive;
   --max: 1240px;
   --shadow: 0 24px 60px rgba(7, 17, 31, .1);
 }
@@ -291,6 +301,10 @@ fieldset > p { margin-bottom: 2rem; color: var(--muted); font-size: .88rem; }
 .admin-editor label { margin-bottom: 1rem; }
 .admin-editor label input, .admin-editor label select, .admin-editor label textarea { display: block; margin-top: .35rem; font-weight: 400; }
 .admin-editor .button { width: 100%; }
+.admin-check { display: flex !important; align-items: flex-start; gap: .65rem; padding: .8rem; border: 1px solid var(--line); background: #fbfaf6; line-height: 1.35; }
+.admin-check input { width: 1.1rem !important; height: 1.1rem; min-height: 0 !important; flex: 0 0 auto; margin: .1rem 0 0 !important; accent-color: var(--teal); }
+.admin-check span { display: block; }
+.admin-check input:disabled + span { color: var(--muted); }
 .danger-button { display: flex; width: 100%; align-items: center; justify-content: center; gap: .4rem; margin-top: .8rem; padding: .7rem; border: 1px solid #dca8a8; background: transparent; color: var(--danger); font-weight: 700; }
 .save-message { padding: .6rem; background: #e5f4ef; color: #176452; font-size: .72rem; }
 .email-composer { scroll-margin-top: 7rem; }
@@ -300,6 +314,7 @@ fieldset > p { margin-bottom: 2rem; color: var(--muted); font-size: .88rem; }
 .email-composer label { margin-bottom: 1rem; }
 .email-composer label input, .email-composer label textarea { display: block; margin-top: .35rem; font-weight: 400; }
 .email-composer input[readonly] { background: #f3f5f4; color: var(--muted); }
+.email-signature-preview { margin: -.35rem 0 1rem; color: var(--ink); font-family: var(--hand); font-size: 2.25rem; line-height: 1; letter-spacing: 0; }
 
 .site-footer { padding: 5rem clamp(1.2rem, 4vw, 3rem) 1.5rem; background: var(--ink); color: white; }
 .footer-grid { display: grid; width: min(100%, var(--max)); margin-inline: auto; grid-template-columns: 1fr auto auto; gap: clamp(3rem, 9vw, 8rem); }
