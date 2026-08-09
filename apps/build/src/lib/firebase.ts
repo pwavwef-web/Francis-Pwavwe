@@ -110,6 +110,54 @@ export type RequestMessage = {
   createdAt?: { seconds: number } | string | null;
 };
 
+export type ProjectHealth = 'on_track' | 'watch' | 'at_risk' | 'paused';
+export type DeliveryConfidence = 'high' | 'medium' | 'low';
+export type ProjectItemVisibility = { visibleToRequester?: boolean };
+
+export type ProjectMilestone = ProjectItemVisibility & {
+  id: string;
+  title: string;
+  status: 'planned' | 'active' | 'complete' | 'blocked';
+  owner?: string;
+  dueDate?: string;
+  completedAt?: string;
+  summary?: string;
+};
+
+export type ProjectTask = ProjectItemVisibility & {
+  id: string;
+  title: string;
+  status: 'todo' | 'doing' | 'blocked' | 'done';
+  owner?: string;
+  dueDate?: string;
+  notes?: string;
+};
+
+export type ProjectDecision = ProjectItemVisibility & {
+  id: string;
+  title: string;
+  status: 'open' | 'decided' | 'revisit';
+  decidedAt?: string;
+  summary?: string;
+};
+
+export type ProjectRisk = ProjectItemVisibility & {
+  id: string;
+  title: string;
+  level: 'low' | 'medium' | 'high' | 'critical';
+  status: 'open' | 'mitigating' | 'resolved';
+  mitigation?: string;
+};
+
+export type ProjectMeeting = ProjectItemVisibility & {
+  id: string;
+  title: string;
+  scheduledAt?: string;
+  channel?: string;
+  notes?: string;
+  actionItems?: string[];
+};
+
 export type RequesterPortalRequest = {
   id: string;
   reference: string;
@@ -128,6 +176,16 @@ export type RequesterPortalRequest = {
   githubLinks?: string[];
   preferredTimeline?: string;
   budgetRange?: string;
+  projectHealth?: ProjectHealth;
+  deliveryConfidence?: DeliveryConfidence;
+  currentFocus?: string;
+  nextStep?: string;
+  acceptanceCriteria?: string[];
+  projectMilestones?: ProjectMilestone[];
+  projectTasks?: ProjectTask[];
+  projectDecisions?: ProjectDecision[];
+  projectRisks?: ProjectRisk[];
+  projectMeetings?: ProjectMeeting[];
   notificationPreferences: NotificationPreferences;
   smsEnabled: boolean;
   timeline: { key: string; label: string; state: 'complete' | 'current' | 'upcoming'; detail: string }[];
@@ -240,6 +298,16 @@ export type AdminRequest = {
   estimatedDeliveryAt?: string;
   sharedLinks?: string[];
   githubLinks?: string[];
+  projectHealth?: ProjectHealth;
+  deliveryConfidence?: DeliveryConfidence;
+  currentFocus?: string;
+  nextStep?: string;
+  acceptanceCriteria?: string[];
+  projectMilestones?: ProjectMilestone[];
+  projectTasks?: ProjectTask[];
+  projectDecisions?: ProjectDecision[];
+  projectRisks?: ProjectRisk[];
+  projectMeetings?: ProjectMeeting[];
   lastGithubUpdateAt?: { seconds: number } | string;
   lastRequesterMessageAt?: { seconds: number } | string;
   lastOutboundSmsAt?: { seconds: number } | string;

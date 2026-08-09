@@ -94,7 +94,7 @@ export function Layout() {
         </div>
       </header>
       <main id="main-content"><Outlet /></main>
-      {!location.pathname.startsWith('/request') && !location.pathname.startsWith('/admin') && (
+      {!location.pathname.startsWith('/request') && (
         <Link className="floating-cta" to="/request">Request a Build <ArrowUpRight size={16} /></Link>
       )}
       <footer className="site-footer">

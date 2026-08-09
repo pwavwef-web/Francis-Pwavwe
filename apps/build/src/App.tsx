@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { LoaderCircle } from 'lucide-react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout';
+import { AdminLayout } from './components/AdminLayout';
 import { HomePage } from './pages/HomePage';
 
 const WorkPage = lazy(() => import('./pages/WorkPages').then((module) => ({ default: module.WorkPage })));
@@ -29,5 +30,33 @@ function LoadingPage() {
 }
 
 export default function App() {
-  return <BrowserRouter><Suspense fallback={<LoadingPage />}><Routes><Route element={<Layout />}><Route index element={<HomePage />} /><Route path="work" element={<WorkPage />} /><Route path="work/:slug" element={<ProjectPage />} /><Route path="services" element={<ServicesPage />} /><Route path="process" element={<ProcessPage />} /><Route path="request" element={<RequestPage />} /><Route path="request/success" element={<SuccessPage />} /><Route path="request/status" element={<RequesterPortalPage />} /><Route path="feedback" element={<FeedbackPage />} /><Route path="feedback/success" element={<FeedbackSuccessPage />} /><Route path="testimonials" element={<TestimonialsPage />} /><Route path="about" element={<AboutPage />} /><Route path="contact" element={<ContactPage />} /><Route path="privacy" element={<PrivacyPage />} /><Route path="terms" element={<TermsPage />} /><Route path="admin" element={<AdminPage />} /><Route path="admin/requests/:requestId" element={<AdminRequestPage />} /><Route path="admin/feedback" element={<AdminFeedbackPage />} /><Route path="admin/feedback/:testimonialId" element={<AdminTestimonialPage />} /><Route path="*" element={<NotFoundPage />} /></Route></Routes></Suspense></BrowserRouter>;
+  return <BrowserRouter><Suspense fallback={<LoadingPage />}><Routes>
+    {/* Full-screen requester dashboard — its own shell, outside the marketing chrome */}
+    <Route path="request/status" element={<RequesterPortalPage />} />
+    {/* Full-screen admin console — single auth gate + tabbed shell */}
+    <Route path="admin" element={<AdminLayout />}>
+      <Route index element={<AdminPage />} />
+      <Route path="requests/:requestId" element={<AdminRequestPage />} />
+      <Route path="feedback" element={<AdminFeedbackPage />} />
+      <Route path="feedback/:testimonialId" element={<AdminTestimonialPage />} />
+    </Route>
+    {/* Marketing site */}
+    <Route element={<Layout />}>
+      <Route index element={<HomePage />} />
+      <Route path="work" element={<WorkPage />} />
+      <Route path="work/:slug" element={<ProjectPage />} />
+      <Route path="services" element={<ServicesPage />} />
+      <Route path="process" element={<ProcessPage />} />
+      <Route path="request" element={<RequestPage />} />
+      <Route path="request/success" element={<SuccessPage />} />
+      <Route path="feedback" element={<FeedbackPage />} />
+      <Route path="feedback/success" element={<FeedbackSuccessPage />} />
+      <Route path="testimonials" element={<TestimonialsPage />} />
+      <Route path="about" element={<AboutPage />} />
+      <Route path="contact" element={<ContactPage />} />
+      <Route path="privacy" element={<PrivacyPage />} />
+      <Route path="terms" element={<TermsPage />} />
+      <Route path="*" element={<NotFoundPage />} />
+    </Route>
+  </Routes></Suspense></BrowserRouter>;
 }

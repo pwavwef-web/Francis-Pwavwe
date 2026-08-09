@@ -108,6 +108,11 @@ async function storeRequest(value: NormalizedBuildRequest, clientKey: string): P
       requesterAccessEnabled: true, publicStatus: 'new',
       publicNote: 'Your request has been received and is waiting for review.',
       nextUpdateAt: '', estimatedStartAt: '', estimatedDeliveryAt: '', sharedLinks: [], githubLinks: [],
+      projectHealth: 'on_track', deliveryConfidence: 'medium',
+      currentFocus: 'Intake review and fit check',
+      nextStep: 'Review the submitted details and send the next clear update.',
+      acceptanceCriteria: [], projectMilestones: defaultProjectMilestones(),
+      projectTasks: [], projectDecisions: [], projectRisks: [], projectMeetings: [],
       status: 'new', priority: 'normal', assignedTo: null, internalTags: [], internalNotes: '',
       proposalUrl: '', driveFolderUrl: '', followUpDate: '', emailStatus: 'pending', createdAt: now, updatedAt: now,
     });
@@ -268,11 +273,17 @@ export const updateBuildRequest = onCall({ ...callableOptions, timeoutSeconds: 3
   const allowedKeys = [
     'status', 'priority', 'internalNotes', 'internalTags', 'proposalUrl', 'driveFolderUrl', 'followUpDate',
     'publicStatus', 'publicNote', 'nextUpdateAt', 'estimatedStartAt', 'estimatedDeliveryAt', 'sharedLinks', 'githubLinks',
+    'projectHealth', 'deliveryConfidence', 'currentFocus', 'nextStep', 'acceptanceCriteria',
+    'projectMilestones', 'projectTasks', 'projectDecisions', 'projectRisks', 'projectMeetings',
   ];
   const changes = Object.fromEntries(Object.entries(request.data?.changes ?? {}).filter(([key]) => allowedKeys.includes(key)));
   if (!Object.keys(changes).length) throw new HttpsError('invalid-argument', 'No permitted changes supplied.');
   if (typeof changes.internalNotes === 'string' && changes.internalNotes.length > 5_000) throw new HttpsError('invalid-argument', 'Internal notes are too long.');
   if (typeof changes.publicNote === 'string' && changes.publicNote.length > 1_200) throw new HttpsError('invalid-argument', 'The requester note is too long.');
+  if (typeof changes.currentFocus === 'string' && changes.currentFocus.length > 600) throw new HttpsError('invalid-argument', 'Current focus is too long.');
+  if (typeof changes.nextStep === 'string' && changes.nextStep.length > 600) throw new HttpsError('invalid-argument', 'Next step is too long.');
+  if (typeof changes.projectHealth === 'string' && !isOneOf(changes.projectHealth, projectHealthValues)) throw new HttpsError('invalid-argument', 'Project health is invalid.');
+  if (typeof changes.deliveryConfidence === 'string' && !isOneOf(changes.deliveryConfidence, deliveryConfidenceValues)) throw new HttpsError('invalid-argument', 'Delivery confidence is invalid.');
   for (const key of ['proposalUrl', 'driveFolderUrl'] as const) {
     if (typeof changes[key] === 'string' && changes[key] && !isUrl(changes[key])) throw new HttpsError('invalid-argument', 'A link is not valid.');
   }
@@ -282,6 +293,12 @@ export const updateBuildRequest = onCall({ ...callableOptions, timeoutSeconds: 3
   if (Array.isArray(changes.internalTags) && (changes.internalTags.length > 20 || changes.internalTags.some((tag) => typeof tag !== 'string' || tag.length > 40))) throw new HttpsError('invalid-argument', 'Tags are invalid.');
   if ('sharedLinks' in changes) changes.sharedLinks = sanitizeLinkList(changes.sharedLinks, 12);
   if ('githubLinks' in changes) changes.githubLinks = sanitizeLinkList(changes.githubLinks, 12);
+  if ('acceptanceCriteria' in changes) changes.acceptanceCriteria = sanitizeTextList(changes.acceptanceCriteria, 24, 180);
+  if ('projectMilestones' in changes) changes.projectMilestones = sanitizeProjectMilestones(changes.projectMilestones);
+  if ('projectTasks' in changes) changes.projectTasks = sanitizeProjectTasks(changes.projectTasks);
+  if ('projectDecisions' in changes) changes.projectDecisions = sanitizeProjectDecisions(changes.projectDecisions);
+  if ('projectRisks' in changes) changes.projectRisks = sanitizeProjectRisks(changes.projectRisks);
+  if ('projectMeetings' in changes) changes.projectMeetings = sanitizeProjectMeetings(changes.projectMeetings);
   const documentRef = db.collection('buildRequests').doc(requestId);
   let notificationRequest: Record<string, unknown> | null = null;
   let notificationCategoriesToSend: NotificationCategory[] = [];
@@ -712,6 +729,138 @@ async function analyzeAndStoreTestimonial(testimonialId: string, data: Record<st
 
 type RequesterSession = { requestId: string; email: string; reference: string };
 type GithubUpdate = { reference: string; title: string; summary: string; url: string };
+const projectHealthValues = ['on_track', 'watch', 'at_risk', 'paused'] as const;
+const deliveryConfidenceValues = ['high', 'medium', 'low'] as const;
+const milestoneStatusValues = ['planned', 'active', 'complete', 'blocked'] as const;
+const taskStatusValues = ['todo', 'doing', 'blocked', 'done'] as const;
+const decisionStatusValues = ['open', 'decided', 'revisit'] as const;
+const riskLevelValues = ['low', 'medium', 'high', 'critical'] as const;
+const riskStatusValues = ['open', 'mitigating', 'resolved'] as const;
+
+type ProjectVisibility = { visibleToRequester: boolean };
+type ProjectMilestone = ProjectVisibility & {
+  id: string; title: string; status: string; owner: string; dueDate: string; completedAt: string; summary: string;
+};
+type ProjectTask = ProjectVisibility & {
+  id: string; title: string; status: string; owner: string; dueDate: string; notes: string;
+};
+type ProjectDecision = ProjectVisibility & {
+  id: string; title: string; status: string; decidedAt: string; summary: string;
+};
+type ProjectRisk = ProjectVisibility & {
+  id: string; title: string; level: string; status: string; mitigation: string;
+};
+type ProjectMeeting = ProjectVisibility & {
+  id: string; title: string; scheduledAt: string; channel: string; notes: string; actionItems: string[];
+};
+
+function defaultProjectMilestones(): ProjectMilestone[] {
+  return [
+    { id: 'intake', title: 'Intake review', status: 'active', owner: 'Pwavwe Studio', dueDate: '', completedAt: '', summary: 'Confirm the request details, goals, fit, timing and next step.', visibleToRequester: true },
+    { id: 'proposal', title: 'Scope and proposal', status: 'planned', owner: 'Pwavwe Studio', dueDate: '', completedAt: '', summary: 'Prepare the project plan, estimate and decision path.', visibleToRequester: true },
+    { id: 'kickoff', title: 'Kickoff', status: 'planned', owner: 'Pwavwe Studio', dueDate: '', completedAt: '', summary: 'Align on deliverables, communication rhythm and working links.', visibleToRequester: true },
+    { id: 'build', title: 'Build and review', status: 'planned', owner: 'Pwavwe Studio', dueDate: '', completedAt: '', summary: 'Move through design, implementation, review and iteration.', visibleToRequester: true },
+    { id: 'handover', title: 'Delivery and handover', status: 'planned', owner: 'Pwavwe Studio', dueDate: '', completedAt: '', summary: 'Ship the agreed work and hand over the essentials.', visibleToRequester: true },
+  ];
+}
+
+function sanitizeProjectMilestones(value: unknown): ProjectMilestone[] {
+  return toRecordList(value, 12).map((item, index) => ({
+    id: sanitizeItemId(item.id, `milestone-${index + 1}`),
+    title: cleanString(item.title, 140) || `Milestone ${index + 1}`,
+    status: sanitizeEnum(item.status, milestoneStatusValues, 'planned'),
+    owner: cleanString(item.owner, 100),
+    dueDate: cleanDate(item.dueDate),
+    completedAt: cleanDate(item.completedAt),
+    summary: cleanString(item.summary, 700),
+    visibleToRequester: item.visibleToRequester !== false,
+  }));
+}
+
+function projectMilestonesOrDefault(value: unknown): ProjectMilestone[] {
+  const milestones = sanitizeProjectMilestones(value);
+  return Array.isArray(value) ? milestones : defaultProjectMilestones();
+}
+
+function sanitizeProjectTasks(value: unknown): ProjectTask[] {
+  return toRecordList(value, 32).map((item, index) => ({
+    id: sanitizeItemId(item.id, `task-${index + 1}`),
+    title: cleanString(item.title, 160) || `Task ${index + 1}`,
+    status: sanitizeEnum(item.status, taskStatusValues, 'todo'),
+    owner: cleanString(item.owner, 100),
+    dueDate: cleanDate(item.dueDate),
+    notes: cleanString(item.notes, 700),
+    visibleToRequester: item.visibleToRequester !== false,
+  }));
+}
+
+function sanitizeProjectDecisions(value: unknown): ProjectDecision[] {
+  return toRecordList(value, 16).map((item, index) => ({
+    id: sanitizeItemId(item.id, `decision-${index + 1}`),
+    title: cleanString(item.title, 160) || `Decision ${index + 1}`,
+    status: sanitizeEnum(item.status, decisionStatusValues, 'open'),
+    decidedAt: cleanDate(item.decidedAt),
+    summary: cleanString(item.summary, 900),
+    visibleToRequester: item.visibleToRequester !== false,
+  }));
+}
+
+function sanitizeProjectRisks(value: unknown): ProjectRisk[] {
+  return toRecordList(value, 16).map((item, index) => ({
+    id: sanitizeItemId(item.id, `risk-${index + 1}`),
+    title: cleanString(item.title, 160) || `Risk ${index + 1}`,
+    level: sanitizeEnum(item.level, riskLevelValues, 'medium'),
+    status: sanitizeEnum(item.status, riskStatusValues, 'open'),
+    mitigation: cleanString(item.mitigation, 900),
+    visibleToRequester: item.visibleToRequester !== false,
+  }));
+}
+
+function sanitizeProjectMeetings(value: unknown): ProjectMeeting[] {
+  return toRecordList(value, 16).map((item, index) => ({
+    id: sanitizeItemId(item.id, `meeting-${index + 1}`),
+    title: cleanString(item.title, 160) || `Meeting ${index + 1}`,
+    scheduledAt: cleanDate(item.scheduledAt),
+    channel: cleanString(item.channel, 80),
+    notes: cleanString(item.notes, 900),
+    actionItems: sanitizeTextList(item.actionItems, 12, 180),
+    visibleToRequester: item.visibleToRequester !== false,
+  }));
+}
+
+function sanitizeTextList(value: unknown, maxItems: number, maxLength: number): string[] {
+  const items = Array.isArray(value) ? value : typeof value === 'string' ? value.split(/[\n,]+/) : [];
+  return items.map((item) => cleanString(item, maxLength)).filter(Boolean).slice(0, maxItems);
+}
+
+function toRecordList(value: unknown, maxItems: number): Record<string, unknown>[] {
+  return (Array.isArray(value) ? value : []).filter(isRecord).slice(0, maxItems);
+}
+
+function onlyRequesterVisible<T extends ProjectVisibility>(items: T[]): T[] {
+  return items.filter((item) => item.visibleToRequester !== false);
+}
+
+function sanitizeItemId(value: unknown, fallback: string): string {
+  const cleaned = typeof value === 'string' ? value.trim().replace(/[^A-Za-z0-9_-]/g, '').slice(0, 48) : '';
+  return cleaned || fallback;
+}
+
+function cleanString(value: unknown, maxLength: number): string {
+  return typeof value === 'string' ? value.trim().replace(/\s+\n/g, '\n').slice(0, maxLength) : '';
+}
+
+function cleanDate(value: unknown): string {
+  return typeof value === 'string' && isIsoDate(value) ? value : '';
+}
+
+function sanitizeEnum<T extends string>(value: unknown, values: readonly T[], fallback: T): T {
+  return typeof value === 'string' && (values as readonly string[]).includes(value) ? value as T : fallback;
+}
+
+function isOneOf<T extends string>(value: unknown, values: readonly T[]): value is T {
+  return typeof value === 'string' && (values as readonly string[]).includes(value);
+}
 
 async function enforceRequesterAccessLimit(clientKey: string): Promise<void> {
   const now = Timestamp.now();
@@ -776,6 +925,16 @@ async function buildRequesterPortalPayload(requestId: string, data: Record<strin
       githubLinks: toStringList(data.githubLinks).filter(isUrl),
       preferredTimeline: String(data.preferredTimeline || ''),
       budgetRange: String(data.budgetRange || ''),
+      projectHealth: isOneOf(data.projectHealth, projectHealthValues) ? data.projectHealth : 'on_track',
+      deliveryConfidence: isOneOf(data.deliveryConfidence, deliveryConfidenceValues) ? data.deliveryConfidence : 'medium',
+      currentFocus: String(data.currentFocus || ''),
+      nextStep: String(data.nextStep || ''),
+      acceptanceCriteria: sanitizeTextList(data.acceptanceCriteria, 24, 180),
+      projectMilestones: onlyRequesterVisible(projectMilestonesOrDefault(data.projectMilestones)),
+      projectTasks: onlyRequesterVisible(sanitizeProjectTasks(data.projectTasks)),
+      projectDecisions: onlyRequesterVisible(sanitizeProjectDecisions(data.projectDecisions)),
+      projectRisks: onlyRequesterVisible(sanitizeProjectRisks(data.projectRisks)),
+      projectMeetings: onlyRequesterVisible(sanitizeProjectMeetings(data.projectMeetings)),
       notificationPreferences: normalizeNotificationPreferences(data.notificationPreferences, smsEnabled),
       smsEnabled,
       timeline: buildTimeline(data),
@@ -834,7 +993,12 @@ function cleanMessageForPortal(data: Record<string, unknown>) {
 }
 
 function publicRequestUpdateKeys(changes: Record<string, unknown>, previous: Record<string, unknown>): string[] {
-  const publicKeys = ['status', 'publicStatus', 'publicNote', 'nextUpdateAt', 'estimatedStartAt', 'estimatedDeliveryAt', 'proposalUrl', 'driveFolderUrl', 'sharedLinks', 'githubLinks'];
+  const publicKeys = [
+    'status', 'publicStatus', 'publicNote', 'nextUpdateAt', 'estimatedStartAt', 'estimatedDeliveryAt',
+    'proposalUrl', 'driveFolderUrl', 'sharedLinks', 'githubLinks', 'projectHealth', 'deliveryConfidence',
+    'currentFocus', 'nextStep', 'acceptanceCriteria', 'projectMilestones', 'projectTasks',
+    'projectDecisions', 'projectRisks', 'projectMeetings',
+  ];
   return Object.keys(changes).filter((key) => publicKeys.includes(key) && JSON.stringify(changes[key]) !== JSON.stringify(previous[key]));
 }
 
@@ -842,8 +1006,8 @@ function categoriesForRequestChanges(changes: Record<string, unknown>, previous:
   const keys = publicRequestUpdateKeys(changes, previous);
   const categories = new Set<NotificationCategory>();
   if (keys.some((key) => ['status', 'publicStatus', 'publicNote'].includes(key))) categories.add('status');
-  if (keys.some((key) => ['nextUpdateAt', 'estimatedStartAt', 'estimatedDeliveryAt'].includes(key))) categories.add('timeline');
-  if (keys.some((key) => ['proposalUrl', 'driveFolderUrl', 'sharedLinks'].includes(key))) categories.add('milestones');
+  if (keys.some((key) => ['nextUpdateAt', 'estimatedStartAt', 'estimatedDeliveryAt', 'currentFocus', 'nextStep', 'projectHealth', 'deliveryConfidence', 'projectMeetings'].includes(key))) categories.add('timeline');
+  if (keys.some((key) => ['proposalUrl', 'driveFolderUrl', 'sharedLinks', 'acceptanceCriteria', 'projectMilestones', 'projectTasks', 'projectDecisions', 'projectRisks'].includes(key))) categories.add('milestones');
   if (keys.includes('githubLinks')) categories.add('github');
   const nextStatus = String(changes.publicStatus ?? changes.status ?? previous.publicStatus ?? previous.status ?? '');
   if (['proposal_sent', 'accepted', 'in_development', 'delivered'].includes(nextStatus)) categories.add('milestones');
@@ -856,8 +1020,14 @@ function buildPublicUpdateBody(reference: string, status: string, changes: Recor
   if (note) lines.push(note);
   const nextUpdateAt = String(changes.nextUpdateAt ?? previous.nextUpdateAt ?? '').trim();
   if (nextUpdateAt) lines.push(`Next expected update: ${nextUpdateAt}.`);
+  const nextStep = String(changes.nextStep ?? previous.nextStep ?? '').trim();
+  if (nextStep) lines.push(`Next step: ${nextStep}.`);
+  const currentFocus = String(changes.currentFocus ?? previous.currentFocus ?? '').trim();
+  if (currentFocus) lines.push(`Current focus: ${currentFocus}.`);
   const estimatedDeliveryAt = String(changes.estimatedDeliveryAt ?? previous.estimatedDeliveryAt ?? '').trim();
   if (estimatedDeliveryAt) lines.push(`Estimated delivery window: ${estimatedDeliveryAt}.`);
+  const milestone = onlyRequesterVisible(sanitizeProjectMilestones(changes.projectMilestones ?? previous.projectMilestones))[0];
+  if (milestone) lines.push(`Top milestone: ${milestone.title} (${humanize(milestone.status)}).`);
   return lines.join('\n\n');
 }
 
