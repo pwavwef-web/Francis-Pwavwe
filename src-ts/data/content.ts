@@ -50,6 +50,7 @@ export const STUDIO_URL = 'https://build.pwavwe.com';
 export const SOCIALS: readonly SocialLink[] = [
   { label: 'Email', href: 'mailto:francis@pwavwe.com', icon: '✉' },
   { label: 'LinkedIn', href: 'https://linkedin.com/in/francis-pwavwe', icon: 'in' },
+  { label: 'GitHub', href: 'https://github.com/pwavwef-web', icon: 'gh' },
   { label: 'AZ Learner', href: 'https://azlearner.me', icon: '↗' },
 ];
 

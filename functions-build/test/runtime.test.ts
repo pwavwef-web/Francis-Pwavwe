@@ -9,5 +9,9 @@ describe('Functions runtime entrypoint', () => {
     expect(runtime.getBuildRequest).toBeDefined();
     expect(runtime.updateBuildRequest).toBeDefined();
     expect(runtime.deleteBuildRequest).toBeDefined();
+    expect(runtime.sendAdminEmail).toBeDefined();
+    expect(runtime.submitTestimonial).toBeDefined();
+    expect(runtime.analyzeTestimonialSentiment).toBeDefined();
+    expect(runtime.reanalyzeTestimonial).toBeDefined();
   });
 });

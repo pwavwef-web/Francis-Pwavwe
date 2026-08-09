@@ -45,6 +45,87 @@ export const updateBuildRequest = httpsCallable<{ requestId: string; changes: Re
 export const deleteBuildRequest = httpsCallable<{ requestId: string; confirmation: string }, { ok: boolean }>(functions, 'deleteBuildRequest');
 export const verifyBuildAdmin = httpsCallable<Record<string, never>, { authorized: boolean }>(functions, 'verifyBuildAdmin');
 
+export const submitTestimonial = httpsCallable<Record<string, unknown>, { reference: string; emailDelayed?: boolean }>(functions, 'submitTestimonial');
+export const listTestimonials = httpsCallable<Record<string, unknown>, { testimonials: AdminTestimonial[] }>(functions, 'listTestimonials');
+export const getTestimonial = httpsCallable<{ testimonialId: string }, { testimonial: AdminTestimonial }>(functions, 'getTestimonial');
+export const updateTestimonial = httpsCallable<{ testimonialId: string; changes: Record<string, unknown> }, { ok: boolean; published: boolean }>(functions, 'updateTestimonial');
+export const deleteTestimonial = httpsCallable<{ testimonialId: string; confirmation: string }, { ok: boolean }>(functions, 'deleteTestimonial');
+export const reanalyzeTestimonial = httpsCallable<{ testimonialId: string }, { sentiment: TestimonialSentiment }>(functions, 'reanalyzeTestimonial');
+export const sendAdminEmail = httpsCallable<{
+  to: string;
+  subject: string;
+  body: string;
+  contextType: 'general' | 'build_request' | 'testimonial';
+  contextId?: string;
+  reference?: string;
+}, { ok: boolean }>(functions, 'sendAdminEmail');
+
+export type PublicTestimonial = {
+  name: string;
+  role?: string;
+  organisation?: string;
+  quote: string;
+  rating: number;
+  projectName?: string;
+  featured?: boolean;
+  order?: number;
+  sourceId?: string;
+};
+
+// Public, display-safe testimonials. Written only by trusted callable Functions
+// and readable by anyone, so this never exposes emails or private feedback.
+// The Firestore SDK is imported dynamically so it stays out of the initial
+// bundle — the landing page only pays for it once testimonials are requested.
+// Sorting is done client-side to avoid needing a composite index.
+export async function fetchPublicTestimonials(max = 60): Promise<PublicTestimonial[]> {
+  const { collection, getDocs, getFirestore, limit, orderBy, query } = await import('firebase/firestore');
+  const snapshot = await getDocs(query(collection(getFirestore(app), 'publicTestimonials'), orderBy('approvedAt', 'desc'), limit(max)));
+  const items = snapshot.docs.map((document) => document.data() as PublicTestimonial);
+  return items.sort((a, b) => Number(b.featured) - Number(a.featured) || (a.order ?? 0) - (b.order ?? 0));
+}
+
+export type AdminTestimonial = {
+  id: string;
+  reference: string;
+  authorName: string;
+  authorRole?: string;
+  authorOrganisation?: string;
+  authorEmail?: string;
+  projectName?: string;
+  projectRef?: string;
+  rating: number;
+  testimonial: string;
+  privateFeedback?: string;
+  wouldRecommend?: boolean;
+  publishConsent?: boolean;
+  displayNameConsent?: boolean;
+  displayName?: string;
+  displayRole?: string;
+  displayOrganisation?: string;
+  displayQuote?: string;
+  status: string;
+  published?: boolean;
+  featured?: boolean;
+  order?: number;
+  internalNotes?: string;
+  emailStatus?: string;
+  sentimentStatus?: 'pending' | 'analyzed' | 'failed';
+  sentiment?: TestimonialSentiment | null;
+  createdAt?: { seconds: number } | string;
+  updatedAt?: { seconds: number } | string;
+};
+
+export type TestimonialSentiment = {
+  label: 'positive' | 'mixed' | 'neutral' | 'negative';
+  score: number;
+  confidence: number;
+  summary: string;
+  themes: string[];
+  followUpRecommended: boolean;
+  model?: string;
+  analyzedAt?: { seconds: number } | string;
+};
+
 export type AdminRequest = {
   id: string;
   reference: string;

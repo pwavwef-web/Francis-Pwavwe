@@ -111,6 +111,7 @@ export function Layout() {
           <nav aria-label="Footer information">
             <h2>Information</h2>
             <Link to="/request">Request a Build</Link>
+            <Link to="/testimonials">Testimonials</Link>
             {hasWhatsApp() && <a href={whatsappLink('Hi Francis, I found Pwavwe Studio.')} target="_blank" rel="noopener noreferrer" onClick={() => void track('contact_whatsapp_click', { location: 'footer' })}>WhatsApp</a>}
             <Link to="/privacy">Privacy</Link>
             <Link to="/terms">Terms</Link>

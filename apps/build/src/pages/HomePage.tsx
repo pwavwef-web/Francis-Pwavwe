@@ -1,4 +1,5 @@
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, ArrowUpRight, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Packages } from '../components/Packages';
 import { ProjectCard } from '../components/ProjectCard';
@@ -6,6 +7,7 @@ import { Seo } from '../components/Seo';
 import { publishedProjects } from '../data/projects';
 import { processSteps, services } from '../data/services';
 import { track } from '../lib/analytics';
+import { fetchPublicTestimonials, type PublicTestimonial } from '../lib/firebase';
 
 const audiences = [
   ['Students & researchers', 'Portfolio and CV sites, research tools, project websites, survey dashboards and honest student-business MVPs.'],
@@ -80,9 +82,38 @@ export function HomePage() {
         <div className="why-copy"><p>I work across product thinking, interface design and development, so context does not disappear between hand-offs. The questions stay practical: Who is stuck? What should change? What must be true for this to work in real life?</p><p>That matters especially for campus and growing-business systems, where the polished screen is only one part of the job. Operations, permissions, unreliable connections and the person maintaining it next month all count.</p></div>
       </section>
 
+      <HomeTestimonials />
+
       <section className="request-band section-pad"><div><p className="eyebrow">HAVE SOMETHING IN MIND?</p><h2>Start with the untidy version.</h2><p>You do not need a finished specification. Tell me what is happening now, who it affects and what “working” should look like.</p></div><Link className="button button-light" to="/request">Request a Build <ArrowUpRight size={18} /></Link></section>
 
       <section className="section-pad faq-section" aria-labelledby="faq-heading"><p className="eyebrow">FREQUENTLY ASKED</p><h2 id="faq-heading">Useful answers before the call.</h2><div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div></section>
     </>
+  );
+}
+
+// Shows published testimonials, and renders nothing at all until at least one
+// exists — so the section never appears empty or broken on a fresh site.
+function HomeTestimonials() {
+  const [testimonials, setTestimonials] = useState<PublicTestimonial[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try { const items = await fetchPublicTestimonials(6); if (!cancelled) setTestimonials(items); }
+      catch { /* silence: an unavailable feed simply hides the section */ }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+  if (!testimonials.length) return null;
+  return (
+    <section className="section-pad home-testimonials" aria-labelledby="home-testimonials-heading">
+      <div className="section-heading"><div><p className="eyebrow">IN THEIR WORDS</p><h2 id="home-testimonials-heading">Trusted by the people I built for.</h2></div><Link className="text-link" to="/testimonials">Read all testimonials <ArrowUpRight size={16} /></Link></div>
+      <div className="quip-grid">{testimonials.slice(0, 3).map((testimonial, index) => (
+        <figure key={testimonial.sourceId ?? index}>
+          <div className="testimonial-stars" aria-label={`${Math.round(testimonial.rating)} out of 5`}>{[1, 2, 3, 4, 5].map((star) => <Star key={star} size={15} fill={star <= Math.round(testimonial.rating) ? 'currentColor' : 'none'} className={star <= Math.round(testimonial.rating) ? 'is-on' : ''} />)}</div>
+          <blockquote>“{testimonial.quote}”</blockquote>
+          <figcaption><strong>{testimonial.name}</strong>{[testimonial.role, testimonial.organisation].filter(Boolean).join(' · ')}</figcaption>
+        </figure>
+      ))}</div>
+    </section>
   );
 }

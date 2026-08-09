@@ -15,15 +15,16 @@
   },
   "dependencies": {
     "@firebase/app": "^0.16.0",
+    "@google/genai": "^2.16.0",
     "firebase-admin": "^13.0.2",
     "firebase-functions": "^7.3.2",
-    "nodemailer": "^6.9.16",
+    "nodemailer": "^9.0.5",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.16.0",
     "@types/node": "^22.10.2",
-    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer": "^7.0.12",
     "eslint": "^9.16.0",
     "globals": "^15.13.0",
     "typescript": "^5.6.3",

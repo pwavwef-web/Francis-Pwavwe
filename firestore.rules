@@ -39,6 +39,34 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Testimonials / project feedback. The full record (including the author's
+    // email and any private feedback) is only reachable through trusted callable
+    // Functions — never by the public, even when the testimonial is published.
+    match /testimonials/{testimonialId} {
+      allow read, create, update, delete: if isBuildStudioAdmin();
+    }
+
+    // Display-safe, publicly readable projection. It is written only by the
+    // Admin SDK inside a callable Function (which bypasses these rules), so no
+    // client may ever write to it; anyone may read the approved quotes.
+    match /publicTestimonials/{testimonialId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /testimonialActivity/{activityId} {
+      allow read: if isBuildStudioAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /_feedbackRateLimits/{documentId} {
+      allow read, write: if false;
+    }
+
+    match /_feedbackReferences/{documentId} {
+      allow read, write: if false;
+    }
+
     function hasPodcastEpisodeShape() {
       return request.resource.data.keys().hasAll(['title', 'description', 'season', 'episode', 'isPublished'])
              && request.resource.data.title is string
