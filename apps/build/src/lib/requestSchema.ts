@@ -41,6 +41,7 @@ export const requestSchema = z.object({
   discoverySource: z.string().trim().max(160).optional().default(''),
   contactConsent: z.literal(true, { errorMap: () => ({ message: 'Please confirm that Pwavwe Studio may contact you about this request.' }) }),
   marketingConsent: z.boolean().default(false),
+  smsConsent: z.boolean().default(false),
   website: z.string().max(0).optional().default(''),
   startedAt: z.number().int().positive(),
 });
@@ -66,6 +67,7 @@ export type RequestFormData = {
   discoverySource: string;
   contactConsent: boolean;
   marketingConsent: boolean;
+  smsConsent: boolean;
   website: string;
   startedAt: number;
 };
@@ -75,7 +77,7 @@ export const emptyRequest = (): RequestFormData => ({
   projectSummary: '', problemStatement: '', targetUsers: '', features: '',
   preferredTimeline: '', budgetRange: '', preferredContact: '',
   existingWebsite: '', referenceLinks: '', additionalNotes: '', discoverySource: '',
-  contactConsent: false, marketingConsent: false, website: '', startedAt: Date.now(),
+  contactConsent: false, marketingConsent: false, smsConsent: false, website: '', startedAt: Date.now(),
 });
 
 const DRAFT_KEY = 'pwavwe-studio-request-draft';
@@ -94,7 +96,7 @@ export function loadDraft(): RequestFormData | null {
       return null;
     }
     delete draft.savedAt;
-    return draft;
+    return { ...emptyRequest(), ...draft };
   } catch {
     clearDraft();
     return null;

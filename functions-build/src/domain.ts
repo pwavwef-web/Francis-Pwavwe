@@ -5,9 +5,57 @@ const projectTypes = ['Website', 'Web application', 'Mobile application', 'AI to
 const budgets = ['I need guidance', 'Starter project', 'Standard project', 'Advanced custom platform', 'Institutional or long-term project'] as const;
 const timelines = ['As soon as reasonably possible', 'Within one month', 'Within two to three months', 'Within three to six months', 'Flexible', 'I need guidance'] as const;
 const contacts = ['Email', 'WhatsApp', 'Video call', 'Either email or WhatsApp'] as const;
+export const notificationCategories = ['status', 'timeline', 'messages', 'github', 'milestones'] as const;
+export const notificationDigests = ['immediate', 'daily', 'important'] as const;
 
 const text = (min: number, max: number) => z.string().trim().min(min).max(max);
 const optional = (max: number) => z.string().trim().max(max).optional().default('');
+
+export type NotificationCategory = (typeof notificationCategories)[number];
+export type NotificationDigest = (typeof notificationDigests)[number];
+export type NotificationChannelPreferences = Record<NotificationCategory, boolean>;
+export type NotificationPreferences = {
+  email: NotificationChannelPreferences;
+  sms: NotificationChannelPreferences;
+  digest: NotificationDigest;
+};
+
+const channelDefaults = (enabled: boolean): NotificationChannelPreferences => ({
+  status: enabled,
+  timeline: enabled,
+  messages: enabled,
+  github: enabled,
+  milestones: enabled,
+});
+
+const channelPreferenceSchema = z.object({
+  status: z.boolean().optional(),
+  timeline: z.boolean().optional(),
+  messages: z.boolean().optional(),
+  github: z.boolean().optional(),
+  milestones: z.boolean().optional(),
+});
+
+export const notificationPreferencesSchema = z.object({
+  email: channelPreferenceSchema.optional(),
+  sms: channelPreferenceSchema.optional(),
+  digest: z.enum(notificationDigests).optional().default('immediate'),
+});
+
+export function defaultNotificationPreferences(smsEnabled = false): NotificationPreferences {
+  return { email: channelDefaults(true), sms: channelDefaults(smsEnabled), digest: 'immediate' };
+}
+
+export function normalizeNotificationPreferences(value: unknown, smsEnabled = false): NotificationPreferences {
+  const fallback = defaultNotificationPreferences(smsEnabled);
+  const parsed = notificationPreferencesSchema.safeParse(value);
+  if (!parsed.success) return fallback;
+  return {
+    email: { ...fallback.email, ...parsed.data.email },
+    sms: smsEnabled ? { ...fallback.sms, ...parsed.data.sms } : channelDefaults(false),
+    digest: parsed.data.digest,
+  };
+}
 
 export const serverRequestSchema = z.object({
   name: text(2, 100),
@@ -28,6 +76,7 @@ export const serverRequestSchema = z.object({
   additionalNotes: optional(1500),
   contactConsent: z.literal(true),
   marketingConsent: z.boolean().default(false),
+  smsConsent: z.boolean().default(false),
   website: z.string().max(0).optional().default(''),
   startedAt: z.number().int().positive(),
 }).superRefine((value, context) => {
@@ -52,6 +101,7 @@ export function generateReference(year = new Date().getUTCFullYear(), bytes: () 
 
 export type StoredRequest = { requestId: string; reference: string };
 export type EmailMessage = { to: string; subject: string; text: string; html: string; replyTo?: string };
+export type SmsMessage = { to: string; message: string };
 export type ThemedEmailContent = {
   preview: string;
   eyebrow: string;
@@ -64,28 +114,48 @@ export type SubmissionDependencies = {
   store: (request: NormalizedBuildRequest) => Promise<StoredRequest>;
   storeMarketingConsent: (request: NormalizedBuildRequest, stored: StoredRequest) => Promise<void>;
   sendEmail?: (message: EmailMessage) => Promise<void>;
+  sendSms?: (message: SmsMessage) => Promise<void>;
   markEmailStatus: (requestId: string, status: 'sent' | 'delayed' | 'not_configured') => Promise<void>;
+  markSmsStatus?: (requestId: string, status: 'sent' | 'delayed' | 'not_configured' | 'no_phone') => Promise<void>;
   projectsInbox: string;
   publicSiteUrl: string;
 };
 
-export async function processSubmission(value: unknown, dependencies: SubmissionDependencies): Promise<{ reference: string; emailDelayed: boolean }> {
+export async function processSubmission(value: unknown, dependencies: SubmissionDependencies): Promise<{ reference: string; emailDelayed: boolean; smsDelayed?: boolean }> {
   const request = validateBuildRequest(value);
   const stored = await dependencies.store(request);
   if (request.marketingConsent) await dependencies.storeMarketingConsent(request, stored);
+  let emailDelayed = false;
   if (!dependencies.sendEmail) {
     await dependencies.markEmailStatus(stored.requestId, 'not_configured');
-    return { reference: stored.reference, emailDelayed: false };
+  } else {
+    try {
+      const messages = buildEmailMessages(request, stored.reference, dependencies.projectsInbox, dependencies.publicSiteUrl);
+      await Promise.all(messages.map(dependencies.sendEmail));
+      await dependencies.markEmailStatus(stored.requestId, 'sent');
+    } catch {
+      await dependencies.markEmailStatus(stored.requestId, 'delayed');
+      emailDelayed = true;
+    }
   }
-  try {
-    const messages = buildEmailMessages(request, stored.reference, dependencies.projectsInbox, dependencies.publicSiteUrl);
-    await Promise.all(messages.map(dependencies.sendEmail));
-    await dependencies.markEmailStatus(stored.requestId, 'sent');
-    return { reference: stored.reference, emailDelayed: false };
-  } catch {
-    await dependencies.markEmailStatus(stored.requestId, 'delayed');
-    return { reference: stored.reference, emailDelayed: true };
+
+  let smsDelayed = false;
+  if (request.smsConsent) {
+    if (!request.phone) {
+      await dependencies.markSmsStatus?.(stored.requestId, 'no_phone');
+    } else if (!dependencies.sendSms) {
+      await dependencies.markSmsStatus?.(stored.requestId, 'not_configured');
+    } else {
+      try {
+        await dependencies.sendSms(buildRequestReceiptSms(request, stored.reference, dependencies.publicSiteUrl));
+        await dependencies.markSmsStatus?.(stored.requestId, 'sent');
+      } catch {
+        await dependencies.markSmsStatus?.(stored.requestId, 'delayed');
+        smsDelayed = true;
+      }
+    }
   }
+  return { reference: stored.reference, emailDelayed, ...(smsDelayed ? { smsDelayed } : {}) };
 }
 
 export function buildEmailMessages(request: NormalizedBuildRequest, reference: string, projectsInbox: string, publicSiteUrl: string): EmailMessage[] {
@@ -137,6 +207,36 @@ export function buildAdminEmail(to: string, subject: string, body: string, publi
       cta: { label: 'Visit Pwavwe Studio', href: url },
     }),
   };
+}
+
+export function buildRequesterUpdateEmail(to: string, subject: string, title: string, body: string, publicSiteUrl: string, reference: string): EmailMessage {
+  const url = publicSiteUrl.replace(/\/$/, '');
+  return {
+    to,
+    subject,
+    text: `${body.trim()}\n\nView your request: ${url}/request/status?reference=${encodeURIComponent(reference)}\n\nFrancis\nPwavwe Studio\n${url}`,
+    html: renderThemedEmail({
+      preview: subject,
+      eyebrow: 'REQUEST UPDATE',
+      title,
+      body: body.trim(),
+      publicSiteUrl: url,
+      cta: { label: 'View request status', href: `${url}/request/status?reference=${encodeURIComponent(reference)}` },
+    }),
+  };
+}
+
+export function buildRequestReceiptSms(request: NormalizedBuildRequest, reference: string, publicSiteUrl: string): SmsMessage {
+  const url = publicSiteUrl.replace(/\/$/, '');
+  return {
+    to: request.phone,
+    message: `Pwavwe Studio: your request ${reference} was received. Track updates at ${url}/request/status using this code.`,
+  };
+}
+
+export function buildRequesterUpdateSms(reference: string, update: string, publicSiteUrl: string): string {
+  const url = publicSiteUrl.replace(/\/$/, '');
+  return `Pwavwe Studio ${reference}: ${update.trim()} Track: ${url}/request/status`;
 }
 
 export function renderThemedEmail(content: ThemedEmailContent): string {

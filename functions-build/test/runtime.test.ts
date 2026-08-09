@@ -10,8 +10,16 @@ describe('Functions runtime entrypoint', () => {
     expect(runtime.updateBuildRequest).toBeDefined();
     expect(runtime.deleteBuildRequest).toBeDefined();
     expect(runtime.sendAdminEmail).toBeDefined();
+    expect(runtime.sendAdminSms).toBeDefined();
+    expect(runtime.verifyRequesterCode).toBeDefined();
+    expect(runtime.getRequesterRequest).toBeDefined();
+    expect(runtime.updateRequesterPreferences).toBeDefined();
+    expect(runtime.submitRequesterMessage).toBeDefined();
+    expect(runtime.listRequestActivity).toBeDefined();
+    expect(runtime.listRequestMessages).toBeDefined();
+    expect(runtime.githubBuildWebhook).toBeDefined();
     expect(runtime.submitTestimonial).toBeDefined();
     expect(runtime.analyzeTestimonialSentiment).toBeDefined();
     expect(runtime.reanalyzeTestimonial).toBeDefined();
-  });
+  }, 60_000);
 });

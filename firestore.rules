@@ -27,6 +27,29 @@ service cloud.firestore {
       allow create, update, delete: if false;
     }
 
+    match /requestMessages/{messageId} {
+      allow read: if isBuildStudioAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /outboundEmails/{emailId} {
+      allow read: if isBuildStudioAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /outboundSms/{smsId} {
+      allow read: if isBuildStudioAdmin();
+      allow create, update, delete: if false;
+    }
+
+    match /_requesterSessions/{sessionId} {
+      allow read, write: if false;
+    }
+
+    match /_requesterAccessRateLimits/{documentId} {
+      allow read, write: if false;
+    }
+
     match /_buildRateLimits/{documentId} {
       allow read, write: if false;
     }

@@ -38,12 +38,18 @@ if (import.meta.env.DEV && typeof window !== 'undefined' && window.location.host
   connectFunctionsEmulator(functions, '127.0.0.1', 5001);
 }
 
-export const submitBuildRequest = httpsCallable<Record<string, unknown>, { reference: string; emailDelayed?: boolean }>(functions, 'submitBuildRequest');
+export const submitBuildRequest = httpsCallable<Record<string, unknown>, { reference: string; emailDelayed?: boolean; smsDelayed?: boolean }>(functions, 'submitBuildRequest');
 export const listBuildRequests = httpsCallable<Record<string, unknown>, { requests: AdminRequest[] }>(functions, 'listBuildRequests');
 export const getBuildRequest = httpsCallable<{ requestId: string }, { request: AdminRequest }>(functions, 'getBuildRequest');
 export const updateBuildRequest = httpsCallable<{ requestId: string; changes: Record<string, unknown> }, { ok: boolean }>(functions, 'updateBuildRequest');
 export const deleteBuildRequest = httpsCallable<{ requestId: string; confirmation: string }, { ok: boolean }>(functions, 'deleteBuildRequest');
 export const verifyBuildAdmin = httpsCallable<Record<string, never>, { authorized: boolean }>(functions, 'verifyBuildAdmin');
+export const listRequestActivity = httpsCallable<{ requestId: string }, { activity: RequestActivity[] }>(functions, 'listRequestActivity');
+export const listRequestMessages = httpsCallable<{ requestId: string }, { messages: RequestMessage[] }>(functions, 'listRequestMessages');
+export const verifyRequesterCode = httpsCallable<{ email: string; reference: string }, { session: RequesterSession; portal: RequesterPortal }>(functions, 'verifyRequesterCode');
+export const getRequesterRequest = httpsCallable<RequesterSession, { portal: RequesterPortal }>(functions, 'getRequesterRequest');
+export const updateRequesterPreferences = httpsCallable<RequesterSession & { preferences: NotificationPreferences }, { ok: boolean; preferences: NotificationPreferences }>(functions, 'updateRequesterPreferences');
+export const submitRequesterMessage = httpsCallable<RequesterSession & { body: string }, { ok: boolean; emailDelayed: boolean }>(functions, 'submitRequesterMessage');
 
 export const submitTestimonial = httpsCallable<Record<string, unknown>, { reference: string; emailDelayed?: boolean }>(functions, 'submitTestimonial');
 export const listTestimonials = httpsCallable<Record<string, unknown>, { testimonials: AdminTestimonial[] }>(functions, 'listTestimonials');
@@ -59,6 +65,82 @@ export const sendAdminEmail = httpsCallable<{
   contextId?: string;
   reference?: string;
 }, { ok: boolean }>(functions, 'sendAdminEmail');
+export const sendAdminSms = httpsCallable<{ requestId: string; body: string; force?: boolean }, { ok: boolean }>(functions, 'sendAdminSms');
+
+export type NotificationCategory = 'status' | 'timeline' | 'messages' | 'github' | 'milestones';
+export type NotificationDigest = 'immediate' | 'daily' | 'important';
+export type NotificationChannelPreferences = Record<NotificationCategory, boolean>;
+export type NotificationPreferences = {
+  email: NotificationChannelPreferences;
+  sms: NotificationChannelPreferences;
+  digest: NotificationDigest;
+};
+
+export type RequesterSession = {
+  requestId: string;
+  sessionId: string;
+  token: string;
+  expiresAt?: string;
+};
+
+export type RequestActivity = {
+  id: string;
+  action: string;
+  category?: string;
+  title?: string;
+  summary?: string;
+  subject?: string;
+  url?: string;
+  public?: boolean;
+  publicChangedKeys?: string[];
+  changedKeys?: string[];
+  actorEmail?: string;
+  createdAt?: { seconds: number } | string | null;
+};
+
+export type RequestMessage = {
+  id: string;
+  direction: string;
+  channel: string;
+  subject?: string;
+  body: string;
+  to?: string;
+  senderEmail?: string;
+  emailStatus?: string;
+  createdAt?: { seconds: number } | string | null;
+};
+
+export type RequesterPortalRequest = {
+  id: string;
+  reference: string;
+  name: string;
+  organisation: string;
+  projectType: string;
+  projectSummary: string;
+  status: string;
+  publicNote?: string;
+  nextUpdateAt?: string;
+  estimatedStartAt?: string;
+  estimatedDeliveryAt?: string;
+  proposalUrl?: string;
+  driveFolderUrl?: string;
+  sharedLinks?: string[];
+  githubLinks?: string[];
+  preferredTimeline?: string;
+  budgetRange?: string;
+  notificationPreferences: NotificationPreferences;
+  smsEnabled: boolean;
+  timeline: { key: string; label: string; state: 'complete' | 'current' | 'upcoming'; detail: string }[];
+  createdAt?: { seconds: number } | string | null;
+  updatedAt?: { seconds: number } | string | null;
+  lastGithubUpdateAt?: { seconds: number } | string | null;
+};
+
+export type RequesterPortal = {
+  request: RequesterPortalRequest;
+  activity: RequestActivity[];
+  messages: RequestMessage[];
+};
 
 export type PublicTestimonial = {
   name: string;
@@ -147,6 +229,20 @@ export type AdminRequest = {
   additionalNotes?: string;
   contactConsent: boolean;
   marketingConsent: boolean;
+  smsConsent?: boolean;
+  smsStatus?: string;
+  notificationPreferences?: NotificationPreferences;
+  requesterAccessEnabled?: boolean;
+  publicStatus?: string;
+  publicNote?: string;
+  nextUpdateAt?: string;
+  estimatedStartAt?: string;
+  estimatedDeliveryAt?: string;
+  sharedLinks?: string[];
+  githubLinks?: string[];
+  lastGithubUpdateAt?: { seconds: number } | string;
+  lastRequesterMessageAt?: { seconds: number } | string;
+  lastOutboundSmsAt?: { seconds: number } | string;
   status: string;
   priority: string;
   internalNotes?: string;

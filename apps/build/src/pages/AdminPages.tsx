@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, ArrowLeft, Check, Copy, Download, ExternalLink, Eye, EyeOff, LoaderCircle, LockKeyhole, LogIn, Mail, MessageSquareQuote, RefreshCw, Save, Search, Send, Sparkles, Star, Trash2 } from 'lucide-react';
 import { onAuthStateChanged, signInWithPopup, signOut, type User } from 'firebase/auth';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -101,7 +101,18 @@ function RequestDetail() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => { void (async () => { try { setRequest((await getBuildRequest({ requestId })).data.request); } catch { setError('This request could not be loaded.'); } finally { setLoading(false); } })(); }, [requestId]);
+  const loadDetail = useCallback(async () => {
+    try {
+      const requestResult = await getBuildRequest({ requestId });
+      setRequest(requestResult.data.request);
+    } catch {
+      setError('This request could not be loaded.');
+    } finally {
+      setLoading(false);
+    }
+  }, [requestId]);
+
+  useEffect(() => { void loadDetail(); }, [loadDetail]);
   if (loading) return <AdminState icon={<LoaderCircle className="spin" />} title="Loading request…" message="Retrieving the protected request record." />;
   if (!request || error) return <AdminState icon={<AlertTriangle />} title="Request unavailable" message={error || 'The request does not exist.'} action={<Link className="button" to="/admin"><ArrowLeft size={16} /> Back to requests</Link>} />;
 
@@ -109,7 +120,13 @@ function RequestDetail() {
   const save = async () => {
     setMessage(''); setError('');
     try {
-      await updateBuildRequest({ requestId, changes: { status: request.status, priority: request.priority, internalNotes: request.internalNotes ?? '', internalTags: request.internalTags ?? [], proposalUrl: request.proposalUrl ?? '', driveFolderUrl: request.driveFolderUrl ?? '', followUpDate: request.followUpDate ?? '' } });
+      await updateBuildRequest({ requestId, changes: {
+        status: request.status, priority: request.priority, internalNotes: request.internalNotes ?? '', internalTags: request.internalTags ?? [],
+        proposalUrl: request.proposalUrl ?? '', driveFolderUrl: request.driveFolderUrl ?? '', followUpDate: request.followUpDate ?? '',
+        publicStatus: request.publicStatus ?? request.status, publicNote: request.publicNote ?? '', nextUpdateAt: request.nextUpdateAt ?? '',
+        estimatedStartAt: request.estimatedStartAt ?? '', estimatedDeliveryAt: request.estimatedDeliveryAt ?? '',
+        sharedLinks: request.sharedLinks ?? [], githubLinks: request.githubLinks ?? [],
+      } });
       setMessage('Changes saved and added to the activity trail.');
     } catch { setError('Changes could not be saved. The existing request remains unchanged.'); }
   };
