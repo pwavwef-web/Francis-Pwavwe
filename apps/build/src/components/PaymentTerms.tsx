@@ -1,5 +1,5 @@
 import { ArrowUpRight, BadgeCheck, HandCoins, Smartphone } from 'lucide-react';
-import { hasMomo, hasPaystack, hasWhatsApp, studio, whatsappLink } from '../data/studio';
+import { hasMomo, hasOnlinePayment, hasWhatsApp, studio, whatsappLink } from '../data/studio';
 import { track } from '../lib/analytics';
 
 const steps = [
@@ -10,7 +10,7 @@ const steps = [
 ] as const;
 
 export function PaymentTerms({ contrast = false }: { contrast?: boolean }) {
-  const online = hasPaystack() || hasMomo();
+  const online = hasOnlinePayment() || hasMomo();
   return (
     <section className={`section-pad payment-section${contrast ? ' section-contrast' : ''}`} id="payment" aria-labelledby="payment-heading">
       <div className="section-heading">
@@ -28,9 +28,9 @@ export function PaymentTerms({ contrast = false }: { contrast?: boolean }) {
           <p>Payment is simple — {studio.deposit}. That split keeps things fair for both sides.</p>
           {online ? (
             <div className="pay-options">
-              {hasPaystack() && (
-                <a className="button" href={studio.paystackUrl} target="_blank" rel="noopener noreferrer" onClick={() => void track('payment_paystack_click')}>
-                  Pay with card or MoMo (Paystack) <ArrowUpRight size={16} />
+              {hasOnlinePayment() && (
+                <a className="button" href={studio.onlinePayment.url} target="_blank" rel="noopener noreferrer" onClick={() => void track('payment_online_click', { provider: 'orglet' })}>
+                  {studio.onlinePayment.label} <ArrowUpRight size={16} />
                 </a>
               )}
               {hasMomo() && (
@@ -45,7 +45,7 @@ export function PaymentTerms({ contrast = false }: { contrast?: boolean }) {
               )}
             </div>
           ) : (
-            <p className="pay-pending">Your secure payment details (Paystack card/MoMo and direct Mobile Money) are shared with your proposal.</p>
+            <p className="pay-pending">Your secure online payment details and direct Mobile Money option are shared with your proposal.</p>
           )}
           <p className="pay-contact">
             <BadgeCheck size={16} /> Questions about payment?{' '}

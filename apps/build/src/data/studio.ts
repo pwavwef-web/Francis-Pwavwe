@@ -16,10 +16,11 @@ export const studio = {
    *  Ghana 0557535673 -> 233557535673. Leave '' to hide WhatsApp everywhere. */
   whatsappNumber: '233557535673',
 
-  /** Paystack payment link for deposits (card + Mobile Money).
-   *  TODO: add once available, e.g. 'https://paystack.shop/pay/xxxxxxx'.
-   *  While '', the Paystack button stays hidden and Mobile Money is shown instead. */
-  paystackUrl: '',
+  /** Online payment page for deposits. Leave url '' to hide this button. */
+  onlinePayment: {
+    url: 'https://orglet.web.app/give/pwavwe',
+    label: 'Pay online with Orglet',
+  },
 
   /** Direct Mobile Money details. Leave number '' to hide the MoMo block. */
   momo: {
@@ -40,5 +41,5 @@ export function whatsappLink(message?: string): string {
 }
 
 export const hasWhatsApp = (): boolean => Boolean(studio.whatsappNumber);
-export const hasPaystack = (): boolean => Boolean(studio.paystackUrl);
+export const hasOnlinePayment = (): boolean => Boolean(studio.onlinePayment.url);
 export const hasMomo = (): boolean => Boolean(studio.momo.number);
